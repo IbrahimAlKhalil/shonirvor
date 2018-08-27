@@ -15,7 +15,7 @@ class DealerRegistrationController extends Controller
      */
     public function index()
     {
-        //
+        return view('frontend.dealer-registration');
     }
 
     /**
@@ -36,7 +36,8 @@ class DealerRegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        dd($request);
     }
 
     /**

@@ -15,6 +15,14 @@ class CreateDealerRegistrationsTable extends Migration
     {
         Schema::create('dealer_registrations', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->integer('number');
+            $table->string('email');
+            $table->unsignedTinyInteger('age');
+            $table->string('qualification');
+            $table->string('address');
+            $table->string('image');
+
             $table->timestamps();
         });
     }
