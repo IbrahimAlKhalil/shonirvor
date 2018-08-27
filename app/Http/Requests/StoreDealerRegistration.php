@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DealerRegistration extends FormRequest
+class StoreDealerRegistration extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class DealerRegistration extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,11 +25,11 @@ class DealerRegistration extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'number' => 'required|integer',
+            'number' => 'required',
             'email' => 'email',
-            'age' => 'required|min:15',
+            'age' => 'required|integer|min:10',
             'address' => 'required|string',
-            'photo' => 'file|image'
+            'photo' => 'image'
         ];
     }
 }

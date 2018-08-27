@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDealerRegistration;
 use App\Models\DealerRegistration;
 use Illuminate\Http\Request;
 
@@ -34,10 +35,22 @@ class DealerRegistrationController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDealerRegistration $request)
     {
 
-        dd($request);
+        $newDealerRegistration = new DealerRegistration();
+
+        $newDealerRegistration->name = $request->post('name');
+        $newDealerRegistration->number = $request->post('number');
+        $newDealerRegistration->email = $request->post('email');
+        $newDealerRegistration->age = $request->post('age');
+        $newDealerRegistration->qualification = $request->post('qualification');
+        $newDealerRegistration->address = $request->post('address');
+        $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
+        $newDealerRegistration->save();
+
+        return view('frontend.dealer-registration', ['success' => true]);
+
     }
 
     /**

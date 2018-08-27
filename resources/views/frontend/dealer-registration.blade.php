@@ -2,8 +2,21 @@
 
 @section('content')
     <div style="margin-top: 40px;"></div>
+
+    @isset($success)
+        <div class="alert alert-success">
+            <strong>Success!</strong> Thanks! Your request will be reviewed within 24 hours, and we will confirm you by email, so stay tuned!
+        </div>
+    @endisset
+
+    @foreach($errors->all() as $error)
+        <div class="alert alert-danger">
+            <strong>Error! </strong> {{ $error }}
+        </div>
+    @endforeach
+
     <div class="container">
-        <form action="{{ route('dealer-registration.store') }}" method="post">
+        <form method="post" enctype="multipart/form-data" action="{{ route('dealer-registration.store') }}">
             {{ csrf_field() }}
             <div class="form-group row">
                 <label for="name" class="col-4 col-form-label">Name</label>
@@ -26,7 +39,7 @@
             <div class="form-group row">
                 <label for="age" class="col-4 col-form-label">Age</label>
                 <div class="col-8">
-                    <input id="age" name="age" type="text" required="required" class="form-control here">
+                    <input id="age" name="age" type="number" required="required" class="form-control here">
                 </div>
             </div>
             <div class="form-group row">
@@ -38,7 +51,8 @@
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">Address</label>
                 <div class="col-8">
-                    <input id="address" name="address" type="text" required="required" class="form-control here">
+                    <textarea id="address" name="address" type="text" required="required" class="form-control here">
+                    </textarea>
                 </div>
             </div>
             <div class="form-group row">
