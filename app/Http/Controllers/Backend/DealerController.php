@@ -13,21 +13,34 @@ class DealerController extends Controller
 //        $this->middleware('role:superadmin');
     }
 
+
     public function index()
     {
-        //
+        return view('backend.dealer.index');
     }
 
 
     public function create()
     {
-        //
+        return view('backend.dealer.create');
     }
 
 
     public function store(Request $request)
     {
-        //
+        $dealer = new User();
+        $dealer->name = $request->post('name');
+        $dealer->mobile = $request->post('mobile');
+        $dealer->email = $request->post('email');
+        $dealer->age = $request->post('age');
+        $dealer->qualification = $request->post('qualification');
+        $dealer->address = $request->post('address');
+        $dealer->save();
+
+        $dealer->photo = $request->file('photo')->store('users/'.$dealer->id);
+        $dealer->save();
+
+        return redirect(route('dealer.index'))->with('success', 'Done!!');
     }
 
 

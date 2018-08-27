@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="{{ route('backend.home') }}">{{ config('app.name') }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,6 +11,9 @@
             </li>
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Backend</a>
+            </li>
+            <li class="nav-item @if(request()->url() == route('dealer.index') || request()->url() == route('dealer.create')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>
             </li>
         </ul>
     </div>
