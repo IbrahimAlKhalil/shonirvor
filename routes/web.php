@@ -11,9 +11,14 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('temporary.dealerRegistration');
 });
+
+
 
 Auth::routes();
 
