@@ -20,12 +20,14 @@
                     <th scope="row">{{ $serial }}</th>
                     <td><a href="{{ route('dealer-request.show', $dealerRequest->id) }}">{{ $dealerRequest->name }}</a>
                     </td>
-                    <td>{{ $dealerRequest->number }}</td>
+                    <td>{{ $dealerRequest->mobile }}</td>
                     <td>{{ $dealerRequest->email }}</td>
                 </tr>
 
             @empty
-                <p class="text-uppercase text-center">No Requests!</p>
+                <tr>
+                    <td colspan="4"><p class="text-uppercase text-center">No Requests!</p></td>
+                </tr>
             @endforelse
             </tbody>
         </table>

@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="number" class="col-4 col-form-label">Phone Number</label>
+                <label for="number" class="col-4 col-form-label">Mobile Number</label>
                 <div class="col-8">
-                    <input id="number" name="number" type="text" min="10" required="required" class="form-control here">
+                    <input id="number" name="mobile" type="text" min="10" required="required" class="form-control here">
                 </div>
             </div>
             <div class="form-group row">

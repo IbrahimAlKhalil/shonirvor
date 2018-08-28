@@ -22,7 +22,7 @@ class DealerRegistrationController extends Controller
         $newDealerRegistration = new DealerRegistration();
 
         $newDealerRegistration->name = $request->post('name');
-        $newDealerRegistration->number = $request->post('number');
+        $newDealerRegistration->mobile = $request->post('mobile');
         $newDealerRegistration->email = $request->post('email');
         $newDealerRegistration->password = Hash::make($request->post('password'));
         $newDealerRegistration->age = $request->post('age');

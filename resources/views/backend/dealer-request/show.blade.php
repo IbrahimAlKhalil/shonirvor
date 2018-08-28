@@ -20,7 +20,7 @@
 
                     <tr>
                         <th scope="row">Mobile</th>
-                        <td>{{ $dealerRequest->number }}</td>
+                        <td>{{ $dealerRequest->mobile }}</td>
                     </tr>
 
                     <tr>

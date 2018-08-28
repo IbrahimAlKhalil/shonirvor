@@ -16,7 +16,7 @@ class CreateDealerRegistrationsTable extends Migration
         Schema::create('dealer_registrations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('number', 15)->unique();
+            $table->string('mobile', 15)->unique();
             $table->string('email')->unique()->nullable();
             $table->string('password');
             $table->unsignedTinyInteger('age');
