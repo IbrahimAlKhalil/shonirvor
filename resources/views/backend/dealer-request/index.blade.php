@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <h3 class="my-4">All Requests</h3>
+        @include('components.success')
         <table class="table table-striped table-bordered table-hover table-sm text-center">
             <thead>
             <tr>

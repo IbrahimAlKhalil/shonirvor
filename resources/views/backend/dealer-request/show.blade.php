@@ -52,9 +52,9 @@
                 </table>
 
                 <div class="row">
-                    <div class="btn-group mx-auto" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-secondary btn-success">Approve</button>
-                        <button type="button" class="btn btn-secondary btn-danger">Reject</button>
+                    <div class="btn-group mx-auto" role="group">
+                        <a href="{{ route('dealer-request.approve', $dealerRequest->id) }}" class="btn btn-secondary btn-success">Approve</a>
+                        <a href="{{ route('dealer-request.reject', $dealerRequest->id) }}" class="btn btn-secondary btn-danger">Reject</a>
                     </div>
                 </div>
             </div>

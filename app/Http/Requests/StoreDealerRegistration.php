@@ -31,7 +31,8 @@ class StoreDealerRegistration extends FormRequest
             'password' => 'required',
             'age' => 'required|integer|min:10',
             'address' => 'required|string',
-            'photo' => 'image'
+            'photo' => 'image',
+            'documents.*' => 'image'
         ];
     }
 }
