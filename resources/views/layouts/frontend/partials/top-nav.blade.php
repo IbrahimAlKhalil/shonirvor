@@ -10,6 +10,11 @@
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
             </li>
+
+            <li class="nav-item @if(request()->url() == route('dealer-registration.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('dealer-registration.index') }}">Dealer Registrarion</a>
+            </li>
+
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Backend</a>
             </li>

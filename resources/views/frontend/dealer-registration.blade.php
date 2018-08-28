@@ -3,11 +3,7 @@
 @section('content')
     <div style="margin-top: 40px;"></div>
 
-    @isset($success)
-        <div class="alert alert-success">
-            <strong>Success!</strong> Thanks! Your request will be reviewed within 24 hours, and we will confirm you by email, so stay tuned!
-        </div>
-    @endisset
+    {{--@include('components.success')--}}
 
     @foreach($errors->all() as $error)
         <div class="alert alert-danger">
@@ -36,6 +32,14 @@
                     <input id="email" name="email" type="text" class="form-control here">
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="password" class="col-4 col-form-label">Password</label>
+                <div class="col-8">
+                    <input id="password" name="password" type="password" class="form-control here">
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="age" class="col-4 col-form-label">Age</label>
                 <div class="col-8">
@@ -51,7 +55,7 @@
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">Address</label>
                 <div class="col-8">
-                    <textarea id="address" name="address" type="text" required="required" class="form-control here">
+                    <textarea id="address" name="address" required="required" class="form-control here">
                     </textarea>
                 </div>
             </div>

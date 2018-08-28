@@ -17,9 +17,10 @@ class CreateDealerRegistrationsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('number', 15);
-            $table->string('email');
+            $table->string('email')->nullable();
+            $table->string('password');
             $table->unsignedTinyInteger('age');
-            $table->string('qualification');
+            $table->string('qualification')->nullable();
             $table->string('address');
             $table->string('photo');
 
