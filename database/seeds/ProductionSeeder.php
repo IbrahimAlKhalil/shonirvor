@@ -16,8 +16,7 @@ class ProductionSeeder extends Seeder
 
         DB::table('roles')->insert([
             ['name' => 'superadmin'],
-            ['name' => 'dealer'],
-            ['name' => 'customer']
+            ['name' => 'dealer']
         ]);
     }
 }
