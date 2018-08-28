@@ -32,16 +32,18 @@ class DealerRegistrationController extends Controller
         $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
         $newDealerRegistration->save();
 
-        $documents = [];
+        if($request->filled('documents')) {
+            $documents = [];
 
-        foreach ($request->documents as $document) {
-            array_push($documents, [
-                'document' => $document->store('pending-dealers'),
-                'dealer_registration_id' => $newDealerRegistration->id
-            ]);
+            foreach ($request->documents as $document) {
+                array_push($documents, [
+                    'document' => $document->store('pending-dealers'),
+                    'dealer_registration_id' => $newDealerRegistration->id
+                ]);
+            }
+
+            DealerRegistrationDocument::insert($documents);
         }
-
-        DealerRegistrationDocument::insert($documents);
 
         return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
 
