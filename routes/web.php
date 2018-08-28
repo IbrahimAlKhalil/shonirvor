@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
+Route::get('backend', 'Backend\HomeController@index')->name('backend.home');
 
 Route::get('/backend', 'Backend\HomeController@index')->name('backend.home');
+Route::resource('backend/dealer', 'Backend\DealerController');
 
 
 /*** Ibrahim ***/
 
-Route::resource('dealer-registration', 'Frontend\DealerRegistrationController', ['only' => ['index', 'store', 'update', 'destroy']]);
-Route::get('dealer-registration/requests', 'Frontend\DealerRegistrationController@dealerRequests')->name('dealer-registration.requests');
+Route::resource('dealer-registration', 'Frontend\DealerRegistrationController', ['only' => ['index', 'store']]);
+Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'store', 'destroy', 'show']]);

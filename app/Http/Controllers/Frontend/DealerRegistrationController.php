@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDealerRegistration;
 use App\Models\DealerRegistration;
-use Illuminate\Http\Request;
+use App\Models\DealerRegistrationDocument;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class DealerRegistrationController extends Controller
 {
@@ -16,37 +17,33 @@ class DealerRegistrationController extends Controller
     }
 
 
-    public function dealerRequests(Request $request)
-    {
-        $dealerRequests = DealerRegistration::all();
-
-        return view('backend.dealer-requests', compact('dealerRequests'));
-    }
-
-
     public function store(StoreDealerRegistration $request)
     {
-
         $newDealerRegistration = new DealerRegistration();
 
         $newDealerRegistration->name = $request->post('name');
         $newDealerRegistration->number = $request->post('number');
         $newDealerRegistration->email = $request->post('email');
+        $newDealerRegistration->password = Hash::make($request->post('password'));
         $newDealerRegistration->age = $request->post('age');
         $newDealerRegistration->qualification = $request->post('qualification');
+        $newDealerRegistration->nid = $request->post('nid');
         $newDealerRegistration->address = $request->post('address');
         $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
         $newDealerRegistration->save();
 
-        return back()->with('success', true);
-        /*
-        return view('frontend.dealer-registration', ['success' => true]);*/
+        $documents = [];
 
-    }
+        foreach ($request->documents as $document) {
+            array_push($documents, [
+                'document' => $document->store('pending-dealers'),
+                'dealer_registration_id' => $newDealerRegistration->id
+            ]);
+        }
 
+        DealerRegistrationDocument::insert($documents);
 
-    public function destroy(DealerRegistration $dealerRegistration)
-    {
-        //
+        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
+
     }
 }

@@ -25,8 +25,10 @@ class StoreDealerRegistration extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'number' => 'required',
-            'email' => 'email',
+            'number' => 'required|unique:dealer_registrations',
+            'email' => 'email|unique:dealer_registrations',
+            'nid' => 'required|integer|unique:dealer_registrations',
+            'password' => 'required',
             'age' => 'required|integer|min:10',
             'address' => 'required|string',
             'photo' => 'image'
