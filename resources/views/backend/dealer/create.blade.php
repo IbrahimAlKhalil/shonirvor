@@ -20,15 +20,15 @@
                 <form action="{{ route('dealer.store') }}" method="post" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="form-group row">
-                        <label for="name" class="col-4 col-form-label">Name</label>
+                        <label for="name" class="col-4 col-form-label">Full Name <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input id="name" name="name" type="text" required="required" class="form-control">
+                            <input id="name" name="name" type="text" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
+                        <label for="mobile" class="col-4 col-form-label">Mobile Number <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input id="mobile" name="mobile" type="number" required="required" class="form-control">
+                            <input id="mobile" name="mobile" type="number" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -38,9 +38,15 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="nid" class="col-4 col-form-label">NID Number</label>
+                        <div class="col-8">
+                            <input id="nid" name="nid" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="age" class="col-4 col-form-label">Age</label>
                         <div class="col-8">
-                            <input id="age" name="age" type="number" required="required" class="form-control">
+                            <input id="age" name="age" type="number" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -52,13 +58,25 @@
                     <div class="form-group row">
                         <label for="address" class="col-4 col-form-label">Address</label>
                         <div class="col-8">
-                            <textarea name="address" id="address" rows="5" required class="form-control"></textarea>
+                            <textarea name="address" id="address" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="photo" class="col-4 col-form-label">Photo</label>
+                        <label for="password" class="col-4 col-form-label">Dealer's Password</label>
+                        <div class="col-8">
+                            <input id="password" name="password" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="photo" class="col-4 col-form-label">Dealer's Photo</label>
                         <div class="col-8">
                             <input id="photo" name="photo" type="file" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="documents" class="col-4 col-form-label">Documents/Papers</label>
+                        <div class="col-8">
+                            <input id="documents" name="documents[]" type="file" class="form-control" multiple>
                         </div>
                     </div>
                     <div class="form-group row">
