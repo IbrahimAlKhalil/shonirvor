@@ -1,5 +1,7 @@
 @extends('layouts.backend.master')
 
+@section('title', 'Create Dealers')
+
 @section('content')
     <div class="container">
         <div class="row">
@@ -17,6 +19,13 @@
         <div class="row">
             <div class="col">
                 <h3 class="mb-4">Create Dealer</h3>
+
+                @foreach($errors->all() as $error)
+                    <div class="alert alert-danger">
+                        <strong>Error! </strong> {{ $error }}
+                    </div>
+                @endforeach
+
                 <form action="{{ route('dealer.store') }}" method="post" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="form-group row">
@@ -62,9 +71,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="password" class="col-4 col-form-label">Dealer's Password</label>
+                        <label for="password" class="col-4 col-form-label">Dealer's Password <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input id="password" name="password" type="text" class="form-control">
+                            <input id="password" name="password" type="text" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group row">

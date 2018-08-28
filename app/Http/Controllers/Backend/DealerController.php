@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\User;
 use App\Models\UserDocument;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreDealer;
 use App\Http\Controllers\Controller;
 
 class DealerController extends Controller
@@ -31,8 +32,9 @@ class DealerController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreDealer $request)
     {
+        dd($request->all());
         $dealer = new User();
         $dealer->name = $request->post('name');
         $dealer->mobile = $request->post('mobile');
@@ -66,7 +68,7 @@ class DealerController extends Controller
 
     public function show(User $user)
     {
-        //
+        return view('backend.dealer.show', compact('user'));
     }
 
 
