@@ -10,7 +10,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         factory(User::class, 80)->create()->each(function($user) {
-            $user->documents()->save(factory(UserDocument::class)->make());
+            $user->documents()->saveMany(factory(UserDocument::class, 2)->make());
             // Attach a role
             $countRoles = Role::count();
             $user->roles()->attach(rand(1, $countRoles));

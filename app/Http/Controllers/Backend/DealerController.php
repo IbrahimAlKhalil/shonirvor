@@ -65,9 +65,9 @@ class DealerController extends Controller
     }
 
 
-    public function show(User $user)
+    public function show(User $dealer)
     {
-        return view('backend.dealer.show', compact('user'));
+        return view('backend.dealer.show', compact('dealer'));
     }
 
 

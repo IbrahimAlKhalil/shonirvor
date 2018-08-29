@@ -1,10 +1,9 @@
 <?php
 
 use App\Models\UserDocument;
-use Faker\Generator as Faker;
 
-$factory->define(UserDocument::class, function (Faker $faker) {
+$factory->define(UserDocument::class, function () {
     return [
-        'document' => $faker->imageUrl(640, 480),
+        'document' => 'seed/user-documents/nid-front.jpg'
     ];
 });
