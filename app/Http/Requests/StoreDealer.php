@@ -19,7 +19,6 @@ class StoreDealer extends FormRequest
             'mobile' => 'required|unique:users',
             'email' => 'email|unique:users',
             'nid' => 'required|integer|unique:users',
-            'age' => 'integer|min:10',
             'qualification' => 'string',
             'address' => 'string',
             'password' => 'required',
