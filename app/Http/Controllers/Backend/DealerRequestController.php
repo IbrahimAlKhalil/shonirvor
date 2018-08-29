@@ -46,6 +46,8 @@ class DealerRequestController extends Controller
         $newUser->password = $dealerRegistration->password;
         $newUser->save();
 
+        $newUser->roles()->attach(2);
+
         $newDocuments = [];
 
         foreach ($dealerDocuments as $document) {

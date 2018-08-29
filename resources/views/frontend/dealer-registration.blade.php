@@ -1,5 +1,7 @@
 @extends('layouts.frontend.master')
 
+@section('title', 'Dealer Registration')
+
 @section('content')
     <div style="margin-top: 40px;"></div>
 

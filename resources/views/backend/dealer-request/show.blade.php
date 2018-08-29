@@ -1,5 +1,7 @@
 @extends('layouts.backend.master')
 
+@section('title', 'Dealer Request')
+
 @section('content')
     <div class="container mt-4">
         <div class="row">
@@ -63,14 +65,16 @@
         <h3 class="my-4">Documents</h3>
 
         <div class="row">
-            @foreach($dealerRequest->documents as $document)
+            @forelse($dealerRequest->documents as $document)
                 <div class="col">
                     <a href="{{ asset('storage/' . $document->document) }}" target="_blank">
                         <img src="{{ asset('storage/' . $document->document) }}"
                              class="img-responsive img-rounded img-thumbnail">
                     </a>
                 </div>
-            @endforeach
+                @empty
+                <p class="text-center text-uppercase">No Documents found!</p>
+            @endforelse
         </div>
     </div>
 @endsection

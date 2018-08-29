@@ -32,7 +32,8 @@ class DealerRegistrationController extends Controller
         $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
         $newDealerRegistration->save();
 
-        if($request->filled('documents')) {
+
+        if($request->has('documents')) {
             $documents = [];
 
             foreach ($request->documents as $document) {

@@ -1,5 +1,7 @@
 @extends('layouts.backend.master')
 
+@section('title', 'Dealer Requests')
+
 @section('content')
     <div class="container">
         <h3 class="my-4">All Requests</h3>
@@ -27,7 +29,7 @@
 
             @empty
                 <tr>
-                    <td colspan="4"><p class="text-uppercase text-center">No Requests!</p></td>
+                    <td colspan="4"><p class="text-uppercase text-center">Empty!</p></td>
                 </tr>
             @endforelse
             </tbody>
