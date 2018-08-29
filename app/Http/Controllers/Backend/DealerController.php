@@ -34,7 +34,6 @@ class DealerController extends Controller
 
     public function store(StoreDealer $request)
     {
-        dd($request->all());
         $dealer = new User();
         $dealer->name = $request->post('name');
         $dealer->mobile = $request->post('mobile');
