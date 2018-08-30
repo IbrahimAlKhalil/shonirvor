@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDealerRegistrationsTable extends Migration
+class CreateOrgServiceProviderRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateDealerRegistrationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('dealer_registrations', function (Blueprint $table) {
+        Schema::create('org_service_provider_registrations', function (Blueprint $table) {
             $table->increments('id');
+
             $table->unsignedInteger('user_id');
 
-            $table->string('email')->unique()->nullable();
-            $table->unsignedSmallInteger('age');
-            $table->string('qualification')->nullable();
-            $table->string('nid')->unique();
+            $table->string('name');
+            $table->string('email');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->string('service');
             $table->string('address');
-            $table->string('photo')->nullable();
 
             $table->timestamps();
 
@@ -41,6 +42,6 @@ class CreateDealerRegistrationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dealer_registrations');
+        Schema::dropIfExists('org_service_provider_registrations');
     }
 }

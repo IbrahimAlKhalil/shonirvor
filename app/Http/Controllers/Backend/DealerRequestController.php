@@ -42,7 +42,7 @@ class DealerRequestController extends Controller
         $newUser->password = $dealerRegistration->password;
         $newUser->save();
 
-        $newUser->roles()->attach('2');
+        $newUser->roles()->attach(2);
 
         $newDocuments = [];
 
@@ -52,7 +52,7 @@ class DealerRequestController extends Controller
             Storage::move($document->document, 'users-documents/' . $filename);
 
             array_push($newDocuments, [
-                'document' => 'users-documents/' . $filename,
+                'document' => 'users-documents/' . $newUser->id . '/' . $filename,
                 'user_id' => $newUser->id
             ]);
         }

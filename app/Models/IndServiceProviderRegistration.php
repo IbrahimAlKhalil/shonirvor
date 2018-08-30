@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DealerRegistration extends Model
+class IndServiceProviderRegistration extends Model
 {
-    public function documents()
+    public function photos()
     {
-        return $this->hasMany(DealerRegistrationDocument::class);
+        return $this->hasMany(IndServiceProviderRegistrationPhoto::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
 }

@@ -73,8 +73,13 @@
                              class="img-responsive img-rounded img-thumbnail">
                     </a>
                 </div>
+<<<<<<< HEAD
             @empty
                 <div class="col text-muted">No document submitted.</div>
+=======
+                @empty
+                <p class="text-center text-uppercase">No Documents found!</p>
+>>>>>>> bde9a6b8a3679278a514ab7b86a7c744a6d20933
             @endforelse
         </div>
     </div>
