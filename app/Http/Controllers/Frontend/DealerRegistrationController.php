@@ -6,6 +6,7 @@ use App\Http\Requests\StoreDealerRegistration;
 use App\Models\DealerRegistration;
 use App\Models\DealerRegistrationDocument;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DealerRegistrationController extends Controller
@@ -13,7 +14,7 @@ class DealerRegistrationController extends Controller
 
     public function index()
     {
-        return view('frontend.dealer-registration');
+        return view('frontend.registration.dealer');
     }
 
 
@@ -21,19 +22,17 @@ class DealerRegistrationController extends Controller
     {
         $newDealerRegistration = new DealerRegistration();
 
-        $newDealerRegistration->name = $request->post('name');
-        $newDealerRegistration->mobile = $request->post('mobile');
+        $newDealerRegistration->user_id = Auth::id();
+
         $newDealerRegistration->email = $request->post('email');
-        $newDealerRegistration->password = Hash::make($request->post('password'));
         $newDealerRegistration->age = $request->post('age');
-        $newDealerRegistration->qualification = $request->post('qualification');
         $newDealerRegistration->nid = $request->post('nid');
         $newDealerRegistration->address = $request->post('address');
         $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
         $newDealerRegistration->save();
 
 
-        if($request->has('documents')) {
+        if ($request->has('documents')) {
             $documents = [];
 
             foreach ($request->documents as $document) {

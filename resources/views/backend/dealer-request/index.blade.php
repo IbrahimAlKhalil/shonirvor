@@ -1,7 +1,5 @@
 @extends('layouts.backend.master')
 
-@section('title', 'Dealer Requests')
-
 @section('content')
     <div class="container">
         <h3 class="my-4">All Requests</h3>
@@ -21,9 +19,9 @@
                 @php($serial = $dealerRequests->perPage() * ($dealerRequests->currentPage() - 1) + $loop->iteration)
                 <tr>
                     <th scope="row">{{ $serial }}</th>
-                    <td><a href="{{ route('dealer-request.show', $dealerRequest->id) }}">{{ $dealerRequest->name }}</a>
+                    <td><a href="{{ route('dealer-request.show', $dealerRequest->id) }}">{{ $dealerRequest->user->name }}</a>
                     </td>
-                    <td>{{ $dealerRequest->mobile }}</td>
+                    <td>{{ $dealerRequest->user->mobile }}</td>
                     <td>{{ $dealerRequest->email }}</td>
                 </tr>
 

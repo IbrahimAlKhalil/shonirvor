@@ -14,7 +14,11 @@ class CreateUserDocumentsTable extends Migration
             $table->string('document');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
         });
     }

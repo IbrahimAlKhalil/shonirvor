@@ -11,13 +11,25 @@
                 <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
             </li>
 
-            <li class="nav-item @if(request()->url() == route('dealer-registration.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('dealer-registration.index') }}">Dealer Registrarion</a>
+            <li class="nav-item @if(request()->url() == route('registration.dealer.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('registration.dealer.index') }}">Dealer Registrarion</a>
+            </li>
+
+            <li class="nav-item @if(request()->url() == route('registration.service-provider.agreement')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('registration.service-provider.agreement') }}">SP
+                    Registrarion</a>
             </li>
 
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Backend</a>
             </li>
+
+            @auth()
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                </li>
+            @endauth
+
         </ul>
     </div>
 </nav>

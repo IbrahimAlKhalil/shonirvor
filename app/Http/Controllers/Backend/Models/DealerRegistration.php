@@ -10,9 +10,4 @@ class DealerRegistration extends Model
     {
         return $this->hasMany(DealerRegistrationDocument::class);
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

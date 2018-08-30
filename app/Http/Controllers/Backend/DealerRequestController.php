@@ -56,7 +56,7 @@ class DealerRequestController extends Controller
             Storage::move($document->document, 'users-documents/' . $filename);
 
             array_push($newDocuments, [
-                'document' => 'users-documents/' . $filename,
+                'document' => 'users-documents/' . $newUser->id . '/' . $filename,
                 'user_id' => $newUser->id
             ]);
         }
