@@ -1,5 +1,7 @@
 @extends('layouts.backend.master')
 
+@section('title', $dealer->name)
+
 @section('content')
     <div class="container">
         <div class="row mb-2">
@@ -18,7 +20,8 @@
         <div class="row">
             <div class="col-md-4">
                 <a href="{{ asset('storage/' . $dealer->photo) }}" target="_blank">
-                    <img src="{{ asset('storage/' . $dealer->photo) }}" class="img-responsive img-thumbnail" alt="{{ $dealer->name }}">
+                    <img src="{{ asset('storage/' . $dealer->photo) }}" class="img-responsive img-thumbnail"
+                         alt="{{ $dealer->name }}">
                 </a>
             </div>
 
