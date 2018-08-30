@@ -16,7 +16,7 @@ class StoreDealer extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'mobile' => 'required|unique:users',
+            'mobile' => 'required|unique:users|digits:11',
             'email' => 'email|unique:users',
             'nid' => 'required|integer|unique:users',
             'qualification' => 'string',

@@ -10,11 +10,8 @@
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('dealer-request.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('dealer-request.index') }}">Dealer Requests</a>
-            </li>
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.home') }}">Backend</a>
+                <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
             </li>
             <li class="nav-item @if(request()->url() == route('dealer.index') || request()->url() == route('dealer.create')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>

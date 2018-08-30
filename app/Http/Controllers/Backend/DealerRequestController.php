@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\DealerRegistration;
 use App\Models\User;
 use App\Models\UserDocument;
-use Illuminate\Http\Request;
+use App\Models\DealerRegistration;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,10 +19,8 @@ class DealerRequestController extends Controller
     }
 
 
-    public function show($id)
+    public function show(DealerRegistration $dealerRequest)
     {
-        $dealerRequest = DealerRegistration::find($id);
-
         return view('backend.dealer-request.show', compact('dealerRequest'));
     }
 
@@ -32,7 +29,6 @@ class DealerRequestController extends Controller
     {
         $dealerRegistration = DealerRegistration::find($id);
         $dealerDocuments = $dealerRegistration->documents;
-
 
         $newUser = new User();
         $newUser->name = $dealerRegistration->name;
@@ -45,6 +41,8 @@ class DealerRequestController extends Controller
         $newUser->photo = $dealerRegistration->photo;
         $newUser->password = $dealerRegistration->password;
         $newUser->save();
+
+        $newUser->roles()->attach('2');
 
         $newDocuments = [];
 
@@ -63,14 +61,12 @@ class DealerRequestController extends Controller
 
         $dealerRegistration->delete();
 
-        return redirect('dealer-request')->with('success', 'Dealer Request approved successfully!');
-
+        return redirect(route('dealer.index'))->with('success', 'Dealer Request approved successfully!');
     }
 
 
     public function reject($id)
     {
-
         foreach (DealerRegistration::find($id)->documents as $document) {
             Storage::delete($document->document);
         }

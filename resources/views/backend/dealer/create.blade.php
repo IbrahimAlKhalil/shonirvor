@@ -8,10 +8,10 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('dealer.index') }}">All</a>
+                        <a class="nav-link active" href="{{ route('dealer.index') }}">All dealers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
+                        <a class="nav-link" href="{{ route('dealer-request.index') }}">Requests</a>
                     </li>
                 </ul>
             </div>
@@ -36,7 +36,7 @@
                     <div class="form-group row">
                         <label for="mobile" class="col-4 col-form-label">Mobile Number <span class="text-danger">*</span></label>
                         <div class="col-8">
-                            <input id="mobile" name="mobile" type="text" pattern="\d*" maxlength="11" minlength="11" value="{{ old('mobile') }}" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
+                            <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
                             @include('components.invalid', ['name' => 'mobile'])
                         </div>
                     </div>

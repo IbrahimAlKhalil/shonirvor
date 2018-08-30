@@ -10,14 +10,27 @@
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
             </li>
-
+            <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
+            </li>
             <li class="nav-item @if(request()->url() == route('dealer-registration.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer-registration.index') }}">Dealer Registrarion</a>
             </li>
-
-            <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.home') }}">Backend</a>
+            @guest
+            <li class="nav-item @if(request()->url() == route('login')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('login') }}">Login</a>
             </li>
+            <li class="nav-item @if(request()->url() == route('register')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('register') }}">Registration</a>
+            </li>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form action="{{ route('logout') }}" method="post" id="logout-form" class="hidden">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+            @endguest
         </ul>
     </div>
 </nav>

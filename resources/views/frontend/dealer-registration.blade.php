@@ -1,10 +1,11 @@
 @extends('layouts.frontend.master')
 
+@section('title', 'Dealer Registrarion')
+
 @section('content')
     <div style="margin-top: 40px;"></div>
 
     <div class="container">
-
         @include('components.success')
 
         @foreach($errors->all() as $error)

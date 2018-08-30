@@ -29,10 +29,14 @@ class DealerRegistrationController extends Controller
         $newDealerRegistration->qualification = $request->post('qualification');
         $newDealerRegistration->nid = $request->post('nid');
         $newDealerRegistration->address = $request->post('address');
-        $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
+        if ($request->hasFile('photo')) {
+            $newDealerRegistration->photo = $request->file('photo')->store('pending-dealers');
+        } else {
+            $newDealerRegistration->photo = 'default/user-photo/person.jpg';
+        }
         $newDealerRegistration->save();
 
-        if($request->filled('documents')) {
+        if ($request->filled('documents')) {
             $documents = [];
 
             foreach ($request->documents as $document) {
@@ -46,6 +50,5 @@ class DealerRegistrationController extends Controller
         }
 
         return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
-
     }
 }

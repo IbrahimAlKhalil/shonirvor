@@ -8,10 +8,10 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('dealer.index') }}">All</a>
+                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
+                        <a class="nav-link" href="{{ route('dealer-request.index') }}">Requests</a>
                     </li>
                 </ul>
             </div>
