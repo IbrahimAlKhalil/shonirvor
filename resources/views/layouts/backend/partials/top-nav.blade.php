@@ -16,8 +16,11 @@
             <li class="nav-item @if(request()->url() == route('dealer-request.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer-request.index') }}">Dealer Requests</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('service-provider-request.individual.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('service-provider-request.individual.index') }}">SP Requests</a>
+            <li class="nav-item @if(request()->url() == route('ind-service-request.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('ind-service-request.index') }}">SP Requests</a>
+            </li>
+            <li class="nav-item @if(request()->url() == route('ind-service.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('ind-service.index') }}">Service Providers</a>
             </li>
             <li class="nav-item @if(request()->url() == route('dealer.index') || request()->url() == route('dealer.create')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>

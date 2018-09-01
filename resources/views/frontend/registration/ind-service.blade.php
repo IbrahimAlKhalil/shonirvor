@@ -1,16 +1,27 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Dealer Registrarion')
+@section('title', 'Individual Service Provider Registration')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
 
     <div class="container">
+
         @include('components.success')
 
 
-        <form method="post" enctype="multipart/form-data" action="{{ route('registration.dealer.store') }}">
+        <form method="post" enctype="multipart/form-data" action="{{ route('ind-service-registration.store') }}">
             {{ csrf_field() }}
+
+            <div class="form-group row">
+                <label for="name" class="col-4 col-form-label">Name</label>
+                <div class="col-8">
+                    <input id="name" name="name" type="text" value="{{ old('name') }}"
+                           class="form-control @if($errors->has('name')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'name'])
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="email" class="col-4 col-form-label">Email</label>
                 <div class="col-8">
@@ -19,7 +30,6 @@
                     @include('components.invalid', ['name' => 'email'])
                 </div>
             </div>
-
 
             <div class="form-group row">
                 <label for="age" class="col-4 col-form-label">Age</label>
@@ -43,6 +53,34 @@
                     @include('components.invalid', ['name' => 'nid'])
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="latitude" class="col-4 col-form-label">Latitude</label>
+                <div class="col-8">
+                    <input id="latitude" name="latitude" type="number" value="{{ old('latitude') }}"
+                           class="form-control @if($errors->has('latitude')) is-invalid @endif" required>
+                    @include('components.invalid', ['name' => 'latitude'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="longitude" class="col-4 col-form-label">Longitude</label>
+                <div class="col-8">
+                    <input id="longitude" name="longitude" type="number" value="{{ old('longitude') }}"
+                           class="form-control @if($errors->has('longitude')) is-invalid @endif" required>
+                    @include('components.invalid', ['name' => 'longitude'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="service" class="col-4 col-form-label">Service</label>
+                <div class="col-8">
+                    <input id="service" name="service" type="text" value="{{ old('service') }}"
+                           class="form-control @if($errors->has('service')) is-invalid @endif" required>
+                    @include('components.invalid', ['name' => 'service'])
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">Address</label>
                 <div class="col-8">
@@ -53,8 +91,9 @@
                     @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
+
             <div class="form-group row">
-                <label for="photo" class="col-4 col-form-label">Photo</label>
+                <label for="photo" class="col-4 col-form-label">Profile Picture</label>
                 <div class="col-8">
                     <input id="photo" name="photo" type="file" accept="image/*"
                            class="form-control @if($errors->has('photo')) is-invalid @endif">
@@ -63,9 +102,18 @@
             </div>
 
             <div class="form-group row">
-                <label for="documents" class="col-4 col-form-label">Documents/Papers</label>
+                <label for="images" class="col-4 col-form-label">Images</label>
                 <div class="col-8">
-                    <input id="documents" name="documents[]" type="file" accept="image/*" class="form-control" multiple>
+                    <input id="images" name="images[]" type="file" accept="image/*"
+                           class="form-control @if($errors->has('images')) is-invalid @endif" multiple>
+                    @include('components.invalid', ['name' => 'images'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="docs" class="col-4 col-form-label">Documents/Papers</label>
+                <div class="col-8">
+                    <input id="docs" name="docs[]" type="file" accept="image/*" class="form-control" multiple>
                 </div>
             </div>
 

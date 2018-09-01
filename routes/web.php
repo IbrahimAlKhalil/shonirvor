@@ -17,8 +17,6 @@ Route::get('dealer-request/approve/{id}', 'Backend\DealerRequestController@appro
 Route::get('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
 Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']])->middleware('auth');
 
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
-
 
 Route::middleware('auth')
     ->name('registration.')
@@ -27,20 +25,17 @@ Route::middleware('auth')
         Route::resource('dealer', 'Frontend\DealerRegistrationController', ['only' => ['index', 'store']]);
     });
 
+Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 
-Route::middleware('auth')
-    ->name('registration.')
-    ->prefix('registration/service-provider')
-    ->group(function () {
-        Route::view('', 'frontend.registration.service-provider-agreement')->name('service-provider.agreement');
-        Route::resource('individual', 'Frontend\IndServiceProviderRegistrationController', ['only' => ['index', 'store']]);
-        Route::resource('organization', 'Frontend\OrgServiceProviderRegistrationController', ['only' => ['index', 'store']]);
-    });
+Route::middleware('auth')->group(function () {
 
-Route::middleware('auth')
-    ->name('service-provider-request.')
-    ->prefix('backend/service-provider-request')
-    ->group(function () {
-        Route::resource('individual', 'Backend\IndServiceProviderRequestController', ['only' => ['index', 'show']]);
-        Route::resource('organization', 'Backend\OrgServiceProviderRequestController', ['only' => ['index', 'show']]);
-    });
+    Route::resource('ind-service-registration', 'Frontend\IndServiceRegistrationController', ['only' => ['index', 'store']]);
+    Route::resource('org-service-registration', 'Frontend\OrgServiceRegistrationController', ['only' => ['index', 'store']]);
+});
+
+Route::middleware('auth')->prefix('dashboard')->group(function () {
+    Route::resource('ind-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+    Route::resource('org-service-request', 'Backend\OrgServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+    Route::resource('ind-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy', 'store', 'create']]);
+    Route::resource('org-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy', 'store', 'create']]);
+});

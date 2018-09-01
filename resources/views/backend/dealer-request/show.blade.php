@@ -16,7 +16,8 @@
         <div class="row  mt-4">
             <div class="col-md-4">
                 <a href="{{ asset('storage/' . $dealerRequest->photo) }}">
-                    <img src="{{ asset('storage/' . $dealerRequest->photo) }}" class="img-thumbnail" alt="{{ $dealerRequest->name }}">
+                    <img src="{{ asset('storage/' . $dealerRequest->photo) }}" class="img-thumbnail"
+                         alt="{{ $dealerRequest->name }}">
                 </a>
             </div>
 
@@ -56,8 +57,10 @@
 
                 <div class="row">
                     <div class="btn-group mx-auto" role="group">
-                        <a href="{{ route('dealer-request.approve', $dealerRequest->id) }}" class="btn btn-secondary btn-success">Approve</a>
-                        <a href="{{ route('dealer-request.reject', $dealerRequest->id) }}" class="btn btn-secondary btn-danger">Reject</a>
+                        <a href="{{ route('dealer-request.approve', $dealerRequest->id) }}"
+                           class="btn btn-secondary btn-success">Approve</a>
+                        <a href="{{ route('dealer-request.reject', $dealerRequest->id) }}"
+                           class="btn btn-secondary btn-danger">Reject</a>
                     </div>
                 </div>
             </div>
@@ -73,13 +76,8 @@
                              class="img-responsive img-rounded img-thumbnail">
                     </a>
                 </div>
-<<<<<<< HEAD
             @empty
                 <div class="col text-muted">No document submitted.</div>
-=======
-                @empty
-                <p class="text-center text-uppercase">No Documents found!</p>
->>>>>>> bde9a6b8a3679278a514ab7b86a7c744a6d20933
             @endforelse
         </div>
     </div>

@@ -16,8 +16,8 @@
             <li class="nav-item @if(request()->url() == route('registration.dealer.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('registration.dealer.index') }}">Dealer Registrarion</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('registration.service-provider.agreement')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('registration.service-provider.agreement') }}">SP Registrarion</a>
+            <li class="nav-item @if(request()->url() == route('service-registration-instruction')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('service-registration-instruction') }}">SP Registrarion</a>
             </li>
             @guest
             <li class="nav-item @if(request()->url() == route('login')){{ 'active' }}@endif">
