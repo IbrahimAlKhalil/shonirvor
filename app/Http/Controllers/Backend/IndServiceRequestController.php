@@ -36,6 +36,7 @@ class IndServiceRequestController extends Controller
 
         $service = new IndService;
         $service->user_id = $pendingService->user_id;
+        $service->mobile = $pendingService->mobile;
         $service->email = $pendingService->email;
         $service->latitude = $pendingService->latitude;
         $service->longitude = $pendingService->longitude;
@@ -51,7 +52,7 @@ class IndServiceRequestController extends Controller
         foreach ($pendingDocs as $pendingDoc) {
             $filename = basename(asset('storage/' . $pendingDoc->doc));
 
-            Storage::move($pendingDoc->doc, 'ind-service-docs/' . $filename);
+            Storage::move($pendingDoc->doc, 'ind-service-docs/' . $service->id . '/' . $filename);
 
             array_push($documents, [
                 'doc' => 'ind-service-docs/' . $service->id . '/' . $filename,
@@ -62,7 +63,7 @@ class IndServiceRequestController extends Controller
         foreach ($pendingImages as $pendingImage) {
             $filename = basename(asset('storage/' . $pendingImage->image));
 
-            Storage::move($pendingImage->image, 'ind-service-docs/' . $filename);
+            Storage::move($pendingImage->image, 'ind-service-images/' . $service->id . '/' . $filename);
 
             array_push($images, [
                 'image' => 'ind-service-images/' . $service->id . '/' . $filename,

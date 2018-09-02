@@ -35,8 +35,8 @@
                     <td>
                         <a href="{{ route('ind-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->user->name }}</a>
                     </td>
-                    <td>{{ $serviceRequest->user->mobile }}</td>
-                    <td>{{ $serviceRequest->age }}</td>
+                    <td>{{ $serviceRequest->mobile }}</td>
+                    <td>{{ $serviceRequest->user->age }}</td>
                     <td>{{ $serviceRequest->service }}</td>
                 </tr>
 

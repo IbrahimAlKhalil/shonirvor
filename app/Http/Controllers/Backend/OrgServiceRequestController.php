@@ -38,6 +38,7 @@ class OrgServiceRequestController extends Controller
         $service = new OrgService;
         $service->user_id = $pendingService->user_id;
         $service->org_name = $pendingService->org_name;
+        $service->mobile = $pendingService->mobile;
         $service->description = $pendingService->description;
         $service->email = $pendingService->email;
         $service->latitude = $pendingService->latitude;
@@ -54,7 +55,7 @@ class OrgServiceRequestController extends Controller
         foreach ($pendingDocs as $pendingDoc) {
             $filename = basename(asset('storage/' . $pendingDoc->doc));
 
-            Storage::move($pendingDoc->doc, 'org-service-docs/' . $filename);
+            Storage::move($pendingDoc->doc, 'org-service-docs/' . $service->id . '/' . $filename);
 
             array_push($documents, [
                 'doc' => 'org-service-docs/' . $service->id . '/' . $filename,
@@ -65,7 +66,7 @@ class OrgServiceRequestController extends Controller
         foreach ($pendingImages as $pendingImage) {
             $filename = basename(asset('storage/' . $pendingImage->image));
 
-            Storage::move($pendingImage->image, 'org-service-docs/' . $filename);
+            Storage::move($pendingImage->image, 'org-service-images/' . $service->id . '/' . $filename);
 
             array_push($images, [
                 'image' => 'org-service-images/' . $service->id . '/' . $filename,

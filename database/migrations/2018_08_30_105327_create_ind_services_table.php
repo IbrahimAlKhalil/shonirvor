@@ -18,6 +18,7 @@ class CreateIndServicesTable extends Migration
             $table->unsignedInteger('user_id');
 
             $table->string('email');
+            $table->string('mobile', 11);
             $table->string('latitude');
             $table->string('longitude');
             $table->string('service');

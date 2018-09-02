@@ -8,7 +8,7 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
+                        <a class="nav-link" href="{{ route('ind-service.create') }}">Create</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('ind-service-request.index') }}">Requests</a>

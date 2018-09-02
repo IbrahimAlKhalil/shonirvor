@@ -39,15 +39,15 @@
                     </tr>
                     <tr>
                         <th scope="row">Age</th>
-                        <td>{{ $serviceRequest->age }}</td>
+                        <td>{{ $serviceRequest->user->age }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Qualification/Experience</th>
-                        <td>{{ $serviceRequest->qualification }}</td>
+                        <td>{{ $serviceRequest->user->qualification }}</td>
                     </tr>
                     <tr>
                         <th scope="row">NID</th>
-                        <td>{{ $serviceRequest->nid }}</td>
+                        <td>{{ $serviceRequest->user->nid }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Address</th>

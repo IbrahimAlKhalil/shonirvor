@@ -19,6 +19,7 @@ class CreateOrgServicesTable extends Migration
             $table->unsignedInteger('user_id');
 
             $table->string('email');
+            $table->string('mobile', 11);
             $table->string('org_name');
             $table->text('description');
             $table->string('latitude');

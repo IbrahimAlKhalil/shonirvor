@@ -23,7 +23,25 @@
             </div>
 
             <div class="form-group row">
-                <label for="email" class="col-4 col-form-label">Email</label>
+                <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
+                <div class="col-8">
+                    <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}"
+                           class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
+                    @include('components.invalid', ['name' => 'mobile'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="personal-email" class="col-4 col-form-label">Personal Email</label>
+                <div class="col-8">
+                    <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
+                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'personal-email'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="email" class="col-4 col-form-label">Working Email</label>
                 <div class="col-8">
                     <input id="email" name="email" type="text" value="{{ old('email') }}"
                            class="form-control @if($errors->has('email')) is-invalid @endif">
@@ -42,7 +60,8 @@
             <div class="form-group row">
                 <label for="qualification" class="col-4 col-form-label">Qualification/Experience</label>
                 <div class="col-8">
-                    <input id="qualification" name="qualification" type="text" class="form-control here">
+                    <input id="qualification" name="qualification" type="text" class="form-control here"
+                           value="{{ old('qualification') }}">
                 </div>
             </div>
             <div class="form-group row">

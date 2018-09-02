@@ -32,7 +32,7 @@
                 <tr>
                     <th scope="row">{{ $serial }}</th>
                     <td>
-                        <a href="{{ route('org-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->name }}</a>
+                        <a href="{{ route('org-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->org_name }}</a>
                     </td>
                     <td>{{ $serviceRequest->email }}</td>
                     <td>{{ $serviceRequest->service }}</td>

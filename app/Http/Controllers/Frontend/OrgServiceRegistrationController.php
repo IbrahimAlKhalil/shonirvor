@@ -20,9 +20,17 @@ class OrgServiceRegistrationController extends Controller
 
     public function store(StoreOrgServiceRegistration $request)
     {
+        if(PendingOrgService::where('user_id', Auth::id())->count() >= 3) {
+            return response('You have already three requests pending, please wait until we review your applications, and then you can request to be a service provider again!');
+        }
+
         $registration = new PendingOrgService;
+
+        $user = Auth::user();
+
         $registration->user_id = Auth::id();
         $registration->org_name = $request->post('org-name');
+        $registration->mobile = $request->post('mobile');
         $registration->description = $request->post('description');
         $registration->email = $request->post('email');
         $registration->latitude = $request->post('latitude');
@@ -32,12 +40,14 @@ class OrgServiceRegistrationController extends Controller
         $registration->save();
 
 
-        $registration->user()->update([
-            'name' => $request->post('name'),
-            'nid' => $request->post('nid'),
-            'photo' => $request->file('photo')->store('user-photo'),
-            'age' => $request->post('age')
-        ]);
+        $user->name = $request->post('name');
+        $user->email = $request->post('personal-email');
+        $user->nid = $request->post('nid');
+        $user->qualification = $request->post('qualification');
+        $user->photo = $request->file('photo')->store('user-photo');
+        $user->age = $request->post('age');
+
+        $user->save();
 
 
         if ($request->has('images')) {
@@ -68,16 +78,5 @@ class OrgServiceRegistrationController extends Controller
         }
 
         return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
-    }
-
-
-    public function approve()
-    {
-
-    }
-
-    public function reject()
-    {
-
     }
 }

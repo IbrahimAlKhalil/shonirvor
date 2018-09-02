@@ -87,8 +87,8 @@
         <div class="row">
             @forelse($orgService->images as $image)
                 <div class="col-md-3">
-                    <a href="{{ asset('storage/' . $image->$image) }}" target="_blank">
-                        <img src="{{ asset('storage/' . $image->$image) }}" class="img-responsive img-thumbnail">
+                    <a href="{{ asset('storage/' . $image->image) }}" target="_blank">
+                        <img src="{{ asset('storage/' . $image->image) }}" class="img-responsive img-thumbnail">
                     </a>
                 </div>
             @empty
