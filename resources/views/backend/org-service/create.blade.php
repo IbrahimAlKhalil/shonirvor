@@ -19,7 +19,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <h3 class="mb-4">Create Individual Service Provider</h3>
+                <h3 class="mb-4">Create Organizational Service Provider</h3>
 
                 @include('components.success')
 

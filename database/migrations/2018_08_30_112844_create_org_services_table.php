@@ -27,6 +27,7 @@ class CreateOrgServicesTable extends Migration
             $table->string('service');
             $table->string('address');
 
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')

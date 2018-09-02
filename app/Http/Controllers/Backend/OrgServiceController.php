@@ -8,6 +8,8 @@ use App\Models\OrgServiceDoc;
 use App\Models\OrgServiceImage;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OrgServiceController extends Controller
 {
@@ -37,6 +39,7 @@ class OrgServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
+        $user->roles()->attach(4);
 
 
         $registration = new OrgService;
@@ -83,6 +86,51 @@ class OrgServiceController extends Controller
     public function show(OrgService $orgService)
     {
         return view('backend.org-service.show', compact('orgService'));
+    }
+
+    public function destroy(Request $request, OrgService $orgService)
+    {
+        if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
+            switch ($request->post('type')) {
+                case 'deactivate':
+                    $orgService->delete();
+                    $msg = 'Account Deactivated Successfully!';
+                    break;
+                default:
+
+                    // delete directories
+                    Storage::deleteDirectory('org-service-docs/' . $orgService->id);
+                    Storage::deleteDirectory('org-service-images/' . $orgService->id);
+
+                    $orgService->forceDelete();
+
+                    $msg = 'Account Removed Successfully!';
+            }
+
+            return redirect(route('org-service.show-disabled', $orgService->id))->with('success', $msg);
+        }
+
+        return abort('404');
+    }
+
+
+    public function showDisabledAccounts()
+    {
+        $orgServices = OrgService::onlyTrashed()->paginate(15);
+
+        return view('backend.org-service.index', compact('orgServices'));
+    }
+
+    public function showDisabled($id)
+    {
+        $orgService = OrgService::withTrashed()->find($id);
+        return view('backend.org-service.show', compact('orgService'));
+    }
+
+    public function activate(Request $request)
+    {
+        OrgService::onlyTrashed()->find($request->post('id'))->restore();
+        return redirect(route('org-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 
 }

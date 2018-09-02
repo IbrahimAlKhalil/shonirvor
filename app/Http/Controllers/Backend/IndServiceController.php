@@ -8,6 +8,8 @@ use App\Models\IndServiceDoc;
 use App\Models\IndServiceImage;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class IndServiceController extends Controller
 {
@@ -38,6 +40,7 @@ class IndServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
+        $user->roles()->attach(3);
 
 
         $registration = new IndService;
@@ -84,4 +87,49 @@ class IndServiceController extends Controller
     {
         return view('backend.ind-service.show', compact('indService'));
     }
+
+    public function destroy(Request $request, IndService $indService)
+    {
+        if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
+            switch ($request->post('type')) {
+                case 'deactivate':
+                    $indService->delete();
+                    $msg = 'Account Deactivated Successfully!';
+                    break;
+                default:
+
+                    // delete directories
+                    Storage::deleteDirectory('ind-service-docs/' . $indService->id);
+                    Storage::deleteDirectory('ind-service-images/' . $indService->id);
+
+                    $indService->forceDelete();
+
+                    $msg = 'Account Removed Successfully!';
+            }
+
+            return redirect(route('ind-service.show-disabled', $indService->id))->with('success', $msg);
+        }
+
+        return abort('404');
+    }
+
+    public function showDisabledAccounts()
+    {
+        $indServices = IndService::onlyTrashed()->paginate(15);
+
+        return view('backend.ind-service.index', compact('indServices'));
+    }
+
+    public function showDisabled($id)
+    {
+        $indService = IndService::withTrashed()->find($id);
+        return view('backend.ind-service.show', compact('indService'));
+    }
+
+    public function activate(Request $request)
+    {
+        IndService::onlyTrashed()->find($request->post('id'))->restore();
+        return redirect(route('ind-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+    }
+
 }

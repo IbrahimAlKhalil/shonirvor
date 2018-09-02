@@ -6,6 +6,7 @@ use App\Models\IndService;
 use App\Models\IndServiceDoc;
 use App\Models\IndServiceImage;
 use App\Models\PendingIndService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +45,7 @@ class IndServiceRequestController extends Controller
         $service->address = $pendingService->address;
 
         $service->save();
+        User::find($service->user_id)->roles()->attach(3);
 
 
         $documents = [];

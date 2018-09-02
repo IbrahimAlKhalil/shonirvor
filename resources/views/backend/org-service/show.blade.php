@@ -10,9 +10,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('ind-service.index') }}">All</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ind-service.create') }}">Create</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -35,7 +32,7 @@
 
                     <tr>
                         <th scope="row">Mobile</th>
-                        <td>{{ $orgService->user->mobile }}</td>
+                        <td>{{ $orgService->mobile }}</td>
                     </tr>
 
                     <tr>
@@ -65,6 +62,48 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="row">
+                    {{-- check the account currently showing is deactivated or not --}}
+
+                    @if($orgService->trashed())
+
+                        {{-- current account is deactivated so show "Actiate" button --}}
+
+                        <div class="btn-group mx-auto">
+                            <span class="btn btn-secondary btn-success"
+                                  onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</span>
+                        </div>
+                        <form id="activate-account"
+                              action="{{ route('org-service.activate') }}"
+                              method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="id" value="{{ $orgService->id }}">
+                        </form>
+                    @else
+                        {{-- current account not is deactivated so show "Deactivate" and "Remove" buttons --}}
+
+                        <div class="btn-group mx-auto">
+                    <span class="btn btn-secondary btn-warning"
+                          onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">Deactivate This Account</span>
+                            <span class="btn btn-secondary btn-danger"
+                                  onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
+                        </div>
+                        <form id="deactivate-account"
+                              action="{{ route('org-service.destroy', $orgService->id) }}"
+                              method="post">
+                            {{ csrf_field() }}
+                            {{ method_field('delete') }}
+                            <input type="hidden" name="type" value="deactivate">
+                        </form>
+                        <form id="remove-account"
+                              action="{{ route('org-service.destroy', $orgService->id) }}"
+                              method="post">
+                            {{ csrf_field() }}
+                            {{ method_field('delete') }}
+                            <input type="hidden" name="type" value="remove">
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
 

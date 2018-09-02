@@ -13,9 +13,9 @@
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('dealer-registration.index')){{ 'active' }}@endif">
+            {{--<li class="nav-item @if(request()->url() == route('dealer-registration.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer-registration.index') }}">Dealer Registrarion</a>
-            </li>
+            </li>--}}
         </ul>
     </div>
 </nav>

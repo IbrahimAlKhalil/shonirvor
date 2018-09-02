@@ -8,11 +8,29 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ind-service.create') }}">Create</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('ind-service-request.index') }}">Requests</a>
                     </li>
+
+                    {{-- check what if current page showing disable accounts or not --}}
+
+                    @if(route('ind-service.disabled') == request()->url())
+                        {{-- current page is showing disable accounts --}}
+                        {{-- set the appropriate show route --}}
+                        @php($routeToGo = 'ind-service.show-disabled')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('ind-service.index') }}">Show Activated Accounts
+                                Only</a>
+                        </li>
+                    @else
+                        {{-- current page is showing activated accounts --}}
+                        {{-- set the appropriate show route --}}
+                        @php($routeToGo = 'ind-service.show')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('ind-service.disabled') }}">Show Disabled
+                                Accounts
+                                Only</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -45,9 +63,9 @@
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>
-                                <a href="{{ route('ind-service.show', $indService->id) }}">{{ $indService->user->name }}</a>
+                                <a href="{{ route($routeToGo, $indService->id) }}">{{ $indService->user->name }}</a>
                             </td>
-                            <td>{{ $indService->user->mobile }}</td>
+                            <td>{{ $indService->mobile }}</td>
                             <td>{{ $indService->email }}</td>
                         </tr>
                     @empty

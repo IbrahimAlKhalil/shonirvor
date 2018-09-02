@@ -8,6 +8,7 @@ use App\Models\OrgService;
 use App\Models\OrgServiceDoc;
 use App\Models\OrgServiceImage;
 use App\Models\PendingOrgService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,6 +48,7 @@ class OrgServiceRequestController extends Controller
         $service->address = $pendingService->address;
 
         $service->save();
+        User::find($service->user_id)->roles()->attach(4);
 
 
         $documents = [];

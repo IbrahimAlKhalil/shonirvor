@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                         <th scope="row">Mobile</th>
-                        <td>{{ $serviceRequest->user->mobile }}</td>
+                        <td>{{ $serviceRequest->mobile }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Email</th>

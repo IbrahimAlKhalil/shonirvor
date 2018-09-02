@@ -8,11 +8,28 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('org-service.create') }}">Create</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('org-service-request.index') }}">Requests</a>
                     </li>
+                    {{-- check what if current page showing disable accounts or not --}}
+
+                    @if(route('org-service.disabled') == request()->url())
+                        {{-- current page is showing disable accounts --}}
+                        {{-- set the appropriate show route --}}
+                        @php($routeToGo = 'org-service.show-disabled')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('org-service.index') }}">Show Activated Accounts
+                                Only</a>
+                        </li>
+                    @else
+                        {{-- current page is showing activated accounts --}}
+                        {{-- set the appropriate show route --}}
+                        @php($routeToGo = 'org-service.show')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('org-service.disabled') }}">Show Disabled
+                                Accounts
+                                Only</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -45,9 +62,9 @@
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>
-                                <a href="{{ route('org-service.show', $orgService->id) }}">{{ $orgService->user->name }}</a>
+                                <a href="{{ route($routeToGo, $orgService->id) }}">{{ $orgService->user->name }}</a>
                             </td>
-                            <td>{{ $orgService->user->mobile }}</td>
+                            <td>{{ $orgService->mobile }}</td>
                             <td>{{ $orgService->email }}</td>
                         </tr>
                     @empty

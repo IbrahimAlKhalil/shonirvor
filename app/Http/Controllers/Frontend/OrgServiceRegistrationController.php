@@ -21,7 +21,8 @@ class OrgServiceRegistrationController extends Controller
     public function store(StoreOrgServiceRegistration $request)
     {
         if(PendingOrgService::where('user_id', Auth::id())->count() >= 3) {
-            return response('You have already three requests pending, please wait until we review your applications, and then you can request to be a service provider again!');
+            return response('You have already three requests
+             pending, please wait until we review your applications, and then you can request to be a service provider again!');
         }
 
         $registration = new PendingOrgService;
