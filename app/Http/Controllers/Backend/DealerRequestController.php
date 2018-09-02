@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\User;
-use App\Models\UserDocument;
-use App\Models\DealerRegistration;
+use App\Models\Dealer;
+use App\Models\DealerDocument;
+use App\Models\PendingDealer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,13 +13,12 @@ class DealerRequestController extends Controller
 
     public function index()
     {
-        $dealerRequests = DealerRegistration::paginate(15);
-
+        $dealerRequests = PendingDealer::paginate(15);
         return view('backend.dealer-request.index', compact('dealerRequests'));
     }
 
 
-    public function show(DealerRegistration $dealerRequest)
+    public function show(PendingDealer $dealerRequest)
     {
         return view('backend.dealer-request.show', compact('dealerRequest'));
     }
@@ -27,39 +26,36 @@ class DealerRequestController extends Controller
 
     public function approve($id)
     {
-        $dealerRegistration = DealerRegistration::find($id);
-        $dealerDocuments = $dealerRegistration->documents;
+        $pendingDealer = PendingDealer::find($id);
+        $pendingDealerDocuments = $pendingDealer->documents;
 
-        $newUser = new User();
-        $newUser->name = $dealerRegistration->name;
-        $newUser->mobile = $dealerRegistration->mobile;
-        $newUser->email = $dealerRegistration->email;
-        $newUser->nid = $dealerRegistration->nid;
-        $newUser->age = $dealerRegistration->age;
-        $newUser->qualification = $dealerRegistration->qualification;
-        $newUser->address = $dealerRegistration->address;
-        $newUser->photo = $dealerRegistration->photo;
-        $newUser->password = $dealerRegistration->password;
-        $newUser->save();
+        $dealer = new Dealer();
+        $dealer->user_id = $pendingDealer->user_id;
+        $dealer->mobile = $pendingDealer->mobile;
+        $dealer->email = $pendingDealer->email;
+        $dealer->district = $pendingDealer->district;
+        $dealer->thana = $pendingDealer->thana;
+        $dealer->union = $pendingDealer->union;
+        $dealer->address = $pendingDealer->address;
+        $dealer->save();
 
-        $newUser->roles()->attach(2);
+        $dealer->user->attachRole(2);
 
-        $newDocuments = [];
+        $movingDocuments = [];
+        foreach ($pendingDealerDocuments as $document) {
+            $filename = basename(asset('storage/' . $document->path));
 
-        foreach ($dealerDocuments as $document) {
-            $filename = basename(asset('storage/' . $document->document));
+            Storage::move($document->path, 'dealer-documents/' . $dealer->id . '/' . $filename);
 
-            Storage::move($document->document, 'users-documents/' . $filename);
-
-            array_push($newDocuments, [
-                'document' => 'users-documents/' . $newUser->id . '/' . $filename,
-                'user_id' => $newUser->id
+            array_push($movingDocuments, [
+                'dealer_id' => $dealer->id,
+                'path' => 'dealer-documents/' . $dealer->id . '/' . $filename
             ]);
         }
 
-        UserDocument::insert($newDocuments);
+        DealerDocument::insert($movingDocuments);
 
-        $dealerRegistration->delete();
+        $pendingDealer->delete();
 
         return redirect(route('dealer.index'))->with('success', 'Dealer Request approved successfully!');
     }
@@ -67,11 +63,11 @@ class DealerRequestController extends Controller
 
     public function reject($id)
     {
-        foreach (DealerRegistration::find($id)->documents as $document) {
+        foreach (PendingDealer::find($id)->documents as $document) {
             Storage::delete($document->document);
         }
 
-        DealerRegistration::find($id)->delete();
+        PendingDealer::find($id)->delete();
 
         return redirect(route('dealer-request.index'))->with('success', 'Dealer Request rejected successfully!');
     }

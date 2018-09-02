@@ -231,5 +231,4 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
-
 ];

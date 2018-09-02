@@ -28,8 +28,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function documents()
+    public function dealer()
     {
-        return $this->hasMany(UserDocument::class);
+        return $this->hasOne(Dealer::class);
     }
 }

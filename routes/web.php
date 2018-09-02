@@ -8,26 +8,14 @@ Auth::routes();
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
 
-Route::resource('dashboard/dealer', 'Backend\DealerController');
-
+Route::resource('dashboard/dealer', 'Backend\DealerController', ['except' => ['create', 'store']]);
+Route::get('dealer-instruction', 'Frontend\DealerRegistrationController@instruction')->name('dealer.instruction');
+Route::resource('dealer-registration', 'Frontend\DealerRegistrationController', ['except' => ['create', 'show', 'delete']])->middleware('auth');
+Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']])->middleware('auth');
+Route::post('dealer-request/approve/{id}', 'Backend\DealerRequestController@approve')->name('dealer-request.approve');
+Route::delete('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
 
 /*** Ibrahim ***/
-
-Route::get('dealer-request/approve/{id}', 'Backend\DealerRequestController@approve')->name('dealer-request.approve');
-Route::get('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
-Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']])->middleware('auth');
-
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('logout');
-
-
-Route::middleware('auth')
-    ->name('registration.')
-    ->prefix('registration')
-    ->group(function () {
-        Route::resource('dealer', 'Frontend\DealerRegistrationController', ['only' => ['index', 'store']]);
-    });
-
-
 Route::middleware('auth')
     ->name('registration.')
     ->prefix('registration/service-provider')

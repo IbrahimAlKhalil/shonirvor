@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', $dealer->name)
+@section('title', $user->name)
 
 @section('content')
     <div class="container">
@@ -10,18 +10,15 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('dealer.index') }}">All</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ asset('storage/' . $dealer->photo) }}" target="_blank">
-                    <img src="{{ asset('storage/' . $dealer->photo) }}" class="img-responsive img-thumbnail"
-                         alt="{{ $dealer->name }}">
+                <a href="{{ asset('storage/' . $user->photo) }}" target="_blank">
+                    <img src="{{ asset('storage/' . $user->photo) }}" class="img-responsive img-thumbnail"
+                         alt="{{ $user->name }}">
                 </a>
             </div>
 
@@ -30,38 +27,55 @@
                     <tbody>
                     <tr>
                         <th scope="row">Name</th>
-                        <td>{{ $dealer->name }}</td>
+                        <td>{{ $user->name }}</td>
                     </tr>
-
                     <tr>
-                        <th scope="row">Mobile</th>
-                        <td>{{ $dealer->mobile }}</td>
+                        <th scope="row">Private Mobile</th>
+                        <td>{{ $user->mobile }}</td>
                     </tr>
-
                     <tr>
-                        <th scope="row">Email</th>
-                        <td>{{ $dealer->email }}</td>
+                        <th scope="row">Public Mobile</th>
+                        <td>{{ $user->dealer->mobile }}</td>
                     </tr>
-
-
+                    <tr>
+                        <th scope="row">Private Email</th>
+                        <td>{{ $user->email }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Public Email</th>
+                        <td>{{ $user->dealer->email }}</td>
+                    </tr>
                     <tr>
                         <th scope="row">Age</th>
-                        <td>{{ $dealer->age }}</td>
+                        <td>{{ $user->age }}</td>
                     </tr>
-
                     <tr>
                         <th scope="row">Qualification/Experience</th>
-                        <td>{{ $dealer->qualification }}</td>
+                        <td>{{ $user->qualification }}</td>
                     </tr>
-
                     <tr>
                         <th scope="row">NID</th>
-                        <td>{{ $dealer->nid }}</td>
+                        <td>{{ $user->nid }}</td>
                     </tr>
-
                     <tr>
-                        <th scope="row">Address</th>
-                        <td>{{ $dealer->address }}</td>
+                        <th scope="row">Category</th>
+                        <td>{{ 'Shirt, Pant.' }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Area</th>
+                        <td>
+                            @if($user->dealer->district)
+                                {{ $user->dealer->union. ', ' .$user->dealer->thana. ', ' .$user->dealer->district }}.
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Private Address</th>
+                        <td>{{ $user->address }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Working Address</th>
+                        <td>{{ $user->dealer->address }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -71,13 +85,15 @@
         <h3 class="my-4">Documents</h3>
 
         <div class="row">
-            @foreach($dealer->documents as $document)
+            @forelse($user->dealer->documents as $document)
                 <div class="col-md-3">
-                    <a href="{{ asset('storage/' . $document->document) }}" target="_blank">
-                        <img src="{{ asset('storage/' . $document->document) }}" class="img-responsive img-thumbnail">
+                    <a href="{{ asset('storage/' . $document->path) }}" target="_blank">
+                        <img src="{{ asset('storage/' . $document->path) }}" class="img-responsive img-thumbnail">
                     </a>
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12 text-muted">No attachments uploaded.</div>
+            @endforelse
         </div>
     </div>
 @endsection

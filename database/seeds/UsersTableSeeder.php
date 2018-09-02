@@ -2,35 +2,34 @@
 
 use App\Models\Role;
 use App\Models\User;
-use App\Models\UserDocument;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
     public function run()
     {
+        $customer = new User;
+        $customer->name = "Hujaifa Islam";
+        $customer->mobile = '00000000000';
+        $customer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
+        $customer->save();
+
         $superadmin = new User;
         $superadmin->name = "Rafiq Uddin";
         $superadmin->mobile = '11111111111';
-        $superadmin->password = bcrypt('123456');
+        $superadmin->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
         $superadmin->save();
-        $superadmin->roles()->attach(1);
-
-        $customer = new User;
-        $customer->name = "Hujaifa Islam";
-        $customer->mobile = '22222222222';
-        $customer->password = bcrypt('123456');
-        $customer->save();
+        $superadmin->attachRole(1);
 
         $dealer = new User;
         $dealer->name = "Ikram Mansur";
-        $dealer->mobile = '33333333333';
-        $dealer->password = bcrypt('123456');
+        $dealer->mobile = '22222222222';
+        $dealer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
         $dealer->save();
-        $dealer->roles()->attach(2);
+        $dealer->attachRole(2);
+        $dealer->dealer()->create();
 
         factory(User::class, 80)->create()->each(function($user) {
-            $user->documents()->save(factory(UserDocument::class)->make());
             // Attach a role
             $countRoles = Role::count();
             $user->roles()->attach(rand(1, $countRoles));

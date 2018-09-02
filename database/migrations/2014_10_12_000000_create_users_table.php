@@ -17,13 +17,12 @@ class CreateUsersTable extends Migration
             $table->integer('age')->nullable();
             $table->string('qualification')->nullable();
             $table->string('address')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('photo')->default('default/user-photos/person.jpg');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
     }
-
 
     public function down()
     {

@@ -8,9 +8,6 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer.create') }}">Create</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('dealer-request.index') }}">Requests</a>
                     </li>
                 </ul>
@@ -30,13 +27,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($dealers as $dealer)
-                            @php($serial = $dealers->perPage() * ($dealers->currentPage() - 1) + $loop->iteration)
+                        @forelse($users as $user)
+                            @php($serial = $users->perPage() * ($users->currentPage() - 1) + $loop->iteration)
                             <tr>
                                 <td>{{ $serial }}</td>
-                                <td><a href="{{ route('dealer.show', $dealer->id) }}">{{ $dealer->name }}</a></td>
-                                <td>{{ $dealer->mobile }}</td>
-                                <td>{{ $dealer->email }}</td>
+                                <td><a href="{{ route('dealer.show', $user->id) }}">{{ $user->name }}</a></td>
+                                <td>{{ $user->mobile }}</td>
+                                <td>{{ $user->email }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -49,7 +46,7 @@
         </div>
         <div class="row">
             <div class="mx-auto">
-                {{ $dealers->links('pagination::bootstrap-4') }}
+                {{ $users->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

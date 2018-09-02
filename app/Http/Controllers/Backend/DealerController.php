@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\User;
-use App\Models\UserDocument;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDealer;
 use App\Http\Controllers\Controller;
@@ -18,11 +17,11 @@ class DealerController extends Controller
 
     public function index()
     {
-        $dealers = User::whereHas('roles', function ($q) {
+        $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'dealer');
-        })->orderBy('id', 'desc')->paginate(15);
+        })->paginate(15);
 
-        return view('backend.dealer.index', compact('dealers'));
+        return view('backend.dealer.index', compact('users'));
     }
 
 
@@ -48,7 +47,7 @@ class DealerController extends Controller
         $dealer->roles()->attach(2);
 
         if ($request->hasFile('photo')) {
-            $dealer->photo = $request->file('photo')->store('users-photo/' . $dealer->id);
+            $dealer->photo = $request->file('photo')->store('user-photo/' . $dealer->id);
             $dealer->save();
         }
 
@@ -65,9 +64,10 @@ class DealerController extends Controller
     }
 
 
-    public function show(User $dealer)
+    public function show($id)
     {
-        return view('backend.dealer.show', compact('dealer'));
+        $user = User::with(['dealer', 'dealer.documents'])->find($id);
+        return view('backend.dealer.show', compact('user'));
     }
 
 

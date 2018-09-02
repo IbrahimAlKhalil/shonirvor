@@ -3,7 +3,7 @@
 @section('title', 'Service Provicder Registration')
 
 @section('content')
-    <div class="container mt-4">
+    <div class="container my-4">
         <div class="row">
             <div>
                 <p class="mt-4">
@@ -85,6 +85,5 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 @endsection

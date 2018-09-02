@@ -61,10 +61,7 @@
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">Address</label>
                 <div class="col-8">
-                    <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">
-                        {{ old('address') }}
-                    </textarea>
+                    <textarea id="address" rows="8" name="address" required="required" class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
                     @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
