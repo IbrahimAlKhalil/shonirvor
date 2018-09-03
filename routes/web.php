@@ -11,7 +11,7 @@ Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
 Route::resource('dashboard/dealer', 'Backend\DealerController', ['except' => ['create', 'store']]);
 Route::get('dealer-instruction', 'Frontend\DealerRegistrationController@instruction')->name('dealer.instruction');
 Route::resource('dealer-registration', 'Frontend\DealerRegistrationController', ['except' => ['create', 'show', 'delete']])->middleware('auth');
-Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']])->middleware('auth');
+Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']]);
 Route::post('dealer-request/approve/{id}', 'Backend\DealerRequestController@approve')->name('dealer-request.approve');
 Route::delete('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
 

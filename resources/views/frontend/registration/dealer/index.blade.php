@@ -26,7 +26,7 @@
             <div class="form-group row">
                 <label for="age" class="col-4 col-form-label">Age</label>
                 <div class="col-8">
-                    <input id="age" name="age" type="number" value="{{ old('age') }}" required="required" class="form-control @if($errors->has('age')) is-invalid @endif">
+                    <input id="age" name="age" type="number" value="{{ old('age') }}" class="form-control @if($errors->has('age')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'age'])
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="form-group row">
                 <label for="nid" class="col-4 col-form-label">NID Number</label>
                 <div class="col-8">
-                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}" class="form-control @if($errors->has('nid')) is-invalid @endif" required>
+                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}" class="form-control @if($errors->has('nid')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'nid'])
                 </div>
             </div>
@@ -89,7 +89,7 @@
             <div class="form-group row">
                 <label for="address" class="col-4 col-form-label">Full Work Address</label>
                 <div class="col-8">
-                    <textarea id="address" rows="8" name="address" required="required" class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
+                    <textarea id="address" rows="8" name="address" class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
                     @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
@@ -105,7 +105,8 @@
             <div class="form-group row">
                 <label for="documents" class="col-4 col-form-label">Documents/Papers</label>
                 <div class="col-8">
-                    <input id="documents" name="documents[]" type="file" accept="image/*" class="form-control" multiple>
+                    <input id="documents" name="documents[]" type="file" accept="image/*" class="form-control{{ $errors->has('documents.0') ? ' is-invalid' : '' }}" multiple>
+                    @include('components.invalid', ['name' => 'documents.0'])
                 </div>
             </div>
             <div class="form-group row">

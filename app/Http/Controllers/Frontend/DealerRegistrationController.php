@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PendingDealerDocument;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreDealerRegistration;
+use App\Http\Requests\UpdateDealerRegistration;
 
 class DealerRegistrationController extends Controller
 {
@@ -60,7 +61,7 @@ class DealerRegistrationController extends Controller
             PendingDealerDocument::insert($documents);
         }
 
-        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
+        return redirect(route('dealer-registration.edit', Auth::id()))->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
     }
 
     public function edit($id)
@@ -72,12 +73,44 @@ class DealerRegistrationController extends Controller
             return redirect(route('dealer-registration.index'));
         }
 
-        return view('frontend.registration.dealer.edit');
+        $user = User::with('pendingDealer')->find($id);
+        return view('frontend.registration.dealer.edit', compact('user'));
     }
 
-    public function update()
+    public function update(UpdateDealerRegistration $request, $id)
     {
-        //
+        $user = User::with(['pendingDealer', 'pendingDealer.documents'])->find($id);
+
+        $user->age = $request->post('age');
+        $user->qualification = $request->post('qualification');
+        $user->nid = $request->post('nid');
+        $user->save();
+
+        $user->pendingDealer->mobile = $request->post('mobile');
+        $user->pendingDealer->email = $request->post('email');
+        $user->pendingDealer->category = $request->post('category');
+        $user->pendingDealer->category = $request->post('category');
+        $user->pendingDealer->district = $request->post('district');
+        $user->pendingDealer->thana = $request->post('thana');
+        $user->pendingDealer->union = $request->post('union');
+        $user->pendingDealer->no_area = $request->post('no_area');
+        $user->pendingDealer->address = $request->post('address');
+        $user->pendingDealer->save();
+
+        if ($request->hasFile('documents')) {
+            foreach ($user->pendingDealer->documents as $document) {
+                Storage::delete($document->path);
+                $document->delete();
+            }
+            foreach ($request->documents as $document) {
+                $pendingDealerDocument = new PendingDealerDocument();
+                $pendingDealerDocument->pending_dealer_id = $user->pendingDealer->id;
+                $pendingDealerDocument->path = $document->store('pending-dealer-documents');
+                $pendingDealerDocument->save();
+            }
+        }
+
+        return back()->with('success', 'Data updated successfully!');
     }
 
     public function instruction()

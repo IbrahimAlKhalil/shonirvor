@@ -2,6 +2,7 @@
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Dealer;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -33,6 +34,11 @@ class UsersTableSeeder extends Seeder
             // Attach a role
             $countRoles = Role::count();
             $user->roles()->attach(rand(1, $countRoles));
+            // If Dealer
+            if ($user->hasRole('dealer'))
+            {
+                $user->dealer()->save(factory(Dealer::class)->make());
+            }
         });
     }
 }

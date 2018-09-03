@@ -4,18 +4,11 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dealer-request.index') }}">Requests</a>
-                    </li>
-                </ul>
+        <div class="row mt-5">
+            <div class="col-12 mb-4">
+                <h3>All Dealers</h3>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h3 class="mb-4">All Dealers</h3>
+            <div class="col-md-9">
                 @include('components.success')
                 <table class="table table-striped table-bordered table-hover table-sm text-center">
                     <thead>
@@ -42,11 +35,17 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="mx-auto">
+                        {{ $users->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="mx-auto">
-                {{ $users->links('pagination::bootstrap-4') }}
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="{{ route('dealer.index') }}" class="list-group-item active">All Dealer</a>
+                    <a href="{{ route('dealer-request.index') }}" class="list-group-item">Dealer Requests</a>
+                </div>
             </div>
         </div>
     </div>

@@ -32,4 +32,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Dealer::class);
     }
+
+    public function pendingDealer()
+    {
+        return $this->hasOne(PendingDealer::class);
+    }
 }

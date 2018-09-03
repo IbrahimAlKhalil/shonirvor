@@ -14,6 +14,6 @@ $factory->define(User::class, function (Faker $faker) {
         'address' => $faker->address,
         'photo' => 'default/user-photos/person.jpg',
         'password' => '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC', // 123456
-        'remember_token' => str_random(10),
+        'remember_token' => str_random(10)
     ];
 });

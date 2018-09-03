@@ -2,24 +2,25 @@
 
 namespace App\Http\Requests;
 
-use App\Models\PendingDealer;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class StoreDealerRegistration extends FormRequest
+class UpdateDealerRegistration extends FormRequest
 {
     public function authorize()
     {
-        return !PendingDealer::where('user_id', Auth::id())->first() && !Auth::user()->hasRole('dealer');
+        return true;
     }
 
     public function rules()
     {
+        $nidID = Auth::user()->pendingDealer->id;
+
         return [
-//            'mobile' => 'digits:11',
+            'mobile' => 'digits:11',
             'email' => 'email',
             'age' => 'integer|min:10',
-            'nid' => 'integer|unique:users',
+            'nid' => 'integer|unique:users,nid,'. $nidID,
             'address' => 'string',
             'photo' => 'image',
             'documents.*' => 'image'
