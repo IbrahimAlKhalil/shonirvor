@@ -83,8 +83,9 @@ class IndServiceController extends Controller
     }
 
 
-    public function show(IndService $indService)
+    public function show($id)
     {
+        $indService = IndService::find($id);
         return view('backend.ind-service.show', compact('indService'));
     }
 
@@ -107,7 +108,7 @@ class IndServiceController extends Controller
                     $msg = 'Account Removed Successfully!';
             }
 
-            return redirect(route('ind-service.show-disabled', $indService->id))->with('success', $msg);
+            return redirect(route('individual-service.show-disabled', $indService->id))->with('success', $msg);
         }
 
         return abort('404');
@@ -129,7 +130,7 @@ class IndServiceController extends Controller
     public function activate(Request $request)
     {
         IndService::onlyTrashed()->find($request->post('id'))->restore();
-        return redirect(route('ind-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+        return redirect(route('individual-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 
 }

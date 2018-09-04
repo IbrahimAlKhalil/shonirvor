@@ -10,7 +10,7 @@
         @include('components.success')
 
 
-        <form method="post" enctype="multipart/form-data" action="{{ route('ind-service-registration.store') }}">
+        <form method="post" enctype="multipart/form-data" action="{{ route('individual-service-registration.store') }}">
             {{ csrf_field() }}
 
             <div class="form-group row">
@@ -104,9 +104,7 @@
                 <label for="address" class="col-4 col-form-label">Address</label>
                 <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">
-                        {{ old('address') }}
-                    </textarea>
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
                     @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
@@ -121,7 +119,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">Images</label>
+                <label for="images" class="col-4 col-form-label">Portfolio</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

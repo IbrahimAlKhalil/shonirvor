@@ -8,7 +8,7 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('ind-service.index') }}">All</a>
+                        <a class="nav-link active" href="{{ route('individual-service.index') }}">All</a>
                     </li>
                 </ul>
             </div>
@@ -33,15 +33,24 @@
                     </tr>
 
                     <tr>
-                        <th scope="row">Mobile</th>
+                        <th scope="row">Working Mobile</th>
                         <td>{{ $indService->mobile }}</td>
                     </tr>
 
                     <tr>
-                        <th scope="row">Email</th>
+                        <th scope="row">Personal Mobile</th>
+                        <td>{{ $indService->user->mobile }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Personal Email</th>
                         <td>{{ $indService->email }}</td>
                     </tr>
 
+                    <tr>
+                        <th scope="row">Working Email</th>
+                        <td>{{ $indService->user->email }}</td>
+                    </tr>
 
                     <tr>
                         <th scope="row">Age</th>
@@ -77,7 +86,7 @@
                                   onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</span>
                         </div>
                         <form id="activate-account"
-                              action="{{ route('ind-service.activate') }}"
+                              action="{{ route('individual-service.activate') }}"
                               method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $indService->id }}">
@@ -92,14 +101,14 @@
                                   onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
                         </div>
                         <form id="deactivate-account"
-                              action="{{ route('ind-service.destroy', $indService->id) }}"
+                              action="{{ route('individual-service.destroy', $indService->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}
                             <input type="hidden" name="type" value="deactivate">
                         </form>
                         <form id="remove-account"
-                              action="{{ route('ind-service.destroy', $indService->id) }}"
+                              action="{{ route('individual-service.destroy', $indService->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}

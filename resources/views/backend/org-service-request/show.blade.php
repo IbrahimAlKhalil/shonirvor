@@ -8,7 +8,7 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('ind-service-request.index') }}">All
+                        <a class="nav-link active" href="{{ route('individual-service-request.index') }}">All
                             Service Provider requests</a>
                     </li>
                 </ul>
@@ -26,17 +26,35 @@
                 <table class="table table-striped table-bordered table-hover table-sm">
                     <tbody>
                     <tr>
-                        <th scope="row">Name</th>
+                        <th scope="row">User Name</th>
                         <td>{{ $serviceRequest->user->name }}</td>
                     </tr>
+
                     <tr>
-                        <th scope="row">Mobile</th>
+                        <th scope="row">Organization Name</th>
+                        <td>{{ $serviceRequest->org_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Organization Mobile</th>
                         <td>{{ $serviceRequest->mobile }}</td>
                     </tr>
+
                     <tr>
-                        <th scope="row">Email</th>
+                        <th scope="row">Personal Mobile</th>
+                        <td>{{ $serviceRequest->user->mobile }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Working Email</th>
                         <td>{{ $serviceRequest->email }}</td>
                     </tr>
+
+                    <tr>
+                        <th scope="row">Personal Email</th>
+                        <td>{{ $serviceRequest->user->email }}</td>
+                    </tr>
+
                     <tr>
                         <th scope="row">Age</th>
                         <td>{{ $serviceRequest->user->age }}</td>
@@ -49,10 +67,17 @@
                         <th scope="row">NID</th>
                         <td>{{ $serviceRequest->user->nid }}</td>
                     </tr>
+
                     <tr>
-                        <th scope="row">Address</th>
+                        <th scope="row">Organization Address</th>
                         <td>{{ $serviceRequest->address }}</td>
                     </tr>
+
+                    <tr>
+                        <th scope="row">User Address</th>
+                        <td>{{ $serviceRequest->user->address }}</td>
+                    </tr>
+
                     <tr>
                         <th scope="row">Latitude</th>
                         <td>{{ $serviceRequest->latitude }}</td>
@@ -72,14 +97,14 @@
                         <span class="btn btn-secondary btn-danger"
                               onclick="document.getElementById('reject-request').submit();">Reject</span>
 
-                        <form id="approve-request" action="{{ route('org-service-request.store') }}"
+                        <form id="approve-request" action="{{ route('organization-service-request.store') }}"
                               method="post">
                             {{ csrf_field() }}
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                         </form>
 
                         <form id="reject-request"
-                              action="{{ route('org-service-request.destroy', $serviceRequest->id) }}"
+                              action="{{ route('organization-service-request.destroy', $serviceRequest->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}

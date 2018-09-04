@@ -12,7 +12,7 @@
         @include('components.success')
 
         <form method="post" enctype="multipart/form-data"
-              action="{{ route('ind-service-registration.update', $pendingIndService->id) }}">
+              action="{{ route('individual-service-registration.update', $pendingIndService->id) }}">
             {{ method_field('put') }}
             {{ csrf_field() }}
 
@@ -68,7 +68,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">Images</label>
+                <label for="images" class="col-4 col-form-label">Portfolio</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

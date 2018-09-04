@@ -8,11 +8,11 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('org-service.index') }}">All Organizational Service
+                        <a class="nav-link active" href="{{ route('organization-service.index') }}">All Organizational Service
                             Providers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('org-service-request.index') }}">Requests</a>
+                        <a class="nav-link" href="{{ route('organization-service-request.index') }}">Requests</a>
                     </li>
                 </ul>
             </div>
@@ -28,7 +28,7 @@
                 @endif
 
                 <form method="post" enctype="multipart/form-data"
-                      action="{{ route('org-service.store') }}">
+                      action="{{ route('organization-service.store') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">

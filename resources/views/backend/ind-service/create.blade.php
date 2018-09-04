@@ -8,11 +8,11 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('ind-service.index') }}">All Individual Service
+                        <a class="nav-link active" href="{{ route('individual-service.index') }}">All Individual Service
                             Providers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ind-service-request.index') }}">Requests</a>
+                        <a class="nav-link" href="{{ route('individual-service-request.index') }}">Requests</a>
                     </li>
                 </ul>
             </div>
@@ -27,7 +27,7 @@
                     <div class="alert alert-danger text-center">Validation Fail. Check your information.</div>
                 @endif
 
-                <form method="post" enctype="multipart/form-data" action="{{ route('ind-service.store') }}">
+                <form method="post" enctype="multipart/form-data" action="{{ route('individual-service.store') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">

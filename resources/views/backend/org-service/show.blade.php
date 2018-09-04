@@ -8,7 +8,7 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('ind-service.index') }}">All</a>
+                        <a class="nav-link active" href="{{ route('individual-service.index') }}">All</a>
                     </li>
                 </ul>
             </div>
@@ -26,20 +26,34 @@
                 <table class="table table-striped table-bordered table-hover table-sm">
                     <tbody>
                     <tr>
-                        <th scope="row">Name</th>
+                        <th scope="row">User Name</th>
                         <td>{{ $orgService->user->name }}</td>
                     </tr>
 
                     <tr>
-                        <th scope="row">Mobile</th>
+                        <th scope="row">Organization Name</th>
+                        <td>{{ $orgService->org_name }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Personal Mobile</th>
+                        <td>{{ $orgService->user->mobile }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Organization Mobile</th>
                         <td>{{ $orgService->mobile }}</td>
                     </tr>
 
                     <tr>
-                        <th scope="row">Email</th>
+                        <th scope="row">Organization Email</th>
                         <td>{{ $orgService->email }}</td>
                     </tr>
 
+                    <tr>
+                        <th scope="row">Personal Email</th>
+                        <td>{{ $orgService->user->email }}</td>
+                    </tr>
 
                     <tr>
                         <th scope="row">Age</th>
@@ -57,9 +71,15 @@
                     </tr>
 
                     <tr>
-                        <th scope="row">Address</th>
+                        <th scope="row">Organization Address</th>
                         <td>{{ $orgService->address }}</td>
                     </tr>
+
+                    <tr>
+                        <th scope="row">User Address</th>
+                        <td>{{ $orgService->address }}</td>
+                    </tr>
+
                     </tbody>
                 </table>
                 <div class="row">
@@ -74,7 +94,7 @@
                                   onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</span>
                         </div>
                         <form id="activate-account"
-                              action="{{ route('org-service.activate') }}"
+                              action="{{ route('organization-service.activate') }}"
                               method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $orgService->id }}">
@@ -89,14 +109,14 @@
                                   onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
                         </div>
                         <form id="deactivate-account"
-                              action="{{ route('org-service.destroy', $orgService->id) }}"
+                              action="{{ route('organization-service.destroy', $orgService->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}
                             <input type="hidden" name="type" value="deactivate">
                         </form>
                         <form id="remove-account"
-                              action="{{ route('org-service.destroy', $orgService->id) }}"
+                              action="{{ route('organization-service.destroy', $orgService->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}

@@ -29,23 +29,31 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('ind-service-registration', 'Frontend\IndServiceRegistrationController', ['only' => ['index', 'store', 'update']]);
-    Route::resource('org-service-registration', 'Frontend\OrgServiceRegistrationController', ['only' => ['index', 'store', 'update', 'edit']]);
+    Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
+        'only' => ['index', 'store', 'update'], 'parameters' => [
+            'individual-service-registration' => 'ind_id'
+        ]]);
+    Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
+        'only' => [
+            'index', 'store', 'update', 'edit'
+        ], 'parameters' => [
+            'organization-service-registration' => 'org_id'
+        ]]);
 });
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {
-    Route::resource('ind-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
-    Route::resource('org-service-request', 'Backend\OrgServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+    Route::resource('individual-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+    Route::resource('organization-service-request', 'Backend\OrgServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
 
-    Route::get('ind-service/disabled', 'Backend\IndServiceController@showDisabledAccounts')->name('ind-service.disabled');
-    Route::get('org-service/disabled', 'Backend\OrgServiceController@showDisabledAccounts')->name('org-service.disabled');
+    Route::get('individual-service/disabled', 'Backend\IndServiceController@showDisabledAccounts')->name('individual-service.disabled');
+    Route::get('organization-service/disabled', 'Backend\OrgServiceController@showDisabledAccounts')->name('organization-service.disabled');
 
-    Route::get('ind-service/disabled/{id}', 'Backend\IndServiceController@showDisabled')->name('ind-service.show-disabled');
-    Route::get('org-service/disabled/{id}', 'Backend\OrgServiceController@showDisabled')->name('org-service.show-disabled');
+    Route::get('individual-service/disabled/{id}', 'Backend\IndServiceController@showDisabled')->name('individual-service.show-disabled');
+    Route::get('organization-service/disabled/{id}', 'Backend\OrgServiceController@showDisabled')->name('organization-service.show-disabled');
 
-    Route::post('ind-service/activate', 'Backend\IndServiceController@activate')->name('ind-service.activate');
-    Route::post('org-service/activate', 'Backend\OrgServiceController@activate')->name('org-service.activate');
+    Route::post('individual-service/activate', 'Backend\IndServiceController@activate')->name('individual-service.activate');
+    Route::post('organization-service/activate', 'Backend\OrgServiceController@activate')->name('organization-service.activate');
 
-    Route::resource('ind-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy']]);
-    Route::resource('org-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy']]);
+    Route::resource('individual-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy']]);
+    Route::resource('organization-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy']]);
 });

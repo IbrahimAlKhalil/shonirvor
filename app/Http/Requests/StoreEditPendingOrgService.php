@@ -23,7 +23,7 @@ class StoreEditPendingOrgService extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('org_service_registration');
+        $id = $this->route('org_id');
 
         return [
             'org-name' => 'required',

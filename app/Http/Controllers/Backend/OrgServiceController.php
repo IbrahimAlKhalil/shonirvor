@@ -107,7 +107,7 @@ class OrgServiceController extends Controller
                     $msg = 'Account Removed Successfully!';
             }
 
-            return redirect(route('org-service.show-disabled', $orgService->id))->with('success', $msg);
+            return redirect(route('organization-service.show-disabled', $orgService->id))->with('success', $msg);
         }
 
         return abort('404');
@@ -130,7 +130,7 @@ class OrgServiceController extends Controller
     public function activate(Request $request)
     {
         OrgService::onlyTrashed()->find($request->post('id'))->restore();
-        return redirect(route('org-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+        return redirect(route('organization-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 
 }

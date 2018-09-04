@@ -82,7 +82,7 @@ class OrgServiceRequestController extends Controller
         $pendingService->delete();
 
 
-        return redirect(route('org-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider approved successfully!');
 
     }
 
@@ -98,6 +98,6 @@ class OrgServiceRequestController extends Controller
         }
         PendingOrgService::find($id)->delete();
 
-        return redirect(route('org-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }
 }

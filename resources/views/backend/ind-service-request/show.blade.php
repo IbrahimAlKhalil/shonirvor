@@ -8,7 +8,7 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('ind-service-request.index') }}">All
+                        <a class="nav-link active" href="{{ route('individual-service-request.index') }}">All
                             Service Provider requests</a>
                     </li>
                 </ul>
@@ -30,12 +30,21 @@
                         <td>{{ $serviceRequest->user->name }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Mobile</th>
+                        <th scope="row">Working Mobile</th>
                         <td>{{ $serviceRequest->mobile }}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Email</th>
+                        <th scope="row">Personal Mobile</th>
+                        <td>{{ $serviceRequest->user->mobile }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Working Email</th>
                         <td>{{ $serviceRequest->email }}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Personal Email</th>
+                        <td>{{ $serviceRequest->user->email }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Age</th>
@@ -72,14 +81,14 @@
                         <span class="btn btn-secondary btn-danger"
                               onclick="document.getElementById('reject-request').submit();">Reject</span>
 
-                        <form id="approve-request" action="{{ route('ind-service-request.store') }}"
+                        <form id="approve-request" action="{{ route('individual-service-request.store') }}"
                               method="post">
                             {{ csrf_field() }}
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                         </form>
 
                         <form id="reject-request"
-                              action="{{ route('ind-service-request.destroy', $serviceRequest->id) }}"
+                              action="{{ route('individual-service-request.destroy', $serviceRequest->id) }}"
                               method="post">
                             {{ csrf_field() }}
                             {{ method_field('delete') }}

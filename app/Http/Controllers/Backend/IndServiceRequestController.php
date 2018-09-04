@@ -79,7 +79,7 @@ class IndServiceRequestController extends Controller
         $pendingService->delete();
 
 
-        return redirect(route('ind-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider approved successfully!');
 
     }
 
@@ -95,7 +95,7 @@ class IndServiceRequestController extends Controller
         }
         PendingIndService::find($id)->delete();
 
-        return redirect(route('ind-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }
 
 }

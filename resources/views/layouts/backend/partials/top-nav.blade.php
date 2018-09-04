@@ -16,11 +16,11 @@
             <li class="nav-item @if(request()->url() == route('dealer-request.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer-request.index') }}">Dealer Requests</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('ind-service-request.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('ind-service-request.index') }}">SP Requests</a>
+            <li class="nav-item @if(request()->url() == route('individual-service-request.index') || request()->url() == route('organization-service-request.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('individual-service-request.index') }}">SP Requests</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('ind-service.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('ind-service.index') }}">Service Providers</a>
+            <li class="nav-item @if(request()->url() == route('individual-service.index') || request()->url() == route('organization-service.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('individual-service.index') }}">Service Providers</a>
             </li>
             <li class="nav-item @if(request()->url() == route('dealer.index') || request()->url() == route('dealer.create')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>

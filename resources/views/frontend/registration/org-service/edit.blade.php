@@ -12,7 +12,7 @@
         @include('components.success')
 
         <form method="post" enctype="multipart/form-data"
-              action="{{ route('org-service-registration.update', $pendingOrgService->id) }}">
+              action="{{ route('organization-service-registration.update', $pendingOrgService->id) }}">
             {{ method_field('put') }}
             {{ csrf_field() }}
 
@@ -37,8 +37,8 @@
             <div class="form-group row">
                 <label for="description" class="col-4 col-form-label">Description</label>
                 <div class="col-8">
-                    <input id="description" name="description" type="text" value="{{ oldOrData('description', $pendingOrgService->description) }}"
-                           class="form-control @if($errors->has('description')) is-invalid @endif">
+                    <textarea rows="8" id="description" name="description" type="text"
+                              class="form-control @if($errors->has('description')) is-invalid @endif">{{ oldOrData('description', $pendingOrgService->description) }}</textarea>
                     @include('components.invalid', ['name' => 'description'])
                 </div>
             </div>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">images</label>
+                <label for="images" class="col-4 col-form-label">Portfolio</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

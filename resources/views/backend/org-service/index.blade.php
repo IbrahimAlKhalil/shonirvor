@@ -8,24 +8,24 @@
             <div class="col">
                 <ul class="nav justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('org-service-request.index') }}">Requests</a>
+                        <a class="nav-link" href="{{ route('organization-service-request.index') }}">Requests</a>
                     </li>
                     {{-- check what if current page showing disable accounts or not --}}
 
-                    @if(route('org-service.disabled') == request()->url())
+                    @if(route('organization-service.disabled') == request()->url())
                         {{-- current page is showing disable accounts --}}
                         {{-- set the appropriate show route --}}
-                        @php($routeToGo = 'org-service.show-disabled')
+                        @php($routeToGo = 'organization-service.show-disabled')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('org-service.index') }}">Show Activated Accounts
+                            <a class="nav-link" href="{{ route('organization-service.index') }}">Show Activated Accounts
                                 Only</a>
                         </li>
                     @else
                         {{-- current page is showing activated accounts --}}
                         {{-- set the appropriate show route --}}
-                        @php($routeToGo = 'org-service.show')
+                        @php($routeToGo = 'organization-service.show')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('org-service.disabled') }}">Show Disabled
+                            <a class="nav-link" href="{{ route('organization-service.disabled') }}">Show Disabled
                                 Accounts
                                 Only</a>
                         </li>
@@ -36,10 +36,10 @@
 
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('ind-service.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('ind-service.index')){{ 'active' }}@endif">Individual</a>
-                <a href="{{ route('org-service.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('org-service.index')){{ 'active' }}@endif">Organization</a>
+                <a href="{{ route('individual-service.index') }}"
+                   class="btn btn-secondary @if(request()->url() == route('individual-service.index')){{ 'active' }}@endif">Individual</a>
+                <a href="{{ route('organization-service.index') }}"
+                   class="btn btn-secondary @if(request()->url() == route('organization-service.index')){{ 'active' }}@endif">Organization</a>
             </div>
         </div>
 
