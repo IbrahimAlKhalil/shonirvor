@@ -21,6 +21,9 @@
                 <a class="nav-link" href="{{ route('register') }}">Registration</a>
             </li>
             @else
+                <li class="nav-item @if(request()->url() == route('profile.index')){{ 'active' }}@endif">
+                    <a class="nav-link" href="{{ route('profile.index') }}">{{ auth()->user()->name }}</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     <form action="{{ route('logout') }}" method="post" id="logout-form" class="hidden">

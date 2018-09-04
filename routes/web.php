@@ -7,6 +7,7 @@ Auth::routes();
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
+Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
 
 Route::resource('dashboard/dealer', 'Backend\DealerController', ['except' => ['create', 'store']]);
 Route::get('dealer-instruction', 'Frontend\DealerRegistrationController@instruction')->name('dealer.instruction');
