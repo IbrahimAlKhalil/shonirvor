@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrgServiceRegistration extends FormRequest
+class StorePendingIndService extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +25,12 @@ class StoreOrgServiceRegistration extends FormRequest
     {
         return [
             'name' => 'required',
-            'org-name' => 'required',
-            'description' => 'required',
-            'mobile' => 'required|digits:11|unique:org_services|unique:pending_org_services',
-            'email' => 'email|unique:org_services|unique:pending_org_services',
+            'mobile' => 'required|digits:11|unique:ind_services|unique:pending_ind_services',
+            'email' => 'email|unique:ind_services|unique:pending_ind_services',
             'personal-email' => 'email|unique:users,email',
-            'address' => 'required|string',
             'nid' => 'required|integer|unique:users',
             'age' => 'required|integer|min:10',
+            'address' => 'required|string',
             'latitude' => 'required',
             'longitude' => 'required',
             'photo' => 'required|image',

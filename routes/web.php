@@ -29,8 +29,8 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('ind-service-registration', 'Frontend\IndServiceRegistrationController', ['only' => ['index', 'store']]);
-    Route::resource('org-service-registration', 'Frontend\OrgServiceRegistrationController', ['only' => ['index', 'store']]);
+    Route::resource('ind-service-registration', 'Frontend\IndServiceRegistrationController', ['only' => ['index', 'store', 'update']]);
+    Route::resource('org-service-registration', 'Frontend\OrgServiceRegistrationController', ['only' => ['index', 'store', 'update', 'edit']]);
 });
 
 Route::middleware('auth')->prefix('dashboard')->group(function () {

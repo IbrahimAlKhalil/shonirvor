@@ -32,4 +32,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserDocument::class);
     }
+
+    public function indService()
+    {
+        return $this->hasOne(IndService::class);
+    }
+
+    public function pendingIndService()
+    {
+        return $this->hasOne(PendingIndService::class);
+    }
+
+    public function orgService()
+    {
+        return $this->hasMany(OrgService::class);
+    }
+
+    public function pendingOrgService()
+    {
+        return $this->hasMany(PendingOrgService::class);
+    }
 }

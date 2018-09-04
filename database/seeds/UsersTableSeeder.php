@@ -29,6 +29,12 @@ class UsersTableSeeder extends Seeder
         $dealer->save();
         $dealer->roles()->attach(2);
 
+        $customer = new User;
+        $customer->name = "Hujaifa Islam";
+        $customer->mobile = '44444444444';
+        $customer->password = bcrypt('123456');
+        $customer->save();
+
         factory(User::class, 80)->create()->each(function($user) {
             $user->documents()->save(factory(UserDocument::class)->make());
             // Attach a role
