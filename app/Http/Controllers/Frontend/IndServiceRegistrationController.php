@@ -36,7 +36,9 @@ class IndServiceRegistrationController extends Controller
             return view('frontend.registration.ind-service.edit', compact('pendingIndService'));
         }
 
-        return view('frontend.registration.ind-service.index');
+        $isPicExists = $user->photo;
+
+        return view('frontend.registration.ind-service.index', compact('isPicExists'));
     }
 
 
@@ -80,7 +82,12 @@ class IndServiceRegistrationController extends Controller
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
-        $user->photo = $request->file('photo')->store('user-photo');
+        $user->age = $request->post('age');
+
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photo');
+        }
+
         $user->age = $request->post('age');
 
         $user->save();
@@ -118,11 +125,30 @@ class IndServiceRegistrationController extends Controller
     {
         $pendingIndService = PendingIndService::find($id);
 
-        $pendingIndService->mobile = $request->post('mobile');
+        $user = Auth::user();
+
+        $pendingIndService->user_id = $user->id;
         $pendingIndService->email = $request->post('email');
+        $pendingIndService->mobile = $request->post('mobile');
         $pendingIndService->latitude = $request->post('latitude');
         $pendingIndService->longitude = $request->post('longitude');
         $pendingIndService->service = $request->post('service');
+        $pendingIndService->address = $request->post('address');
+
+        $pendingIndService->save();
+
+        $user->name = $request->post('name');
+        $user->email = $request->post('personal-email');
+        $user->nid = $request->post('nid');
+        $user->qualification = $request->post('qualification');
+
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photo');
+        }
+
+        $user->age = $request->post('age');
+
+        $user->save();
 
         if ($request->has('images')) {
             $images = [];

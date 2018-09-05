@@ -45,7 +45,14 @@ class IndServiceRequestController extends Controller
         $service->address = $pendingService->address;
 
         $service->save();
-        User::find($service->user_id)->roles()->attach(3);
+
+        $user = User::find($service->user_id);
+
+        if(!$user->hasRole('ind-service')) {
+            $user->roles()->attach(3);
+        }
+
+
 
 
         $documents = [];

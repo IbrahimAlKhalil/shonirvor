@@ -40,7 +40,9 @@ class IndServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
-        $user->roles()->attach(3);
+        if(!$user->hasRole('ind-service')) {
+            $user->roles()->attach(3);
+        }
 
 
         $registration = new IndService;
@@ -89,13 +91,16 @@ class IndServiceController extends Controller
         return view('backend.ind-service.show', compact('indService'));
     }
 
-    public function destroy(Request $request, IndService $indService)
+    public function destroy(Request $request, $id )
     {
+        $indService = IndService::find($id);
+
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
                     $indService->delete();
                     $msg = 'Account Deactivated Successfully!';
+                    $route = 'individual-service.show-disabled';
                     break;
                 default:
 
@@ -103,12 +108,14 @@ class IndServiceController extends Controller
                     Storage::deleteDirectory('ind-service-docs/' . $indService->id);
                     Storage::deleteDirectory('ind-service-images/' . $indService->id);
 
-                    $indService->forceDelete();
+                    User::find($indService->user_id)->roles()->detach('ind-service');
 
+                    $indService->forceDelete();
                     $msg = 'Account Removed Successfully!';
+                    $route = 'individual-service.index';
             }
 
-            return redirect(route('individual-service.show-disabled', $indService->id))->with('success', $msg);
+            return redirect(route($route, $indService->id))->with('success', $msg);
         }
 
         return abort('404');

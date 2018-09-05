@@ -39,7 +39,9 @@ class OrgServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
-        $user->roles()->attach(4);
+        if (!$user->hasRole('org-service')) {
+            $user->roles()->attach(4);
+        }
 
 
         $registration = new OrgService;
@@ -83,18 +85,21 @@ class OrgServiceController extends Controller
         return back()->with('success', 'Organizational Service Provider Created Successfully!');
     }
 
-    public function show(OrgService $orgService)
+    public function show($id)
     {
+        $orgService = OrgService::find($id);
         return view('backend.org-service.show', compact('orgService'));
     }
 
-    public function destroy(Request $request, OrgService $orgService)
+    public function destroy(Request $request, $id)
     {
+        $orgService = OrgService::find($id);
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
                     $orgService->delete();
                     $msg = 'Account Deactivated Successfully!';
+                    $route = 'organization-service.show-disabled';
                     break;
                 default:
 
@@ -102,12 +107,19 @@ class OrgServiceController extends Controller
                     Storage::deleteDirectory('org-service-docs/' . $orgService->id);
                     Storage::deleteDirectory('org-service-images/' . $orgService->id);
 
-                    $orgService->forceDelete();
 
+                    $user = User::find($orgService->user_id);
+
+                    if (!$user->orgService()->count() <= 1) {
+                        $user->roles()->detach('org-service');
+                    }
+
+                    $orgService->forceDelete();
                     $msg = 'Account Removed Successfully!';
+                    $route = 'organization-service.index';
             }
 
-            return redirect(route('organization-service.show-disabled', $orgService->id))->with('success', $msg);
+            return redirect(route($route, $orgService->id))->with('success', $msg);
         }
 
         return abort('404');

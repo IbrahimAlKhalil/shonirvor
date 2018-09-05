@@ -17,6 +17,15 @@
             {{ csrf_field() }}
 
             <div class="form-group row">
+                <label for="name" class="col-4 col-form-label">Your Name</label>
+                <div class="col-8">
+                    <input id="name" name="name" type="text" value="{{ oldOrData('name', $pendingOrgService->user->name) }}"
+                           class="form-control @if($errors->has('name')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'name'])
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
                 <div class="col-8">
                     <input id="mobile" name="mobile" type="number" value="{{ oldOrData('mobile', $pendingOrgService->mobile) }}"
@@ -43,12 +52,40 @@
                 </div>
             </div>
 
+
+            <div class="form-group row">
+                <label for="personal-email" class="col-4 col-form-label">Personal Email</label>
+                <div class="col-8">
+                    <input id="personal-email" name="personal-email" type="text" value="{{ oldOrData('personal-email', $pendingOrgService->user->email) }}"
+                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'personal-email'])
+                </div>
+            </div>
+
             <div class="form-group row">
                 <label for="email" class="col-4 col-form-label">Organization Email</label>
                 <div class="col-8">
                     <input id="email" name="email" type="text" value="{{ oldOrData('email', $pendingOrgService->email) }}"
                            class="form-control @if($errors->has('email')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'email'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="age" class="col-4 col-form-label">Age</label>
+                <div class="col-8">
+                    <input id="age" name="age" type="number" value="{{ oldOrData('age', $pendingOrgService->user->age) }}" required="required"
+                           class="form-control @if($errors->has('age')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'age'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="nid" class="col-4 col-form-label">NID Number</label>
+                <div class="col-8">
+                    <input id="nid" name="nid" type="number" value="{{ oldOrData('nid', $pendingOrgService->user->nid) }}"
+                           class="form-control @if($errors->has('nid')) is-invalid @endif" required>
+                    @include('components.invalid', ['name' => 'nid'])
                 </div>
             </div>
 
@@ -80,7 +117,25 @@
             </div>
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">Portfolio</label>
+                <label for="address" class="col-4 col-form-label">Address</label>
+                <div class="col-8">
+                    <textarea id="address" rows="8" name="address" required="required"
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $pendingOrgService->address) }}</textarea>
+                    @include('components.invalid', ['name' => 'address'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="photo" class="col-4 col-form-label">Profile Picture</label>
+                <div class="col-8">
+                    <input id="photo" name="photo" type="file" accept="image/*"
+                           class="form-control @if($errors->has('photo')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'photo'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="images" class="col-4 col-form-label">Work Photos</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

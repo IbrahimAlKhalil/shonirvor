@@ -48,7 +48,11 @@ class OrgServiceRequestController extends Controller
         $service->address = $pendingService->address;
 
         $service->save();
-        User::find($service->user_id)->roles()->attach(4);
+
+        $user = User::find($service->user_id);
+        if(!$user->hasRole('org-service')) {
+            $user->roles()->attach(4);
+        }
 
 
         $documents = [];

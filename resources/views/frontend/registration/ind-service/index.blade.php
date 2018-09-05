@@ -109,17 +109,19 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="photo" class="col-4 col-form-label">Profile Picture</label>
-                <div class="col-8">
-                    <input id="photo" name="photo" type="file" accept="image/*"
-                           class="form-control @if($errors->has('photo')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'photo'])
+            @if(!$isPicExists)
+                <div class="form-group row">
+                    <label for="photo" class="col-4 col-form-label">Profile Picture</label>
+                    <div class="col-8">
+                        <input id="photo" name="photo" type="file" accept="image/*"
+                               class="form-control @if($errors->has('photo')) is-invalid @endif">
+                        @include('components.invalid', ['name' => 'photo'])
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">Portfolio</label>
+                <label for="images" class="col-4 col-form-label">Work Photos</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

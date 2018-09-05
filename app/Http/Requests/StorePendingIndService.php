@@ -33,7 +33,7 @@ class StorePendingIndService extends FormRequest
             'address' => 'required|string',
             'latitude' => 'required',
             'longitude' => 'required',
-            'photo' => 'required|image',
+            'photo' => 'image',
             'images.*' => 'image',
             'docs.*' => 'image'
         ];

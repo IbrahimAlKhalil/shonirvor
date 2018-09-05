@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreEditPendingOrgService extends FormRequest
 {
@@ -33,7 +34,13 @@ class StoreEditPendingOrgService extends FormRequest
             'latitude' => 'required',
             'longitude' => 'required',
             'images.*' => 'image',
-            'docs.*' => 'image'
+            'docs.*' => 'image',
+            'name' => 'required',
+            'personal-email' => 'email|unique:users,email,' . Auth::id(),
+            'address' => 'required|string',
+            'nid' => 'required|integer|unique:users,nid,' . Auth::id(),
+            'age' => 'required|integer|min:10',
+            'photo' => 'image'
         ];
     }
 }
