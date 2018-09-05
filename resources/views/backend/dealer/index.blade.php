@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-12 mb-4">
-                <h3>All Dealers</h3>
+                <h4>All Dealers</h4>
             </div>
             <div class="col-md-9">
                 @include('components.success')

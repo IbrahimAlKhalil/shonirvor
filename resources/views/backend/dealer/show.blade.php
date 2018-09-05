@@ -13,7 +13,7 @@
                         </a>
                     </div>
                     <div class="col-md-8">
-                        <h3 class="mb-3">{{ $user->name }}</h3>
+                        <h4 class="mb-3">{{ $user->name }}</h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>

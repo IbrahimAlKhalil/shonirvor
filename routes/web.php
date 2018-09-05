@@ -17,19 +17,26 @@ Route::post('dealer-request/approve/{id}', 'Backend\DealerRequestController@appr
 Route::delete('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
 
 /*** Ibrahim ***/
-Route::middleware('auth')
-    ->name('registration.')
-    ->prefix('registration/service-provider')
-    ->group(function () {
-        Route::view('', 'frontend.registration.service-provider-agreement')->name('service-provider.agreement');
-        Route::resource('individual', 'Frontend\IndServiceProviderRegistrationController', ['only' => ['index', 'store']]);
-        Route::resource('organization', 'Frontend\OrgServiceProviderRegistrationController', ['only' => ['index', 'store']]);
-    });
+Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 
-Route::middleware('auth')
-    ->name('service-provider-request.')
-    ->prefix('backend/service-provider-request')
-    ->group(function () {
-        Route::resource('individual', 'Backend\IndServiceProviderRequestController', ['only' => ['index', 'show']]);
-        Route::resource('organization', 'Backend\OrgServiceProviderRequestController', ['only' => ['index', 'show']]);
-    });
+Route::middleware('auth')->group(function () {
+    Route::resource('ind-service-registration', 'Frontend\IndServiceRegistrationController', ['only' => ['index', 'store', 'update']]);
+    Route::resource('org-service-registration', 'Frontend\OrgServiceRegistrationController', ['only' => ['index', 'store', 'update', 'edit']]);
+});
+
+Route::middleware('auth')->prefix('dashboard')->group(function () {
+    Route::resource('ind-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+    Route::resource('org-service-request', 'Backend\OrgServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
+
+    Route::get('ind-service/disabled', 'Backend\IndServiceController@showDisabledAccounts')->name('ind-service.disabled');
+    Route::get('org-service/disabled', 'Backend\OrgServiceController@showDisabledAccounts')->name('org-service.disabled');
+
+    Route::get('ind-service/disabled/{id}', 'Backend\IndServiceController@showDisabled')->name('ind-service.show-disabled');
+    Route::get('org-service/disabled/{id}', 'Backend\OrgServiceController@showDisabled')->name('org-service.show-disabled');
+
+    Route::post('ind-service/activate', 'Backend\IndServiceController@activate')->name('ind-service.activate');
+    Route::post('org-service/activate', 'Backend\OrgServiceController@activate')->name('org-service.activate');
+
+    Route::resource('ind-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy']]);
+    Route::resource('org-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy']]);
+});

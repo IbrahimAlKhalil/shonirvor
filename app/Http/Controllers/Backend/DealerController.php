@@ -20,7 +20,6 @@ class DealerController extends Controller
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'dealer');
         })->paginate(15);
-
         return view('backend.dealer.index', compact('users'));
     }
 
@@ -47,7 +46,7 @@ class DealerController extends Controller
         $dealer->roles()->attach(2);
 
         if ($request->hasFile('photo')) {
-            $dealer->photo = $request->file('photo')->store('user-photo/' . $dealer->id);
+            $dealer->photo = $request->file('photo')->store('user-photos/' . $dealer->id);
             $dealer->save();
         }
 

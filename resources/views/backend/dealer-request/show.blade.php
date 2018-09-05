@@ -76,7 +76,6 @@
                                 <form action="{{ route('dealer-request.approve', $dealerRequest->id) }}" method="post" id="approve-form" class="d-none">
                                     {{ csrf_field() }}
                                 </form>
-
                                 <a href="{{ url('dealer-request/reject') }}" class="btn btn-secondary btn-danger rounded-right" onclick="event.preventDefault(); document.getElementById('reject-form').submit();">Reject</a>
                                 <form action="{{ route('dealer-request.reject', $dealerRequest->id) }}" method="post" id="reject-form" class="d-none">
                                     {{ csrf_field() }}

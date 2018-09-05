@@ -30,6 +30,12 @@ class UsersTableSeeder extends Seeder
         $dealer->attachRole(2);
         $dealer->dealer()->create();
 
+        $customer = new User;
+        $customer->name = "Hujaifa Islam";
+        $customer->mobile = '44444444444';
+        $customer->password = bcrypt('123456');
+        $customer->save();
+
         factory(User::class, 80)->create()->each(function($user) {
             // Attach a role
             $countRoles = Role::count();

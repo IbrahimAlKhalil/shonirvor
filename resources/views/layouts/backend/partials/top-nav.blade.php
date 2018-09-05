@@ -13,11 +13,11 @@
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
             </li>
-            <li class="nav-item @if(request()->url() == route('service-provider-request.individual.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('service-provider-request.individual.index') }}">SP Requests</a>
-            </li>
             <li class="nav-item @if(request()->url() == route('dealer.index') || request()->url() == route('dealer.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>
+            </li>
+            <li class="nav-item @if(request()->url() == route('ind-service.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('ind-service.index') }}">Service Providers</a>
             </li>
             @auth
                 <li class="nav-item">
