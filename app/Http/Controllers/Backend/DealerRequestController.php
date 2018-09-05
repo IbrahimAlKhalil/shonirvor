@@ -17,12 +17,10 @@ class DealerRequestController extends Controller
         return view('backend.dealer-request.index', compact('dealerRequests'));
     }
 
-
     public function show(PendingDealer $dealerRequest)
     {
         return view('backend.dealer-request.show', compact('dealerRequest'));
     }
-
 
     public function approve($id)
     {

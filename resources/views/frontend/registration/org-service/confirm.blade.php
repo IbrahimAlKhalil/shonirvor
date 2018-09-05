@@ -35,7 +35,7 @@
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>
-                                <a href="{{ route('org-service-registration.edit', $pendingOrgService->id) }}">{{ $pendingOrgService->org_name }}</a>
+                                <a href="{{ route('organization-service-registration.edit', $pendingOrgService->id) }}">{{ $pendingOrgService->org_name }}</a>
                             </td>
                             <td>{{ $pendingOrgService->created_at->format('d/m/y h:i A') }}</td>
                             <td>{{ $pendingOrgService->updated_at->format('d/m/y h:i A') }}</td>
@@ -46,7 +46,7 @@
             </div>
             <div class="tab-pane fade {{ $classesToAdd[1] }} show" id="request-account">
                 <form method="post" enctype="multipart/form-data"
-                      action="{{ route('org-service-registration.store') }}">
+                      action="{{ route('organization-service-registration.store') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">
@@ -79,8 +79,8 @@
                     <div class="form-group row">
                         <label for="description" class="col-4 col-form-label">Description</label>
                         <div class="col-8">
-                            <input id="description" name="description" type="text" value="{{ old('description') }}"
-                                   class="form-control @if($errors->has('description')) is-invalid @endif">
+                            <textarea rows="8" id="description" name="description" type="text"
+                                      class="form-control @if($errors->has('description')) is-invalid @endif">{{ old('description') }}</textarea>
                             @include('components.invalid', ['name' => 'description'])
                         </div>
                     </div>
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="images" class="col-4 col-form-label">images</label>
+                        <label for="images" class="col-4 col-form-label">Portfolio</label>
                         <div class="col-8">
                             <input id="images" name="images[]" type="file" accept="image/*"
                                    class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

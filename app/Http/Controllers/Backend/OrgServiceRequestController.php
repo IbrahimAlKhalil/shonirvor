@@ -46,7 +46,11 @@ class OrgServiceRequestController extends Controller
         $service->address = $pendingService->address;
 
         $service->save();
-        User::find($service->user_id)->roles()->attach(4);
+
+        $user = User::find($service->user_id);
+        if(!$user->hasRole('org-service')) {
+            $user->roles()->attach(4);
+        }
 
         $documents = [];
         $images = [];
@@ -78,7 +82,7 @@ class OrgServiceRequestController extends Controller
 
         $pendingService->delete();
 
-        return redirect(route('org-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider approved successfully!');
     }
 
     public function destroy($id)
@@ -93,15 +97,15 @@ class OrgServiceRequestController extends Controller
         }
         PendingOrgService::find($id)->delete();
 
-        return redirect(route('org-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }
 
     private function navs()
     {
         return [
-            ['route' => 'org-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'org-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'org-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['route' => 'organization-service.index', 'text' => 'All Service Provider'],
+            ['route' => 'organization-service-request.index', 'text' => 'Service Requests'],
+            ['route' => 'organization-service.disabled', 'text' => 'Disabled Service Provider'],
         ];
     }
 }

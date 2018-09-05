@@ -36,7 +36,9 @@ class IndServiceRegistrationController extends Controller
             return view('frontend.registration.ind-service.edit', compact('pendingIndService'));
         }
 
-        return view('frontend.registration.ind-service.index');
+        $isPicExists = $user->photo;
+
+        return view('frontend.registration.ind-service.index', compact('isPicExists'));
     }
 
 
@@ -73,6 +75,60 @@ class IndServiceRegistrationController extends Controller
         $pendingIndService->longitude = $request->post('longitude');
         $pendingIndService->service = $request->post('service');
         $pendingIndService->address = $request->post('address');
+        $pendingIndService->save();
+
+        $user->name = $request->post('name');
+        $user->email = $request->post('personal-email');
+        $user->nid = $request->post('nid');
+        $user->qualification = $request->post('qualification');
+        $user->age = $request->post('age');
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photos');
+        }
+        $user->age = $request->post('age');
+        $user->save();
+
+        if ($request->has('images')) {
+            $images = [];
+            foreach ($request->file('images') as $image) {
+                array_push($images, [
+                    'image' => $image->store('pending-ind-images'),
+                    'pending_ind_service_id' => $pendingIndService->id
+                ]);
+            }
+
+            PendingIndServiceImage::insert($images);
+        }
+
+        if ($request->has('docs')) {
+            $documents = [];
+
+            foreach ($request->file('docs') as $document) {
+                array_push($documents, [
+                    'doc' => $document->store('pending-ind-docs'),
+                    'pending_ind_service_id' => $pendingIndService->id
+                ]);
+            }
+
+            PendingIndServiceDoc::insert($documents);
+        }
+
+        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
+    }
+
+    public function update(StoreEditPendingIndService $request, $id)
+    {
+        $pendingIndService = PendingIndService::find($id);
+
+        $user = Auth::user();
+
+        $pendingIndService->user_id = $user->id;
+        $pendingIndService->email = $request->post('email');
+        $pendingIndService->mobile = $request->post('mobile');
+        $pendingIndService->latitude = $request->post('latitude');
+        $pendingIndService->longitude = $request->post('longitude');
+        $pendingIndService->service = $request->post('service');
+        $pendingIndService->address = $request->post('address');
 
         $pendingIndService->save();
 
@@ -80,7 +136,11 @@ class IndServiceRegistrationController extends Controller
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
-        $user->photo = $request->file('photo')->store('user-photos');
+
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photo');
+        }
+
         $user->age = $request->post('age');
 
         $user->save();
@@ -110,49 +170,8 @@ class IndServiceRegistrationController extends Controller
             PendingIndServiceDoc::insert($documents);
         }
 
-        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
-
-    }
-
-    public function update(StoreEditPendingIndService $request, $id)
-    {
-        $pendingIndService = PendingIndService::find($id);
-
-        $pendingIndService->mobile = $request->post('mobile');
-        $pendingIndService->email = $request->post('email');
-        $pendingIndService->latitude = $request->post('latitude');
-        $pendingIndService->longitude = $request->post('longitude');
-        $pendingIndService->service = $request->post('service');
-
-        if ($request->has('images')) {
-            $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, [
-                    'image' => $image->store('pending-ind-images'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
-            }
-
-            PendingIndServiceImage::insert($images);
-        }
-
-        if ($request->has('docs')) {
-            $documents = [];
-
-            foreach ($request->file('docs') as $document) {
-                array_push($documents, [
-                    'doc' => $document->store('pending-ind-docs'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
-            }
-
-            PendingIndServiceDoc::insert($documents);
-        }
-
         $pendingIndService->save();
 
         return back()->with('success', 'Done!');
-
     }
-
 }

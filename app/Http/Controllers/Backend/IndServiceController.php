@@ -38,7 +38,9 @@ class IndServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
-        $user->roles()->attach(3);
+        if(!$user->hasRole('ind-service')) {
+            $user->roles()->attach(3);
+        }
 
         $registration = new IndService;
         $registration->user_id = $user->id;
@@ -80,19 +82,23 @@ class IndServiceController extends Controller
     }
 
 
-    public function show(IndService $indService)
+    public function show($id)
     {
         $navs = $this->navs();
+        $indService = IndService::find($id);
         return view('backend.ind-service.show', compact('indService', 'navs'));
     }
 
-    public function destroy(Request $request, IndService $indService)
+    public function destroy(Request $request, $id )
     {
+        $indService = IndService::find($id);
+
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
                     $indService->delete();
                     $msg = 'Account Deactivated Successfully!';
+                    $route = 'individual-service.show-disabled';
                     break;
                 default:
 
@@ -100,12 +106,14 @@ class IndServiceController extends Controller
                     Storage::deleteDirectory('ind-service-docs/' . $indService->id);
                     Storage::deleteDirectory('ind-service-images/' . $indService->id);
 
-                    $indService->forceDelete();
+                    User::find($indService->user_id)->roles()->detach('ind-service');
 
+                    $indService->forceDelete();
                     $msg = 'Account Removed Successfully!';
+                    $route = 'individual-service.index';
             }
 
-            return redirect(route('ind-service.show-disabled', $indService->id))->with('success', $msg);
+            return redirect(route($route, $indService->id))->with('success', $msg);
         }
 
         return abort('404');
@@ -128,15 +136,15 @@ class IndServiceController extends Controller
     public function activate(Request $request)
     {
         IndService::onlyTrashed()->find($request->post('id'))->restore();
-        return redirect(route('ind-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+        return redirect(route('individual-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 
     private function navs()
     {
         return [
-            ['route' => 'ind-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'ind-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'ind-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['route' => 'individual-service.index', 'text' => 'All Service Provider'],
+            ['route' => 'individual-service-request.index', 'text' => 'Service Requests'],
+            ['route' => 'individual-service.disabled', 'text' => 'Disabled Service Provider'],
         ];
     }
 }

@@ -6,11 +6,10 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('ind-service-request.index') }}" class="btn btn-secondary active">Individual</a>
-                <a href="{{ route('org-service-request.index') }}" class="btn btn-secondary">Organization</a>
+                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary active">Individual</a>
+                <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary">Organization</a>
             </div>
         </div>
-
         <div class="row">
             <div class="col-12 mt-4">
                 <h4 class="mb-4">Individual Service Requests</h4>
@@ -34,7 +33,7 @@
                         <tr>
                             <th scope="row">{{ $serial }}</th>
                             <td>
-                                <a href="{{ route('ind-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->user->name }}</a>
+                                <a href="{{ route('individual-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->user->name }}</a>
                             </td>
                             <td>{{ $serviceRequest->mobile }}</td>
                             <td>{{ $serviceRequest->user->age }}</td>
@@ -43,7 +42,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="5"><p class="text-uppercase text-center">Empty!</p></td>
+                            <td colspan="5">No Service Provider Request Found.</td>
                         </tr>
                     @endforelse
                     </tbody>

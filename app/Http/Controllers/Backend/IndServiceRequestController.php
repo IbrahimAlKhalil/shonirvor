@@ -42,7 +42,14 @@ class IndServiceRequestController extends Controller
         $service->service = $pendingService->service;
         $service->address = $pendingService->address;
         $service->save();
-        User::find($service->user_id)->roles()->attach(3);
+
+        $user = User::find($service->user_id);
+
+        if(!$user->hasRole('ind-service')) {
+            $user->roles()->attach(3);
+        }
+
+
 
         $documents = [];
         $images = [];
@@ -74,8 +81,7 @@ class IndServiceRequestController extends Controller
 
         $pendingService->delete();
 
-
-        return redirect(route('ind-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider approved successfully!');
     }
 
     public function destroy($id)
@@ -90,15 +96,15 @@ class IndServiceRequestController extends Controller
         }
         PendingIndService::find($id)->delete();
 
-        return redirect(route('ind-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }
 
     private function navs()
     {
         return [
-            ['route' => 'ind-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'ind-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'ind-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['route' => 'individual-service.index', 'text' => 'All Service Provider'],
+            ['route' => 'individual-service-request.index', 'text' => 'Service Requests'],
+            ['route' => 'individual-service.disabled', 'text' => 'Disabled Service Provider'],
         ];
     }
 }

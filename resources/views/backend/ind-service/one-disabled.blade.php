@@ -46,7 +46,7 @@
                         </table>
                         <div class="row">
                             <button class="btn btn-secondary btn-success mx-auto" onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</button>
-                            <form id="activate-account" action="{{ route('ind-service.activate') }}" method="post">
+                            <form id="activate-account" action="{{ route('individual-service.activate') }}" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="id" value="{{ $indService->id }}">
                             </form>
@@ -80,7 +80,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mt-5">
                 @include('components.side-nav', compact('navs'))
             </div>
         </div>

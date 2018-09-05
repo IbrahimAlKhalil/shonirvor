@@ -6,11 +6,10 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('ind-service-request.index') }}" class="btn btn-secondary">Individual</a>
-                <a href="{{ route('org-service-request.index') }}" class="btn btn-secondary active">Organization</a>
+                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary @if(request()->url() == route('individual-service-request.index')){{ 'active' }}@endif">Individual</a>
+                <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary @if(request()->url() == route('organization-service-request.index')){{ 'active' }}@endif">Organization</a>
             </div>
         </div>
-
         <div class="row">
             <div class="col-12 mt-4">
                 <h4 class="mb-4">Organization Service Requests</h4>
@@ -33,7 +32,7 @@
                         <tr>
                             <th scope="row">{{ $serial }}</th>
                             <td>
-                                <a href="{{ route('org-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->org_name }}</a>
+                                <a href="{{ route('organization-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->org_name }}</a>
                             </td>
                             <td>{{ $serviceRequest->email }}</td>
                             <td>{{ $serviceRequest->service }}</td>
@@ -41,7 +40,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="5"><p class="text-uppercase text-center">Empty!</p></td>
+                            <td colspan="5">No Service Provider Request Found.</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -57,5 +56,4 @@
             </div>
         </div>
     </div>
-
 @endsection

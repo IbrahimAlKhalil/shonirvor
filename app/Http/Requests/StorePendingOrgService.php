@@ -35,7 +35,7 @@ class StorePendingOrgService extends FormRequest
             'age' => 'required|integer|min:10',
             'latitude' => 'required',
             'longitude' => 'required',
-            'photo' => 'required|image',
+            'photo' => 'image',
             'images.*' => 'image',
             'docs.*' => 'image'
         ];

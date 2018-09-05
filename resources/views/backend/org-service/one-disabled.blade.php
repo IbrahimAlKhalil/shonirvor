@@ -49,7 +49,7 @@
                         </table>
                         <div class="row">
                             <button class="btn btn-secondary btn-success mx-auto" onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</button>
-                            <form id="activate-account" action="{{ route('org-service.activate') }}" method="post">
+                            <form id="activate-account" action="{{ route('organization-service.activate') }}" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="id" value="{{ $orgService->id }}">
                             </form>

@@ -14,7 +14,6 @@ class DealerController extends Controller
 //        $this->middleware('role:superadmin');
     }
 
-
     public function index()
     {
         $users = User::whereHas('roles', function ($q) {
@@ -22,7 +21,6 @@ class DealerController extends Controller
         })->paginate(15);
         return view('backend.dealer.index', compact('users'));
     }
-
 
     public function create()
     {

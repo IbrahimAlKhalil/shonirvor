@@ -6,8 +6,8 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('ind-service.disabled') }}" class="btn btn-secondary">Individual</a>
-                <a href="{{ route('org-service.disabled') }}" class="btn btn-secondary active">Organization</a>
+                <a href="{{ route('individual-service.disabled') }}" class="btn btn-secondary">Individual</a>
+                <a href="{{ route('organization-service.disabled') }}" class="btn btn-secondary active">Organization</a>
             </div>
         </div>
 

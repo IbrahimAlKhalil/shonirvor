@@ -13,34 +13,47 @@
                             <img src="{{ asset('storage/' . $indService->user->photo) }}" class="img-responsive img-thumbnail" alt="{{ $indService->user->name }}">
                         </a>
                     </div>
+
                     <div class="col-md-8">
                         <h4 class="mb-3">{{ $indService->user->name }}</h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
-                                <tr>
-                                    <th scope="row">Mobile</th>
-                                    <td>{{ $indService->mobile }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Email</th>
-                                    <td>{{ $indService->email }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Age</th>
-                                    <td>{{ $indService->user->age }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Qualification/Experience</th>
-                                    <td>{{ $indService->user->qualification }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">NID</th>
-                                    <td>{{ $indService->user->nid }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Address</th>
-                                    <td>{{ $indService->address }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{ $indService->user->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Working Mobile</th>
+                                <td>{{ $indService->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Personal Mobile</th>
+                                <td>{{ $indService->user->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Personal Email</th>
+                                <td>{{ $indService->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Working Email</th>
+                                <td>{{ $indService->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Age</th>
+                                <td>{{ $indService->user->age }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Qualification/Experience</th>
+                                <td>{{ $indService->user->qualification }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">NID</th>
+                                <td>{{ $indService->user->nid }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>{{ $indService->address }}</td>
+                            </tr>
                             </tbody>
                         </table>
                         <div class="row">
@@ -48,12 +61,12 @@
                                 <span class="btn btn-secondary btn-warning" onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">Deactivate This Account</span>
                                 <span class="btn btn-secondary btn-danger rounded-right" onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
 
-                                <form id="deactivate-account" action="{{ route('ind-service.destroy', $indService->id) }}" method="post">
+                                <form id="deactivate-account" action="{{ route('individual-service.destroy', $indService->id) }}" method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
                                     <input type="hidden" name="type" value="deactivate">
                                 </form>
-                                <form id="remove-account" action="{{ route('ind-service.destroy', $indService->id) }}" method="post">
+                                <form id="remove-account" action="{{ route('individual-service.destroy', $indService->id) }}" method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
                                     <input type="hidden" name="type" value="remove">

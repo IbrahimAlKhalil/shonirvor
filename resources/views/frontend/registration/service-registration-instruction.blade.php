@@ -76,9 +76,9 @@
 
                 <div class="row">
                     <div class="btn-group mx-auto">
-                        <a href="{{ route('ind-service-registration.index') }}"
+                        <a href="{{ route('individual-service-registration.index') }}"
                            class="btn btn-secondary btn-success">Individual</a>
-                        <a href="{{ route('org-service-registration.index') }}"
+                        <a href="{{ route('organization-service-registration.index') }}"
                            class="btn btn-secondary btn-success">Organization</a>
                     </div>
                 </div>

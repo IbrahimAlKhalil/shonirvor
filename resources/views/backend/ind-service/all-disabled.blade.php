@@ -6,8 +6,8 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('ind-service.disabled') }}" class="btn btn-secondary active">Individual</a>
-                <a href="{{ route('org-service.disabled') }}" class="btn btn-secondary">Organization</a>
+                <a href="{{ route('individual-service.disabled') }}" class="btn btn-secondary active">Individual</a>
+                <a href="{{ route('organization-service.disabled') }}" class="btn btn-secondary">Organization</a>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>
-                                <a href="{{ route('ind-service.show-disabled', $indService->id) }}">{{ $indService->user->name }}</a>
+                                <a href="{{ route('individual-service.show-disabled', $indService->id) }}">{{ $indService->user->name }}</a>
                             </td>
                             <td>{{ $indService->mobile }}</td>
                             <td>{{ $indService->email }}</td>

@@ -36,7 +36,9 @@ class OrgServiceController extends Controller
         $user->photo = $request->file('photo')->store('user-photos');
         $user->age = $request->post('age');
         $user->save();
-        $user->roles()->attach(4);
+        if (!$user->hasRole('org-service')) {
+            $user->roles()->attach(4);
+        }
 
         $registration = new OrgService;
         $registration->user_id = $user->id;
@@ -78,19 +80,22 @@ class OrgServiceController extends Controller
         return back()->with('success', 'Organizational Service Provider Created Successfully!');
     }
 
-    public function show(OrgService $orgService)
+    public function show($id)
     {
         $navs = $this->navs();
+        $orgService = OrgService::find($id);
         return view('backend.org-service.show', compact('orgService', 'navs'));
     }
 
-    public function destroy(Request $request, OrgService $orgService)
+    public function destroy(Request $request, $id)
     {
+        $orgService = OrgService::find($id);
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
                     $orgService->delete();
                     $msg = 'Account Deactivated Successfully!';
+                    $route = 'organization-service.show-disabled';
                     break;
                 default:
 
@@ -98,12 +103,19 @@ class OrgServiceController extends Controller
                     Storage::deleteDirectory('org-service-docs/' . $orgService->id);
                     Storage::deleteDirectory('org-service-images/' . $orgService->id);
 
-                    $orgService->forceDelete();
 
+                    $user = User::find($orgService->user_id);
+
+                    if (!$user->orgService()->count() <= 1) {
+                        $user->roles()->detach('org-service');
+                    }
+
+                    $orgService->forceDelete();
                     $msg = 'Account Removed Successfully!';
+                    $route = 'organization-service.index';
             }
 
-            return redirect(route('org-service.show-disabled', $orgService->id))->with('success', $msg);
+            return redirect(route($route, $orgService->id))->with('success', $msg);
         }
 
         return abort('404');
@@ -126,15 +138,15 @@ class OrgServiceController extends Controller
     public function activate(Request $request)
     {
         OrgService::onlyTrashed()->find($request->post('id'))->restore();
-        return redirect(route('org-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+        return redirect(route('organization-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 
     private function navs()
     {
         return [
-            ['route' => 'org-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'org-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'org-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['route' => 'organization-service.index', 'text' => 'All Service Provider'],
+            ['route' => 'organization-service-request.index', 'text' => 'Service Requests'],
+            ['route' => 'organization-service.disabled', 'text' => 'Disabled Service Provider'],
         ];
     }
 }

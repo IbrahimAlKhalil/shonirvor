@@ -31,14 +31,15 @@ class OrgServiceRegistrationController extends Controller
 
         // check what if current user has less than 3 pending request
         if ($pendingOrgServices->count() < 3 && $pendingOrgServices->count() >= 1) {
-            $classesToAdd = ['', 'active'];
+            $classesToAdd = ['active', ''];
             // didn't reach at the maximum
             // redirect them to the confirmation page
             return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
         }
 
+        $isPicExists = $user->photo;
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index');
+        return view('frontend.registration.org-service.index', compact('isPicExists'));
     }
 
     public function store(StorePendingOrgService $request)
@@ -74,8 +75,10 @@ class OrgServiceRegistrationController extends Controller
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
-        $user->photo = $request->file('photo')->store('user-photos');
         $user->age = $request->post('age');
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photos');
+        }
         $user->save();
 
 
@@ -121,13 +124,31 @@ class OrgServiceRegistrationController extends Controller
 
         $pendingOrgService = PendingOrgService::find($id);
 
-        $pendingOrgService->mobile = $request->post('mobile');
+        $user = Auth::user();
+
+        $pendingOrgService->user_id = Auth::id();
         $pendingOrgService->org_name = $request->post('org-name');
+        $pendingOrgService->mobile = $request->post('mobile');
         $pendingOrgService->description = $request->post('description');
         $pendingOrgService->email = $request->post('email');
         $pendingOrgService->latitude = $request->post('latitude');
         $pendingOrgService->longitude = $request->post('longitude');
         $pendingOrgService->service = $request->post('service');
+        $pendingOrgService->address = $request->post('address');
+        $pendingOrgService->save();
+
+
+        $user->name = $request->post('name');
+        $user->email = $request->post('personal-email');
+        $user->nid = $request->post('nid');
+        $user->qualification = $request->post('qualification');
+        $user->age = $request->post('age');
+
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photo');
+        }
+
+        $user->save();
 
         if ($request->has('images')) {
             $images = [];
