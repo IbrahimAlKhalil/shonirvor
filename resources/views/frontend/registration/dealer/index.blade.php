@@ -57,25 +57,25 @@
                         <div class="col-md">
                             <select name="district" class="form-control">
                                 <option value="">-- Select District --</option>
-                                <option value="1">A</option>
-                                <option value="2">B</option>
-                                <option value="3">C</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="thana" class="form-control">
                                 <option value="">-- Select Thana --</option>
-                                <option value="1">A</option>
-                                <option value="2">B</option>
-                                <option value="3">C</option>
+                                @foreach($thanas as $thana)
+                                    <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="union" class="form-control">
                                 <option value="">-- Select Union --</option>
-                                <option value="1">A</option>
-                                <option value="2">B</option>
-                                <option value="3">C</option>
+                                @foreach($unions as $union)
+                                    <option value="{{ $union->id }}">{{ $union->bn_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="w-100 mb-2"></div>

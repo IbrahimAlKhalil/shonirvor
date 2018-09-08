@@ -52,7 +52,7 @@
                                 <th scope="row">Area</th>
                                 <td>
                                     @if($dealerRequest->district)
-                                        {{ $dealerRequest->union. ', ' .$dealerRequest->thana. ', ' .$dealerRequest->district }}.
+                                        {{ $dealerRequest->union->bn_name. ', ' .$dealerRequest->thana->name. ', ' .$dealerRequest->district->name }}.
                                     @endif
                                     @if($dealerRequest->no_area)
                                         <p class="text-danger mb-0">Area not exist.</p>

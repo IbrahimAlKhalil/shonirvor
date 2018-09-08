@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Sandofvega\Bdgeocode\Seeds\BdgeocodeSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(OrgServiceImagesTableSeeder::class);
         $this->call(IndCategoriesTableSeeder::class);
         $this->call(OrgCategoriesTableSeeder::class);
+        $this->call(BdgeocodeSeeder::class);
     }
 }
