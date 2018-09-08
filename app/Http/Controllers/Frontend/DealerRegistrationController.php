@@ -7,7 +7,10 @@ use App\Models\PendingDealer;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\PendingDealerDocument;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 use Illuminate\Support\Facades\Storage;
+use Sandofvega\Bdgeocode\Models\District;
 use App\Http\Requests\StoreDealerRegistration;
 use App\Http\Requests\UpdateDealerRegistration;
 
@@ -23,7 +26,11 @@ class DealerRegistrationController extends Controller
         }
 
         $user = User::find(Auth::id());
-        return view('frontend.registration.dealer.index', compact('user'));
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+
+        return view('frontend.registration.dealer.index', compact('user', 'districts', 'thanas', 'unions'));
     }
 
     public function store(StoreDealerRegistration $request)
@@ -33,9 +40,9 @@ class DealerRegistrationController extends Controller
         $dealerInfo->mobile = $request->post('mobile');
         $dealerInfo->email = $request->post('email');
         $dealerInfo->category = $request->post('category');
-        $dealerInfo->district = $request->post('district');
-        $dealerInfo->thana = $request->post('thana');
-        $dealerInfo->union = $request->post('union');
+        $dealerInfo->district_id = $request->post('district');
+        $dealerInfo->thana_id = $request->post('thana');
+        $dealerInfo->union_id = $request->post('union');
         $dealerInfo->no_area = $request->post('no_area');
         $dealerInfo->address = $request->post('address');
         $dealerInfo->save();
