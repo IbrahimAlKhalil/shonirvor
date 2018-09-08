@@ -23,7 +23,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Sub-Category</th>
+                        <th scope="col">Category</th>
                     </tr>
                     </thead>
                     <tbody>
