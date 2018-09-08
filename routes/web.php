@@ -47,4 +47,10 @@ Route::prefix('dashboard')->group(function () {
 
     Route::resource('individual-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy']]);
     Route::resource('organization-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy']]);
+
+    Route::resource('individual-category', 'Backend\IndCategoryController', ['only' => ['index', 'show', 'destroy', 'store', 'update'], 'parameters' => ['individual-category' => 'ind_category']]);
+    Route::resource('organization-category', 'Backend\OrgCategoryController', ['only' => ['index', 'show', 'destroy', 'store', 'update'], 'parameters' => ['organization-category' => 'org_category']]);
+
+    Route::resource('individual-sub-category', 'Backend\IndSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['individual-sub-category' => 'ind_sub_category']]);
+    Route::resource('organization-sub-category', 'Backend\OrgSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['organization-sub-category' => 'org_sub_category']]);
 });
