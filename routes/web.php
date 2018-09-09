@@ -16,6 +16,12 @@ Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => 
 Route::post('dealer-request/approve/{id}', 'Backend\DealerRequestController@approve')->name('dealer-request.approve');
 Route::delete('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
 
+Route::get('individual-service-provider', 'Frontend\IndServiceController@index')->name('frontend.ind-service.index');
+Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceController@show')->name('frontend.ind-service.show');
+
+Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
+Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 
@@ -30,7 +36,7 @@ Route::middleware('auth')->group(function () {
         ], 'parameters' => [
             'organization-service-registration' => 'org_id'
         ]]);
-});
+}, '');
 
 Route::prefix('dashboard')->group(function () {
     Route::resource('individual-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
@@ -47,4 +53,4 @@ Route::prefix('dashboard')->group(function () {
 
     Route::resource('individual-service', 'Backend\IndServiceController', ['only' => ['index', 'show', 'destroy']]);
     Route::resource('organization-service', 'Backend\OrgServiceController', ['only' => ['index', 'show', 'destroy']]);
-});
+}, '');

@@ -58,25 +58,25 @@
                         <div class="col-md">
                             <select name="district" class="form-control">
                                 <option value="">-- Select District --</option>
-                                <option value="1" @if($user->pendingDealer->district == 1){{ 'selected' }}@endif>A</option>
-                                <option value="2" @if($user->pendingDealer->district == 2){{ 'selected' }}@endif>B</option>
-                                <option value="3" @if($user->pendingDealer->district == 3){{ 'selected' }}@endif>C</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}" @if($user->pendingDealer->district->id == $district->id){{ 'selected' }}@endif>{{ $district->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="thana" class="form-control">
                                 <option value="">-- Select Thana --</option>
-                                <option value="1" @if($user->pendingDealer->thana == 1){{ 'selected' }}@endif>A</option>
-                                <option value="2" @if($user->pendingDealer->thana == 2){{ 'selected' }}@endif>B</option>
-                                <option value="3" @if($user->pendingDealer->thana == 3){{ 'selected' }}@endif>C</option>
+                                @foreach($thanas as $thana)
+                                    <option value="{{ $thana->id }}" @if($user->pendingDealer->thana->id == $thana->id){{ 'selected' }}@endif>{{ $thana->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="union" class="form-control">
                                 <option value="">-- Select Union --</option>
-                                <option value="1" @if($user->pendingDealer->union == 1){{ 'selected' }}@endif>A</option>
-                                <option value="2" @if($user->pendingDealer->union == 2){{ 'selected' }}@endif>B</option>
-                                <option value="3" @if($user->pendingDealer->union == 3){{ 'selected' }}@endif>C</option>
+                                @foreach($unions as $union)
+                                    <option value="{{ $union->id }}" @if($user->pendingDealer->union->id == $union->id){{ 'selected' }}@endif>{{ $union->bn_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="w-100 mb-2"></div>

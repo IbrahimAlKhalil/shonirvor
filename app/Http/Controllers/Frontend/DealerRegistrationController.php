@@ -81,7 +81,11 @@ class DealerRegistrationController extends Controller
         }
 
         $user = User::with('pendingDealer')->find($id);
-        return view('frontend.registration.dealer.edit', compact('user'));
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+
+        return view('frontend.registration.dealer.edit', compact('user', 'districts', 'thanas', 'unions'));
     }
 
     public function update(UpdateDealerRegistration $request, $id)

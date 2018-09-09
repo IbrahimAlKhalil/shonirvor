@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row my-5 justify-content-md-center">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <h3 class="mb-3">{{ $profile->name }}</h3>
                 @include('components.success')
             </div>
@@ -22,18 +22,18 @@
                             </a>
                         </caption>
                         <tbody>
-                        <tr>
-                            <th>Mobile</th>
-                            <td>{{ $profile->mobile }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ $profile->email }}</td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <th>Shipping Address</th>
-                            <td>{{ $profile->address }}</td>
-                        </tr>
+                            <tr>
+                                <th>Mobile</th>
+                                <td>{{ $profile->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ $profile->email }}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>Shipping Address</th>
+                                <td>{{ $profile->address }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

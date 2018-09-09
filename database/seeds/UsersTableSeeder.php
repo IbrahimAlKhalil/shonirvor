@@ -39,7 +39,7 @@ class UsersTableSeeder extends Seeder
         $customer->password = bcrypt('123456');
         $customer->save();
 
-        factory(User::class, 20)->create()->each(function ($user) {
+        factory(User::class, 80)->create()->each(function ($user) {
             $isIndService = rand(1, 10);
             $isOrgService = rand(1, 10);
 
