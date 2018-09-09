@@ -19,6 +19,9 @@
             <li class="nav-item @if(request()->url() == route('individual-service.index') || request()->url() == route('organization-service.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-service.index') }}">Service Providers</a>
             </li>
+            <li class="nav-item @if(request()->url() == route('individual-category.index') || request()->url() == route('organization-category.index')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('individual-category.index') }}">Service Categories</a>
+            </li>
             @auth
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>

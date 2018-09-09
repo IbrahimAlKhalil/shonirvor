@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(IndServiceImagesTableSeeder::class);
         $this->call(OrgServiceDocsTableSeeder::class);
         $this->call(OrgServiceImagesTableSeeder::class);
+        $this->call(IndCategoriesTableSeeder::class);
+        $this->call(OrgCategoriesTableSeeder::class);
         $this->call(BdgeocodeSeeder::class);
     }
 }

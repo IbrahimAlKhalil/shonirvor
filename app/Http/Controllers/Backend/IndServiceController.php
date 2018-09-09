@@ -38,7 +38,7 @@ class IndServiceController extends Controller
         $user->age = $request->post('age');
 
         $user->save();
-        if(!$user->hasRole('ind-service')) {
+        if (!$user->hasRole('ind-service')) {
             $user->roles()->attach(3);
         }
 
@@ -89,7 +89,7 @@ class IndServiceController extends Controller
         return view('backend.ind-service.show', compact('indService', 'navs'));
     }
 
-    public function destroy(Request $request, $id )
+    public function destroy(Request $request, $id)
     {
         $indService = IndService::find($id);
 
@@ -144,7 +144,7 @@ class IndServiceController extends Controller
         return [
             ['route' => 'individual-service.index', 'text' => 'All Service Provider'],
             ['route' => 'individual-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'individual-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['route' => 'individual-service.disabled', 'text' => 'Disabled Service Provider']
         ];
     }
 }
