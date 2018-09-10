@@ -22,6 +22,9 @@ Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceControl
 Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
 Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
 
+Route::get('dashboard/profile/individual-service/{provider}', 'Backend\IndProfileController@show')->name('backend.ind-service.profile');
+Route::get('dashboard/profile/organization-service/{provider}', 'Backend\OrgProfileController@show')->name('backend.org-service.profile');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

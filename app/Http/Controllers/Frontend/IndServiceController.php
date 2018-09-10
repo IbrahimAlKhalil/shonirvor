@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\IndService;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\IndServiceVisitorCount;
 
 class IndServiceController extends Controller
 {
@@ -16,14 +16,12 @@ class IndServiceController extends Controller
 
     public function show(IndService $provider)
     {
-        if ($count = IndServiceVisitorCount::whereDate('created_at', date('Y-m-d'))->where('ind_service_id', $provider->id)->first()) {
-            $count->how_many++;
-            $count->save();
-        }
-        else {
-            $createNewRow = new IndServiceVisitorCount();
-            $createNewRow->ind_service_id = $provider->id;
-            $createNewRow->save();
+        if (DB::table('ind_service_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('ind_service_id', $provider->id)->exists()) {
+            DB::table('ind_service_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('ind_service_id', $provider->id)->increment('how_much', 1, ['updated_at' => date('Y-m-d H:i:s')]);
+        } else {
+            DB::table('ind_service_visitor_counts')->insert(
+                ['ind_service_id' => $provider->id, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
+            );
         }
 
         return view('frontend.ind-service.show', compact('provider'));

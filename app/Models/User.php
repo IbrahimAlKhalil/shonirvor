@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function indService()
     {
-        return $this->hasOne(IndService::class);
+        return $this->hasMany(IndService::class);
     }
 
     public function pendingIndService()

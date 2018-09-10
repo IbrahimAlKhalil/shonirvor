@@ -11,7 +11,7 @@ class CreateIndServiceVisitorCountsTable extends Migration
         Schema::create('ind_service_visitor_counts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('ind_service_id');
-            $table->integer('how_many')->default(1);
+            $table->integer('how_much')->default(1);
             $table->timestamps();
 
             $table->foreign('ind_service_id')->references('id')->on('ind_services')->onUpdate('cascade')->onDelete('cascade');

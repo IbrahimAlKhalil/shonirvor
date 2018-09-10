@@ -144,9 +144,9 @@ class OrgServiceController extends Controller
     private function navs()
     {
         return [
-            ['route' => 'organization-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'organization-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'organization-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['url' => route('organization-service.index'), 'text' => 'All Service Provider'],
+            ['url' => route('organization-service-request.index'), 'text' => 'Service Requests'],
+            ['url' => route('organization-service.disabled'), 'text' => 'Disabled Service Provider'],
         ];
     }
 }

@@ -25,6 +25,11 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="div mx-auto">
+                        {{ $providers->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
