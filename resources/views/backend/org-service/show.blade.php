@@ -99,7 +99,16 @@
                     </div>
             </div>
             <div class="col-md-3 mt-5">
-                @include('components.side-nav', compact('navs'))
+                <div class="row">
+                    <div class="col-12">
+                        @include('components.side-nav', compact('navs'))
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.visitor-conuter', compact('visitor'))
+                    </div>
+                </div>
             </div>
         </div>
     </div>

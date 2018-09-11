@@ -29,7 +29,7 @@
             </li>
             @else
                 <li class="nav-item @if(request()->url() == route('profile.index')){{ 'active' }}@endif">
-                    <a class="nav-link" href="{{ route('profile.index') }}">{{ auth()->user()->name }}</a>
+                    <a class="nav-link" href="{{ route('profile.index') }}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>

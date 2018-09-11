@@ -9,6 +9,7 @@ use App\Models\IndServiceImage;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class IndServiceController extends Controller
@@ -85,8 +86,12 @@ class IndServiceController extends Controller
     public function show($id)
     {
         $navs = $this->navs();
+        $visitor['today'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
+        $visitor['thisMonth'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
+        $visitor['thisYear'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereYear('created_at', date('Y'))->sum('how_much');
         $indService = IndService::find($id);
-        return view('backend.ind-service.show', compact('indService', 'navs'));
+
+        return view('backend.ind-service.show', compact('indService', 'navs', 'visitor'));
     }
 
     public function destroy(Request $request, $id)
