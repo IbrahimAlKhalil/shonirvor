@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+Route::prefix('command')->group(function () {
+    Route::get('storage-link', 'CommandController@storage');
+}, '');
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');

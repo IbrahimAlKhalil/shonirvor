@@ -6,13 +6,13 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary @if(request()->url() == route('individual-service-request.index')){{ 'active' }}@endif">Individual</a>
-                <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary @if(request()->url() == route('organization-service-request.index')){{ 'active' }}@endif">Organization</a>
+                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary">বেক্তিগত</a>
+                <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary active">প্রাতিষ্ঠানিক</a>
             </div>
         </div>
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">Organization Service Requests</h4>
+                <h4 class="mb-4">সকল প্রাতিষ্ঠানিক সার্ভিস রিকোয়েস্ট</h4>
                 @include('components.success')
             </div>
             <div class="col-md-9">
@@ -20,9 +20,9 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Organization Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Service</th>
+                        <th scope="col">প্রতিষ্ঠানের নাম</th>
+                        <th scope="col">ইমেইল</th>
+                        <th scope="col">সার্ভিস</th>
                     </tr>
                     </thead>
                     <tbody>

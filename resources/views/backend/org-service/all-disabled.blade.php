@@ -6,14 +6,14 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service.disabled') }}" class="btn btn-secondary">Individual</a>
-                <a href="{{ route('organization-service.disabled') }}" class="btn btn-secondary active">Organization</a>
+                <a href="{{ route('individual-service.disabled') }}" class="btn btn-secondary">বেক্তিগত</a>
+                <a href="{{ route('organization-service.disabled') }}" class="btn btn-secondary active">প্রাতিষ্ঠানিক</a>
             </div>
         </div>
 
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">Disabled Organigation Service Providers</h4>
+                <h4 class="mb-4">সকল বাতিল প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার</h4>
                 @include('components.success')
             </div>
             <div class="col-md-9">
@@ -21,9 +21,9 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Mobile</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">নাম</th>
+                        <th scope="col">মোবাইল</th>
+                        <th scope="col">ইমেইল</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -6,17 +6,20 @@
     <div class="container my-5">
         <div class="row mb-5">
             <div class="col-12">
-                <h1 class="text-center">Welcome to Shonirvor</h1>
-                <p class="lead text-center">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+                <h1 class="text-center">স্বনির্ভর ওয়েবসাইটে আপনাকে স্বাগতম।</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
+        <div class="row justify-content-center pt-5">
+            <div class="col-6">
                 <div class="card shadow">
+                    <div class="card-header">
+                        <p class="h5">সার্ভিস রেজিস্ট্রেশান</p>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Service Registration</h5>
-                        <p class="card-text">This is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content.</p>
-                        <a href="{{ route('service-registration-instruction') }}" class="btn btn-primary">Read More</a>
+                        <p class="card-text">এই ওয়েবসাইটে আপনি আপনার  যেকোনো সার্ভিস (বেক্তিগত কিংবা প্রাতিষ্ঠানিক)-এর বিজ্ঞাপন দিতে পারবেন।</p>
+                        <div class="div text-center">
+                            <a href="{{ route('service-registration-instruction') }}" class="btn btn-primary">বিস্তারিত পরুন</a>
+                        </div>
                     </div>
                 </div>
             </div>

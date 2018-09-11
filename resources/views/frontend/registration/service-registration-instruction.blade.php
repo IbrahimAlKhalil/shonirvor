@@ -3,83 +3,35 @@
 @section('title', 'Service Provider Registration')
 
 @section('content')
-    <div class="container my-4">
+    <div class="container my-5">
         <div class="row">
-            <div>
-                <p class="mt-4">
-                    Our Services display some content that is not Google’s. This content is the sole responsibility
-                    of the entity that makes it available. We may review content to determine whether it is illegal
-                    or violates our policies, and we may remove or refuse to display content that we reasonably
-                    believe violates our policies or the law. But that does not necessarily mean that we review
-                    content, so please don’t assume that we do.
-
-                    In connection with your use of the Services, we may send you service announcements,
-                    administrative messages, and other information. You may opt out of some of those communications.
-
-                    Some of our Services are available on mobile devices. Do not use such Services in a way that
-                    distracts you and prevents you from obeying traffic or safety laws.
-
-                    Your Google Account
-                    You may need a Google Account in order to use some of our Services. You may create your own
-                    Google Account, or your Google Account may be assigned to you by an administrator, such as your
-                    employer or educational institution. If you are using a Google Account assigned to you by an
-                    administrator, different or additional terms may apply and your administrator may be able to
-                    access or disable your account.
-
-                    To protect your Google Account, keep your password confidential. You are responsible for the
-                    activity that happens on or through your Google Account. Try not to reuse your Google Account
-                    password on third-party applications. If you learn of any unauthorized use of your password or
-                    Google Account, follow these instructions.
-
-                    Privacy and Copyright Protection
-                    Google’s privacy policies explain how we treat your personal data and protect your privacy when
-                    you use our Services. By using our Services, you agree that Google can use such data in
-                    accordance with our privacy policies.
-
-                    We respond to notices of alleged copyright infringement and terminate accounts of repeat
-                    infringers according to the process set out in the U.S. Digital Millennium Copyright Act.
-
-                    We provide information to help copyright holders manage their intellectual property online. If
-                    you think somebody is violating your copyrights and want to notify us, you can find information
-                    about submitting notices and Google’s policy about responding to notices in our Help Center.
-
-                    Your Content in our Services
-                    Some of our Services allow you to upload, submit, store, send or receive content. You retain
-                    ownership of any intellectual property rights that you hold in that content. In short, what
-                    belongs to you stays yours.
-
-                    When you upload, submit, store, send or receive content to or through our Services, you give
-                    Google (and those we work with) a worldwide license to use, host, store, reproduce, modify,
-                    create derivative works (such as those resulting from translations, adaptations or other changes
-                    we make so that your content works better with our Services), communicate, publish, publicly
-                    perform, publicly display and distribute such content. The rights you grant in this license are
-                    for the limited purpose of operating, promoting, and improving our Services, and to develop new
-                    ones. This license continues even if you stop using our Services (for example, for a business
-                    listing you have added to Google Maps). Some Services may offer you ways to access and remove
-                    content that has been provided to that Service. Also, in some of our Services, there are terms
-                    or settings that narrow the scope of our use of the content submitted in those Services. Make
-                    sure you have the necessary rights to grant us this license for any content that you submit to
-                    our Services.
-
-                    Our automated systems analyze your content (including emails) to provide you personally relevant
-                    product features, such as customized search results, tailored advertising, and spam and malware
-                    detection. This analysis occurs as the content is sent, received, and when it is stored.
-
-                    If you have a Google Account, we may display your Profile name, Profile photo, and actions you
-                    take on Google or on third-party applications connected to your Google Account (such as +1’s,
-                    reviews you write and comments you post) in our Services, including displaying in ads and other
-                    commercial contexts. We will respect the choices you make to limit sharing or visibility
-                    settings in your Google Account. For example, you can choose your settings so your name and
-                    ple to you. There may be provisions in the open
-                    source license that expressly override some of these terms.
-                </p>
-
-                <div class="row">
-                    <div class="btn-group mx-auto">
-                        <a href="{{ route('individual-service-registration.index') }}"
-                           class="btn btn-secondary btn-success">Individual</a>
-                        <a href="{{ route('organization-service-registration.index') }}"
-                           class="btn btn-secondary btn-success">Organization</a>
+            <div class="col-12">
+                <h2>সার্ভিস প্রভাইডার এর নিয়মাবলী</h2>
+            </div>
+            <div class="col-12 px-4 mt-4">
+                <p>১. গ্রুপে সবাইকে সবার সাথে বন্ধুত্বপূর্ণ পরিবেশে ও সম্মানের সাথে, শ্রদ্ধার সাথে নিজের বক্তব্য তুলে ধরতে হবে। কেউ কাউকে কোন রকম ভাবে অসম্মান করে, ছোট করে, হাসির পাত্র বানিয়ে কোন পোষ্ট, মন্তব্য করতে পারবেন না। </p>
+                <p>২. কেউ কারও বিশ্বাসকে/বিশ্বাসের প্রবক্তাকে কোনভাবেই ছোট করে, অসম্মান করে, গালিগালাজ করে, কোন অশালীন মন্তব্য করে কোন পোষ্ট বা মন্তব্য করা যাবে না। প্রত্যেকে তার বিপরীত ধর্ম/মতবাদকে সম্মান ও শ্রদ্ধা দেখিয়ে প্রশ্ন/বিতর্ক/যুক্তি/প্রমাণ/আলোচনা উপস্থাপন করতে হবে। যদি কেউ এই নিয়ম ভঙ্গ বিন্দুমাত্র ভঙ্গ করে তাহলে তাকে প্রথমে সতর্ক এবং পরবর্তীতে ব্যান করা হবে।</p>
+                <p>৩. স্পামিং, অফটপিক, মার্কেটিং লিঙ্ক (অথবা যে কোন মার্কেটিং), পেজের বিজ্ঞাপন, গ্রুপের বিজ্ঞাপন, এড মি, অশ্লীল ছবি, অপছন্দনীয় ছবি এগুলো ফেসবুক গ্রুপের নিয়মিত সমস্যা। এটি ভঙ্গ করলে তাকে বিনা নোটিশে, সতর্ক না করে ব্যান করা হবে।</p>
+                <p>৪. এই গ্রুপ আস্তিক, নাস্তিক, মুসলিম, হিন্দু, খ্রীষ্টান, বৌদ্ধ, ইহুদী সহ সকল ধর্ম ও মতবাদে বিশ্বাসী মানুষের জন্য উন্মুক্ত। নিয়ম মেনে সবাই এখানে আলোচনা, বিতর্ক, পোষ্ট, মন্তব্য করতে পারবেন। এতে কোন বাধা নেই।</p>
+                <p>৫. বিতর্কে, যুক্তি খন্ডনে, ধর্মীয় কথা বলার সময়, অন্য ধর্মের ভুল/ব্যাখ্যা জানার অথবা জানানোর দরকার হলে অবশ্যই রেফারেন্স উল্লেখ করতে হবে। এবং এখানে অবশ্যই সম্মানের সাথে, শ্রদ্ধার সাথে জানাতে হবে। বিন্দুমাত্র অসম্মান করা যাবে না।</p>
+                <p>৬. কাউকে ব্যক্তিগত আক্রমণ করা যাবে না। কাউকে ছোট করে, অসম্মান করে, গালিগালাজ করে এমনকি উপমার ছলে গালিগালাজ করে কিছু বলা, খারাপ ও অশ্লীল উক্তি, পোষ্ট, মন্তব্য দেয়া যাবে না। যদি কেউ এই নিয়ম ভঙ্গ করে তাহলে তাকে প্রথমে সতর্ক এবং পরবর্তীতে ব্যান করা হবে।</p>
+                <p>৭. এই গ্রুপ এ সকল ধর্মের বানী (রেফারেন্স সহ) ও নাস্তিকের মতবাদ তুলে ধরা যাবে। এতে অন্য মতবাদ/বিশ্বাসের মানুষ প্রশ্ন করতে পারেন। যুক্তি তুলে ধরতে পারেন। ভুল তুলে ধরতে পারেন। ব্যাখ্যা জানতে চাইতে পারেন। সব কিছুই বিনম্র, শ্রদ্ধা ও সম্মানের সাথে উপস্থাপন করতে হবে যেন কারও বিশ্বাসে/মতবাদে আঘাত না লাগে। যদি কেউ এই নিয়ম ভঙ্গ করে তাহলে তাকে প্রথমে সতর্ক এবং পরবর্তীতে ব্যান করা হবে।</p>
+                <p>৮. জ্ঞানের বিকাশ ঘটে পারস্পারিক আলোচনার ফলে। যে কেউ যে কোন ধর্মীয় মতামত বিনিময়/ ধর্ম সংক্রান্ত যে কোন বিষয় বিশ্লষণ করতে পারবে তবে এক্ষেত্রে অশ্লিল শব্দ চয়ন করা যাবে না এবং উপরের নিয়মগুলো মানতে হবে। যুক্তিসংগতভাবে নিজের মতামত তুলে ধরতে হবে এবং অপরের মতামতের প্রতি শ্রদ্ধা প্রদর্শন করতে হবে। যদি কেউ এই নিয়ম ভঙ্গ করে তাহলে তাকে প্রথমে সতর্ক এবং পরবর্তীতে ব্যান করা হবে।</p>
+                <p>৯. রাজনীতিবিদের একটা কাজ হল ধর্ম নিয়ে রাজনীতি করা। কিন্তু এই গ্রুপ এ সকল ধরণের রাজনৈতিক লেখা, রাজনৈতিক মানুষের বক্তব্য, সকল রাজনৈতিক দলাদলি বন্ধ।</p>
+                <p>১০. এই গ্রুপ এ অন্য কোন গ্রুপ বা পেজের লেখা শেয়ার করা যাবে না। আপনারা নিজের স্ট্যাটাস শেয়ার করতে পারবেন। অন্য গ্রুপ ও পেজের লেখা বেশীরভাগই হয় বিজ্ঞাপন এবং অনেক সময় লেখাতেও ভুল থাকে। এই জন্য এটা নিষিদ্ধ করা হল। নিজের লেখা পোষ্ট করুন।</p>
+                <p>১১. বড় পোষ্ট করার ক্ষেত্রে অবশ্যই শিরোনাম দিতে হবে। তাছাড়া লেখা এপ্রুভ করা হবে না। শিরোনামে যেন বিষয়বস্তু প্রকাশ পায় এবং এতে মানুষের পড়তে আগ্রহ জাগে।</p>
+                <p>১২. কোন লিঙ্ক শেয়ার করতে হলে অবশ্যই সেই লিঙ্ক এর সংক্ষিপ্ত ও পরিষ্কার বর্ণনা দিতে হবে। যেন সবাই দেখেই বুঝতে পারে এখানে কি আছে। বর্ণনা ছাড়া কোন ধরণের লিঙ্ক এপ্রুভ করা হবে না।</p>
+                <p>১৩. সবার প্রতি অনুরোধ। কোন লেখা যাচাই না করে কোনভাবেই পোষ্ট করবেন না। সব মেম্বার যাচাই করে শেয়ার করুন। আমরাও এপ্রুভ করার আগে রেফারেন্স দেখে যাচাই করব। যেন কোন ভাবেই আমাদের গ্রুপে মানুষ বিভ্রান্ত না হয়।</p>
+                <p>১৪.যদি কেউ বিতর্ক করতে চান তাহলে করতে পারেন। তবে এক্ষেত্রে উপরের নিয়মের পাশাপাশি আরও কিছু নিয়ম মানতে হবে। যা এই লিঙ্ক এ পাবেন।</p>
+                <p>১৫. গ্রুপের কারও কথায় আঘাত পেলে, কেউ নিয়ম ভঙ্গ করলে সরাসরি প্রমাণ সহ এডমিনকে ম্যাসেজ করুন। যত দ্রুত সম্ভব তাদের বিরুদ্ধে ব্যবস্থা নেয়া হবে।</p>
+            </div>
+            <div class="col-12 my-3">
+                <div class="row justify-content-around">
+                    <div class="col-6 text-right">
+                        <a href="{{ route('individual-service-registration.index') }}" class="btn btn-secondary btn-success" role="button">Individual</a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ route('organization-service-registration.index') }}" class="btn btn-secondary btn-success" role="button">Organization</a>
                     </div>
                 </div>
             </div>

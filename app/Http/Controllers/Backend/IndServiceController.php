@@ -147,9 +147,9 @@ class IndServiceController extends Controller
     private function navs()
     {
         return [
-            ['url' => route('individual-service.index'), 'text' => 'All Service Provider'],
-            ['url' => route('individual-service-request.index'), 'text' => 'Service Requests'],
-            ['url' => route('individual-service.disabled'), 'text' => 'Disabled Service Provider']
+            ['url' => route('individual-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
+            ['url' => route('individual-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('individual-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার']
         ];
     }
 }

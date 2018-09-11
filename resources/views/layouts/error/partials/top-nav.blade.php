@@ -8,10 +8,10 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
+                <a class="nav-link" href="{{ route('frontend.home') }}">হোম</a>
             </li>
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
+                <a class="nav-link" href="{{ route('backend.home') }}">ড্যাশবোর্ড</a>
             </li>
         </ul>
     </div>

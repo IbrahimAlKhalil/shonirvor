@@ -6,8 +6,7 @@
     <div class="container my-5">
         <div class="row">
             <div class="@if($indServices->isEmpty() && $orgServices->isEmpty()){{ 'col-12' }}@else{{ 'col-md-9' }}@endif">
-                <h1 class="text-center">Admin Dashboard</h1>
-                <p class="lead text-center">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+                <h1 class="text-center">আপনার ড্যাশবোর্ড</h1>
             </div>
             @if(!$indServices->isEmpty() || !$orgServices->isEmpty())
             <div class="col-md-3">

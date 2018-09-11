@@ -48,7 +48,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Category</th>
+                        <th scope="col">Sub-Category</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
