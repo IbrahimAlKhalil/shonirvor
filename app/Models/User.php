@@ -28,16 +28,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function dealer()
-    {
-        return $this->hasOne(Dealer::class);
-    }
-
-    public function pendingDealer()
-    {
-        return $this->hasOne(PendingDealer::class);
-    }
-
     public function indService()
     {
         return $this->hasMany(IndService::class);

@@ -10,9 +10,11 @@
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
             </li>
+            @auth
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
             </li>
+            @endauth
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle @if(request()->url() == route('frontend.ind-service.index') || request()->url() == route('frontend.org-service.index')){{ 'active' }}@endif" href="javascript:" id="navbarDropdown" role="button" data-toggle="dropdown">Services</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Dealer;
 use App\Models\User;
 use App\Models\IndService;
 use App\Models\OrgService;
@@ -14,7 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         $customer = new User;
         $customer->name = "Hujaifa Islam";
-        $customer->mobile = '00000000000';
+        $customer->mobile = '0';
         $customer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
         $customer->save();
 
@@ -31,7 +30,6 @@ class UsersTableSeeder extends Seeder
         $dealer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
         $dealer->save();
         $dealer->attachRole(2);
-        $dealer->dealer()->create();
 
         $customer = new User;
         $customer->name = "Hujaifa Islam";
@@ -79,12 +77,6 @@ class UsersTableSeeder extends Seeder
 
             // Attach a role
             $user->roles()->attach(rand(1, 2));
-            // If Dealer
-            if ($user->hasRole('dealer'))
-            {
-                $user->dealer()->save(factory(Dealer::class)->make());
-            }
-
         });
     }
 }
