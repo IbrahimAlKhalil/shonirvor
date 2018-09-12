@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\OrgService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -24,6 +25,12 @@ class OrgServiceController extends Controller
             );
         }
 
-        return view('frontend.org-service.show', compact('provider'));
+        if (Auth::check()) {
+            $canFeedback = !$provider->feedbacks()->where('user_id', Auth::user()->getAuthIdentifier())->exists() && $provider->user->id != Auth::user()->getAuthIdentifier();
+        } else {
+            $canFeedback = false;
+        }
+
+        return view('frontend.org-service.show', compact('provider', 'canFeedback'));
     }
 }

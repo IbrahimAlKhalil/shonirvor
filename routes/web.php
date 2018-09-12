@@ -21,6 +21,9 @@ Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceContr
 Route::get('dashboard/profile/individual-service/{provider}', 'Backend\IndProfileController@show')->name('backend.ind-service.profile');
 Route::get('dashboard/profile/organization-service/{provider}', 'Backend\OrgProfileController@show')->name('backend.org-service.profile');
 
+Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
+Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

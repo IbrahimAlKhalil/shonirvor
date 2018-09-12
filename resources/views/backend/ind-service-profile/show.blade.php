@@ -6,7 +6,7 @@
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9">
-                <p class="lead text-center">My name is {{ $provider->user->name }}..<br> I am a <mark>individual</mark> service provider...</p>
+                <p class="lead text-center">আমার নাম {{ $provider->user->name }}..<br>আমি একজন <mark>বেক্তিগত</mark>সার্ভিস প্রভাইডার...</p>
             </div>
             <div class="col-md-3">
                 <div class="row">
@@ -17,6 +17,11 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         @include('components.visitor-conuter', compact('visitor'))
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.feedback-counter', compact('countFeedbacks'))
                     </div>
                 </div>
             </div>

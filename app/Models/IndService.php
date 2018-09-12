@@ -25,4 +25,9 @@ class IndService extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function feedbacks()
+    {
+        return $this->morphMany(Feedback::class, 'feedbackable');
+    }
 }
