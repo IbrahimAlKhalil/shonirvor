@@ -6,7 +6,8 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary active">Individual</a>
+                <a href="{{ route('individual-service-request.index') }}"
+                   class="btn btn-secondary active">Individual</a>
                 <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary">Organization</a>
             </div>
         </div>
@@ -23,7 +24,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Mobile</th>
                         <th scope="col">Age</th>
-                        <th scope="col">Service</th>
+                        <th scope="col">Category</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,7 +38,7 @@
                             </td>
                             <td>{{ $serviceRequest->mobile }}</td>
                             <td>{{ $serviceRequest->user->age }}</td>
-                            <td>{{ $serviceRequest->service }}</td>
+                            <td>{{ $serviceRequest->category }}</td>
                         </tr>
 
                     @empty

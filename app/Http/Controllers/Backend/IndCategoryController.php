@@ -27,11 +27,11 @@ class IndCategoryController extends Controller
 
     public function store(StoreIndCategory $request)
     {
-        $indSubCategory = new IndCategory;
-        $indSubCategory->category = $request->post('category');
-        $indSubCategory->save();
+        $indCategory = new IndCategory;
+        $indCategory->category = $request->post('category');
+        $indCategory->save();
 
-        return redirect(route('individual-category.show', $indSubCategory->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
+        return redirect(route('individual-category.show', $indCategory->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
     }
 
 

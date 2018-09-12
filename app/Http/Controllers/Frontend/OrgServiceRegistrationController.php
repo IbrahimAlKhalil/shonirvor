@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEditPendingOrgService;
 use App\Http\Requests\StorePendingOrgService;
-use App\Models\OrgService;
 Use App\Models\PendingOrgService;
 use App\Models\PendingOrgServiceDoc;
 use App\Models\PendingOrgServiceImage;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class OrgServiceRegistrationController extends Controller
 {
@@ -19,40 +19,54 @@ class OrgServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $pendingOrgServices = $user->pendingOrgService;
+        $pendingOrgServices = $user->pendingOrgServices;
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
         $classesToAdd = ['active', 'disabled'];
+        $isPicExists = $user->photo;
+        $compact = compact('classesToAdd', 'pendingOrgServices', 'districts', 'thanas', 'unions', 'isPicExists');
+
+        $count = $pendingOrgServices->count();
 
         // check what if current user didn't reach at the maximum pending request
-        if ($pendingOrgServices->count() >= 3) {
+        if ($count >= 3) {
             // reached at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            return view('frontend.registration.org-service.confirm', $compact);
         }
 
         // check what if current user has less than 3 pending request
-        if ($pendingOrgServices->count() < 3 && $pendingOrgServices->count() >= 1) {
-            $classesToAdd = ['active', ''];
+        if ($count < 3 && $count >= 1) {
+            $compact['classesToAdd'] = ['active', ''];
+
             // didn't reach at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            return view('frontend.registration.org-service.confirm', $compact);
         }
 
-        $isPicExists = $user->photo;
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index', compact('isPicExists'));
+        return view('frontend.registration.org-service.index', $compact);
     }
 
     public function store(StorePendingOrgService $request)
     {
         $user = Auth::user();
-        $pendingOrgServices = $user->pendingOrgService;
+        $pendingOrgServices = $user->pendingOrgServices;
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+        $classesToAdd = ['active', 'disabled'];
+        $isPicExists = $user->photo;
+        $compact = compact('classesToAdd', 'pendingOrgServices', 'districts', 'thanas', 'unions', 'isPicExists');
+
+        $count = $pendingOrgServices->count();
 
         // check what if current user didn't reach at the maximum pending request
-        if ($pendingOrgServices->count() >= 3) {
-            $classesToAdd = ['active', 'disabled'];
+        if ($count >= 3) {
             // reached at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            return view('frontend.registration.org-service.confirm', $compact);
         }
 
         $pendingOrgService = new PendingOrgService;
@@ -60,18 +74,25 @@ class OrgServiceRegistrationController extends Controller
         $user = Auth::user();
 
         $pendingOrgService->user_id = Auth::id();
+        $pendingOrgService->district_id = $request->post('district');
+        $pendingOrgService->thana_id = $request->post('thana');
+        $pendingOrgService->union_id = $request->post('union');
+
         $pendingOrgService->org_name = $request->post('org-name');
         $pendingOrgService->mobile = $request->post('mobile');
+        $pendingOrgService->category = $request->post('category');
+        $pendingOrgService->website = $request->post('website');
+        $pendingOrgService->facebook = $request->post('facebook');
         $pendingOrgService->description = $request->post('description');
+        $pendingOrgService->no_area = $request->post('no_area');
         $pendingOrgService->email = $request->post('email');
-        $pendingOrgService->latitude = $request->post('latitude');
-        $pendingOrgService->longitude = $request->post('longitude');
-        $pendingOrgService->service = $request->post('service');
         $pendingOrgService->address = $request->post('address');
+        if ($request->hasFile('logo')) {
+            $pendingOrgService->logo = $request->file('logo')->store('pending-org-images');
+        }
         $pendingOrgService->save();
 
 
-        $user->name = $request->post('name');
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
@@ -115,7 +136,12 @@ class OrgServiceRegistrationController extends Controller
     public function edit($id)
     {
         $pendingOrgService = PendingOrgService::find($id);
-        return view('frontend.registration.org-service.edit', compact('pendingOrgService'));
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+        $isPicExists = $pendingOrgService->user->photo;
+
+        return view('frontend.registration.org-service.edit', compact('pendingOrgService', 'districts', 'thanas', 'unions', 'isPicExists'));
     }
 
 
@@ -126,28 +152,32 @@ class OrgServiceRegistrationController extends Controller
 
         $user = Auth::user();
 
-        $pendingOrgService->user_id = Auth::id();
+        $pendingOrgService->district_id = $request->post('district');
+        $pendingOrgService->thana_id = $request->post('thana');
+        $pendingOrgService->union_id = $request->post('union');
+
         $pendingOrgService->org_name = $request->post('org-name');
         $pendingOrgService->mobile = $request->post('mobile');
+        $pendingOrgService->category = $request->post('category');
+        $pendingOrgService->website = $request->post('website');
+        $pendingOrgService->facebook = $request->post('facebook');
         $pendingOrgService->description = $request->post('description');
+        $pendingOrgService->no_area = $request->post('no_area');
         $pendingOrgService->email = $request->post('email');
-        $pendingOrgService->latitude = $request->post('latitude');
-        $pendingOrgService->longitude = $request->post('longitude');
-        $pendingOrgService->service = $request->post('service');
         $pendingOrgService->address = $request->post('address');
+        if ($request->hasFile('logo')) {
+            $pendingOrgService->logo = $request->file('logo')->store('pending-org-images');
+        }
         $pendingOrgService->save();
 
 
-        $user->name = $request->post('name');
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
         $user->age = $request->post('age');
-
         if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photo');
+            $user->photo = $request->file('photo')->store('user-photos');
         }
-
         $user->save();
 
         if ($request->has('images')) {

@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="email" class="col-4 col-form-label">Working Email</label>
+                        <label for="email" class="col-4 col-form-label">Work Email</label>
                         <div class="col-8">
                             <input id="email" name="email" type="text" value="{{ old('email') }}"
                                    class="form-control @if($errors->has('email')) is-invalid @endif">

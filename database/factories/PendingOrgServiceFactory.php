@@ -11,7 +11,7 @@ $factory->define(PendingOrgService::class, function (Faker $faker) {
         'email' => $faker->companyEmail,
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
-        'service' => $faker->jobTitle,
-        'address' => $faker->address
+        'address' => $faker->address,
+        'category' => $faker->jobTitle
     ];
 });

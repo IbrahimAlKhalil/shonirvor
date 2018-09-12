@@ -6,22 +6,13 @@
     <div style="margin-top: 40px;"></div>
 
     <div class="container">
+        <h3>Service Provider Registration</h3>
 
         @include('components.success')
-
 
         <form method="post" enctype="multipart/form-data"
               action="{{ route('organization-service-registration.store') }}">
             {{ csrf_field() }}
-
-            <div class="form-group row">
-                <label for="name" class="col-4 col-form-label">Your Name</label>
-                <div class="col-8">
-                    <input id="name" name="name" type="text" value="{{ old('name') }}"
-                           class="form-control @if($errors->has('name')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'name'])
-                </div>
-            </div>
 
             <div class="form-group row">
                 <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
@@ -70,6 +61,82 @@
             </div>
 
             <div class="form-group row">
+                <label for="website" class="col-4 col-form-label">Website</label>
+                <div class="col-8">
+                    <input id="website" name="website" type="url" value="{{ old('website') }}"
+                           class="form-control @if($errors->has('website')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'website'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="facebook" class="col-4 col-form-label">Facebook</label>
+                <div class="col-8">
+                    <input id="facebook" name="facebook" type="url" value="{{ old('facebook') }}"
+                           class="form-control @if($errors->has('facebook')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'facebook'])
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Area</label>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-md">
+                            <select name="district" class="form-control">
+                                <option value="">-- Select District --</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="thana" class="form-control">
+                                <option value="">-- Select Thana --</option>
+                                @foreach($thanas as $thana)
+                                    <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="union" class="form-control">
+                                <option value="">-- Select Union --</option>
+                                @foreach($unions as $union)
+                                    <option value="{{ $union->id }}">{{ $union->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-100 mb-2"></div>
+                        <div class="col-md">
+                            <label class="form-check-label" for="no-area">My area is not listed here.</label>
+                            <input name="no_area" type="checkbox" value="1" id="no-area">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="address" class="col-4 col-form-label">Address</label>
+                <div class="col-8">
+                    <textarea id="address" rows="8" name="address" required="required"
+                              class="form-control @if($errors->has('address')) is-invalid @endif">
+                        {{ old('address') }}
+                    </textarea>
+                    @include('components.invalid', ['name' => 'address'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-4 col-form-label">Service Category</label>
+                <div class="col-8">
+                    <textarea id="category" name="category"
+                              class="form-control @if($errors->has('category')) is-invalid @endif" rows="4" placeholder="Type your service categories. Like: Teacher, Doctor, Electrician, Etc.."></textarea>
+                    @include('components.invalid', ['name' => 'category'])
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label for="age" class="col-4 col-form-label">Age</label>
                 <div class="col-8">
                     <input id="age" name="age" type="number" value="{{ old('age') }}" required="required"
@@ -88,40 +155,11 @@
             </div>
 
             <div class="form-group row">
-                <label for="latitude" class="col-4 col-form-label">Latitude</label>
+                <label for="logo" class="col-4 col-form-label">Logo</label>
                 <div class="col-8">
-                    <input id="latitude" name="latitude" type="number" value="{{ old('latitude') }}"
-                           class="form-control @if($errors->has('latitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'latitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="longitude" class="col-4 col-form-label">Longitude</label>
-                <div class="col-8">
-                    <input id="longitude" name="longitude" type="number" value="{{ old('longitude') }}"
-                           class="form-control @if($errors->has('longitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'longitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="service" class="col-4 col-form-label">Service</label>
-                <div class="col-8">
-                    <input id="service" name="service" type="text" value="{{ old('service') }}"
-                           class="form-control @if($errors->has('service')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'service'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="address" class="col-4 col-form-label">Address</label>
-                <div class="col-8">
-                    <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">
-                        {{ old('address') }}
-                    </textarea>
-                    @include('components.invalid', ['name' => 'address'])
+                    <input id="logo" name="logo" type="file" accept="image/*"
+                           class="form-control @if($errors->has('logo')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'logo'])
                 </div>
             </div>
 

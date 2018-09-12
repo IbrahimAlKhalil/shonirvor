@@ -39,6 +39,22 @@
                                 <th scope="row">NID</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
+
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $serviceRequest->district->bn_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $serviceRequest->thana->bn_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $serviceRequest->union->bn_name}}</td>
+                            </tr>
+
                             <tr>
                                 <th scope="row">Address</th>
                                 <td>{{ $serviceRequest->address }}</td>
@@ -51,21 +67,45 @@
                                 <th scope="row">Longitude</th>
                                 <td>{{ $serviceRequest->longitude }}</td>
                             </tr>
+                            <tr>
+                                <th scope="row">Category</th>
+                                <td>{{ $serviceRequest->category }}</td>
+                            </tr>
                             </tbody>
                         </table>
-
+                        <form id="approve-request" action="{{ route('individual-service-request.store') }}"
+                              method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="category">Category</label>
+                                    <select class="form-control" name="category" id="category">
+                                        <option>-- Select Category --</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="category">Sub-Category</label>
+                                    <option>-- Select Category --</option>
+                                    <select class="form-control" name="sub-categories[]" id="category" multiple>
+                                        <option>-- Select Sub-Category --</option>
+                                        @foreach($subCategories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                         <div class="row">
+
                             <div class="btn-group mx-auto" role="group">
                                 <span class="btn btn-secondary btn-success"
                                       onclick="document.getElementById('approve-request').submit();">Approve</span>
                                 <span class="btn btn-secondary btn-danger rounded-right"
                                       onclick="document.getElementById('reject-request').submit();">Reject</span>
-
-                                <form id="approve-request" action="{{ route('individual-service-request.store') }}"
-                                      method="post">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
-                                </form>
 
                                 <form id="reject-request"
                                       action="{{ route('individual-service-request.destroy', $serviceRequest->id) }}"
@@ -84,7 +124,8 @@
                     @forelse($serviceRequest->docs as $document)
                         <div class="col-md-3">
                             <a href="{{ asset('storage/' . $document->doc) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $document->doc) }}" class="img-responsive img-rounded img-thumbnail">
+                                <img src="{{ asset('storage/' . $document->doc) }}"
+                                     class="img-responsive img-rounded img-thumbnail">
                             </a>
                         </div>
                     @empty

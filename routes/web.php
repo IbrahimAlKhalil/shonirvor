@@ -21,7 +21,7 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 
 Route::middleware('auth')->group(function () {
     Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
-        'only' => ['index', 'store', 'update'], 'parameters' => [
+        'only' => ['index', 'store', 'update', 'edit'], 'parameters' => [
             'individual-service-registration' => 'ind_id'
         ]]);
     Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
         ], 'parameters' => [
             'organization-service-registration' => 'org_id'
         ]]);
-});
+}, '');
 
 Route::prefix('dashboard')->group(function () {
     Route::resource('individual-service-request', 'Backend\IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy']]);
@@ -53,4 +53,4 @@ Route::prefix('dashboard')->group(function () {
 
     Route::resource('individual-sub-category', 'Backend\IndSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['individual-sub-category' => 'ind_sub_category']]);
     Route::resource('organization-sub-category', 'Backend\OrgSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['organization-sub-category' => 'org_sub_category']]);
-});
+}, '');

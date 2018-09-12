@@ -38,22 +38,22 @@ class User extends Authenticatable
         return $this->hasOne(PendingDealer::class);
     }
 
-    public function indService()
+    public function indServices()
     {
-        return $this->hasOne(IndService::class);
+        return $this->hasMany(IndService::class);
     }
 
-    public function pendingIndService()
+    public function pendingIndServices()
     {
-        return $this->hasOne(PendingIndService::class);
+        return $this->hasMany(PendingIndService::class);
     }
 
-    public function orgService()
+    public function orgServices()
     {
         return $this->hasMany(OrgService::class);
     }
 
-    public function pendingOrgService()
+    public function pendingOrgServices()
     {
         return $this->hasMany(PendingOrgService::class);
     }

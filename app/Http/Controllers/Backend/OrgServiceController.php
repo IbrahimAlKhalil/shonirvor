@@ -106,7 +106,7 @@ class OrgServiceController extends Controller
 
                     $user = User::find($orgService->user_id);
 
-                    if (!$user->orgService()->count() <= 1) {
+                    if (!$user->orgServices()->count() <= 1) {
                         $user->roles()->detach('org-service');
                     }
 

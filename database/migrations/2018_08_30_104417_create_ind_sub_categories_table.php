@@ -16,11 +16,15 @@ class CreateIndSubCategoriesTable extends Migration
         Schema::create('ind_sub_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('ind_category_id');
-            $table->string('category');
+            $table->string('sub_category');
 
             $table->timestamps();
 
-            $table->foreign('ind_category_id')->references('id')->on('ind_categories')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('ind_category_id')
+                ->references('id')
+                ->on('ind_categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

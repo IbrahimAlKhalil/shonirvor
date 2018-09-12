@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEditPendingIndService;
 use App\Http\Requests\StorePendingIndService;
+use App\Models\IndCategory;
+use App\Models\IndSubCategory;
 use App\Models\PendingIndService;
 use App\Models\PendingIndServiceDoc;
 use App\Models\PendingIndServiceImage;
 use App\Models\User;
+use App\Models\WorkMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class IndServiceRegistrationController extends Controller
 {
@@ -17,28 +24,39 @@ class IndServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $pendingIndServices = $user->pendingIndServices;
 
-        // Check what if the user is already a service provider.
-        if ($user->hasRole(3)) {
-
-            // user is already a service provider so stop going farther
-            // TODO::1 Make a nice view an show, the message there, or redirect to another specific route
-
-            return response('You are already a service provider, if you are planing provide other services, then please request for adding new Service Category to your account.');
-        }
-
-        $pendingIndService = $user->pendingIndService;
-
-        // check what if current user has already a request pending
-        if ($pendingIndService) {
-
-            // user has already a request pending so let him/her edit the information
-            return view('frontend.registration.ind-service.edit', compact('pendingIndService'));
-        }
-
+        $workMethods = WorkMethod::all();
+        $categories = IndCategory::all();
+        $subCategories = IndSubCategory::all();
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+        $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
+        $compact = compact('classesToAdd', 'pendingIndServices', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $view = 'frontend.registration.ind-service.confirm';
+        $count = $pendingIndServices->count();
 
-        return view('frontend.registration.ind-service.index', compact('isPicExists'));
+        // check what if current user didn't reach at the maximum pending request
+        if ($count >= 3) {
+            // reached at the maximum
+            // redirect them to the confirmation page
+            return view($view, $compact);
+        }
+
+        // check what if current user has less than 3 pending request
+        if ($count < 3 && $count >= 1) {
+            $compact['classesToAdd'] = ['active', ''];
+            // didn't reach at the maximum
+            // redirect them to the confirmation page
+            return view($view, $compact);
+        }
+
+        // pendingIndServices, classesToAdd are unnecessary for index
+        unset($compact['pendingIndServices'], $compact['classesToAdd']);
+
+        return view('frontend.registration.ind-service.index', $compact);
     }
 
 
@@ -46,38 +64,66 @@ class IndServiceRegistrationController extends Controller
     {
 
         $user = Auth::user();
+        $pendingIndServices = $user->pendingIndServices;
+        $workMethods = WorkMethod::all();
+        $categories = IndCategory::all();
+        $subCategories = IndSubCategory::all();
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+        $classesToAdd = ['active', 'disabled'];
+        $isPicExists = $user->photo;
+        $compact = compact('classesToAdd', 'pendingIndServices', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
 
-        // Check what if the user is already a service provider.
-
-        if ($user->hasRole(3)) {
-            // user is already a service provider so stop going farther
-
-            // TODO::1
-            return response('You are already a service provider, if you are planing provide other services, then please request for adding new Service Category to your account.');
-        }
-
-        $pendingIndService = $user->pendingIndService;
-
-        // check what if current user has already a request pending
-        if ($pendingIndService) {
-
-            // user has already a request pending so let him/her edit the information
-            return view('frontend.registration.ind-service.edit', compact('pendingIndService'));
+        // check what if current user didn't reach at the maximum pending request
+        if ($pendingIndServices->count() >= 3) {
+            // reached at the maximum
+            // redirect them to the confirmation page
+            return view('frontend.registration.ind-service.confirm', $compact);
         }
 
         $pendingIndService = new PendingIndService;
-        $user = Auth::user();
+
+        // PendingIndService
 
         $pendingIndService->user_id = $user->id;
-        $pendingIndService->email = $request->post('email');
+        $pendingIndService->district_id = $request->post('district');
+        $pendingIndService->thana_id = $request->post('thana');
+        $pendingIndService->union_id = $request->post('union');
+        if ($request->has('category')) {
+            $pendingIndService->ind_category_id = $request->post('category');
+        }
+
         $pendingIndService->mobile = $request->post('mobile');
-        $pendingIndService->latitude = $request->post('latitude');
-        $pendingIndService->longitude = $request->post('longitude');
-        $pendingIndService->service = $request->post('service');
+        $pendingIndService->email = $request->post('email');
+        $pendingIndService->website = $request->post('website');
+        $pendingIndService->facebook = $request->post('facebook');
+        $pendingIndService->no_area = $request->post('no_area');
         $pendingIndService->address = $request->post('address');
         $pendingIndService->save();
 
-        $user->name = $request->post('name');
+        // ind_category_pending_ind_service table
+        if ($request->has('sub-categories')) {
+            $subCategories = [];
+            foreach ($request->post('sub-categories') as $subCategory) {
+                array_push($subCategories, [
+                    'ind_sub_category_id' => $subCategory,
+                    'pending_ind_service_id' => $pendingIndService->id
+                ]);
+            }
+        }
+        DB::table('ind_sub_category_pending_ind_service')->insert($subCategories);
+
+        // work_method_pending_ind_service table
+        $workMethods = [];
+        foreach ($request->post('work-methods') as $workMethod) {
+            array_push($workMethods, [
+                'work_method_id' => $workMethod,
+                'pending_ind_service_id' => $pendingIndService->id
+            ]);
+        }
+        DB::table('work_method_pending_ind_service')->insert($workMethods);
+
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
@@ -119,7 +165,6 @@ class IndServiceRegistrationController extends Controller
     public function update(StoreEditPendingIndService $request, $id)
     {
         $pendingIndService = PendingIndService::find($id);
-
         $user = Auth::user();
 
         $pendingIndService->user_id = $user->id;
@@ -129,7 +174,6 @@ class IndServiceRegistrationController extends Controller
         $pendingIndService->longitude = $request->post('longitude');
         $pendingIndService->service = $request->post('service');
         $pendingIndService->address = $request->post('address');
-
         $pendingIndService->save();
 
         $user->name = $request->post('name');
@@ -173,5 +217,17 @@ class IndServiceRegistrationController extends Controller
         $pendingIndService->save();
 
         return back()->with('success', 'Done!');
+    }
+
+    public function edit($id)
+    {
+        $pendingIndService = PendingIndService::find($id);
+        $workMethods = WorkMethod::all();
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
+
+        $isPicExists = $pendingIndService->user->photo;
+        return view('frontend.registration.ind-service.edit', compact('pendingIndService', 'isPicExists', 'workMethods', 'districts', 'thanas', 'unions'));
     }
 }

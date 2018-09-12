@@ -10,7 +10,8 @@
                 <div class="row">
                     <div class="col-md-4">
                         <a href="{{ asset('storage/' . $serviceRequest->user->photo) }}">
-                            <img src="{{ asset('storage/' . $serviceRequest->user->photo) }}" class="img-thumbnail" alt="{{ $serviceRequest->user->name }}">
+                            <img src="{{ asset('storage/' . $serviceRequest->user->photo) }}" class="img-thumbnail"
+                                 alt="{{ $serviceRequest->user->name }}">
                         </a>
                     </div>
                     <div class="col-md-8">
@@ -30,13 +31,29 @@
                                 <td>{{ $serviceRequest->user->age }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Qualification/Experience</th>
-                                <td>{{ $serviceRequest->user->qualification }}</td>
+                                <th scope="row">Category</th>
+                                <td>{{ $serviceRequest->category }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">NID</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
+
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $serviceRequest->district->bn_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $serviceRequest->thana->bn_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $serviceRequest->union->bn_name}}</td>
+                            </tr>
+
                             <tr>
                                 <th scope="row">Address</th>
                                 <td>{{ $serviceRequest->address }}</td>
@@ -92,18 +109,18 @@
                 </div>
 
                 <div class="row">
-            <h3 class="col-12 my-4">Images</h3>
-            @forelse($serviceRequest->images as $document)
-                <div class="col">
-                    <a href="{{ asset('storage/' . $document->image) }}" target="_blank">
-                        <img src="{{ asset('storage/' . $document->image) }}"
-                             class="img-responsive img-rounded img-thumbnail">
-                    </a>
+                    <h3 class="col-12 my-4">Images</h3>
+                    @forelse($serviceRequest->images as $document)
+                        <div class="col">
+                            <a href="{{ asset('storage/' . $document->image) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $document->image) }}"
+                                     class="img-responsive img-rounded img-thumbnail">
+                            </a>
+                        </div>
+                    @empty
+                        <div class="col-12 text-muted">No image submitted.</div>
+                    @endforelse
                 </div>
-            @empty
-                <div class="col-12 text-muted">No image submitted.</div>
-            @endforelse
-        </div>
             </div>
             <div class="col-md-3 mt-5">
                 @include('components.side-nav', compact('navs'))

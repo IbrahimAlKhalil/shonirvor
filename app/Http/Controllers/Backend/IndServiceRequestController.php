@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Requests\StoreApproveIndService;
+use App\Models\IndCategory;
 use App\Models\IndService;
 use App\Models\IndServiceDoc;
 use App\Models\IndServiceImage;
+use App\Models\IndSubCategory;
 use App\Models\PendingIndService;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class IndServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = PendingIndService::paginate(15);
+        $serviceRequests = PendingIndService::orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
         return view('backend.ind-service-request.index', compact('serviceRequests', 'navs'));
     }
@@ -23,11 +26,13 @@ class IndServiceRequestController extends Controller
     public function show($id)
     {
         $serviceRequest = PendingIndService::find($id);
+        $categories = IndCategory::all();
+        $subCategories = IndSubCategory::all();
         $navs = $this->navs();
-        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs'));
+        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'categories', 'subCategories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreApproveIndService $request)
     {
         $pendingService = PendingIndService::find($request->post('id'));
         $pendingDocs = $pendingService->docs;
@@ -35,20 +40,55 @@ class IndServiceRequestController extends Controller
 
         $service = new IndService;
         $service->user_id = $pendingService->user_id;
+        $service->ind_category_id = $request->post('category');
+        $service->district_id = $pendingService->district;
+        $service->thana_id = $pendingService->thana;
+        $service->union_id = $pendingService->union;
+
         $service->mobile = $pendingService->mobile;
         $service->email = $pendingService->email;
+        $service->facebook = $pendingService->facebook;
+        $service->website = $pendingService->website;
         $service->latitude = $pendingService->latitude;
         $service->longitude = $pendingService->longitude;
-        $service->service = $pendingService->service;
         $service->address = $pendingService->address;
         $service->save();
 
-        $user = User::find($service->user_id);
+        // ind_subcategory_ind_service
 
-        if(!$user->hasRole('ind-service')) {
-            $user->roles()->attach(3);
+        $subCategoryIds = IndCategory::find($request->post('category'))
+            ->subCategories
+            ->pluck('id');
+        $subCategories = [];
+
+        // TODO: Store Sub-categories from request->sub-categories
+        foreach ($subCategoryIds as $subCategoryId) {
+            array_push($subCategories, [
+                'ind_sub_category_id' => $subCategoryId,
+                'ind_service_id' => $service->id
+            ]);
         }
 
+        DB::table('ind_sub_category_ind_service')->insert($subCategories);
+
+
+        // work_method_ind_service table
+
+        $pendingWorkMethods = $pendingService->workMethods->pluck('id');
+        $workMethods = [];
+        foreach ($pendingWorkMethods as $workMethod) {
+            array_push($workMethods, [
+                'work_method_id' => $workMethod,
+                'ind_service_id' => $pendingService->id
+            ]);
+        }
+        DB::table('work_method_ind_service')->insert($workMethods);
+
+        // attach role
+        $user = User::find($service->user_id);
+        if (!$user->hasRole('ind-service')) {
+            $user->roles()->attach(3);
+        }
 
 
         $documents = [];

@@ -31,16 +31,21 @@ class StoreEditPendingOrgService extends FormRequest
             'description' => 'required',
             'mobile' => 'required|digits:11|unique:org_services|unique:pending_org_services,mobile,' . $id,
             'email' => 'email|unique:org_services|unique:pending_org_services,email,' . $id,
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'images.*' => 'image',
-            'docs.*' => 'image',
-            'name' => 'required',
             'personal-email' => 'email|unique:users,email,' . Auth::id(),
             'address' => 'required|string',
             'nid' => 'required|integer|unique:users,nid,' . Auth::id(),
             'age' => 'required|integer|min:10',
-            'photo' => 'image'
+            'website' => 'url',
+            'facebook' => 'url',
+            'no_area' => 'boolean',
+            'district' => 'exists:districts,id',
+            'thana' => 'exists:thanas,id',
+            'union' => 'exists:unions,id',
+            'category' => 'required',
+            'logo' => 'image',
+            'photo' => 'image',
+            'images.*' => 'image',
+            'docs.*' => 'image'
         ];
     }
 }

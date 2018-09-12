@@ -11,7 +11,6 @@ $factory->define(OrgService::class, function (Faker $faker) {
         'email' => $faker->companyEmail,
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
-        'service' => $faker->jobTitle,
         'address' => $faker->address
     ];
 });

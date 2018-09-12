@@ -25,4 +25,12 @@ class IndService extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function workMethods() {
+        return $this->belongsToMany(WorkMethod::class, 'work_method_ind_service');
+    }
+
+    public function category() {
+        return $this->belongsTo(IndCategory::class);
+    }
 }

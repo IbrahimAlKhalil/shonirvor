@@ -6,20 +6,12 @@
     <div style="margin-top: 40px;"></div>
 
     <div class="container">
+        <h3>Service Provider Registration</h3>
 
         @include('components.success')
 
         <form method="post" enctype="multipart/form-data" action="{{ route('individual-service-registration.store') }}">
             {{ csrf_field() }}
-
-            <div class="form-group row">
-                <label for="name" class="col-4 col-form-label">Name</label>
-                <div class="col-8">
-                    <input id="name" name="name" type="text" value="{{ old('name') }}"
-                           class="form-control @if($errors->has('name')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'name'])
-                </div>
-            </div>
 
             <div class="form-group row">
                 <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
@@ -40,11 +32,138 @@
             </div>
 
             <div class="form-group row">
-                <label for="email" class="col-4 col-form-label">Working Email</label>
+                <label for="email" class="col-4 col-form-label">Work Email</label>
                 <div class="col-8">
                     <input id="email" name="email" type="text" value="{{ old('email') }}"
                            class="form-control @if($errors->has('email')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'email'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="website" class="col-4 col-form-label">Website</label>
+                <div class="col-8">
+                    <input id="website" name="website" type="url" value="{{ old('website') }}"
+                           class="form-control @if($errors->has('website')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'website'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="facebook" class="col-4 col-form-label">Facebook</label>
+                <div class="col-8">
+                    <input id="facebook" name="facebook" type="url" value="{{ old('facebook') }}"
+                           class="form-control @if($errors->has('facebook')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'facebook'])
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Area</label>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-md">
+                            <select name="district" class="form-control">
+                                <option value="">-- Select District --</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="thana" class="form-control">
+                                <option value="">-- Select Thana --</option>
+                                @foreach($thanas as $thana)
+                                    <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="union" class="form-control">
+                                <option value="">-- Select Union --</option>
+                                @foreach($unions as $union)
+                                    <option value="{{ $union->id }}">{{ $union->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-100 mb-2"></div>
+                        <div class="col-md">
+                            <label class="form-check-label" for="no-area">My area is not listed here.</label>
+                            <input name="no_area" type="checkbox" value="1" id="no-area">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="address" class="col-4 col-form-label">Address</label>
+                <div class="col-8">
+                    <textarea id="address" rows="8" name="address" required="required"
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
+                    @include('components.invalid', ['name' => 'address'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-4 col-form-label">Service Category</label>
+                <div class="col-8">
+                    <select id="category" name="category"
+                            class="form-control @if($errors->has('category')) is-invalid @endif">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                        @endforeach
+                    </select>
+                    @include('components.invalid', ['name' => 'category'])
+                    <label for="no-category">My Category is not listed here.</label>
+                    <input type="checkbox" id="no-category" class="mt-2">
+                    <input type="text" id="category-request" class="form-control mt-3 mb-4" style="display: none"
+                           placeholder="Type your category here.">
+                    <style>
+                        #no-category:checked + input {
+                            display: block !important;
+                        }
+                    </style>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-4 col-form-label">Service Sub-Category</label>
+                <div class="col-8">
+                    <select id="sub-categories" name="sub-categories[]"
+                            class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
+                        @foreach($subCategories as $subCategory)
+                            <option value="{{ $subCategory->id }}">{{ $subCategory->sub_category }}</option>
+                        @endforeach
+                    </select>
+                    @include('components.invalid', ['name' => 'sub-categories'])
+                    <label for="no-category mt-4">My Sub-Category is not listed here.</label>
+                    <input type="checkbox" id="no-sub-category" class="mt-2">
+                    <div style="display: none">
+                        <input type="text" id="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
+                        <input type="text" id="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
+                        <input type="text" id="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
+                    </div>
+                    <style>
+                        #no-sub-category:checked + div {
+                            display: block !important;
+                        }
+                    </style>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Contract Method</label>
+                <div class="col-8" style="text-transform: capitalize">
+                    @foreach($workMethods as $workMethod)
+                        <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->method }}</label>
+                        <input type="checkbox" id="work-method-{{ $workMethod->id }}" value="{{ $workMethod->id }}"
+                               name="work-methods[]">
+                    @endforeach
+                    @include('components.invalid', ['name' => 'work-methods'])
                 </div>
             </div>
 
@@ -69,41 +188,6 @@
                     <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
                            class="form-control @if($errors->has('nid')) is-invalid @endif" required>
                     @include('components.invalid', ['name' => 'nid'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="latitude" class="col-4 col-form-label">Latitude</label>
-                <div class="col-8">
-                    <input id="latitude" name="latitude" type="number" value="{{ old('latitude') }}"
-                           class="form-control @if($errors->has('latitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'latitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="longitude" class="col-4 col-form-label">Longitude</label>
-                <div class="col-8">
-                    <input id="longitude" name="longitude" type="number" value="{{ old('longitude') }}"
-                           class="form-control @if($errors->has('longitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'longitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="service" class="col-4 col-form-label">Service</label>
-                <div class="col-8">
-                    <input id="service" name="service" type="text" value="{{ old('service') }}"
-                           class="form-control @if($errors->has('service')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'service'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="address" class="col-4 col-form-label">Address</label>
-                <div class="col-8">
-                    <textarea id="address" rows="8" name="address" required="required" class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
-                    @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
 

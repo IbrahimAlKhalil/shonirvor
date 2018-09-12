@@ -24,7 +24,6 @@ class StorePendingOrgService extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
             'org-name' => 'required',
             'description' => 'required',
             'mobile' => 'required|digits:11|unique:org_services|unique:pending_org_services',
@@ -33,8 +32,14 @@ class StorePendingOrgService extends FormRequest
             'address' => 'required|string',
             'nid' => 'required|integer|unique:users',
             'age' => 'required|integer|min:10',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'website' => 'url',
+            'facebook' => 'url',
+            'no_area' => 'boolean',
+            'district' => 'exists:districts,id',
+            'thana' => 'exists:thanas,id',
+            'union' => 'exists:unions,id',
+            'category' => 'required',
+            'logo' => 'required|image',
             'photo' => 'image',
             'images.*' => 'image',
             'docs.*' => 'image'

@@ -29,17 +29,23 @@ class StoreEditPendingIndService extends FormRequest
         $id = Auth::user()->pendingIndService->id;
 
         return [
-            'name' => 'required',
             'mobile' => 'required|digits:11|unique:ind_services|unique:pending_ind_services,mobile,' . $id,
             'email' => 'email|unique:ind_services,email|unique:pending_ind_services,email,' . $id,
             'personal-email' => 'email|unique:users,email,' . Auth::id(),
             'nid' => 'required|integer|unique:users,nid,' . Auth::id(),
             'age' => 'required|integer|min:10',
-            'address' => 'required|string',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'district' => 'exists:districts,id',
+            'thana' => 'exists:thanas,id',
+            'union' => 'exists:unions,id',
+            'category' => 'exists:ind_categories,id',
+            'sub-categories.*' => 'exists:ind_sub_categories,id',
+            'address' => 'string',
+            'website' => 'url',
+            'facebook' => 'url',
+            'photo' => 'image',
             'images.*' => 'image',
-            'docs.*' => 'image'
+            'docs.*' => 'image',
+            'work-methods.*' => 'required|exists:work_methods,id'
         ];
     }
 }

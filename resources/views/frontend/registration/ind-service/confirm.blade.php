@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Organization Service Provider Registration')
+@section('title', 'Individual Service Provider Registration')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
@@ -25,20 +25,20 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Organization Name</th>
+                        <th scope="col">Service Category</th>
                         <th scope="col">Request Date</th>
                         <th scope="col">Last Updated</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($pendingOrgServices as $pendingOrgService)
+                    @foreach($pendingIndServices as $pendingIndService)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>
-                                <a href="{{ route('organization-service-registration.edit', $pendingOrgService->id) }}">{{ $pendingOrgService->org_name }}</a>
+                                <a href="{{ route('individual-service-registration.edit', $pendingIndService->id) }}">{{ $pendingIndService->category }}</a>
                             </td>
-                            <td>{{ $pendingOrgService->created_at->format('d/m/y h:i A') }}</td>
-                            <td>{{ $pendingOrgService->updated_at->format('d/m/y h:i A') }}</td>
+                            <td>{{ $pendingIndService->created_at->format('d/m/y h:i A') }}</td>
+                            <td>{{ $pendingIndService->updated_at->format('d/m/y h:i A') }}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -46,7 +46,7 @@
             </div>
             <div class="tab-pane fade {{ $classesToAdd[1] }} show" id="request-account">
                 <form method="post" enctype="multipart/form-data"
-                      action="{{ route('organization-service-registration.store') }}">
+                      action="{{ route('individual-service-registration.store') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">
@@ -59,35 +59,17 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="org-name" class="col-4 col-form-label">Organization Name</label>
-                        <div class="col-8">
-                            <input id="org-name" name="org-name" type="text" value="{{ old('org-name') }}"
-                                   class="form-control @if($errors->has('org-name')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'org-name'])
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="description" class="col-4 col-form-label">Description</label>
-                        <div class="col-8">
-                    <textarea rows="8" id="description" name="description" type="text"
-                              class="form-control @if($errors->has('description')) is-invalid @endif">{{ old('description') }}</textarea>
-                            @include('components.invalid', ['name' => 'description'])
-                        </div>
-                    </div>
-
-
-                    <div class="form-group row">
                         <label for="personal-email" class="col-4 col-form-label">Personal Email</label>
                         <div class="col-8">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
+                            <input id="personal-email" name="personal-email" type="text"
+                                   value="{{ old('personal-email') }}"
                                    class="form-control @if($errors->has('personal-email')) is-invalid @endif">
                             @include('components.invalid', ['name' => 'personal-email'])
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="email" class="col-4 col-form-label">Organization Email</label>
+                        <label for="email" class="col-4 col-form-label">Work Email</label>
                         <div class="col-8">
                             <input id="email" name="email" type="text" value="{{ old('email') }}"
                                    class="form-control @if($errors->has('email')) is-invalid @endif">
@@ -155,9 +137,7 @@
                         <label for="address" class="col-4 col-form-label">Address</label>
                         <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">
-                        {{ old('address') }}
-                    </textarea>
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
                             @include('components.invalid', ['name' => 'address'])
                         </div>
                     </div>
@@ -166,8 +146,22 @@
                         <label for="category" class="col-4 col-form-label">Service Category</label>
                         <div class="col-8">
                     <textarea id="category" name="category"
-                              class="form-control @if($errors->has('category')) is-invalid @endif" rows="4" placeholder="Type your service categories. Like: Teacher, Doctor, Electrician, Etc.."></textarea>
+                              class="form-control @if($errors->has('category')) is-invalid @endif" rows="4"
+                              placeholder="Type your service categories. Like: Teacher, Doctor, Electrician, Etc.."></textarea>
                             @include('components.invalid', ['name' => 'category'])
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">Contract Method</label>
+                        <div class="col-8" style="text-transform: capitalize">
+                            @foreach($workMethods as $workMethod)
+                                <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->method }}</label>
+                                <input type="checkbox" id="work-method-{{ $workMethod->id }}"
+                                       value="{{ $workMethod->id }}"
+                                       name="work-methods[]">
+                            @endforeach
+                            @include('components.invalid', ['name' => 'work-methods'])
                         </div>
                     </div>
 
@@ -179,7 +173,13 @@
                             @include('components.invalid', ['name' => 'age'])
                         </div>
                     </div>
-
+                    <div class="form-group row">
+                        <label for="qualification" class="col-4 col-form-label">Qualification/Experience</label>
+                        <div class="col-8">
+                            <input id="qualification" name="qualification" type="text" class="form-control here"
+                                   value="{{ old('qualification') }}">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="nid" class="col-4 col-form-label">NID Number</label>
                         <div class="col-8">
@@ -189,34 +189,25 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="logo" class="col-4 col-form-label">Logo</label>
-                        <div class="col-8">
-                            <input id="logo" name="logo" type="file" accept="image/*"
-                                   class="form-control @if($errors->has('logo')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'logo'])
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="photo" class="col-4 col-form-label">Profile Picture</label>
-                        <div class="col-8">
-                            <input id="photo" name="photo" type="file" accept="image/*"
-                                   class="form-control @if($errors->has('photo')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'photo'])
-                        </div>
-                    </div>
-
                     @if(!$isPicExists)
                         <div class="form-group row">
-                            <label for="images" class="col-4 col-form-label">Work Photos</label>
+                            <label for="photo" class="col-4 col-form-label">Profile Picture</label>
                             <div class="col-8">
-                                <input id="images" name="images[]" type="file" accept="image/*"
-                                       class="form-control @if($errors->has('images')) is-invalid @endif" multiple>
-                                @include('components.invalid', ['name' => 'images'])
+                                <input id="photo" name="photo" type="file" accept="image/*"
+                                       class="form-control @if($errors->has('photo')) is-invalid @endif">
+                                @include('components.invalid', ['name' => 'photo'])
                             </div>
                         </div>
                     @endif
+
+                    <div class="form-group row">
+                        <label for="images" class="col-4 col-form-label">Work Photos</label>
+                        <div class="col-8">
+                            <input id="images" name="images[]" type="file" accept="image/*"
+                                   class="form-control @if($errors->has('images')) is-invalid @endif" multiple>
+                            @include('components.invalid', ['name' => 'images'])
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <label for="docs" class="col-4 col-form-label">Documents/Papers</label>

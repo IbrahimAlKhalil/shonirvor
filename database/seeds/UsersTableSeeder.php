@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Dealer;
+use App\Models\IndCategory;
+use App\Models\IndSubCategory;
 use App\Models\User;
 use App\Models\IndService;
 use App\Models\OrgService;
@@ -40,48 +42,11 @@ class UsersTableSeeder extends Seeder
         $customer->save();
 
         factory(User::class, 20)->create()->each(function ($user) {
-            $isIndService = rand(1, 10);
-            $isOrgService = rand(1, 10);
-
-            if ($isIndService >= 6) {
-                $isPending = rand(1, 10) >= 6;
-
-                switch ($isPending) {
-                    case false:
-                        $user->indService()->save(factory(IndService::class)->make());
-                        $user->roles()->attach(3);
-                        break;
-                    default:
-                        $user->pendingIndService()->save(factory(PendingIndService::class)->make());
-                }
-            }
-
-            if ($isOrgService >= 6) {
-                $isPending = rand(1, 10) >= 6;
-
-                switch ($isPending) {
-                    case false:
-                        $iteration = rand(1, 5);
-
-                        for ($i = 0; $i < $iteration; $i++) {
-                            $user->orgService()->save(factory(OrgService::class)->make());
-                        }
-
-                        $user->roles()->attach(4);
-                        break;
-                    default:
-                        $iteration = rand(1, 3);
-                        for ($i = 0; $i < $iteration; $i++) {
-                            $user->pendingOrgService()->save(factory(PendingOrgService::class)->make());
-                        }
-                }
-            }
 
             // Attach a role
             $user->roles()->attach(rand(1, 2));
             // If Dealer
-            if ($user->hasRole('dealer'))
-            {
+            if ($user->hasRole('dealer')) {
                 $user->dealer()->save(factory(Dealer::class)->make());
             }
 

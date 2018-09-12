@@ -35,7 +35,7 @@
                                 <td>{{ $indService->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Working Email</th>
+                                <th scope="row">Work Email</th>
                                 <td>{{ $indService->user->email }}</td>
                             </tr>
                             <tr>

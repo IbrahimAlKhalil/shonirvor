@@ -13,7 +13,7 @@ class OrgCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(OrgCategory::class, rand(20, 40))->create()->each(function ($orgCategory) {
+        factory(OrgCategory::class, rand(20, 30))->create()->each(function ($orgCategory) {
             $orgCategory->subCategories()->saveMany(factory(OrgSubCategory::class, rand(10, 20))->make());
         });
     }

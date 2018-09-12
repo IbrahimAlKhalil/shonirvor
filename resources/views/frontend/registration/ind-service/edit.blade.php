@@ -17,15 +17,6 @@
             {{ csrf_field() }}
 
             <div class="form-group row">
-                <label for="name" class="col-4 col-form-label">Name</label>
-                <div class="col-8">
-                    <input id="name" name="name" type="text" value="{{ oldOrData('name', $pendingIndService->user->name) }}"
-                           class="form-control @if($errors->has('name')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'name'])
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label for="mobile" class="col-4 col-form-label">Mobile Number</label>
                 <div class="col-8">
                     <input id="mobile" name="mobile" type="number"
@@ -46,12 +37,100 @@
             </div>
 
             <div class="form-group row">
-                <label for="email" class="col-4 col-form-label">Working Email</label>
+                <label for="email" class="col-4 col-form-label">Work Email</label>
                 <div class="col-8">
                     <input id="email" name="email" type="text"
                            value="{{ oldOrData('email', $pendingIndService->email) }}"
                            class="form-control @if($errors->has('email')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'email'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="website" class="col-4 col-form-label">Website</label>
+                <div class="col-8">
+                    <input id="website" name="website" type="url"
+                           value="{{ oldOrData('website', $pendingIndService->website) }}"
+                           class="form-control @if($errors->has('website')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'website'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="facebook" class="col-4 col-form-label">Facebook</label>
+                <div class="col-8">
+                    <input id="facebook" name="facebook" type="url"
+                           value="{{ oldOrData('facebook', $pendingIndService->facebook) }}"
+                           class="form-control @if($errors->has('facebook')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'facebook'])
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Area</label>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-md">
+                            <select name="district" class="form-control">
+                                <option value="">-- Select District --</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}" {{ selectOpt($pendingIndService->district->id, $district->id) }}>{{ $district->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="thana" class="form-control">
+                                <option value="">-- Select Thana --</option>
+                                @foreach($thanas as $thana)
+                                    <option value="{{ $thana->id }}" {{ selectOpt($pendingIndService->thana->id, $thana->id) }}>{{ $thana->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="union" class="form-control">
+                                <option value="">-- Select Union --</option>
+                                @foreach($unions as $union)
+                                    <option value="{{ $union->id }}" {{ selectOpt($pendingIndService->union->id, $union->id) }}>{{ $union->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-100 mb-2"></div>
+                        <div class="col-md">
+                            <label class="form-check-label" for="no-area">My area is not listed here.</label>
+                            <input name="no_area" type="checkbox" value="1" id="no-area">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="address" class="col-4 col-form-label">Address</label>
+                <div class="col-8">
+                    <textarea id="address" rows="8" name="address" required="required"
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $pendingIndService->address) }}</textarea>
+                    @include('components.invalid', ['name' => 'address'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-4 col-form-label">Service Category</label>
+                <div class="col-8">
+                    <textarea id="category" name="category"
+                              class="form-control @if($errors->has('category')) is-invalid @endif" rows="4" placeholder="Type your service categories. Like: Teacher, Doctor, Electrician, Etc..">{{ oldOrData('category', $pendingIndService->category) }}</textarea>
+                    @include('components.invalid', ['name' => 'category'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Contract Method</label>
+                <div class="col-8" style="text-transform: capitalize">
+                    @foreach($workMethods as $workMethod)
+                        <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->method }}</label>
+                        <input type="checkbox" id="work-method-{{ $workMethod->id }}" value="{{ $workMethod->id }}"
+                               name="work-methods[]">
+                    @endforeach
+                    @include('components.invalid', ['name' => 'work-methods'])
                 </div>
             </div>
 
@@ -82,26 +161,6 @@
             </div>
 
             <div class="form-group row">
-                <label for="latitude" class="col-4 col-form-label">Latitude</label>
-                <div class="col-8">
-                    <input id="latitude" name="latitude" type="number"
-                           value="{{ oldOrData('latitude', $pendingIndService->latitude) }}"
-                           class="form-control @if($errors->has('latitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'latitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="longitude" class="col-4 col-form-label">Longitude</label>
-                <div class="col-8">
-                    <input id="longitude" name="longitude" type="number"
-                           value="{{ oldOrData('longitude', $pendingIndService->longitude) }}"
-                           class="form-control @if($errors->has('longitude')) is-invalid @endif" required>
-                    @include('components.invalid', ['name' => 'longitude'])
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label for="service" class="col-4 col-form-label">Service</label>
                 <div class="col-8">
                     <input id="service" name="service" type="text"
@@ -120,14 +179,16 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="photo" class="col-4 col-form-label">Profile Picture</label>
-                <div class="col-8">
-                    <input id="photo" name="photo" type="file" accept="image/*"
-                           class="form-control @if($errors->has('photo')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'photo'])
+            @if(!$isPicExists)
+                <div class="form-group row">
+                    <label for="photo" class="col-4 col-form-label">Profile Picture</label>
+                    <div class="col-8">
+                        <input id="photo" name="photo" type="file" accept="image/*"
+                               class="form-control @if($errors->has('photo')) is-invalid @endif">
+                        @include('components.invalid', ['name' => 'photo'])
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="form-group row">
                 <label for="images" class="col-4 col-form-label">Portfolio</label>

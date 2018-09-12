@@ -20,5 +20,18 @@ class ProductionSeeder extends Seeder
             ['name' => 'ind-service'],
             ['name' => 'org-service'],
         ]);
+
+        /***** Service Provider Contract Method *****/
+        DB::table('work_methods')->insert([
+            ['method' => 'hourly'],
+            ['method' => 'daily'],
+            ['method' => 'monthly']
+        ]);
+
+        /***** Payment Method *****/
+        DB::table('payment_methods')->insert([
+            ['method' => 'bkash']
+        ]);
+
     }
 }
