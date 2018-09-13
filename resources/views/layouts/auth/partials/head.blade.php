@@ -7,6 +7,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
-    @yield('page-css')
+    @yield('css')
 </head>
 <body>

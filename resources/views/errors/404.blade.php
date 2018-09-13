@@ -2,7 +2,7 @@
 
 @section('title', 'Not Found')
 
-@section('page-css')
+@section('css')
     <style>
         .starter-template {
             padding: 3rem 1.5rem;
