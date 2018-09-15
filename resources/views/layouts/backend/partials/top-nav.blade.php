@@ -8,23 +8,20 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item @if(request()->url() == route('frontend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
+                <a class="nav-link" href="{{ route('frontend.home') }}">হোম</a>
             </li>
             <li class="nav-item @if(request()->url() == route('backend.home')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.home') }}">Dashboard</a>
-            </li>
-            <li class="nav-item @if(request()->url() == route('dealer.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('dealer.index') }}">Dealers</a>
+                <a class="nav-link" href="{{ route('backend.home') }}">ড্যাশবোর্ড</a>
             </li>
             <li class="nav-item @if(request()->url() == route('individual-service.index') || request()->url() == route('organization-service.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('individual-service.index') }}">Service Providers</a>
+                <a class="nav-link" href="{{ route('individual-service.index') }}">সার্ভিস</a>
             </li>
             <li class="nav-item @if(request()->url() == route('individual-category.index') || request()->url() == route('organization-category.index')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('individual-category.index') }}">Service Categories</a>
+                <a class="nav-link" href="{{ route('individual-category.index') }}">ক্যাটাগরি</a>
             </li>
             @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">লগ আউট</a>
                     <form action="{{ route('logout') }}" method="post" id="logout-form" class="hidden">
                         {{ csrf_field() }}
                     </form>

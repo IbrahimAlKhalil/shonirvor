@@ -66,7 +66,7 @@ class OrgCategoryController extends Controller
     private function navs()
     {
         return [
-            ['route' => 'organization-category.index', 'text' => 'Organization Categories']
+            ['url' => route('organization-category.index'), 'text' => 'Organization Categories']
         ];
     }
 }

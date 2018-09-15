@@ -9,6 +9,7 @@ use App\Models\OrgServiceImage;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class OrgServiceController extends Controller
@@ -83,8 +84,12 @@ class OrgServiceController extends Controller
     public function show($id)
     {
         $navs = $this->navs();
+        $visitor['today'] = DB::table('org_service_visitor_counts')->where('org_service_id', $id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
+        $visitor['thisMonth'] = DB::table('org_service_visitor_counts')->where('org_service_id', $id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
+        $visitor['thisYear'] = DB::table('org_service_visitor_counts')->where('org_service_id', $id)->whereYear('created_at', date('Y'))->sum('how_much');
         $orgService = OrgService::find($id);
-        return view('backend.org-service.show', compact('orgService', 'navs'));
+
+        return view('backend.org-service.show', compact('orgService', 'navs', 'visitor'));
     }
 
     public function destroy(Request $request, $id)
@@ -144,9 +149,9 @@ class OrgServiceController extends Controller
     private function navs()
     {
         return [
-            ['route' => 'organization-service.index', 'text' => 'All Service Provider'],
-            ['route' => 'organization-service-request.index', 'text' => 'Service Requests'],
-            ['route' => 'organization-service.disabled', 'text' => 'Disabled Service Provider'],
+            ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
+            ['url' => route('organization-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
         ];
     }
 }

@@ -4,17 +4,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+Route::prefix('command')->group(function () {
+    Route::get('storage-link', 'CommandController@storage');
+}, '');
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
 Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
 
-Route::resource('dashboard/dealer', 'Backend\DealerController', ['except' => ['create', 'store']]);
-Route::get('dealer-instruction', 'Frontend\DealerRegistrationController@instruction')->name('dealer.instruction');
-Route::resource('dealer-registration', 'Frontend\DealerRegistrationController', ['except' => ['create', 'show', 'delete']])->middleware('auth');
-Route::resource('dealer-request', 'Backend\DealerRequestController', ['only' => ['index', 'show']]);
-Route::post('dealer-request/approve/{id}', 'Backend\DealerRequestController@approve')->name('dealer-request.approve');
-Route::delete('dealer-request/reject/{id}', 'Backend\DealerRequestController@reject')->name('dealer-request.reject');
+Route::get('individual-service-provider', 'Frontend\IndServiceController@index')->name('frontend.ind-service.index');
+Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceController@show')->name('frontend.ind-service.show');
+
+Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
+Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
+
+Route::get('dashboard/profile/individual-service/{provider}', 'Backend\IndProfileController@show')->name('backend.ind-service.profile');
+Route::get('dashboard/profile/organization-service/{provider}', 'Backend\OrgProfileController@show')->name('backend.org-service.profile');
+
+Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
+Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
 
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');

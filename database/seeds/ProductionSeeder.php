@@ -5,32 +5,26 @@ use Illuminate\Support\Facades\DB;
 
 class ProductionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         /***** Creating Roles *****/
-
         DB::table('roles')->insert([
             ['name' => 'superadmin'],
-            ['name' => 'dealer'],
-            ['name' => 'ind-service'],
-            ['name' => 'org-service'],
+            ['name' => 'ind'],
+            ['name' => 'org'],
         ]);
 
         /***** Service Provider Contract Method *****/
         DB::table('work_methods')->insert([
-            ['method' => 'hourly'],
-            ['method' => 'daily'],
-            ['method' => 'monthly']
+            ['name' => 'hourly'],
+            ['name' => 'daily'],
+            ['name' => 'monthly']
         ]);
 
-        /***** Payment Method *****/
-        DB::table('payment_methods')->insert([
-            ['method' => 'bkash']
+        /***** Service Type *****/
+        DB::table('service_types')->insert([
+            ['name' => 'ind'],
+            ['name' => 'org']
         ]);
 
     }

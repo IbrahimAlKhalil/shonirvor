@@ -10,51 +10,44 @@ class User extends Authenticatable
 {
     use Notifiable, EntrustUserTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name', 'mobile', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function dealer()
+    public function inds($status = null)
     {
-        return $this->hasOne(Dealer::class);
+        if ($status) {
+            $result = null;
+            switch ($status) {
+                case 'pending':
+                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 1);
+                    break;
+                case 'approved':
+                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 0);
+            }
+            return $result;
+        }
+
+        return $this->hasMany(Ind::class);
     }
 
-    public function pendingDealer()
+    public function orgs($status = null)
     {
-        return $this->hasOne(PendingDealer::class);
-    }
+        if ($status) {
+            switch ($status) {
+                case 'pending':
+                    return $this->hasMany(Org::class)->where('is_pending', '=', 1);
+                    break;
+                case 'approved':
+                    return $this->hasMany(Org::class)->where('is_pending', '=', 0);
+                    break;
+            }
+        }
 
-    public function indServices()
-    {
-        return $this->hasMany(IndService::class);
-    }
-
-    public function pendingIndServices()
-    {
-        return $this->hasMany(PendingIndService::class);
-    }
-
-    public function orgServices()
-    {
-        return $this->hasMany(OrgService::class);
-    }
-
-    public function pendingOrgServices()
-    {
-        return $this->hasMany(PendingOrgService::class);
+        return $this->hasMany(Org::class);
     }
 }

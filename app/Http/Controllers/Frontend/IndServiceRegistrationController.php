@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEditPendingIndService;
-use App\Http\Requests\StorePendingIndService;
-use App\Models\IndCategory;
-use App\Models\IndSubCategory;
-use App\Models\PendingIndService;
-use App\Models\PendingIndServiceDoc;
-use App\Models\PendingIndServiceImage;
-use App\Models\User;
+use App\Http\Requests\StoreEditInd;
+use App\Http\Requests\StoreInd;
+use App\Http\Requests\UpdateInd;
+use App\Models\Ind;
+use App\Models\ServiceType;
+use App\Models\Category;
 use App\Models\WorkMethod;
-use Illuminate\Support\Facades\Auth;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
@@ -24,19 +23,19 @@ class IndServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $pendingIndServices = $user->pendingIndServices;
+        $inds = $user->inds('pending')->get();
 
         $workMethods = WorkMethod::all();
-        $categories = IndCategory::all();
-        $subCategories = IndSubCategory::all();
+        $categories = Category::getAll('ind');
+        $subCategories = SubCategory::getAll('ind');
         $districts = District::take(20)->get();
         $thanas = Thana::take(20)->get();
         $unions = Union::take(20)->get();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'pendingIndServices', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
         $view = 'frontend.registration.ind-service.confirm';
-        $count = $pendingIndServices->count();
+        $count = $inds->count();
 
         // check what if current user didn't reach at the maximum pending request
         if ($count >= 3) {
@@ -53,77 +52,97 @@ class IndServiceRegistrationController extends Controller
             return view($view, $compact);
         }
 
-        // pendingIndServices, classesToAdd are unnecessary for index
-        unset($compact['pendingIndServices'], $compact['classesToAdd']);
+        // inds, classesToAdd are unnecessary for index
+        unset($compact['inds'], $compact['classesToAdd']);
 
         return view('frontend.registration.ind-service.index', $compact);
     }
 
 
-    public function store(StorePendingIndService $request)
+    public function store(StoreInd $request)
     {
 
         $user = Auth::user();
-        $pendingIndServices = $user->pendingIndServices;
+        $inds = $user->inds('pending')->get();
+
         $workMethods = WorkMethod::all();
-        $categories = IndCategory::all();
-        $subCategories = IndSubCategory::all();
+        $categories = Category::getAll('ind');
+        $subCategories = SubCategory::getAll('ind');
         $districts = District::take(20)->get();
         $thanas = Thana::take(20)->get();
         $unions = Union::take(20)->get();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'pendingIndServices', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
 
         // check what if current user didn't reach at the maximum pending request
-        if ($pendingIndServices->count() >= 3) {
+        if ($inds->count() >= 3) {
             // reached at the maximum
             // redirect them to the confirmation page
             return view('frontend.registration.ind-service.confirm', $compact);
         }
 
-        $pendingIndService = new PendingIndService;
+        // handle category  and sub-category request
+        $category = Category::find($request->post('category'));
+        $categoryId = $category->id;
+        $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
 
-        // PendingIndService
+        if ($isCategoryRequest) {
+            $serviceTypeId = ServiceType::getThe('ind')->id;
+            $category = new Category;
+            $category->service_type_id = $serviceTypeId;
+            $category->name = $request->post('category-request');
+            $category->is_confirmed = 0;
+            $category->save();
 
-        $pendingIndService->user_id = $user->id;
-        $pendingIndService->district_id = $request->post('district');
-        $pendingIndService->thana_id = $request->post('thana');
-        $pendingIndService->union_id = $request->post('union');
-        if ($request->has('category')) {
-            $pendingIndService->ind_category_id = $request->post('category');
-        }
-
-        $pendingIndService->mobile = $request->post('mobile');
-        $pendingIndService->email = $request->post('email');
-        $pendingIndService->website = $request->post('website');
-        $pendingIndService->facebook = $request->post('facebook');
-        $pendingIndService->no_area = $request->post('no_area');
-        $pendingIndService->address = $request->post('address');
-        $pendingIndService->save();
-
-        // ind_category_pending_ind_service table
-        if ($request->has('sub-categories')) {
             $subCategories = [];
-            foreach ($request->post('sub-categories') as $subCategory) {
-                array_push($subCategories, [
-                    'ind_sub_category_id' => $subCategory,
-                    'pending_ind_service_id' => $pendingIndService->id
+            foreach ($request->post('sub-category-requests') as $subCategoryName) {
+                !is_null($subCategoryName) && array_push($subCategories, [
+                    'category_id' => $category->id,
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
                 ]);
             }
+            DB::table('sub_categories')->insert($subCategories);
+            $categoryId = $category->id;
         }
-        DB::table('ind_sub_category_pending_ind_service')->insert($subCategories);
 
-        // work_method_pending_ind_service table
+        $ind = new Ind;
+        $ind->user_id = $user->id;
+        $ind->district_id = $request->post('district');
+        $ind->thana_id = $request->post('thana');
+        $ind->union_id = $request->post('union');
+
+        $ind->mobile = $request->post('mobile');
+        $ind->referrer = $request->post('referrer');
+        $ind->email = $request->post('email');
+        $ind->category_id = $categoryId;
+        $ind->website = $request->post('website');
+        $ind->facebook = $request->post('facebook');
+        $ind->address = $request->post('address');
+        $ind->save();
+        if ($request->hasFile('experience-certificate')) {
+            $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
+        }
+        $ind->save();
+
+        // sub-categories
+        foreach ($category->subCategories as $subCategory) {
+            $ind->subCategories()->save($subCategory);
+        }
+
+        // ind_work_method table
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
             array_push($workMethods, [
                 'work_method_id' => $workMethod,
-                'pending_ind_service_id' => $pendingIndService->id
+                'ind_id' => $ind->id
             ]);
         }
-        DB::table('work_method_pending_ind_service')->insert($workMethods);
 
+        DB::table('ind_work_method')->insert($workMethods);
+
+        // User
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
@@ -131,103 +150,121 @@ class IndServiceRegistrationController extends Controller
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');
         }
-        $user->age = $request->post('age');
         $user->save();
 
+        // work images
         if ($request->has('images')) {
             $images = [];
             foreach ($request->file('images') as $image) {
-                array_push($images, [
-                    'image' => $image->store('pending-ind-images'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
+                array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
             }
-
-            PendingIndServiceImage::insert($images);
+            $ind->workImages()->createMany($images);
         }
 
-        if ($request->has('docs')) {
-            $documents = [];
-
-            foreach ($request->file('docs') as $document) {
-                array_push($documents, [
-                    'doc' => $document->store('pending-ind-docs'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
-            }
-
-            PendingIndServiceDoc::insert($documents);
-        }
-
-        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
+        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
-    public function update(StoreEditPendingIndService $request, $id)
+    public function update(UpdateInd $request, $id)
     {
-        $pendingIndService = PendingIndService::find($id);
+
         $user = Auth::user();
+        $ind = Ind::find($id);
 
-        $pendingIndService->user_id = $user->id;
-        $pendingIndService->email = $request->post('email');
-        $pendingIndService->mobile = $request->post('mobile');
-        $pendingIndService->latitude = $request->post('latitude');
-        $pendingIndService->longitude = $request->post('longitude');
-        $pendingIndService->service = $request->post('service');
-        $pendingIndService->address = $request->post('address');
-        $pendingIndService->save();
+        // handle category  and sub-category request
+        $category = Category::find($request->post('category'));
+        $categoryId = $category->id;
+        $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
 
-        $user->name = $request->post('name');
+        if ($isCategoryRequest) {
+            $ind->category()->delete();
+
+            $serviceTypeId = ServiceType::getThe('ind')->id;
+            $category = new Category;
+            $category->service_type_id = $serviceTypeId;
+            $category->name = $request->post('category-request');
+            $category->is_confirmed = 0;
+            $category->save();
+
+            $subCategories = [];
+            foreach ($request->post('sub-category-requests') as $subCategoryName) {
+                !is_null($subCategoryName) && array_push($subCategories, [
+                    'category_id' => $category->id,
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
+                ]);
+            }
+            DB::table('sub_categories')->insert($subCategories);
+            $categoryId = $category->id;
+        }
+
+        $ind->district_id = $request->post('district');
+        $ind->thana_id = $request->post('thana');
+        $ind->union_id = $request->post('union');
+        $ind->mobile = $request->post('mobile');
+        $ind->email = $request->post('email');
+        $ind->category_id = $categoryId;
+        $ind->website = $request->post('website');
+        $ind->facebook = $request->post('facebook');
+        $ind->address = $request->post('address');
+        $ind->save();
+        if ($request->hasFile('experience-certificate')) {
+            $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
+        }
+        $ind->save();
+
+        // sub-categories
+        foreach ($category->subCategories as $subCategory) {
+            $ind->subCategories()->save($subCategory);
+        }
+
+        // ind_work_method table
+        $ind->workMethods()->each(function ($workMethod) {
+            $workMethod->delete();
+        });
+
+        $workMethods = [];
+        foreach ($request->post('work-methods') as $workMethod) {
+            array_push($workMethods, [
+                'work_method_id' => $workMethod,
+                'ind_id' => $ind->id
+            ]);
+        }
+
+        DB::table('ind_work_method')->insert($workMethods);
+
+        // User
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
-
-        if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photo');
-        }
-
         $user->age = $request->post('age');
-
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photos');
+        }
         $user->save();
 
+        // work images
         if ($request->has('images')) {
             $images = [];
             foreach ($request->file('images') as $image) {
-                array_push($images, [
-                    'image' => $image->store('pending-ind-images'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
+                array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
             }
-
-            PendingIndServiceImage::insert($images);
+            $ind->workImages()->createMany($images);
         }
-
-        if ($request->has('docs')) {
-            $documents = [];
-
-            foreach ($request->file('docs') as $document) {
-                array_push($documents, [
-                    'doc' => $document->store('pending-ind-docs'),
-                    'pending_ind_service_id' => $pendingIndService->id
-                ]);
-            }
-
-            PendingIndServiceDoc::insert($documents);
-        }
-
-        $pendingIndService->save();
 
         return back()->with('success', 'Done!');
     }
 
     public function edit($id)
     {
-        $pendingIndService = PendingIndService::find($id);
+        $ind = Ind::find($id);
         $workMethods = WorkMethod::all();
+        $categories = Category::getAll('ind');
+        $subCategories = SubCategory::getAll('ind');
         $districts = District::take(20)->get();
         $thanas = Thana::take(20)->get();
         $unions = Union::take(20)->get();
 
-        $isPicExists = $pendingIndService->user->photo;
-        return view('frontend.registration.ind-service.edit', compact('pendingIndService', 'isPicExists', 'workMethods', 'districts', 'thanas', 'unions'));
+        $isPicExists = $ind->user->photo;
+        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
     }
 }

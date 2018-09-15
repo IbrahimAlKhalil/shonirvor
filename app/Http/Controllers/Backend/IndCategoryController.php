@@ -65,7 +65,7 @@ class IndCategoryController extends Controller
     private function navs()
     {
         return [
-            ['route' => 'individual-category.index', 'text' => 'Individual Categories']
+            ['url' => route('individual-category.index'), 'text' => 'Individual Categories']
         ];
     }
 }
