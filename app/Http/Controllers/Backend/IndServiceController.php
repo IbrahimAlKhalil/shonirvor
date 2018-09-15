@@ -8,6 +8,7 @@ use App\Models\IndServiceDoc;
 use App\Models\IndServiceImage;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Notifications\AdminToUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

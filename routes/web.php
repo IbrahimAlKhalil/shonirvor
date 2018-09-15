@@ -24,6 +24,9 @@ Route::get('dashboard/profile/organization-service/{provider}', 'Backend\OrgProf
 Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
 Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
 
+Route::get('notifications', 'NotificationController@show')->name('notification.show');
+Route::post('notification/send/{user}', 'NotificationController@send')->name('notification.send');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 
