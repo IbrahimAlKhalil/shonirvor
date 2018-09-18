@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'All Organizational Service Providers')
+@section('title', 'সকল প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার')
 
 @section('content')
     <div class="container">
@@ -27,26 +27,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($orgServices as $orgService)
-                        @php($serial = $orgServices->perPage() * ($orgServices->currentPage() - 1) + $loop->iteration)
+                    @forelse($orgs as $org)
+                        @php($serial = $orgs->perPage() * ($orgs->currentPage() - 1) + $loop->iteration)
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>
-                                <a href="{{ route('organization-service.show', $orgService->id) }}">{{ $orgService->org_name }}</a>
+                                <a href="{{ route('organization-service.show', $org->id) }}">{{ $org->name }}</a>
                             </td>
-                            <td>{{ $orgService->mobile }}</td>
-                            <td>{{ $orgService->email }}</td>
+                            <td>{{ $org->mobile }}</td>
+                            <td>{{ $org->email }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">No Service Provider Found.</td>
+                            <td colspan="4">কোন সেবা প্রদানকারী খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $orgServices->links('pagination::bootstrap-4') }}
+                        {{ $orgs->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

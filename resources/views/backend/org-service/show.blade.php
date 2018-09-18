@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', $orgService->user->name)
+@section('title', $org->user->name)
 
 @section('content')
     <div class="container py-5">
@@ -9,57 +9,66 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="{{ asset('storage/' . $orgService->user->photo) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $orgService->user->photo) }}" class="img-responsive img-thumbnail" alt="{{ $orgService->user->name }}">
+                        <a href="{{ asset('storage/' . $org->user->photo) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $org->user->photo) }}"
+                                 class="img-responsive img-thumbnail" alt="{{ $org->user->name }}">
                         </a>
                     </div>
 
                     <div class="col-md-8">
-                        <h4 class="mb-3">{{ $orgService->user->name }}</h4>
+                        <h4 class="mb-3">{{ $org->user->name }}</h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
-                                <th scope="row">Mobile</th>
-                                <td>{{ $orgService->mobile }}</td>
+                                <th scope="row">মোবাইল</th>
+                                <td>{{ $org->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Email</th>
-                                <td>{{ $orgService->email }}</td>
+                                <th scope="row">ইমেইল</th>
+                                <td>{{ $org->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Age</th>
-                                <td>{{ $orgService->user->age }}</td>
+                                <th scope="row">বয়স</th>
+                                <td>{{ $org->user->age }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Qualification/Experience</th>
-                                <td>{{ $orgService->user->qualification }}</td>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                <td>{{ $org->user->nid }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">NID</th>
-                                <td>{{ $orgService->user->nid }}</td>
+                                <th scope="row">ঠিকানা</th>
+                                <td>{{ $org->address }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Address</th>
-                                <td>{{ $orgService->address }}</td>
+                                <th scope="row">সেবা-বিভাগ</th>
+                                <td>{{ $org->category->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">সাব-ক্যাটাগরি</th>
+                                <td>
+                                    @foreach($org->subCategories('confirmed')->get() as $subCategory)
+                                        <span class="badge badge-success">{{ $subCategory->name }}</span>&nbsp;
+                                    @endforeach
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="row">
                             <div class="btn-group mx-auto">
                                 <span class="btn btn-secondary btn-warning"
-                                      onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">Deactivate This Account</span>
+                                      onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">একাউন্টটি নিষ্ক্রিয় করুন</span>
                                 <span class="btn btn-secondary btn-danger rounded-right"
-                                      onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
+                                      onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">একাউন্টটি মুছে ফেলুন</span>
 
                                 <form id="deactivate-account"
-                                      action="{{ route('organization-service.destroy', $orgService->id) }}"
+                                      action="{{ route('organization-service.destroy', $org->id) }}"
                                       method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
                                     <input type="hidden" name="type" value="deactivate">
                                 </form>
                                 <form id="remove-account"
-                                      action="{{ route('organization-service.destroy', $orgService->id) }}"
+                                      action="{{ route('organization-service.destroy', $org->id) }}"
                                       method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
@@ -71,32 +80,28 @@
                 </div>
 
                 <div class="row">
-                    <h3 class="my-4 col-12">Documents</h3>
-                    @forelse($orgService->docs as $document)
-                        <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $document->doc) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $document->doc) }}"
-                                     class="img-responsive img-thumbnail">
-                            </a>
-                        </div>
-                    @empty
-                        <p class="text-muted col-12">No Document Uploaded!</p>
-                    @endforelse
+                    <h3 class="my-4 col-12">নথিপত্র</h3>
+                    <div class="col-md-3">
+                        <span class="text-muted">ট্রেড লাইসেন্স</span>
+                        <a href="{{ asset('storage/' . $org->trade_license) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $org->trade_license) }}"
+                                 class="img-responsive img-thumbnail">
+                        </a>
+                    </div>
                 </div>
 
                 <div class="row">
-                        <h3 class="my-4 col-12">Images</h3>
-                        @forelse($orgService->images as $image)
-                            <div class="col-md-3">
-                                <a href="{{ asset('storage/' . $image->image) }}" target="_blank">
-                                    <img src="{{ asset('storage/' . $image->image) }}"
-                                         class="img-responsive img-thumbnail">
-                                </a>
-                            </div>
-                        @empty
-                            <p class="text-muted col-12">No Image uploaded!</p>
-                        @endforelse
-                    </div>
+                    <h3 class="my-4 col-12">কাজের ছবি</h3>
+                    @forelse($org->workImages as $image)
+                        <div class="col-md-3">
+                            <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $image->path) }}" class="img-responsive img-thumbnail">
+                            </a>
+                        </div>
+                    @empty
+                        <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
+                    @endforelse
+                </div>
             </div>
             <div class="col-md-3 mt-5">
                 <div class="row">

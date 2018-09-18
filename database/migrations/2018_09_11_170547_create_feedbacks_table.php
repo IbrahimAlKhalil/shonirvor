@@ -8,7 +8,7 @@ class CreateFeedbacksTable extends Migration
 {
     public function up()
     {
-        /*Schema::create('feedbacks', function (Blueprint $table) {
+        Schema::create('feedbacks', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('feedbackable_id');
@@ -17,7 +17,7 @@ class CreateFeedbacksTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-        });*/
+        });
     }
 
     public function down()

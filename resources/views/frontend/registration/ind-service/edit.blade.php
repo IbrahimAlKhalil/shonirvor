@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Edit Service Provider Request')
+@section('title', 'সেবা প্রদানকারী অনুরোধ সম্পাদনা করুন')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
@@ -17,7 +17,7 @@
             {{ csrf_field() }}
 
             <div class="form-group row">
-                <label for="mobile" class="col-4 col-form-label">মোবাইল নম্বর</label>
+                <label for="mobile" class="col-4 col-form-label">মোবাইল নম্বর <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="mobile" name="mobile" type="number"
                            value="{{ oldOrData('mobile', $ind->mobile) }}"
@@ -29,7 +29,8 @@
             <div class="form-group row">
                 <label for="referrer" class="col-4 col-form-label">রেফারার</label>
                 <div class="col-8">
-                    <input id="referrer" name="referrer" type="number" value="{{ oldOrData('referrer', $ind->referrer) }}"
+                    <input id="referrer" name="referrer" type="number"
+                           value="{{ oldOrData('referrer', $ind->referrer) }}"
                            class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}" required>
                     @include('components.invalid', ['name' => 'referrer'])
                 </div>
@@ -76,7 +77,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">এরিয়া</label>
+                <label class="col-4 col-form-label">এরিয়া <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <div class="row">
                         <div class="col-md">
@@ -113,7 +114,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-4 col-form-label">ঠিকানা</label>
+                <label for="address" class="col-4 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
                               class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $ind->address) }}</textarea>
@@ -122,7 +123,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সেবা বিভাগ</label>
+                <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="category" name="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
@@ -134,8 +135,10 @@
 
                     @include('components.invalid', ['name' => 'category'])
                     <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
-                    <input type="checkbox" id="no-category" class="mt-2" {{ checkBox(!$ind->category->is_confirmed) }}>
-                    <input type="text" id="category-request" class="form-control mt-3 mb-4" style="display: none"
+                    <input type="checkbox" id="no-category" name="no-category"
+                           class="mt-2" {{ checkBox(!$ind->category->is_confirmed) }}>
+                    <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
+                           style="display: none"
                            placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।" value="{{ $ind->category->name }}">
                     <style>
                         #no-category:checked + input {
@@ -146,36 +149,39 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সার্ভিস সাব-ক্যাটাগরি</label>
+                <label for="sub-categories" class="col-4 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
+
                     <select id="sub-categories" name="sub-categories[]"
                             class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
                         <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
                         @php($selectedSubCategories = $ind->subCategories->pluck('id')->toArray())
+
                         @foreach($subCategories as $subCategory)
                             <option value="{{ $subCategory->id }}" {{ in_array($subCategory->id, $selectedSubCategories)?'selected':'' }}>{{ $subCategory->name }}</option>
                         @endforeach
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
-                    <label for="no-category mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
-                    @php($isSubConfirmed = $ind->subcategories->first() && !$ind->subcategories->first()->is_confirmed)
-                    <input type="checkbox" id="no-sub-category"
-                           class="mt-2" {{ checkBox($isSubConfirmed) }}>
+
+                    @php($requestedSubCategories = $ind->subCategories('requested')->get())
+                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-sub-category" name="no-sub-category"
+                           class="mt-2" {{ checkBox($requestedSubCategories->count() >= 1) }}>
                     <div style="display: none">
-                        @if($isSubConfirmed)
-                            @foreach($ind->subcategories as $subcategory)
-                                <input type="text" id="sub-category-{{ $subcategory->id }}" class="form-control mt-3"
-                                       placeholder="Type your sub-category here." value="{{ $subcategory->name }}">
-                            @endforeach
-                        @else
-                            <input type="text" id="sub-category-requests[]" class="form-control mt-3"
-                                   placeholder="Type your sub-category here.">
-                            <input type="text" id="sub-category-requests[]" class="form-control mt-3"
-                                   placeholder="Type your sub-category here.">
-                            <input type="text" id="sub-category-requests[]" class="form-control mt-3"
-                                   placeholder="Type your sub-category here.">
-                        @endif
+
+                        @foreach($requestedSubCategories as $subcategory)
+                            <input type="text" name="sub-category-requests[]" class="form-control mt-3"
+                                   placeholder="Type your sub-category here." value="{{ $subcategory->name }}">
+                        @endforeach
+                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
+                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
+                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
+                               placeholder="Type your sub-category here.">
                     </div>
+
                     <style>
                         #no-sub-category:checked + div {
                             display: block !important;
@@ -185,7 +191,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">চুক্তি পদ্ধতি</label>
+                <label class="col-4 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
                 <div class="col-8" style="text-transform: capitalize">
                     @php($indWorkMethods = $ind->workMethods->pluck('id')->toArray())
                     @foreach($workMethods as $workMethod)
@@ -198,7 +204,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="age" class="col-4 col-form-label">বয়স</label>
+                <label for="age" class="col-4 col-form-label">বয়স <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="age" name="age" type="number"
                            value="{{ oldOrData('age', $ind->user->age) }}" required="required"
@@ -214,21 +220,13 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nid" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের নম্বর</label>
+                <label for="nid" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="nid" name="nid" type="number"
                            value="{{ oldOrData('nid', $ind->user->nid) }}"
                            class="form-control @if($errors->has('nid')) is-invalid @endif" required>
                     @include('components.invalid', ['name' => 'nid'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="address" class="col-4 col-form-label">ঠিকানা</label>
-                <div class="col-8">
-                    <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $ind->address) }}</textarea>
-                    @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
 
@@ -244,7 +242,7 @@
             @endif
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">পোর্টফোলিও</label>
+                <label for="images" class="col-4 col-form-label">কাজের ছবি</label>
                 <div class="col-8">
                     <input id="images" name="images[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('images')) is-invalid @endif" multiple>

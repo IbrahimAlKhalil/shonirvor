@@ -35,8 +35,15 @@ class User extends Authenticatable
         return $this->hasMany(Ind::class);
     }
 
+    /**
+     * @param $status string
+     * @return object|null
+     * */
+
     public function orgs($status = null)
     {
+        $result = null;
+
         if ($status) {
             switch ($status) {
                 case 'pending':

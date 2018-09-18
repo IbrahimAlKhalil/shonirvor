@@ -20,23 +20,31 @@
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
-                                <th scope="row">Mobile</th>
+                                <th scope="row">কাজের ফোন নম্বর</th>
                                 <td>{{ $serviceRequest->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Email</th>
-                                <td>{{ $serviceRequest->email }}</td>
+                                <th scope="row">ব্যক্তিগত ফোন নম্বর</th>
+                                <td>{{ $serviceRequest->user->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Age</th>
+                                <th scope="row">কাজের ইমেইল</th>
+                                <td>{{ $serviceRequest->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ব্যক্তিগত ইমেইল</th>
+                                <td>{{ $serviceRequest->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">বয়স</th>
                                 <td>{{ $serviceRequest->user->age }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Qualification/Experience</th>
+                                <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
                                 <td>{{ $serviceRequest->user->qualification }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">NID</th>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
 
@@ -56,20 +64,31 @@
                             </tr>
 
                             <tr>
-                                <th scope="row">Address</th>
+                                <th scope="row">ঠিকানা</th>
                                 <td>{{ $serviceRequest->address }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Latitude</th>
+                                <th scope="row">অক্ষাংশ</th>
                                 <td>{{ $serviceRequest->latitude }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Longitude</th>
+                                <th scope="row">দ্রাঘিমাংশ</th>
                                 <td>{{ $serviceRequest->longitude }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Category</th>
-                                <td>{{ $serviceRequest->category }}</td>
+                                <th scope="row">সেবা বিভাগ</th>
+                                <td>{{ $serviceRequest->category->name }} @if(!$serviceRequest->category->is_confirmed)
+                                        <span class="pull-right badge badge-primary">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">সাব-ক্যাটাগরি</th>
+                                <td>
+                                    @forelse($serviceRequest->subCategories('confirmed')->get() as $subCategory)
+                                        {{ $subCategory->name }},
+                                    @empty
+                                        <span class="text-muted small">No Confirmed Sub-Categories</span>
+                                    @endforelse
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -77,27 +96,38 @@
                               method="post">
                             {{ csrf_field() }}
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label for="category">Category</label>
-                                    <select class="form-control" name="category" id="category">
-                                        <option>-- Select Category --</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category  }}</option>
-                                        @endforeach
-                                    </select>
+                            @if(!$serviceRequest->category->is_confirmed)
+                                <div class="form-group row">
+                                    <label for="category" class="col-4 col-form-label">সেবা বিভাগ
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-8">
+                                        <input id="category" name="category" type="text"
+                                               value="{{ oldOrData('category', $serviceRequest->category->name) }}"
+                                               class="form-control{{ $errors->has('category') ? ' is-invalid' : '' }}"
+                                               required>
+                                        @include('components.invalid', ['name' => 'category'])
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="category">Sub-Category</label>
-                                    <option>-- Select Category --</option>
-                                    <select class="form-control" name="sub-categories[]" id="category" multiple>
-                                        <option>-- Select Sub-Category --</option>
-                                        @foreach($subCategories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->category  }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            @endif
+                            @php($subCategories = $serviceRequest->subCategories('requested')->get())
+                            @if($subCategories->count() >= 1)
+                                <label>Requested Sub-Categories</label>
+                                @foreach($subCategories as $key => $subCategory)
+                                    <div class="form-group row">
+                                        <label for="sub-categories" class="col-4 col-form-label">সাব
+                                            ক্যাটাগরি {{ en2bnNumber($loop->iteration) }} <span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-8">
+                                            <input id="sub-categories" name="sub-categories[]" type="text"
+                                                   value="{{ oldOrData('sub-categories.' . $key, $subCategory->name) }}"
+                                                   class="form-control{{ $errors->has('sub-categories') ? ' is-invalid' : '' }}"
+                                                   required>
+                                            @include('components.invalid', ['name' => 'sub-categories'])
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </form>
                         <div class="row">
 
@@ -120,30 +150,30 @@
                 </div>
 
                 <div class="row">
-                    <h3 class="col-12 my-4">Documents</h3>
-                    @forelse($serviceRequest->docs as $document)
+                    <h3 class="my-4 col-12">Documents</h3>
+                    @if($serviceRequest->experience_certificate)
                         <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $document->doc) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $document->doc) }}"
-                                     class="img-responsive img-rounded img-thumbnail">
+                            <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                            <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                     class="img-responsive img-thumbnail">
                             </a>
                         </div>
-                    @empty
-                        <div class="col-12 text-muted">No document submitted.</div>
-                    @endforelse
+                    @else
+                        <p class="text-muted col-12">No Document uploaded!</p>
+                    @endif
                 </div>
 
                 <div class="row">
-                    <h3 class="col-12 my-4">Images</h3>
-                    @forelse($serviceRequest->images as $document)
+                    <h3 class="my-4 col-12">কাজের ছবি</h3>
+                    @forelse($serviceRequest->workImages as $image)
                         <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $document->image) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $document->image) }}"
-                                     class="img-responsive img-rounded img-thumbnail">
+                            <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $image->path) }}" class="img-responsive img-thumbnail">
                             </a>
                         </div>
                     @empty
-                        <div class="col-12 text-muted">No image submitted.</div>
+                        <p class="text-muted col-12">No Image uploaded!</p>
                     @endforelse
                 </div>
             </div>

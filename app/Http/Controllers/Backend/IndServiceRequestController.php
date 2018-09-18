@@ -2,139 +2,85 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Requests\StoreApproveIndService;
-use App\Models\IndCategory;
-use App\Models\IndService;
-use App\Models\IndServiceDoc;
-use App\Models\IndServiceImage;
-use App\Models\IndSubCategory;
-use App\Models\PendingIndService;
-use App\Models\User;
-use App\Http\Controllers\Controller;
+use App\Models\Ind;
+use App\Models\Category;
+use App\Models\SubCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class IndServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = PendingIndService::orderBy('updated_at', 'DSC')->paginate(15);
+        $serviceRequests = Ind::getOnly('pending')->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
         return view('backend.ind-service-request.index', compact('serviceRequests', 'navs'));
     }
 
-    public function show($id)
+    public function show(Ind $serviceRequest)
     {
-        $serviceRequest = PendingIndService::find($id);
-        $categories = IndCategory::all();
-        $subCategories = IndSubCategory::all();
+        $categories = Category::getAll('ind')->get();
+        $subCategories = SubCategory::getAll('ind')->get();
         $navs = $this->navs();
         return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'categories', 'subCategories'));
     }
 
-    public function store(StoreApproveIndService $request)
+    public function store(Request $request)
     {
-        $pendingService = PendingIndService::find($request->post('id'));
-        $pendingDocs = $pendingService->docs;
-        $pendingImages = $pendingService->images;
+        // TODO:: Make a request class
 
-        $service = new IndService;
-        $service->user_id = $pendingService->user_id;
-        $service->ind_category_id = $request->post('category');
-        $service->district_id = $pendingService->district;
-        $service->thana_id = $pendingService->thana;
-        $service->union_id = $pendingService->union;
+        DB::beginTransaction();
 
-        $service->mobile = $pendingService->mobile;
-        $service->email = $pendingService->email;
-        $service->facebook = $pendingService->facebook;
-        $service->website = $pendingService->website;
-        $service->latitude = $pendingService->latitude;
-        $service->longitude = $pendingService->longitude;
-        $service->address = $pendingService->address;
-        $service->save();
+        $ind = Ind::find($request->post('id'));
+        $category = Category::find($ind->category->id);
 
-        // ind_subcategory_ind_service
-
-        $subCategoryIds = IndCategory::find($request->post('category'))
-            ->subCategories
-            ->pluck('id');
-        $subCategories = [];
-
-        // TODO: Store Sub-categories from request->sub-categories
-        foreach ($subCategoryIds as $subCategoryId) {
-            array_push($subCategories, [
-                'ind_sub_category_id' => $subCategoryId,
-                'ind_service_id' => $service->id
-            ]);
-        }
-
-        DB::table('ind_sub_category_ind_service')->insert($subCategories);
-
-
-        // work_method_ind_service table
-
-        $pendingWorkMethods = $pendingService->workMethods->pluck('id');
-        $workMethods = [];
-        foreach ($pendingWorkMethods as $workMethod) {
-            array_push($workMethods, [
-                'work_method_id' => $workMethod,
-                'ind_service_id' => $pendingService->id
-            ]);
-        }
-        DB::table('work_method_ind_service')->insert($workMethods);
-
-        // attach role
-        $user = User::find($service->user_id);
-        if (!$user->hasRole('ind-service')) {
-            $user->roles()->attach(3);
+        if ($category->is_confirmed == 0) {
+            $category->name = $request->post('category');
+            $category->is_confirmed = 1;
+            $category->save();
         }
 
 
-        $documents = [];
-        $images = [];
+        $previousRequested = $ind->subCategories('requested');
+        $previousRequested->detach();
+        $previousRequested->delete();
 
-        foreach ($pendingDocs as $pendingDoc) {
-            $filename = basename(asset('storage/' . $pendingDoc->doc));
-
-            Storage::move($pendingDoc->doc, 'ind-service-docs/' . $service->id . '/' . $filename);
-
-            array_push($documents, [
-                'doc' => 'ind-service-docs/' . $service->id . '/' . $filename,
-                'ind_service_id' => $service->id
-            ]);
+        if ($request->has('sub-categories')) {
+            $data = [];
+            foreach ($request->post('sub-categories') as $subCategoryName) {
+                // TODO:: Please check null in the request file, not here!
+                !is_null($subCategoryName) && array_push($data, [
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
+                ]);
+            }
+            $requestedSubCategories = $category->subCategories()->createMany($data);
+            // associate sub-categories
+            $ind->subCategories()->saveMany($requestedSubCategories);
         }
 
-        foreach ($pendingImages as $pendingImage) {
-            $filename = basename(asset('storage/' . $pendingImage->image));
+        $ind->is_pending = 0;
+        $ind->save();
 
-            Storage::move($pendingImage->image, 'ind-service-images/' . $service->id . '/' . $filename);
-
-            array_push($images, [
-                'image' => 'ind-service-images/' . $service->id . '/' . $filename,
-                'ind_service_id' => $service->id
-            ]);
-        }
-
-        IndServiceDoc::insert($documents);
-        IndServiceImage::insert($images);
-
-        $pendingService->delete();
+        DB::commit();
 
         return redirect(route('individual-service-request.index'))->with('success', 'Service Provider approved successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Ind $serviceRequest)
     {
-        $pendingService = PendingIndService::find($id);
+        $category = $serviceRequest->category;
+        $subCategories = $serviceRequest->subCategories('requested');
 
-        foreach ($pendingService->docs as $doc) {
-            Storage::delete($doc->doc);
+        $serviceRequest->subCategories()->detach();
+        $subCategories->delete();
+
+        if ($category->is_confirmed == 0) {
+            $category->delete();
         }
-        foreach ($pendingService->images as $image) {
-            Storage::delete($image->image);
-        }
-        PendingIndService::find($id)->delete();
+
+        // TODO:: Don't forget to delete documents/images
 
         return redirect(route('individual-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }

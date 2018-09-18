@@ -14,15 +14,14 @@ class StoreInd extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => 'required|digits:11|unique:inds',
+            /*'mobile' => 'required|digits:11|unique:inds',*/
             'email' => 'email|unique:inds',
             'personal-email' => 'email|unique:users,email',
             'nid' => 'required|integer|unique:users',
-            'age' => 'required|integer|min:10',
+            /*'age' => 'required|integer|min:10',*/
             'district' => 'exists:districts,id',
             'thana' => 'exists:thanas,id',
             'union' => 'exists:unions,id',
-            'category' => 'required',
             'address' => 'string',
             'website' => 'url',
             'facebook' => 'url',

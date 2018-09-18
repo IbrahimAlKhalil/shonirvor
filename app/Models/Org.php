@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class Org extends Model
 {
@@ -15,21 +18,75 @@ class Org extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function workMethods() {
+    public function workMethods()
+    {
         return $this->belongsToMany(WorkMethod::class);
     }
 
 
-    public function workImages() {
+    public function workImages()
+    {
         return $this->morphMany(WorkImages::class, 'work_imagable');
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function subCategories() {
-        return $this->morphToMany(SubCategory::class, 'sub_categoriable');
+    /**
+     * @param $status string
+     * @return object
+     * */
+
+    public function subCategories($status = null)
+    {
+        $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
+
+        switch ($status) {
+            case 'confirmed':
+                $result = $result->where('is_confirmed', '=', 1);
+                break;
+            case 'requested':
+                $result = $result->where('is_confirmed', '=', 0);
+        }
+
+        return $result;
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function thana()
+    {
+        return $this->belongsTo(Thana::class);
+    }
+
+    public function union()
+    {
+        return $this->belongsTo(Union::class);
+    }
+
+    /**
+     * @param $status string
+     * @return object|null
+     * */
+
+    public static function getOnly($status)
+    {
+        $result = null;
+
+        switch ($status) {
+            case 'pending':
+                $result = Org::where('is_pending', 1);
+                break;
+            case 'approved':
+                $result = Org::where('is_pending', 0);
+        }
+
+        return $result;
     }
 
     public function feedbacks()

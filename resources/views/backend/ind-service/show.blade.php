@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', $indService->user->name)
+@section('title', $ind->user->name)
 
 @section('content')
     <div class="container py-5">
@@ -9,64 +9,81 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="{{ asset('storage/' . $indService->user->photo) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $indService->user->photo) }}" class="img-responsive img-thumbnail" alt="{{ $indService->user->name }}">
+                        <a href="{{ asset('storage/' . $ind->user->photo) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $ind->user->photo) }}" class="img-responsive img-thumbnail"
+                                 alt="{{ $ind->user->name }}">
                         </a>
                     </div>
 
                     <div class="col-md-8">
-                        <h4 class="mb-3">{{ $indService->user->name }}</h4>
+                        <h4 class="mb-3">{{ $ind->user->name }}</h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
-                                <th scope="row">Name</th>
-                                <td>{{ $indService->user->name }}</td>
+                                <th scope="row">নাম</th>
+                                <td>{{ $ind->user->name }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Working Mobile</th>
-                                <td>{{ $indService->mobile }}</td>
+                                <th scope="row">কাজের ফোন নম্বর</th>
+                                <td>{{ $ind->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Personal Mobile</th>
-                                <td>{{ $indService->user->mobile }}</td>
+                                <th scope="row">ব্যক্তিগত ফোন নম্বর</th>
+                                <td>{{ $ind->user->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Personal Email</th>
-                                <td>{{ $indService->email }}</td>
+                                <th scope="row">কাজের ইমেইল</th>
+                                <td>{{ $ind->user->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Work Email</th>
-                                <td>{{ $indService->user->email }}</td>
+                                <th scope="row">ব্যক্তিগত ইমেইল</th>
+                                <td>{{ $ind->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Age</th>
-                                <td>{{ $indService->user->age }}</td>
+                                <th scope="row">বয়স</th>
+                                <td>{{ $ind->user->age }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Qualification/Experience</th>
-                                <td>{{ $indService->user->qualification }}</td>
+                                <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
+                                <td>{{ $ind->user->qualification }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">NID</th>
-                                <td>{{ $indService->user->nid }}</td>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                <td>{{ $ind->user->nid }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Address</th>
-                                <td>{{ $indService->address }}</td>
+                                <th scope="row">ঠিকানা</th>
+                                <td>{{ $ind->address }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">সেবা-বিভাগ</th>
+                                <td>{{ $ind->category->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">সাব-ক্যাটাগরি</th>
+                                <td>
+                                    @foreach($ind->subCategories('confirmed')->get() as $subCategory)
+                                        <span class="badge badge-success">{{ $subCategory->name }}</span>&nbsp;
+                                    @endforeach
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="row">
                             <div class="btn-group mx-auto">
-                                <span class="btn btn-secondary btn-warning" onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">Deactivate This Account</span>
-                                <span class="btn btn-secondary btn-danger rounded-right" onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">Remove This Account</span>
+                                <span class="btn btn-secondary btn-warning"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">একাউন্টটি নিষ্ক্রিয় করুন</span>
+                                <span class="btn btn-secondary btn-danger rounded-right"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">একাউন্টটি মুছে ফেলুন</span>
 
-                                <form id="deactivate-account" action="{{ route('individual-service.destroy', $indService->id) }}" method="post">
+                                <form id="deactivate-account"
+                                      action="{{ route('individual-service.destroy', $ind->id) }}" method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
                                     <input type="hidden" name="type" value="deactivate">
                                 </form>
-                                <form id="remove-account" action="{{ route('individual-service.destroy', $indService->id) }}" method="post">
+                                <form id="remove-account" action="{{ route('individual-service.destroy', $ind->id) }}"
+                                      method="post">
                                     {{ csrf_field() }}
                                     {{ method_field('delete') }}
                                     <input type="hidden" name="type" value="remove">
@@ -77,28 +94,26 @@
                 </div>
 
                 <div class="row">
-                    <h3 class="my-4 col-12">Documents</h3>
-                    @forelse($indService->docs as $document)
-                        <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $document->doc) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $document->doc) }}" class="img-responsive img-thumbnail">
-                            </a>
-                        </div>
-                    @empty
-                        <p class="text-muted col-12">No Document Uploaded!</p>
-                    @endforelse
+                    <h3 class="my-4 col-12">নথিপত্র</h3>
+                    <div class="col-md-3">
+                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                        <a href="{{ asset('storage/' . $ind->experience_certificate) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $ind->experience_certificate) }}"
+                                 class="img-responsive img-thumbnail">
+                        </a>
+                    </div>
                 </div>
 
                 <div class="row">
-                    <h3 class="my-4 col-12">Images</h3>
-                    @forelse($indService->images as $image)
+                    <h3 class="my-4 col-12">কাজের ছবি</h3>
+                    @forelse($ind->workImages as $image)
                         <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $image->image) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $image->image) }}" class="img-responsive img-thumbnail">
+                            <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $image->path) }}" class="img-responsive img-thumbnail">
                             </a>
                         </div>
                     @empty
-                        <p class="text-muted col-12">No Image uploaded!</p>
+                        <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
                     @endforelse
                 </div>
             </div>

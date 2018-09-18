@@ -7,9 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 
-    public function subCategories()
+    protected $fillable = ['name', 'is_confirmed'];
+
+    /**
+     * @param $status
+     * @return object
+     * */
+
+    public function subCategories($status = null)
     {
-        return $this->hasMany(SubCategory::class);
+        $result = $this->hasMany(SubCategory::class);
+
+        switch ($status) {
+            case 'confirmed':
+                $result = $result->where('is_confirmed', '=', 1);
+                break;
+            case 'requested':
+                $result = $result->where('is_confirmed', '=', 0);
+        }
+
+        return $result;
     }
 
     /**
@@ -25,8 +42,7 @@ class Category extends Model
             $result = ServiceType::where('name', $serviceType)
                 ->first()
                 ->categories()
-                ->where('is_confirmed', 1)
-                ->get();
+                ->where('is_confirmed', 1);
         }
 
         return $result;

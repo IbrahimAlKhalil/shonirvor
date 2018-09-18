@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'All Individual Service Categories')
+@section('title', 'সকল ব্যক্তি সেবা প্রদানকারী বিভাগ')
 
 @section('content')
     <div class="container">
@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">All Individual Service Categories</h4>
+                <h4 class="mb-4">সকল ব্যক্তি সেবা প্রদানকারী বিভাগ</h4>
                 @include('components.success')
             </div>
             <div class="col-md-9">
@@ -23,28 +23,28 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Category</th>
+                        <th scope="col">বিভাগ</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($indCategories as $indCategory)
-                        @php($serial = $indCategories->perPage() * ($indCategories->currentPage() - 1) + $loop->iteration)
+                    @forelse($categories as $category)
+                        @php($serial = $categories->perPage() * ($categories->currentPage() - 1) + $loop->iteration)
                         <tr>
-                            <td>{{ $serial }}</td>
+                            <td>{{ en2bnNumber($serial) }}</td>
                             <td>
-                                <a href="{{ route('individual-category.show', $indCategory->id) }}">{{ $indCategory->category }}</a>
+                                <a href="{{ route('individual-category.show', $category->id) }}">{{ $category->name }}</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">No Service Category Found.</td>
+                            <td colspan="4">কোনো সেবা বিভাগ খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $indCategories->links('pagination::bootstrap-4') }}
+                        {{ $categories->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

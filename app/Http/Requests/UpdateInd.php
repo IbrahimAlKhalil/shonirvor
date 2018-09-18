@@ -26,8 +26,6 @@ class UpdateInd extends FormRequest
             'district' => 'exists:districts,id',
             'thana' => 'exists:thanas,id',
             'union' => 'exists:unions,id',
-            'category' => 'exists:categories,id',
-            'sub-categories.*' => 'exists:sub_categories,id',
             'address' => 'string',
             'website' => 'url',
             'facebook' => 'url',

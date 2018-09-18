@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubCategory extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'is_confirmed'];
 
     public function inds()
     {
@@ -34,7 +34,7 @@ class SubCategory extends Model
                 ->where('is_confirmed', 1)
                 ->pluck('id')
                 ->toArray();
-            $result = SubCategory::whereIn('id', $categoryIds)->get();
+            $result = SubCategory::whereIn('id', $categoryIds);
         }
 
         return $result;

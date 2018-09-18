@@ -12,7 +12,7 @@ class OrgsTableSeeder extends Seeder
 {
     public function run()
     {
-        $categoryIds = Category::getAll('ind')->pluck('id')->toArray();
+        $categoryIds = Category::getAll('org')->pluck('id')->toArray();
         $districtIds = District::pluck('id')->toArray();
         $thanaIds = Thana::pluck('id')->toArray();
         $unionIds = Union::pluck('id')->toArray();

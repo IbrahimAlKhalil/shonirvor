@@ -5,6 +5,12 @@
 @section('content')
     <div style="margin-top: 40px;"></div>
 
+    @foreach($errors as $error)
+        <div class="alert alert-danger">
+            {{ $error }}
+        </div>
+    @endforeach
+
     <div class="container">
         <h3>সেবা প্রদানকারী নিবন্ধন</h3>
 
@@ -15,7 +21,29 @@
             {{ csrf_field() }}
 
             <div class="form-group row">
-                <label for="mobile" class="col-4 col-form-label">মোবাইল নাম্বার</label>
+                <label for="name" class="col-4 col-form-label">প্রতিষ্ঠানের নাম <span
+                            class="text-danger">*</span></label>
+                <div class="col-8">
+                    <input id="name" name="name" type="text" value="{{ old('name') }}"
+                           class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required>
+                    @include('components.invalid', ['name' => 'name'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="description" class="col-4 col-form-label">বর্ণনা <span
+                            class="text-danger">*</span></label>
+                <div class="col-8">
+                    <textarea rows="6" id="description" name="description"
+                              class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                              required>{{ old('description') }}</textarea>
+                    @include('components.invalid', ['name' => 'description'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="mobile" class="col-4 col-form-label">মোবাইল নাম্বার <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}"
                            class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
@@ -70,7 +98,8 @@
 
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">এরিয়া</label>
+                <label class="col-4 col-form-label">এরিয়া <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <div class="row">
                         <div class="col-md">
@@ -107,7 +136,8 @@
             </div>
 
             <div class="form-group row">
-                <label for="address" class="col-4 col-form-label">ঠিকানা</label>
+                <label for="address" class="col-4 col-form-label">ঠিকানা <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
                               class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
@@ -116,7 +146,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সেবা বিভাগ</label>
+                <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="category" name="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
@@ -140,7 +170,8 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সার্ভিস সাব-ক্যাটাগরি</label>
+                <label for="sub-categories" class="col-4 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="sub-categories" name="sub-categories[]"
                             class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
@@ -150,8 +181,8 @@
                         @endforeach
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
-                    <label for="no-category mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
-                    <input type="checkbox" id="no-sub-category" class="mt-2">
+                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2">
                     <div style="display: none">
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
                                placeholder="Type your sub-category here.">
@@ -169,34 +200,8 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">চুক্তি পদ্ধতি</label>
-                <div class="col-8" style="text-transform: capitalize">
-                    @foreach($workMethods as $workMethod)
-                        <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->name }}</label>
-                        <input type="checkbox" id="work-method-{{ $workMethod->id }}" value="{{ $workMethod->id }}"
-                               name="work-methods[]">
-                    @endforeach
-                    @include('components.invalid', ['name' => 'work-methods'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="age" class="col-4 col-form-label">বয়স</label>
-                <div class="col-8">
-                    <input id="age" name="age" type="number" value="{{ old('age') }}" required="required"
-                           class="form-control @if($errors->has('age')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'age'])
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="qualification" class="col-4 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
-                <div class="col-8">
-                    <input id="qualification" name="qualification" type="text" class="form-control here"
-                           value="{{ old('qualification') }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="nid" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের নম্বর</label>
+                <label for="nid" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
                            class="form-control @if($errors->has('nid')) is-invalid @endif" required>
@@ -225,11 +230,12 @@
             </div>
 
             <div class="form-group row">
-                <label for="experience-certificate" class="col-4 col-form-label">অভিজ্ঞতা প্রত্যয়ন পত্র</label>
+                <label for="trade-license" class="col-4 col-form-label">ট্রেড লাইসেন্স <span
+                            class="text-danger">*</span></label>
                 <div class="col-8">
-                    <input id="experience-certificate" name="experience-certificate" type="file" accept="image/*"
+                    <input id="trade-license" name="trade-license" type="file" accept="image/*"
                            class="form-control" multiple>
-                    @include('components.invalid', ['name' => 'experience-certificate'])
+                    @include('components.invalid', ['name' => 'trade-license'])
                 </div>
             </div>
 
