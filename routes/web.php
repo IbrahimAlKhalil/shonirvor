@@ -27,6 +27,8 @@ Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->na
 Route::get('notifications', 'NotificationController@show')->name('notification.show');
 Route::post('notification/send/{user}', 'NotificationController@send')->name('notification.send');
 
+Route::post('sms/send/{user}', 'SmsController@send')->name('sms.send');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

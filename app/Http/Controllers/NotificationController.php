@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Notifications\AdminToUser;
+use App\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +11,7 @@ class NotificationController extends Controller
 {
     public function send(User $user, Request $request)
     {
-        $user->notify(new AdminToUser($request->input('notification')));
+        $user->notify(new Notification($request->input('notification')));
         return back()->with('success', 'নোটিফিকেশন পাঠানো হয়েছে।');
     }
 
