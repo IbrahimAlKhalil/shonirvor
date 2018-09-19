@@ -30,9 +30,9 @@
 
                         @php($serial = $serviceRequests->perPage() * ($serviceRequests->currentPage() - 1) + $loop->iteration)
                         <tr>
-                            <th scope="row">{{ $serial }}</th>
+                            <th scope="row">{{ en2bnNumber($serial) }}</th>
                             <td>
-                                <a href="{{ route('organization-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->org_name }}</a>
+                                <a href="{{ route('organization-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->name }}</a>
                             </td>
                             <td>{{ $serviceRequest->email }}</td>
                             <td>{{ $serviceRequest->service }}</td>
@@ -40,7 +40,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="5">No Service Provider Request Found.</td>
+                            <td colspan="5">কোন সেবা প্রদানকারী খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>

@@ -18,23 +18,43 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function indService()
+    public function inds($status = null)
     {
-        return $this->hasMany(IndService::class);
+        if ($status) {
+            $result = null;
+            switch ($status) {
+                case 'pending':
+                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 1);
+                    break;
+                case 'approved':
+                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 0);
+            }
+            return $result;
+        }
+
+        return $this->hasMany(Ind::class);
     }
 
-    public function pendingIndService()
-    {
-        return $this->hasOne(PendingIndService::class);
-    }
+    /**
+     * @param $status string
+     * @return object|null
+     * */
 
-    public function orgService()
+    public function orgs($status = null)
     {
-        return $this->hasMany(OrgService::class);
-    }
+        $result = null;
 
-    public function pendingOrgService()
-    {
-        return $this->hasMany(PendingOrgService::class);
+        if ($status) {
+            switch ($status) {
+                case 'pending':
+                    return $this->hasMany(Org::class)->where('is_pending', '=', 1);
+                    break;
+                case 'approved':
+                    return $this->hasMany(Org::class)->where('is_pending', '=', 0);
+                    break;
+            }
+        }
+
+        return $this->hasMany(Org::class);
     }
 }

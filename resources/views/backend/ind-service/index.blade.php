@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'All Individual Service Providers')
+@section('title', 'সকল বেক্তিগত সার্ভিস প্রভাইডার')
 
 @section('content')
     <div class="container">
@@ -27,26 +27,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @forelse($indServices as $indService)
-                        @php($serial = $indServices->perPage() * ($indServices->currentPage() - 1) + $loop->iteration)
+                    @forelse($inds as $ind)
+                        @php($serial = $inds->perPage() * ($inds->currentPage() - 1) + $loop->iteration)
                         <tr>
-                            <td>{{ $serial }}</td>
+                            <td>{{ en2bnNumber($serial) }}</td>
                             <td>
-                                <a href="{{ route('individual-service.show', $indService->id) }}">{{ $indService->user->name }}</a>
+                                <a href="{{ route('individual-service.show', $ind->id) }}">{{ $ind->user->name }}</a>
                             </td>
-                            <td>{{ $indService->mobile }}</td>
-                            <td>{{ $indService->email }}</td>
+                            <td>{{ $ind->mobile }}</td>
+                            <td>{{ $ind->email }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">No Service Provider Found.</td>
+                            <td colspan="4">কোন সেবা প্রদানকারী খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $indServices->links('pagination::bootstrap-4') }}
+                        {{ $inds->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

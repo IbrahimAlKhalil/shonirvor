@@ -1,18 +1,18 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Individual Service Providers')
+@section('title', 'সকল বেক্তিগত সার্ভিস প্রভাইডার')
 
 @section('content')
     <div class="container">
         <div class="row my-5">
-            <h3 class="col-12 mb-4">All individual service providers</h3>
+            <h3 class="col-12 mb-4">সকল বেক্তিগত সার্ভিস প্রভাইডার</h3>
             <div class="col-12">
                 <table class="table table-hover table-sm">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
+                            <th>নাম</th>
+                            <th>ইমেইল</th>
+                            <th>মোবাইল</th>
                         </tr>
                     </thead>
                     <tbody>

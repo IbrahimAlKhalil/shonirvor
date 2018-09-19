@@ -10,9 +10,22 @@ class ProductionSeeder extends Seeder
         /***** Creating Roles *****/
         DB::table('roles')->insert([
             ['name' => 'superadmin'],
-            ['name' => 'dealer'],
-            ['name' => 'ind-service'],
-            ['name' => 'org-service'],
+            ['name' => 'ind'],
+            ['name' => 'org'],
         ]);
+
+        /***** Service Provider Contract Method *****/
+        DB::table('work_methods')->insert([
+            ['name' => 'hourly'],
+            ['name' => 'daily'],
+            ['name' => 'monthly']
+        ]);
+
+        /***** Service Type *****/
+        DB::table('service_types')->insert([
+            ['name' => 'ind'],
+            ['name' => 'org']
+        ]);
+
     }
 }

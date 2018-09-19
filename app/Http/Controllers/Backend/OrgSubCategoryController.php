@@ -2,37 +2,53 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Category;
+use App\Models\SubCategory;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEditOrgSubCategory;
-use App\Http\Requests\StoreOrgSubCategory;
-use App\Models\OrgSubCategory;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateCategory;
+use App\Http\Requests\StoreSubCategory;
+
+// TODO:: This requests class is empty, don't forget about that.
 
 class OrgSubCategoryController extends Controller
 {
 
 
-    public function store(StoreOrgSubCategory $request)
+    public function store(StoreSubCategory $request)
     {
-        $orgSubCategory = new OrgSubCategory();
-        $orgSubCategory->org_category_id = $request->post('category-id');
-        $orgSubCategory->category = $request->post('sub-category');
-        $orgSubCategory->save();
+        DB::beginTransaction();
 
-        return back()->with('success', 'Sub-category "' . $request->post('sub-category') . '" Added Successfully!');
+        Category::find($request->post('category-id'))->subCategories()->create([
+            'name' => $request->post('sub-category')
+        ]);
+
+        DB::commit();
+        return back()->with('success', 'Sub-category "' . $request->post('category') . '" Added Successfully!');
     }
 
 
-    public function update(StoreEditOrgSubCategory $request, OrgSubCategory $orgSubCategory)
+    public function update(UpdateCategory $request, SubCategory $subCategory)
     {
-        $orgSubCategory->category = $request->post('edit-sub-category');
-        $orgSubCategory->save();
+        DB::beginTransaction();
+
+        $subCategory->update([
+            'name' => $request->post('edit-sub-category')
+        ]);
+
+        DB::commit();
         return back()->with('success', 'Sub-Category Renamed Successfully!');
     }
 
 
-    public function destroy(OrgSubCategory $orgSubCategory)
+    public function destroy(SubCategory $subCategory)
     {
-        //
+        DB::beginTransaction();
+        // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
+
+        $subCategory->delete();
+
+        DB::commit();
+        return back()->with('success', 'Sub-category Deleted Successfully!');
     }
 }

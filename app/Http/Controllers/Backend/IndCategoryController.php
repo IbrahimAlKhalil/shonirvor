@@ -2,70 +2,65 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Category;
+use App\Models\ServiceType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreIndCategory;
-use App\Models\IndCategory;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategory;
+use App\Http\Requests\UpdateCategory;
+
+// TODO:: Some of these requests classes are empty, so fill these with whatever you can.
 
 class IndCategoryController extends Controller
 {
 
     public function index()
     {
-        $indCategories = IndCategory::orderBy('updated_at', 'DSC')->paginate(15);
+        $categories = Category::getAll('ind')->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
 
-        return view('backend.ind-category.index', compact('indCategories', 'navs'));
+        return view('backend.ind-category.index', compact('categories', 'navs'));
     }
 
-
-    public function create()
+    public function store(StoreCategory $request)
     {
-        return view('backend.ind-category.create');
+        $category = new Category([
+            'name' => $request->post('category'),
+            'is_confirmed' => 1
+        ]);
+        ServiceType::getThe('ind')->categories()->save($category);
+
+        return redirect(route('individual-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
     }
 
 
-    public function store(StoreIndCategory $request)
-    {
-        $indSubCategory = new IndCategory;
-        $indSubCategory->category = $request->post('category');
-        $indSubCategory->save();
-
-        return redirect(route('individual-category.show', $indSubCategory->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
-    }
-
-
-    public function show(IndCategory $indCategory)
+    public function show(Category $category)
     {
         $navs = $this->navs();
-        $indSubCategories = $indCategory->subCategories()->orderBy('updated_at', 'DSC')->paginate(10);
-        return view('backend.ind-category.show', compact('indCategory', 'indSubCategories', 'navs'));
+        $subCategories = $category->subCategories('confirmed')->orderBy('updated_at', 'DSC')->paginate(10);
+        return view('backend.ind-category.show', compact('category', 'subCategories', 'navs'));
     }
 
 
-    public function edit(IndCategory $indCategory)
+    public function update(UpdateCategory $request, Category $category)
     {
-        //
-    }
-
-
-    public function update(StoreIndCategory $request, IndCategory $indCategory)
-    {
-        $indCategory->category = $request->post('category');
-        $indCategory->save();
+        $category->update([
+            'name' => $request->post('category')
+        ]);
         return back()->with('success', 'Category Renamed Successfully!');
     }
 
-    public function destroy(IndCategory $indCategory)
+    public function destroy(Category $category)
     {
-        $indCategory->delete();
+        // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
+
+        $category->delete();
         return redirect(route('individual-category.index'))->with('success', 'Category Deleted Successfully!');
     }
 
     private function navs()
     {
         return [
-            ['url' => route('individual-category.index'), 'text' => 'Individual Categories']
+            ['url' => route('individual-category.index'), 'text' => 'ব্যক্তি সেবা প্রদানকারী বিভাগসমূহ']
         ];
     }
 }

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEditPendingOrgService;
-use App\Http\Requests\StorePendingOrgService;
-use App\Models\OrgService;
-Use App\Models\PendingOrgService;
-use App\Models\PendingOrgServiceDoc;
-use App\Models\PendingOrgServiceImage;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Org;
+use App\Models\Category;
+use App\Models\ServiceType;
+use App\Models\SubCategory;
+use App\Http\Requests\StoreOrg;
+use App\Http\Requests\UpdateOrg;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
+use Sandofvega\Bdgeocode\Models\District;
 
 class OrgServiceRegistrationController extends Controller
 {
@@ -19,164 +21,303 @@ class OrgServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $pendingOrgServices = $user->pendingOrgService;
+        $orgs = $user->orgs('pending')->get();
+
+        $categories = Category::getAll('org')->get();
+        $subCategories = SubCategory::getAll('org')->get();
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
         $classesToAdd = ['active', 'disabled'];
+        $isPicExists = $user->photo;
+        $compact = compact('classesToAdd', 'orgs', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $view = 'frontend.registration.org-service.confirm';
+        $count = $orgs->count();
 
         // check what if current user didn't reach at the maximum pending request
-        if ($pendingOrgServices->count() >= 3) {
+        if ($count >= 3) {
             // reached at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            return view($view, $compact);
         }
 
         // check what if current user has less than 3 pending request
-        if ($pendingOrgServices->count() < 3 && $pendingOrgServices->count() >= 1) {
-            $classesToAdd = ['active', ''];
+        if ($count < 3 && $count >= 1) {
+            $compact['classesToAdd'] = ['active', ''];
             // didn't reach at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            return view($view, $compact);
         }
 
-        $isPicExists = $user->photo;
+        // inds, classesToAdd are unnecessary for index
+        unset($compact['orgs'], $compact['classesToAdd']);
+
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index', compact('isPicExists'));
+        return view('frontend.registration.org-service.index', $compact);
     }
 
-    public function store(StorePendingOrgService $request)
+    public function store(StoreOrg $request)
     {
+        DB::beginTransaction();
+
         $user = Auth::user();
-        $pendingOrgServices = $user->pendingOrgService;
+        $orgs = $user->orgs('pending')->get();
 
         // check what if current user didn't reach at the maximum pending request
-        if ($pendingOrgServices->count() >= 3) {
-            $classesToAdd = ['active', 'disabled'];
+        if ($orgs->count() >= 3) {
             // reached at the maximum
             // redirect them to the confirmation page
-            return view('frontend.registration.org-service.confirm', compact('classesToAdd', 'pendingOrgServices'));
+            $categories = Category::getAll('org')->get();
+            $subCategories = SubCategory::getAll('org')->get();
+            $districts = District::take(20)->get();
+            $thanas = Thana::take(20)->get();
+            $unions = Union::take(20)->get();
+            $classesToAdd = ['active', 'disabled'];
+            $isPicExists = $user->photo;
+            $compact = compact('classesToAdd', 'orgs', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+            return view('frontend.registration.org-service.confirm', $compact);
         }
 
-        $pendingOrgService = new PendingOrgService;
+        // handle category  and sub-category request
+        // TODO:: Do some custom validation for category and subcategory
 
-        $user = Auth::user();
+        $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
+        $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
 
-        $pendingOrgService->user_id = Auth::id();
-        $pendingOrgService->org_name = $request->post('org-name');
-        $pendingOrgService->mobile = $request->post('mobile');
-        $pendingOrgService->description = $request->post('description');
-        $pendingOrgService->email = $request->post('email');
-        $pendingOrgService->latitude = $request->post('latitude');
-        $pendingOrgService->longitude = $request->post('longitude');
-        $pendingOrgService->service = $request->post('service');
-        $pendingOrgService->address = $request->post('address');
-        $pendingOrgService->save();
+        // Create categories
+        if ($isCategoryRequest) {
+            $serviceTypeId = ServiceType::getThe('org')->id;
+            $category = new Category;
+            $category->service_type_id = $serviceTypeId;
+            $category->name = $request->post('category-request');
+            $category->is_confirmed = 0;
+            $category->save();
+        }
 
+        // Create sub categories
+        if ($isSubCategoryRequest) {
+            $data = [];
+            foreach ($request->post('sub-category-requests') as $subCategoryName) {
+                !is_null($subCategoryName) && array_push($data, [
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
+                ]);
+            }
+            $requestedSubCategories = $category->subCategories()->createMany($data);
+        }
 
-        $user->name = $request->post('name');
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
+
+        $org = new Org;
+        $org->user_id = $user->id;
+        $org->district_id = $request->post('district');
+        $org->thana_id = $thana->id;
+        $org->union_id = $union->id;
+
+        $org->name = $request->post('name');
+        $org->description = $request->post('description');
+        $org->mobile = $request->post('mobile');
+        $org->referrer = $request->post('referrer');
+        $org->email = $request->post('email');
+        $org->category_id = $category->id;
+        $org->website = $request->post('website');
+        $org->facebook = $request->post('facebook');
+        $org->address = $request->post('address');
+        $org->save();
+        if ($request->hasFile('trade-license')) {
+            $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
+        }
+        $org->save();
+
+        // associate sub-categories$org
+        !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
+        $org->subCategories()->saveMany($requestedSubCategories);
+
+        // User
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
-        $user->qualification = $request->post('qualification');
-        $user->age = $request->post('age');
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');
         }
         $user->save();
 
-
+        // work images
         if ($request->has('images')) {
             $images = [];
-
-            foreach ($request->images as $image) {
-                array_push($images, [
-                    'image' => $image->store('pending-org-images'),
-                    'pending_org_service_id' => $pendingOrgService->id
-                ]);
+            foreach ($request->file('images') as $image) {
+                array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
             }
-
-            PendingOrgServiceImage::insert($images);
-
+            $org->workImages()->createMany($images);
         }
 
-        if ($request->has('docs')) {
-            $docs = [];
+        DB::commit();
 
-            foreach ($request->docs as $doc) {
-                array_push($docs, [
-                    'doc' => $doc->store('pending-org-docs'),
-                    'pending_org_service_id' => $pendingOrgService->id
-                ]);
-            }
+        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+    }
 
-            PendingOrgServiceDoc::insert($docs);
+
+    public function update(UpdateOrg $request, $id)
+    {
+
+        DB::beginTransaction();
+
+        $user = Auth::user();
+        $org = Org::find($id);
+
+        // handle category  and sub-category request
+        // TODO:: Do some custom validation for category and subcategory
+
+        $previousCategory = $org->category;
+        $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
+        $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
+
+        // Create categories
+        if ($isCategoryRequest && $previousCategory->is_confirmed == 0) {
+            $category = $org->category;
+            $org->category()->update(['name' => $request->post('category-request')]);
+        } else if ($isCategoryRequest && $previousCategory->is_confirmed == 1) {
+            $serviceTypeId = ServiceType::getThe('org')->id;
+            $category = new Category;
+            $category->service_type_id = $serviceTypeId;
+            $category->name = $request->post('category-request');
+            $category->is_confirmed = 0;
+            $category->save();
         }
 
-        return back()->with('success', 'Thanks! we will review your request as soon as possible, so stay tuned!');
+        // Create sub categories
+        if ($isSubCategoryRequest) {
+            $data = [];
+            foreach ($request->post('sub-category-requests') as $subCategoryName) {
+                !is_null($subCategoryName) && array_push($data, [
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
+                ]);
+            }
+            $requestedSubCategories = $category->subCategories()->createMany($data);
+        }
+
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $previousThana = $org->thana;
+        $previousUnion = $org->union;
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
+
+        $org->district_id = $request->post('district');
+        $org->thana_id = $thana->id;
+        $org->union_id = $union->id;
+        $org->name = $request->post('name');
+        $org->description = $request->post('description');
+        $org->mobile = $request->post('mobile');
+        $org->email = $request->post('email');
+        $org->category_id = $category->id;
+        $org->website = $request->post('website');
+        $org->facebook = $request->post('facebook');
+        $org->address = $request->post('address');
+        $org->save();
+
+        if ($request->hasFile('trade-license')) {
+            $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
+        }
+        $org->save();
+
+        // delete category and subcategories
+        $previousRequested = $org->subCategories('requested');
+        $org->subCategories()->detach();
+        $previousRequested->delete();
+        if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
+            $previousCategory->delete();
+        }
+
+        if (!$isUnionRequest && $previousUnion->is_pending == 1) {
+            $previousUnion->delete();
+        }
+
+        if (!$isThanaRequest && $previousThana->is_pending == 1) {
+            $previousThana->delete();
+        }
+
+        // associate sub-categories
+        !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
+        $org->subCategories()->saveMany($requestedSubCategories);
+
+        // User
+        $user->email = $request->post('personal-email');
+        $user->nid = $request->post('nid');
+        if ($request->hasFile('photo')) {
+            $user->photo = $request->file('photo')->store('user-photos');
+        }
+        $user->save();
+
+        // work images
+        if ($request->has('images')) {
+            $images = [];
+            foreach ($request->file('images') as $image) {
+                array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
+            }
+            $org->workImages()->createMany($images);
+        }
+
+        DB::commit();
+
+        return back()->with('success', 'Done!');
     }
 
     public function edit($id)
     {
-        $pendingOrgService = PendingOrgService::find($id);
-        return view('frontend.registration.org-service.edit', compact('pendingOrgService'));
-    }
+        $org = Org::find($id);
+        $categories = Category::getAll('org')->get();
+        $subCategories = SubCategory::getAll('org')->get();
+        $districts = District::take(20)->get();
+        $thanas = Thana::take(20)->get();
+        $unions = Union::take(20)->get();
 
-
-    public function update(StoreEditPendingOrgService $request, $id)
-    {
-
-        $pendingOrgService = PendingOrgService::find($id);
-
-        $user = Auth::user();
-
-        $pendingOrgService->user_id = Auth::id();
-        $pendingOrgService->org_name = $request->post('org-name');
-        $pendingOrgService->mobile = $request->post('mobile');
-        $pendingOrgService->description = $request->post('description');
-        $pendingOrgService->email = $request->post('email');
-        $pendingOrgService->latitude = $request->post('latitude');
-        $pendingOrgService->longitude = $request->post('longitude');
-        $pendingOrgService->service = $request->post('service');
-        $pendingOrgService->address = $request->post('address');
-        $pendingOrgService->save();
-
-
-        $user->name = $request->post('name');
-        $user->email = $request->post('personal-email');
-        $user->nid = $request->post('nid');
-        $user->qualification = $request->post('qualification');
-        $user->age = $request->post('age');
-
-        if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photo');
-        }
-
-        $user->save();
-
-        if ($request->has('images')) {
-            $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, [
-                    'image' => $image->store('pending-org-images'),
-                    'pending_org_service_id' => $pendingOrgService->id
-                ]);
-            }
-
-            PendingOrgServiceImage::insert($images);
-        }
-
-        if ($request->has('docs')) {
-            $documents = [];
-
-            foreach ($request->file('docs') as $document) {
-                array_push($documents, [
-                    'doc' => $document->store('pending-org-docs'),
-                    'pending_org_service_id' => $pendingOrgService->id
-                ]);
-            }
-
-            PendingOrgServiceDoc::insert($documents);
-        }
-
-        $pendingOrgService->save();
-
-        return back()->with('success', 'Done!');
+        $isPicExists = $org->user->photo;
+        return view('frontend.registration.org-service.edit', compact('org', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
     }
 }

@@ -2,123 +2,58 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Requests\StoreIndService;
-use App\Models\IndService;
-use App\Models\IndServiceDoc;
-use App\Models\IndServiceImage;
-use App\Models\User;
-use App\Http\Controllers\Controller;
+use App\Models\Ind;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
-class IndServiceController extends Controller
+// TODO:: Maybe some of these requests classes are empty or incomplete, so fill these with whatever you can.
+
+class indServiceController extends Controller
 {
     public function index()
     {
-        $indServices = IndService::paginate(15);
+        $inds = Ind::getOnly('approved')->paginate(15);
         $navs = $this->navs();
-        return view('backend.ind-service.index', compact('indServices', 'navs'));
-    }
-
-    public function create()
-    {
-        return view('backend.ind-service.create');
-    }
-
-    public function store(StoreIndService $request)
-    {
-        $user = new User;
-        $user->name = $request->post('name');
-        $user->mobile = $request->post('mobile');
-        $user->password = bcrypt($request->post('password'));
-        $user->email = $request->post('personal-email');
-        $user->nid = $request->post('nid');
-        $user->qualification = $request->post('qualification');
-        $user->photo = $request->file('photo')->store('user-photos');
-        $user->age = $request->post('age');
-
-        $user->save();
-        if (!$user->hasRole('ind-service')) {
-            $user->roles()->attach(3);
-        }
-
-        $registration = new IndService;
-        $registration->user_id = $user->id;
-        $registration->email = $request->post('email');
-        $registration->mobile = $request->post('service-mobile');
-        $registration->latitude = $request->post('latitude');
-        $registration->longitude = $request->post('longitude');
-        $registration->service = $request->post('service');
-        $registration->address = $request->post('address');
-
-        $registration->save();
-
-        if ($request->has('images')) {
-            $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, [
-                    'image' => $image->store('inds-service-images/' . $registration->id),
-                    'ind_service_id' => $registration->id
-                ]);
-            }
-
-            IndServiceImage::insert($images);
-        }
-
-        if ($request->has('docs')) {
-            $documents = [];
-
-            foreach ($request->file('docs') as $document) {
-                array_push($documents, [
-                    'doc' => $document->store('ind-service-docs/' . $registration->id),
-                    'ind_service_id' => $registration->id
-                ]);
-            }
-
-            IndServiceDoc::insert($documents);
-        }
-
-        return back()->with('success', 'Individual Service Provider Created Successfully!');
+        return view('backend.ind-service.index', compact('inds', 'navs'));
     }
 
 
-    public function show($id)
+    public function show(Ind $ind)
     {
         $navs = $this->navs();
-        $visitor['today'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
-        $visitor['thisMonth'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
-        $visitor['thisYear'] = DB::table('ind_service_visitor_counts')->where('ind_service_id', $id)->whereYear('created_at', date('Y'))->sum('how_much');
-        $indService = IndService::find($id);
+        $visitor['today'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
+        $visitor['thisMonth'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
+        $visitor['thisYear'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereYear('created_at', date('Y'))->sum('how_much');
 
-        return view('backend.ind-service.show', compact('indService', 'navs', 'visitor'));
+        return view('backend.ind-service.show', compact('ind', 'navs', 'visitor'));
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Ind $ind)
     {
-        $indService = IndService::find($id);
 
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
-                    $indService->delete();
+                    $ind->delete();
                     $msg = 'Account Deactivated Successfully!';
-                    $route = 'individual-service.show-disabled';
+                    $route = route('individual-service.show-disabled', $ind->id);
                     break;
                 default:
 
-                    // delete directories
-                    Storage::deleteDirectory('ind-service-docs/' . $indService->id);
-                    Storage::deleteDirectory('ind-service-images/' . $indService->id);
+                    // TODO:: Delete images/docs after deleting account
+                    $user = $ind->user;
 
-                    User::find($indService->user_id)->roles()->detach('ind-service');
+                    if (!$user->inds('approved')->count() <= 1) {
+                        $user->roles()->detach('ind');
+                    }
 
-                    $indService->forceDelete();
+                    $ind->forceDelete();
                     $msg = 'Account Removed Successfully!';
-                    $route = 'individual-service.index';
+                    $route = route('individual-service.index');
             }
 
-            return redirect(route($route, $indService->id))->with('success', $msg);
+            return redirect($route)->with('success', $msg);
         }
 
         return abort('404');
@@ -126,21 +61,21 @@ class IndServiceController extends Controller
 
     public function showDisabledAccounts()
     {
-        $indServices = IndService::onlyTrashed()->paginate(15);
+        $inds = Ind::getOnly('approved')->onlyTrashed()->paginate(15);
         $navs = $this->navs();
-        return view('backend.ind-service.all-disabled', compact('indServices', 'navs'));
+        return view('backend.ind-service.all-disabled', compact('inds', 'navs'));
     }
 
     public function showDisabled($id)
     {
-        $indService = IndService::withTrashed()->find($id);
+        $ind = Ind::withTrashed()->find($id);
         $navs = $this->navs();
-        return view('backend.ind-service.one-disabled', compact('indService', 'navs'));
+        return view('backend.ind-service.one-disabled', compact('ind', 'navs'));
     }
 
     public function activate(Request $request)
     {
-        IndService::onlyTrashed()->find($request->post('id'))->restore();
+        Ind::onlyTrashed()->find($request->post('id'))->restore();
         return redirect(route('individual-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
     }
 

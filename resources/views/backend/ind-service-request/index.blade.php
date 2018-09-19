@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'Individual Service Requests')
+@section('title', 'সকল বেক্তিগত সার্ভিস রিকোয়েস্ট')
 
 @section('content')
     <div class="container">
@@ -31,18 +31,18 @@
 
                         @php($serial = $serviceRequests->perPage() * ($serviceRequests->currentPage() - 1) + $loop->iteration)
                         <tr>
-                            <th scope="row">{{ $serial }}</th>
+                            <th scope="row">{{ en2bnNumber($serial) }}</th>
                             <td>
                                 <a href="{{ route('individual-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->user->name }}</a>
                             </td>
                             <td>{{ $serviceRequest->mobile }}</td>
                             <td>{{ $serviceRequest->user->age }}</td>
-                            <td>{{ $serviceRequest->service }}</td>
+                            <td>{{ $serviceRequest->category->name }}</td>
                         </tr>
 
                     @empty
                         <tr>
-                            <td colspan="5">No Service Provider Request Found.</td>
+                            <td colspan="5">কোন সেবা প্রদানকারী খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>

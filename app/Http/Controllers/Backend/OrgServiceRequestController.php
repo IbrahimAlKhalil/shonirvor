@@ -2,100 +2,102 @@
 
 namespace App\Http\Controllers\Backend;
 
-
-use App\Http\Controllers\Controller;
-use App\Models\OrgService;
-use App\Models\OrgServiceDoc;
-use App\Models\OrgServiceImage;
-use App\Models\PendingOrgService;
-use App\Models\User;
+use App\Models\Org;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class OrgServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = PendingOrgService::paginate(15);
+        $serviceRequests = Org::getOnly('pending')->paginate(15);
         $navs = $this->navs();
         return view('backend.org-service-request.index', compact('serviceRequests', 'navs'));
     }
 
-    public function show($id)
+    public function show(Org $serviceRequest)
     {
-        $serviceRequest = PendingOrgService::find($id);
         $navs = $this->navs();
         return view('backend.org-service-request.show', compact('serviceRequest', 'navs'));
     }
 
     public function store(Request $request)
     {
-        $pendingService = PendingOrgService::find($request->post('id'));
-        $pendingDocs = $pendingService->docs;
-        $pendingImages = $pendingService->images;
+        // TODO:: Make a request class
 
-        $service = new OrgService;
-        $service->user_id = $pendingService->user_id;
-        $service->org_name = $pendingService->org_name;
-        $service->mobile = $pendingService->mobile;
-        $service->description = $pendingService->description;
-        $service->email = $pendingService->email;
-        $service->latitude = $pendingService->latitude;
-        $service->longitude = $pendingService->longitude;
-        $service->service = $pendingService->service;
-        $service->address = $pendingService->address;
+        DB::beginTransaction();
 
-        $service->save();
+        $org = Org::find($request->post('id'));
+        $category = Category::find($org->category->id);
+        $thana = Thana::find($org->thana->id);
+        $union = Union::find($org->union->id);
 
-        $user = User::find($service->user_id);
-        if(!$user->hasRole('org-service')) {
-            $user->roles()->attach(4);
+        if ($category->is_confirmed == 0) {
+            $category->name = $request->post('category');
+            $category->is_confirmed = 1;
+            $category->save();
         }
 
-        $documents = [];
-        $images = [];
-
-        foreach ($pendingDocs as $pendingDoc) {
-            $filename = basename(asset('storage/' . $pendingDoc->doc));
-
-            Storage::move($pendingDoc->doc, 'org-service-docs/' . $service->id . '/' . $filename);
-
-            array_push($documents, [
-                'doc' => 'org-service-docs/' . $service->id . '/' . $filename,
-                'org_service_id' => $service->id
-            ]);
+        if ($thana->is_pending == 1) {
+            $thana->bn_name = $request->post('thana');
+            $thana->is_pending = 0;
+            $thana->save();
         }
 
-        foreach ($pendingImages as $pendingImage) {
-            $filename = basename(asset('storage/' . $pendingImage->image));
-
-            Storage::move($pendingImage->image, 'org-service-images/' . $service->id . '/' . $filename);
-
-            array_push($images, [
-                'image' => 'org-service-images/' . $service->id . '/' . $filename,
-                'org_service_id' => $service->id
-            ]);
+        if ($union->is_pending == 1) {
+            $union->bn_name = $request->post('union');
+            $union->is_pending = 0;
+            $union->save();
         }
 
-        OrgServiceDoc::insert($documents);
-        OrgServiceImage::insert($images);
 
-        $pendingService->delete();
+        $previousRequested = $org->subCategories('requested');
+        $previousRequested->detach();
+        $previousRequested->delete();
+
+        if ($request->has('sub-categories')) {
+            $data = [];
+            foreach ($request->post('sub-categories') as $subCategoryName) {
+                // TODO:: Please check null in the request file, not here!
+                !is_null($subCategoryName) && array_push($data, [
+                    'name' => $subCategoryName,
+                    'is_confirmed' => 0
+                ]);
+            }
+            $requestedSubCategories = $category->subCategories()->createMany($data);
+            // associate sub-categories
+            $org->subCategories()->saveMany($requestedSubCategories);
+        }
+
+        $org->is_pending = 0;
+        $org->save();
+
+        DB::commit();
 
         return redirect(route('organization-service-request.index'))->with('success', 'Service Provider approved successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Org $serviceRequest)
     {
-        $pendingService = PendingOrgService::find($id);
+        DB::beginTransaction();
+        $category = $serviceRequest->category;
+        $thana = $serviceRequest->thana;
+        $subCategories = $serviceRequest->subCategories('requested');
 
-        foreach ($pendingService->docs as $doc) {
-            Storage::delete($doc->doc);
-        }
-        foreach ($pendingService->images as $image) {
-            Storage::delete($image->image);
-        }
-        PendingOrgService::find($id)->delete();
+        $serviceRequest->subCategories()->detach();
+        $subCategories->delete();
+
+        $serviceRequest->forceDelete();
+        $category->is_confirmed == 0 && $category->delete();
+        $thana->is_confirmed == 0 && $thana->delete();
+
+        // TODO:: Don't forget to delete documents/images
+
+        DB::commit();
 
         return redirect(route('organization-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }

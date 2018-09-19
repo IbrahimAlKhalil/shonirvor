@@ -9,8 +9,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $indServices = Auth::user()->indService;
-        $orgServices = Auth::user()->orgService;
+        $indServices = Auth::user()->inds;
+        $orgServices = Auth::user()->orgs;
         $navs = $this->navs();
 
         return view('backend.home', compact('indServices', 'orgServices', 'navs'));
@@ -18,8 +18,8 @@ class HomeController extends Controller
 
     private function navs()
     {
-        $indServices = Auth::user()->indService;
-        $orgServices = Auth::user()->orgService;
+        $indServices = Auth::user()->inds;
+        $orgServices = Auth::user()->orgs;
         $navs = [];
 
         foreach ($indServices as $indService) {
