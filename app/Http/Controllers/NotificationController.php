@@ -18,6 +18,6 @@ class NotificationController extends Controller
     public function show()
     {
         $notifications = Auth::user()->notifications()->paginate(10);
-        return view('frontend.notification', compact('notifications'));
+        return view('backend.notification', compact('notifications'));
     }
 }

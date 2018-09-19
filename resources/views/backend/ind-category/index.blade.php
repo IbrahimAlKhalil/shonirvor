@@ -6,10 +6,8 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-category.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('individual-category.index')){{ 'active' }}@endif">Individual</a>
-                <a href="{{ route('organization-category.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('organization-category.index')){{ 'active' }}@endif">Organization</a>
+                <a href="{{ route('individual-category.index') }}" class="btn btn-secondary active">Individual</a>
+                <a href="{{ route('organization-category.index') }}" class="btn btn-secondary">Organization</a>
             </div>
         </div>
 
