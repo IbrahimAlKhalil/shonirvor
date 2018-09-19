@@ -52,6 +52,21 @@
                                 <td>{{ $ind->user->nid }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $ind->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $ind->thana->bn_name}} @if($ind->thana->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $ind->union->bn_name}}  @if($ind->union->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">ঠিকানা</th>
                                 <td>{{ $ind->address }}</td>
                             </tr>

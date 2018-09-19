@@ -20,6 +20,10 @@
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
+                                <th scope="row">নাম</th>
+                                <td>{{ $org->name }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">মোবাইল</th>
                                 <td>{{ $org->mobile }}</td>
                             </tr>
@@ -28,12 +32,23 @@
                                 <td>{{ $org->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">বয়স</th>
-                                <td>{{ $org->user->age }}</td>
-                            </tr>
-                            <tr>
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $org->user->nid }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $org->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $org->thana->bn_name}} @if($org->thana->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $org->union->bn_name}}  @if($org->union->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
                             </tr>
                             <tr>
                                 <th scope="row">ঠিকানা</th>

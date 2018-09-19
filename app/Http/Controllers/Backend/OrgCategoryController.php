@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Category;
 use App\Models\ServiceType;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategory;
 use App\Http\Requests\UpdateCategory;
@@ -24,12 +25,15 @@ class OrgCategoryController extends Controller
 
     public function store(StoreCategory $request)
     {
+        DB::beginTransaction();
+
         $category = new Category([
             'name' => $request->post('category'),
             'is_confirmed' => 1
         ]);
         ServiceType::getThe('org')->categories()->save($category);
 
+        DB::commit();
         return redirect(route('organization-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
     }
 
@@ -44,17 +48,22 @@ class OrgCategoryController extends Controller
 
     public function update(UpdateCategory $request, Category $category)
     {
+        DB::beginTransaction();
         $category->update([
             'name' => $request->post('category')
         ]);
+        DB::commit();
         return back()->with('success', 'Category Renamed Successfully!');
     }
 
     public function destroy(Category $category)
     {
+        DB::beginTransaction();
         // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
 
         $category->delete();
+
+        DB::commit();
         return redirect(route('organization-category.index'))->with('success', 'Category Deleted Successfully!');
     }
 

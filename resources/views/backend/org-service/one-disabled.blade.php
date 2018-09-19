@@ -20,6 +20,10 @@
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
+                                <th scope="row">নাম</th>
+                                <td>{{ $org->name }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">মোবাইল</th>
                                 <td>{{ $org->mobile }}</td>
                             </tr>
@@ -28,12 +32,23 @@
                                 <td>{{ $org->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">বয়স</th>
-                                <td>{{ $org->user->age }}</td>
-                            </tr>
-                            <tr>
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $org->user->nid }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $org->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $org->thana->bn_name}} @if($org->thana->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $org->union->bn_name}}  @if($org->union->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
                             </tr>
                             <tr>
                                 <th scope="row">ঠিকানা</th>
@@ -53,17 +68,32 @@
                             </tr>
                             </tbody>
                         </table>
+
                         <div class="row">
-                            <button class="btn btn-secondary btn-success mx-auto"
-                                    onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">
-                                Activate
-                            </button>
-                            <form id="activate-account" action="{{ route('organization-service.activate') }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $orgService->id }}">
-                            </form>
+                            <div class="btn-group mx-auto">
+
+                                <span class="btn btn-secondary btn-success mx-auto"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">
+                                    একাউন্টটি স্বষ্ক্রিয় করুন
+                                </span>
+                                <span class="btn btn-secondary btn-danger rounded-right"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">একাউন্টটি মুছে ফেলুন</span>
+
+                                <form id="activate-account" action="{{ route('organization-service.activate') }}"
+                                      method="post">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="id" value="{{ $org->id }}">
+                                </form>
+                                <form id="remove-account"
+                                      action="{{ route('organization-service.destroy', $org->id) }}"
+                                      method="post">
+                                    {{ csrf_field() }}
+                                    {{ method_field('delete') }}
+                                    <input type="hidden" name="type" value="remove">
+                                </form>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -95,11 +125,6 @@
                 <div class="row">
                     <div class="col-12">
                         @include('components.side-nav', compact('navs'))
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.visitor-conuter', compact('visitor'))
                     </div>
                 </div>
             </div>

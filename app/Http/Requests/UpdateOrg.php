@@ -17,7 +17,7 @@ class UpdateOrg extends FormRequest
         $id = $this->route('org_id');
 
         return [
-            'name' => 'required',
+            /*'name' => 'required',
             'description' => 'required',
             'mobile' => 'required|digits:11|unique:orgs,mobile,' . $id,
             'email' => 'email|unique:orgs,email,' . $id,
@@ -32,7 +32,7 @@ class UpdateOrg extends FormRequest
             'union' => 'exists:unions,id',
             'logo' => 'image',
             'photo' => 'image',
-            'images.*' => 'image',
+            'images.*' => 'image',*/
         ];
     }
 }

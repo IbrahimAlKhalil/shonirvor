@@ -55,12 +55,14 @@
 
                             <tr>
                                 <th scope="row">থানা</th>
-                                <td>{{ $serviceRequest->thana->bn_name}}</td>
+                                <td>{{ $serviceRequest->thana->bn_name}} @if($serviceRequest->thana->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
                             </tr>
 
                             <tr>
                                 <th scope="row">ইউনিয়ন</th>
-                                <td>{{ $serviceRequest->union->bn_name}}</td>
+                                <td>{{ $serviceRequest->union->bn_name}}  @if($serviceRequest->union->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
                             </tr>
 
                             <tr>
@@ -128,6 +130,37 @@
                                     </div>
                                 @endforeach
                             @endif
+
+                            @if($serviceRequest->thana->is_pending)
+                                <div class="form-group row">
+                                    <label for="thana" class="col-4 col-form-label">থানা
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-8">
+                                        <input id="thana" name="thana" type="text"
+                                               value="{{ oldOrData('thana', $serviceRequest->thana->bn_name) }}"
+                                               class="form-control{{ $errors->has('thana') ? ' is-invalid' : '' }}"
+                                               required>
+                                        @include('components.invalid', ['name' => 'thana'])
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($serviceRequest->union->is_pending)
+                                <div class="form-group row">
+                                    <label for="union" class="col-4 col-form-label">ইউনিয়ন
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-8">
+                                        <input id="union" name="union" type="text"
+                                               value="{{ oldOrData('union', $serviceRequest->union->bn_name) }}"
+                                               class="form-control{{ $errors->has('union') ? ' is-invalid' : '' }}"
+                                               required>
+                                        @include('components.invalid', ['name' => 'union'])
+                                    </div>
+                                </div>
+                            @endif
+
                         </form>
                         <div class="row">
 

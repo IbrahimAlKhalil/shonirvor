@@ -97,12 +97,16 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="w-100 mb-2"></div>
-                        <div class="col-md">
-                            <label class="form-check-label" for="no-area">আমার এলাকা এখানে তালিকাভুক্ত নয় ।</label>
-                            <input name="no_area" type="checkbox" value="1" id="no-area">
-                        </div>
                     </div>
+                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
+                    <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
+                    <br>
+                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
+                    <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
                 </div>
             </div>
 
@@ -128,15 +132,9 @@
                     </select>
                     @include('components.invalid', ['name' => 'category'])
                     <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
-                    <input type="checkbox" id="no-category" class="mt-2" name="no-category">
+                    <input type="checkbox" id="no-category" class="mt-2 no-something" name="no-category">
                     <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
-                           style="display: none"
                            placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
-                    <style>
-                        #no-category:checked + input {
-                            display: block !important;
-                        }
-                    </style>
                 </div>
             </div>
 
@@ -153,8 +151,8 @@
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
                     <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
-                    <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2">
-                    <div style="display: none">
+                    <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
+                    <div class="input-div">
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
                                placeholder="Type your sub-category here.">
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
@@ -162,11 +160,6 @@
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
                                placeholder="Type your sub-category here.">
                     </div>
-                    <style>
-                        #no-sub-category:checked + div {
-                            display: block !important;
-                        }
-                    </style>
                 </div>
             </div>
 
@@ -243,4 +236,13 @@
             </div>
         </form>
     </div>
+    <style>
+        .no-something + input, .no-something + .input-div {
+            display: none;
+        }
+
+        .no-something:checked + input, .no-something:checked + .input-div {
+            display: block;
+        }
+    </style>
 @endsection

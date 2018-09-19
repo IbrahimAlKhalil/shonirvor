@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class OrgServiceRequestController extends Controller
 {
@@ -26,15 +28,30 @@ class OrgServiceRequestController extends Controller
     public function store(Request $request)
     {
         // TODO:: Make a request class
+
         DB::beginTransaction();
 
         $org = Org::find($request->post('id'));
         $category = Category::find($org->category->id);
+        $thana = Thana::find($org->thana->id);
+        $union = Union::find($org->union->id);
 
-        if($category->is_confirmed == 0) {
+        if ($category->is_confirmed == 0) {
             $category->name = $request->post('category');
             $category->is_confirmed = 1;
             $category->save();
+        }
+
+        if ($thana->is_pending == 1) {
+            $thana->bn_name = $request->post('thana');
+            $thana->is_pending = 0;
+            $thana->save();
+        }
+
+        if ($union->is_pending == 1) {
+            $union->bn_name = $request->post('union');
+            $union->is_pending = 0;
+            $union->save();
         }
 
 
@@ -66,17 +83,21 @@ class OrgServiceRequestController extends Controller
 
     public function destroy(Org $serviceRequest)
     {
+        DB::beginTransaction();
         $category = $serviceRequest->category;
+        $thana = $serviceRequest->thana;
         $subCategories = $serviceRequest->subCategories('requested');
 
         $serviceRequest->subCategories()->detach();
         $subCategories->delete();
 
-        // TODO:: Please check null in the request file, not here!
+        $serviceRequest->forceDelete();
+        $category->is_confirmed == 0 && $category->delete();
+        $thana->is_confirmed == 0 && $thana->delete();
 
-        if ($category->is_confirmed == 0) {
-            $category->delete();
-        }
+        // TODO:: Don't forget to delete documents/images
+
+        DB::commit();
 
         return redirect(route('organization-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }

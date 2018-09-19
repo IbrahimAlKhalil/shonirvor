@@ -8,6 +8,8 @@ use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Sandofvega\Bdgeocode\Models\Thana;
+use Sandofvega\Bdgeocode\Models\Union;
 
 class IndServiceRequestController extends Controller
 {
@@ -34,11 +36,25 @@ class IndServiceRequestController extends Controller
 
         $ind = Ind::find($request->post('id'));
         $category = Category::find($ind->category->id);
+        $thana = Thana::find($ind->thana->id);
+        $union = Union::find($ind->union->id);
 
         if ($category->is_confirmed == 0) {
             $category->name = $request->post('category');
             $category->is_confirmed = 1;
             $category->save();
+        }
+
+        if ($thana->is_pending == 1) {
+            $thana->bn_name = $request->post('thana');
+            $thana->is_pending = 0;
+            $thana->save();
+        }
+
+        if ($union->is_pending == 1) {
+            $union->bn_name = $request->post('union');
+            $union->is_pending = 0;
+            $union->save();
         }
 
 
@@ -70,17 +86,22 @@ class IndServiceRequestController extends Controller
 
     public function destroy(Ind $serviceRequest)
     {
+        DB::beginTransaction();
+
         $category = $serviceRequest->category;
+        $thana = $serviceRequest->thana;
         $subCategories = $serviceRequest->subCategories('requested');
 
         $serviceRequest->subCategories()->detach();
         $subCategories->delete();
 
-        if ($category->is_confirmed == 0) {
-            $category->delete();
-        }
+        $serviceRequest->forceDelete();
+        $category->is_confirmed == 0 && $category->delete();
+        $thana->is_confirmed == 0 && $thana->delete();
 
         // TODO:: Don't forget to delete documents/images
+
+        DB::commit();
 
         return redirect(route('individual-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
     }

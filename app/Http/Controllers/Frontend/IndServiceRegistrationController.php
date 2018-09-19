@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Requests\StoreInd;
-use App\Http\Requests\UpdateInd;
 use App\Models\Ind;
-use App\Models\ServiceType;
 use App\Models\Category;
 use App\Models\WorkMethod;
+use App\Models\ServiceType;
 use App\Models\SubCategory;
+use App\Http\Requests\StoreInd;
+use App\Http\Requests\UpdateInd;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Sandofvega\Bdgeocode\Models\District;
 
 class IndServiceRegistrationController extends Controller
 {
@@ -26,10 +26,11 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
+        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('ind')->get();
         $districts = District::take(20)->get();
-        $thanas = Thana::take(20)->get();
-        $unions = Union::take(20)->get();
+        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
+        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
         $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
@@ -71,8 +72,8 @@ class IndServiceRegistrationController extends Controller
             $categories = Category::getAll('ind')->get();
             $subCategories = SubCategory::getAll('ind')->get();
             $districts = District::take(20)->get();
-            $thanas = Thana::take(20)->get();
-            $unions = Union::take(20)->get();
+            $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
+            $unions = Union::where('is_pending', '=', 0)->take(20)->get();
             $classesToAdd = ['active', 'disabled'];
             $isPicExists = $user->photo;
             $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
@@ -83,11 +84,13 @@ class IndServiceRegistrationController extends Controller
         }
 
         // handle category  and sub-category request
-        $category = Category::find($request->post('category'));
-        $subCategories = $subCategories = SubCategory::all()->whereIn('id', $request->post('sub-categories'));;
-        $requestedSubCategories = [];
+        // TODO:: Do some custom validation for category and subcategory
+
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
 
         // Create categories
         if ($isCategoryRequest) {
@@ -111,12 +114,34 @@ class IndServiceRegistrationController extends Controller
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
 
         $ind = new Ind;
         $ind->user_id = $user->id;
         $ind->district_id = $request->post('district');
-        $ind->thana_id = $request->post('thana');
-        $ind->union_id = $request->post('union');
+        $ind->thana_id = $thana->id;
+        $ind->union_id = $union->id;
 
         $ind->mobile = $request->post('mobile');
         $ind->referrer = $request->post('referrer');
@@ -132,10 +157,11 @@ class IndServiceRegistrationController extends Controller
         $ind->save();
 
         // associate sub-categories
-        $ind->subCategories()->saveMany($subCategories);
+        !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
         $ind->subCategories()->saveMany($requestedSubCategories);
 
         // ind_work_method table
+        // TODO:: Some custom validation will be needed for workmethods
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
             array_push($workMethods, [
@@ -179,14 +205,20 @@ class IndServiceRegistrationController extends Controller
         $ind = Ind::find($id);
 
         // handle category  and sub-category request
-        $category = Category::find($request->post('category'));
-        $subCategories = $subCategories = SubCategory::all()->whereIn('id', $request->post('sub-categories'));;
-        $requestedSubCategories = [];
+        // TODO:: Do some custom validation for category and subcategory
+
+        $previousCategory = $ind->category;
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
 
         // Create categories
-        if ($isCategoryRequest) {
+        if ($isCategoryRequest && $previousCategory->is_confirmed == 0) {
+            $category = $ind->category;
+            $ind->category()->update(['name' => $request->post('category-request')]);
+        } else if ($isCategoryRequest && $previousCategory->is_confirmed == 1) {
             $serviceTypeId = ServiceType::getThe('ind')->id;
             $category = new Category;
             $category->service_type_id = $serviceTypeId;
@@ -207,9 +239,34 @@ class IndServiceRegistrationController extends Controller
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $previousThana = $ind->thana;
+        $previousUnion = $ind->union;
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
+
         $ind->district_id = $request->post('district');
-        $ind->thana_id = $request->post('thana');
-        $ind->union_id = $request->post('union');
+        $ind->thana_id = $thana->id;
+        $ind->union_id = $union->id;
         $ind->mobile = $request->post('mobile');
         $ind->email = $request->post('email');
         $ind->category_id = $category->id;
@@ -222,19 +279,28 @@ class IndServiceRegistrationController extends Controller
         }
         $ind->save();
 
-        // sub-categories
+        // delete category and subcategories
         $previousRequested = $ind->subCategories('requested');
         $ind->subCategories()->detach();
         $previousRequested->delete();
+        if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
+            $previousCategory->delete();
+        }
+
+        if (!$isUnionRequest && $previousUnion->is_pending == 1) {
+            $previousUnion->delete();
+        }
+
+        if (!$isThanaRequest && $previousThana->is_pending == 1) {
+            $previousThana->delete();
+        }
 
         // associate sub-categories
-        $ind->subCategories()->saveMany($subCategories);
+        !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
         $ind->subCategories()->saveMany($requestedSubCategories);
 
         // ind_work_method table
-        $ind->workMethods()->each(function ($workMethod) {
-            $workMethod->delete();
-        });
+        $ind->workMethods()->detach();
 
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
@@ -277,11 +343,11 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
-        // TODO:: Don't send all the subcategories after implementing ajax
+        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('ind')->get();
         $districts = District::take(20)->get();
-        $thanas = Thana::take(20)->get();
-        $unions = Union::take(20)->get();
+        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
+        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
 
         $isPicExists = $ind->user->photo;
         return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));

@@ -125,12 +125,18 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="w-100 mb-2"></div>
-                        <div class="col-md">
-                            <label class="form-check-label" for="no-area">আমার এলাকা এখানে তালিকাভুক্ত নয় ।</label>
-                            <input name="no_area" type="checkbox" value="1" id="no-area">
-                        </div>
                     </div>
+                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-thana" class="mt-2 no-something"
+                           name="no-thana" {{ checkBox($org->thana->is_pending) }}>
+                    <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $org->thana->bn_name }}">
+                    <br>
+                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                    <input type="checkbox" id="no-union" class="mt-2 no-something"
+                           name="no-union" {{ checkBox($org->union->is_pending) }}>
+                    <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।" value="{{ $org->union->bn_name }}">
                 </div>
             </div>
 
@@ -260,4 +266,13 @@
             </div>
         </form>
     </div>
+    <style>
+        .no-something + input, .no-something + .input-div {
+            display: none;
+        }
+
+        .no-something:checked + input, .no-something:checked + .input-div {
+            display: block;
+        }
+    </style>
 @endsection

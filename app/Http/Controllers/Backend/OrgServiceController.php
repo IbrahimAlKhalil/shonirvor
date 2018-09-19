@@ -30,6 +30,8 @@ class orgServiceController extends Controller
 
     public function destroy(Request $request, Org $org)
     {
+        DB::beginTransaction();
+
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
                 case 'deactivate':
@@ -52,7 +54,8 @@ class orgServiceController extends Controller
                     $route = route('organization-service.index');
             }
 
-            return redirect(route($route, $org->id))->with('success', $msg);
+            DB::commit();
+            return redirect($route)->with('success', $msg);
         }
 
         return abort('404');

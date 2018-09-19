@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEditPendingOrgService;
-use App\Http\Requests\StoreOrg;
-use App\Http\Requests\StorePendingOrgService;
-use App\Http\Requests\UpdateOrg;
-use App\Models\Category;
 use App\Models\Org;
-Use App\Models\PendingOrgService;
-use App\Models\PendingOrgServiceDoc;
-use App\Models\PendingOrgServiceImage;
+use App\Models\Category;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
-use App\Models\WorkMethod;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreOrg;
+use App\Http\Requests\UpdateOrg;
 use Illuminate\Support\Facades\DB;
-use Sandofvega\Bdgeocode\Models\District;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Sandofvega\Bdgeocode\Models\District;
 
 class OrgServiceRegistrationController extends Controller
 {
@@ -85,11 +79,13 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // handle category  and sub-category request
-        $category = Category::find($request->post('category'));
-        $subCategories = $subCategories = SubCategory::all()->whereIn('id', $request->post('sub-categories'));
-        $requestedSubCategories = [];
+        // TODO:: Do some custom validation for category and subcategory
+
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
 
         // Create categories
         if ($isCategoryRequest) {
@@ -113,11 +109,34 @@ class OrgServiceRegistrationController extends Controller
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
+
         $org = new Org;
         $org->user_id = $user->id;
         $org->district_id = $request->post('district');
-        $org->thana_id = $request->post('thana');
-        $org->union_id = $request->post('union');
+        $org->thana_id = $thana->id;
+        $org->union_id = $union->id;
 
         $org->name = $request->post('name');
         $org->description = $request->post('description');
@@ -134,8 +153,8 @@ class OrgServiceRegistrationController extends Controller
         }
         $org->save();
 
-        // associate sub-categories
-        $org->subCategories()->saveMany($subCategories);
+        // associate sub-categories$org
+        !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
         $org->subCategories()->saveMany($requestedSubCategories);
 
         // User
@@ -170,15 +189,21 @@ class OrgServiceRegistrationController extends Controller
         $org = Org::find($id);
 
         // handle category  and sub-category request
-        $category = Category::find($request->post('category'));
-        $subCategories = $subCategories = SubCategory::all()->whereIn('id', $request->post('sub-categories'));;
-        $requestedSubCategories = [];
+        // TODO:: Do some custom validation for category and subcategory
+
+        $previousCategory = $org->category;
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
+        $category = Category::find($request->post('category'));
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $requestedSubCategories = [];
 
         // Create categories
-        if ($isCategoryRequest) {
-            $serviceTypeId = ServiceType::getThe('ind')->id;
+        if ($isCategoryRequest && $previousCategory->is_confirmed == 0) {
+            $category = $org->category;
+            $org->category()->update(['name' => $request->post('category-request')]);
+        } else if ($isCategoryRequest && $previousCategory->is_confirmed == 1) {
+            $serviceTypeId = ServiceType::getThe('org')->id;
             $category = new Category;
             $category->service_type_id = $serviceTypeId;
             $category->name = $request->post('category-request');
@@ -198,9 +223,34 @@ class OrgServiceRegistrationController extends Controller
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
+        // handle thana and union request
+        // TODO:: Do some custom validation for thana and union
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $previousThana = $org->thana;
+        $previousUnion = $org->union;
+        $thana = Thana::find($request->post('thana'));
+        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+
+        if ($isThanaRequest) {
+            $thana = new Thana;
+            $thana->district_id = $request->post('district');
+            $thana->bn_name = $request->post('thana-request');
+            $thana->is_pending = 1;
+            $thana->save();
+        }
+
+        if ($isUnionRequest) {
+            $union = new Union;
+            $union->thana_id = $thana->id;
+            $union->bn_name = $request->post('union-request');
+            $union->is_pending = 1;
+            $union->save();
+        }
+
         $org->district_id = $request->post('district');
-        $org->thana_id = $request->post('thana');
-        $org->union_id = $request->post('union');
+        $org->thana_id = $thana->id;
+        $org->union_id = $union->id;
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
@@ -216,13 +266,24 @@ class OrgServiceRegistrationController extends Controller
         }
         $org->save();
 
-        // sub-categories
+        // delete category and subcategories
         $previousRequested = $org->subCategories('requested');
         $org->subCategories()->detach();
         $previousRequested->delete();
+        if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
+            $previousCategory->delete();
+        }
+
+        if (!$isUnionRequest && $previousUnion->is_pending == 1) {
+            $previousUnion->delete();
+        }
+
+        if (!$isThanaRequest && $previousThana->is_pending == 1) {
+            $previousThana->delete();
+        }
 
         // associate sub-categories
-        $org->subCategories()->saveMany($subCategories);
+        !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
         $org->subCategories()->saveMany($requestedSubCategories);
 
         // User

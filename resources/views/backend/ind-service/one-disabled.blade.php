@@ -10,7 +10,8 @@
                 <div class="row">
                     <div class="col-md-4">
                         <a href="{{ asset('storage/' . $ind->user->photo) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $ind->user->photo) }}" class="img-responsive img-thumbnail" alt="{{ $ind->user->name }}">
+                            <img src="{{ asset('storage/' . $ind->user->photo) }}" class="img-responsive img-thumbnail"
+                                 alt="{{ $ind->user->name }}">
                         </a>
                     </div>
 
@@ -51,6 +52,21 @@
                                 <td>{{ $ind->user->nid }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $ind->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $ind->thana->bn_name}} @if($ind->thana->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $ind->union->bn_name}}  @if($ind->union->is_pending) <span
+                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">ঠিকানা</th>
                                 <td>{{ $ind->address }}</td>
                             </tr>
@@ -68,12 +84,26 @@
                             </tr>
                             </tbody>
                         </table>
+
                         <div class="row">
-                            <button class="btn btn-secondary btn-success mx-auto" onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">Activate</button>
-                            <form id="activate-account" action="{{ route('individual-service.activate') }}" method="post">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $ind->id }}">
-                            </form>
+                            <div class="btn-group mx-auto">
+                                <span class="btn btn-secondary btn-success mx-auto"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('activate-account').submit()">একাউন্টটি স্বষ্ক্রিয় করুন</span>
+                                <span class="btn btn-secondary btn-danger rounded-right"
+                                      onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">একাউন্টটি মুছে ফেলুন</span>
+
+                                <form id="activate-account" action="{{ route('individual-service.activate') }}"
+                                      method="post">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="id" value="{{ $ind->id }}">
+                                </form>
+                                <form id="remove-account" action="{{ route('individual-service.destroy', $ind->id) }}"
+                                      method="post">
+                                    {{ csrf_field() }}
+                                    {{ method_field('delete') }}
+                                    <input type="hidden" name="type" value="remove">
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,7 +113,8 @@
                     <div class="col-md-3">
                         <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
                         <a href="{{ asset('storage/' . $ind->experience_certificate) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $ind->experience_certificate) }}" class="img-responsive img-thumbnail">
+                            <img src="{{ asset('storage/' . $ind->experience_certificate) }}"
+                                 class="img-responsive img-thumbnail">
                         </a>
                     </div>
                 </div>
