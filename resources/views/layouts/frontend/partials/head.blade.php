@@ -8,6 +8,6 @@
     <title>@yield('title') - {{ config('app.name') }}</title>
 
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
-    @yield('css')
+    @yield('webpack')
 </head>
 <body>

@@ -788,26 +788,26 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.46",
+            "version": "1.0.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2"
+                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2",
-                "reference": "f3e0d925c18b92cf3ce84ea5cc58d62a1762a2b2",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a11e4a75f256bdacf99d20780ce42d3b8272975c",
+                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c",
                 "shasum": ""
             },
             "require": {
+                "ext-fileinfo": "*",
                 "php": ">=5.5.9"
             },
             "conflict": {
                 "league/flysystem-sftp": "<1.0.6"
             },
             "require-dev": {
-                "ext-fileinfo": "*",
                 "phpspec/phpspec": "^3.4",
                 "phpunit/phpunit": "^5.7.10"
             },
@@ -868,7 +868,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-08-22 07:45:22"
+            "time": "2018-09-14 15:30:29"
         },
         {
             "name": "monolog/monolog",
@@ -1495,17 +1495,21 @@
         },
         {
             "name": "sandofvega/bdgeocode",
-            "version": "v1.0.2",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sandofvega/laravel-bangladesh-geocode.git",
-                "reference": "b86ebf4a5c29170c9f40c82aa503b38998ef39e0"
+                "reference": "b3d3113e7bf0367d1466824e9c8da52bf23f849b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sandofvega/laravel-bangladesh-geocode/zipball/b86ebf4a5c29170c9f40c82aa503b38998ef39e0",
-                "reference": "b86ebf4a5c29170c9f40c82aa503b38998ef39e0",
+                "url": "https://api.github.com/repos/sandofvega/laravel-bangladesh-geocode/zipball/b3d3113e7bf0367d1466824e9c8da52bf23f849b",
+                "reference": "b3d3113e7bf0367d1466824e9c8da52bf23f849b",
                 "shasum": ""
+            },
+            "require": {
+                "staudenmeir/eloquent-has-many-deep": "^1.1",
+                "znck/belongs-to-through": "^2.3"
             },
             "type": "laravel",
             "extra": {
@@ -1532,26 +1536,66 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Division, District, Upazila and Union level fully mapped Database.",
+            "description": "8 Division, 64 District, 491 Thana and 2350 Union fully mapped laravel package.",
             "keywords": [
                 "bangladesh",
                 "geocode",
                 "laravel"
             ],
-            "time": "2018-09-10 05:10:49"
+            "time": "2018-09-17 07:28:20"
         },
         {
-            "name": "swiftmailer/swiftmailer",
-            "version": "v6.1.2",
+            "name": "staudenmeir/eloquent-has-many-deep",
+            "version": "v1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "7d760881d266d63c5e7a1155cbcf2ac656a31ca8"
+                "url": "https://github.com/staudenmeir/eloquent-has-many-deep.git",
+                "reference": "88a929dd209ce94734cda011b960eb6d67e165a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/7d760881d266d63c5e7a1155cbcf2ac656a31ca8",
-                "reference": "7d760881d266d63c5e7a1155cbcf2ac656a31ca8",
+                "url": "https://api.github.com/repos/staudenmeir/eloquent-has-many-deep/zipball/88a929dd209ce94734cda011b960eb6d67e165a7",
+                "reference": "88a929dd209ce94734cda011b960eb6d67e165a7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^5.5.29",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\EloquentHasManyDeep\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Laravel Eloquent HasManyThrough relationship with unlimited levels",
+            "time": "2018-07-30 23:55:29"
+        },
+        {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v6.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmailer/swiftmailer.git",
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/8ddcb66ac10c392d3beb54829eef8ac1438595f4",
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4",
                 "shasum": ""
             },
             "require": {
@@ -1597,7 +1641,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2018-07-13 07:04:35"
+            "time": "2018-09-11 07:12:52"
         },
         {
             "name": "symfony/console",
@@ -2646,6 +2690,58 @@
                 "roles"
             ],
             "time": "2017-11-13 23:46:19"
+        },
+        {
+            "name": "znck/belongs-to-through",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/znck/belongs-to-through.git",
+                "reference": "8ac53e9134072902a8d3f3e18c327d4a8fd70d3d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/znck/belongs-to-through/zipball/8ac53e9134072902a8d3f3e18c327d4a8fd70d3d",
+                "reference": "8ac53e9134072902a8d3f3e18c327d4a8fd70d3d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.11",
+                "orchestra/testbench": "~3.0",
+                "phpunit/php-code-coverage": "^3.3",
+                "phpunit/phpunit": "~5.0",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Znck\\Eloquent\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rahul Kadyan",
+                    "email": "hi@znck.me"
+                }
+            ],
+            "description": "Adds belongsToThrough relation to laravel models",
+            "homepage": "https://github.com/znck/belongs-to-through",
+            "keywords": [
+                "belongsToThrough",
+                "eloquent",
+                "laravel",
+                "model",
+                "models",
+                "znck"
+            ],
+            "time": "2017-07-23 13:11:16"
         }
     ],
     "packages-dev": [
