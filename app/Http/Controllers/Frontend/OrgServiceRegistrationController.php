@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateOrg;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -151,6 +152,9 @@ class OrgServiceRegistrationController extends Controller
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
         }
+        if ($request->hasFile('logo')) {
+            $org->trade_license = $request->file('logo')->store('org/' . $org->id);
+        }
         $org->save();
 
         // associate sub-categories$org
@@ -172,6 +176,14 @@ class OrgServiceRegistrationController extends Controller
                 array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
             }
             $org->workImages()->createMany($images);
+        }
+
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
         }
 
         DB::commit();
@@ -259,10 +271,16 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->save();
 
         if ($request->hasFile('trade-license')) {
+            // delete old file
+            Storage::delete($org->trade_license);
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
+        }
+        if ($request->hasFile('logo')) {
+            // delete old file
+            Storage::delete($org->logo);
+            $org->trade_license = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
 
@@ -301,6 +319,13 @@ class OrgServiceRegistrationController extends Controller
                 array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
             }
             $org->workImages()->createMany($images);
+        }
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
         }
 
         DB::commit();

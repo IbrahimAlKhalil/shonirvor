@@ -61,6 +61,7 @@ class IndServiceRegistrationController extends Controller
 
     public function store(StoreInd $request)
     {
+
         DB::beginTransaction();
 
         $user = Auth::user();
@@ -164,9 +165,10 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Some custom validation will be needed for workmethods
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
-            array_push($workMethods, [
-                'work_method_id' => $workMethod,
-                'ind_id' => $ind->id
+            array_key_exists('id', $workMethod) && array_push($workMethods, [
+                'work_method_id' => $workMethod['id'],
+                'ind_id' => $ind->id,
+                'rate' => $workMethod['rate']
             ]);
         }
 
@@ -189,6 +191,15 @@ class IndServiceRegistrationController extends Controller
                 array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
             }
             $ind->workImages()->createMany($images);
+        }
+
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+            DB::table('identities')->insert($identities);
         }
 
         DB::commit();
@@ -304,9 +315,10 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
-            array_push($workMethods, [
-                'work_method_id' => $workMethod,
-                'ind_id' => $ind->id
+            array_key_exists('id', $workMethod) && array_push($workMethods, [
+                'work_method_id' => $workMethod['id'],
+                'ind_id' => $ind->id,
+                'rate' => $workMethod['rate']
             ]);
         }
 
@@ -329,6 +341,15 @@ class IndServiceRegistrationController extends Controller
                 array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
             }
             $ind->workImages()->createMany($images);
+        }
+
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+            DB::table('identities')->insert($identities);
         }
 
 

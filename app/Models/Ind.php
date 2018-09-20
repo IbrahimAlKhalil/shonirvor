@@ -22,7 +22,7 @@ class Ind extends Model
 
     public function workMethods()
     {
-        return $this->belongsToMany(WorkMethod::class);
+        return $this->belongsToMany(WorkMethod::class)->withPivot('rate');
     }
 
     public function workImages()

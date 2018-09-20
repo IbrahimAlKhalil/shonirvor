@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'সকল বেক্তিগত সার্ভিস প্রভাইডার')
+@section('title', 'Individual Service Providers')
 
 @section('content')
     <div class="container">

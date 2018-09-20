@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সকল প্রাতিষ্ঠানিক সেবা বিভাগ')
+@section('title', 'সকল প্রাতিষ্ঠানিক ক্যাটাগরি')
 
 @section('content')
     <div class="container">
@@ -15,7 +15,7 @@
 
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">সকল প্রাতিষ্ঠানিক সেবা বিভাগ</h4>
+                <h4 class="mb-4">সকল প্রাতিষ্ঠানিক ক্যাটাগরি</h4>
                 @include('components.success')
             </div>
             <div class="col-md-9">
@@ -23,7 +23,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">বিভাগ</th>
+                        <th scope="col">ক্যাটাগরি</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,7 +37,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">কোনো সেবা বিভাগ খুঁজে পাওয়া যায়নি ।</td>
+                            <td colspan="4">কোনো ক্যাটাগরি খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>

@@ -71,7 +71,7 @@
                                 <td>{{ $ind->address }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">সেবা-বিভাগ</th>
+                                <th scope="row">ক্যাটাগরি</th>
                                 <td>{{ $ind->category->name }}</td>
                             </tr>
                             <tr>

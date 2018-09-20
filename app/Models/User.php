@@ -57,4 +57,9 @@ class User extends Authenticatable
 
         return $this->hasMany(Org::class);
     }
+
+    public function identities()
+    {
+        return $this->hasMany(Identity::class);
+    }
 }

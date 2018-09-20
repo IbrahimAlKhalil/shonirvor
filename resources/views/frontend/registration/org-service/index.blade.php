@@ -12,7 +12,7 @@
     @endforeach
 
     <div class="container">
-        <h3>সেবা প্রদানকারী নিবন্ধন</h3>
+        <h3>প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
         @include('components.success')
 
@@ -127,12 +127,12 @@
                             </select>
                         </div>
                     </div>
-                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
                     <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
                     <br>
-                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
@@ -150,17 +150,17 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
+                <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="category" name="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
-                        <option>-- শ্রেণী নির্বাচন করুন --</option>
+                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                     @include('components.invalid', ['name' => 'category'])
-                    <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-category" class="mt-2" name="no-category">
                     <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
                            style="display: none"
@@ -185,7 +185,7 @@
                         @endforeach
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
-                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2">
                     <div style="display: none">
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
@@ -223,6 +223,26 @@
                     </div>
                 </div>
             @endif
+
+            <div class="form-group row">
+                <label for="identities" class="col-4 col-form-label">লোগো <span
+                            class="text-danger">*</span></label>
+                <div class="col-8">
+                    <input id="logo" name="logo" type="file" accept="image/*"
+                           class="form-control @if($errors->has('logo')) is-invalid @endif">
+                    @include('components.invalid', ['name' => 'logo'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            class="text-danger">*</span></label>
+                <div class="col-8">
+                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                           class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
+                    @include('components.invalid', ['name' => 'identities'])
+                </div>
+            </div>
 
             <div class="form-group row">
                 <label for="images" class="col-4 col-form-label">কাজের ছবি</label>

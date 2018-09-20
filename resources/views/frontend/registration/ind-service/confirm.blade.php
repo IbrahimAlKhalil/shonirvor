@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'ব্যক্তি সেবা প্রদানকারী নিবন্ধন')
+@section('title', 'Individual Service Provider Registration')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
@@ -26,7 +26,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">সেবা বিভাগ</th>
+                        <th scope="col">ক্যাটাগরি</th>
                         <th scope="col">অনুরোধের তারিখ</th>
                         <th scope="col">সর্বশেষ হালনাগাদকৃত</th>
                     </tr>
@@ -47,7 +47,8 @@
                 </table>
             </div>
             <div class="tab-pane fade {{ $classesToAdd[1] }} show" id="request-account">
-                <form method="post" enctype="multipart/form-data" action="{{ route('individual-service-registration.store') }}">
+                <form method="post" enctype="multipart/form-data"
+                      action="{{ route('individual-service-registration.store') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group row">
@@ -55,7 +56,8 @@
                                     class="text-danger">*</span></label>
                         <div class="col-8">
                             <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}"
-                                   class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
+                                   class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}"
+                                   placeholder="01xxxxxxxxx" required>
                             @include('components.invalid', ['name' => 'mobile'])
                         </div>
                     </div>
@@ -64,7 +66,8 @@
                         <label for="referrer" class="col-4 col-form-label">রেফারার</label>
                         <div class="col-8">
                             <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
-                                   class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}" required>
+                                   class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}"
+                                   placeholder="01xxxxxxxxx" required>
                             @include('components.invalid', ['name' => 'referrer'])
                         </div>
                     </div>
@@ -72,7 +75,8 @@
                     <div class="form-group row">
                         <label for="personal-email" class="col-4 col-form-label">ব্যক্তিগত ইমেইল</label>
                         <div class="col-8">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
+                            <input id="personal-email" name="personal-email" type="text"
+                                   value="{{ old('personal-email') }}"
                                    class="form-control @if($errors->has('personal-email')) is-invalid @endif">
                             @include('components.invalid', ['name' => 'personal-email'])
                         </div>
@@ -135,12 +139,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
                             <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
                             <br>
-                            <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                             <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
@@ -148,7 +152,8 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="address" class="col-4 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
+                        <label for="address" class="col-4 col-form-label">ঠিকানা <span
+                                    class="text-danger">*</span></label>
                         <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
                               class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
@@ -157,20 +162,21 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
+                        <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
                         <div class="col-8">
                             <select id="category" name="category"
                                     class="form-control @if($errors->has('category')) is-invalid @endif">
-                                <option>-- শ্রেণী নির্বাচন করুন --</option>
+                                <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
 
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                             @include('components.invalid', ['name' => 'category'])
-                            <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-category" class="mt-2 no-something" name="no-category">
-                            <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
+                            <input type="text" id="category-request" name="category-request"
+                                   class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
                         </div>
                     </div>
@@ -180,15 +186,17 @@
                                     class="text-danger">*</span></label>
                         <div class="col-8">
                             <select id="sub-categories" name="sub-categories[]"
-                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
+                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                    multiple>
                                 <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
                                 @foreach($subCategories as $subCategory)
                                     <option value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
                                 @endforeach
                             </select>
                             @include('components.invalid', ['name' => 'sub-categories'])
-                            <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
-                            <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
+                            <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                            <input type="checkbox" id="no-sub-category" name="no-sub-category"
+                                   class="mt-2 no-something">
                             <div class="input-div">
                                 <input type="text" name="sub-category-requests[]" class="form-control mt-3"
                                        placeholder="Type your sub-category here.">
@@ -202,14 +210,38 @@
 
                     <div class="form-group row">
                         <label class="col-4 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
-                        <div class="col-8" style="text-transform: capitalize">
+                        <div class="col-8">
                             @foreach($workMethods as $workMethod)
-                                <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->name }}</label>
-                                <input type="checkbox" id="work-method-{{ $workMethod->id }}" value="{{ $workMethod->id }}"
-                                       name="work-methods[]">
+                                <div class="accordion">
+                                    <div class="card mt-2">
+                                        <div class="card-header pb-0 pt-2"><label
+                                                    for="work-{{ $workMethod->id }}"
+                                                    data-toggle="collapse"
+                                                    data-target="#work-method-{{ $workMethod->id }}">{{ $workMethod->name }}
+                                            </label>
+                                            <input type="checkbox"
+                                                   class="pull-right"
+                                                   id="work-{{ $workMethod->id }}"
+                                                   value="{{ $workMethod->id }}"
+                                                   name="work-methods[{{ $loop->iteration-1 }}][id]"
+                                                   data-toggle="collapse"
+                                                   data-target="#work-method-{{ $workMethod->id }}">
+                                        </div>
+                                        <div id="work-method-{{ $workMethod->id }}" class="collapse">
+                                            <div class="card-body">
+                                                <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="work-price-{{ $workMethod->id }}"
+                                                       name="work-methods[{{ $loop->iteration-1 }}][rate]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                             @include('components.invalid', ['name' => 'work-methods'])
                         </div>
+
                     </div>
 
                     <div class="form-group row">
@@ -249,6 +281,17 @@
                     @endif
 
                     <div class="form-group row">
+                        <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম
+                            সনদ <span
+                                    class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input id="identities" name="identities[]" type="file" accept="image/*"
+                                   class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
+                            @include('components.invalid', ['name' => 'identities'])
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label for="images" class="col-4 col-form-label">কাজের ছবি</label>
                         <div class="col-8">
                             <input id="images" name="images[]" type="file" accept="image/*"
@@ -260,8 +303,9 @@
                     <div class="form-group row">
                         <label for="experience-certificate" class="col-4 col-form-label">অভিজ্ঞতা প্রত্যয়ন পত্র</label>
                         <div class="col-8">
-                            <input id="experience-certificate" name="experience-certificate" type="file" accept="image/*"
-                                   class="form-control" multiple>
+                            <input id="experience-certificate" name="experience-certificate" type="file"
+                                   accept="image/*"
+                                   class="form-control">
                             @include('components.invalid', ['name' => 'experience-certificate'])
                         </div>
                     </div>

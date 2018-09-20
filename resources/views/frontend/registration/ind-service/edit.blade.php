@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'সেবা প্রদানকারী অনুরোধ সম্পাদনা করুন')
+@section('title', 'Edit Individual Service Provider Request')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
@@ -105,13 +105,13 @@
                             </select>
                         </div>
                     </div>
-                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-thana" class="mt-2 no-something"
                            name="no-thana" {{ checkBox($ind->thana->is_pending) }}>
                     <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $ind->thana->bn_name }}">
                     <br>
-                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-union" class="mt-2 no-something"
                            name="no-union" {{ checkBox($ind->union->is_pending) }}>
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
@@ -129,18 +129,18 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
+                <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="category" name="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
-                        <option>-- শ্রেণী নির্বাচন করুন --</option>
+                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
                         @endforeach
                     </select>
 
                     @include('components.invalid', ['name' => 'category'])
-                    <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-category" name="no-category"
                            class="mt-2 no-something" {{ checkBox(!$ind->category->is_confirmed) }}>
                     <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
@@ -165,7 +165,7 @@
                     @include('components.invalid', ['name' => 'sub-categories'])
 
                     @php($requestedSubCategories = $ind->subCategories('requested')->get())
-                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
+                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                            class="mt-2 no-something" {{ checkBox($requestedSubCategories->count() >= 1) }}>
                     <div class="input-div">
@@ -186,12 +186,38 @@
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
-                <div class="col-8" style="text-transform: capitalize">
+                <div class="col-8">
                     @php($indWorkMethods = $ind->workMethods->pluck('id')->toArray())
                     @foreach($workMethods as $workMethod)
-                        <label for="work-method-{{ $workMethod->id }}">{{ $workMethod->name }}</label>
-                        <input type="checkbox" id="work-method-{{ $workMethod->id }}" value="{{ $workMethod->id }}"
-                               name="work-methods[]" {{ checkBox(in_array($workMethod->id, $indWorkMethods)) }}>
+                        <div class="accordion">
+                            <div class="card mt-2">
+                                @php($checked = checkBox(in_array($workMethod->id, $indWorkMethods)))
+                                <div class="card-header pb-0 pt-2"><label
+                                            for="work-{{ $workMethod->id }}"
+                                            data-toggle="collapse"
+                                            data-target="#work-method-{{ $workMethod->id }}">{{ $workMethod->name }}
+                                    </label>
+                                    <input type="checkbox"
+                                           class="pull-right"
+                                           id="work-{{ $workMethod->id }}"
+                                           value="{{ $workMethod->id }}"
+                                           name="work-methods[{{ $loop->iteration-1 }}][id]"
+                                           data-toggle="collapse"
+                                           data-target="#work-method-{{ $workMethod->id }}" {{ $checked }}>
+                                </div>
+                                <div id="work-method-{{ $workMethod->id }}"
+                                     class="collapse @if($checked){{ 'show' }}@endif">
+                                    <div class="card-body">
+                                        <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="work-price-{{ $workMethod->id }}"
+                                               name="work-methods[{{ $loop->iteration-1 }}][rate]"
+                                               value="@if($checked){{ $ind->workMethods->find($workMethod->id)->pivot->rate }}@endif">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                     @include('components.invalid', ['name' => 'work-methods'])
                 </div>
@@ -234,6 +260,16 @@
                     </div>
                 </div>
             @endif
+
+            <div class="form-group row">
+                <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            class="text-danger">*</span></label>
+                <div class="col-8">
+                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                           class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
+                    @include('components.invalid', ['name' => 'identities'])
+                </div>
+            </div>
 
             <div class="form-group row">
                 <label for="images" class="col-4 col-form-label">কাজের ছবি</label>

@@ -55,7 +55,7 @@
                                 <td>{{ $org->address }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">সেবা-বিভাগ</th>
+                                <th scope="row">ক্যাটাগরি</th>
                                 <td>{{ $org->category->name }}</td>
                             </tr>
                             <tr>

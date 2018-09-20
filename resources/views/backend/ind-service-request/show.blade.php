@@ -78,7 +78,7 @@
                                 <td>{{ $serviceRequest->longitude }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">সেবা বিভাগ</th>
+                                <th scope="row">ক্যাটাগরি</th>
                                 <td>{{ $serviceRequest->category->name }} @if(!$serviceRequest->category->is_confirmed)
                                         <span class="pull-right badge badge-primary">অনুরোধকৃত</span> @endif</td>
                             </tr>
@@ -100,7 +100,7 @@
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                             @if(!$serviceRequest->category->is_confirmed)
                                 <div class="form-group row">
-                                    <label for="category" class="col-4 col-form-label">সেবা বিভাগ
+                                    <label for="category" class="col-4 col-form-label">ক্যাটাগরি
                                         <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-8">
