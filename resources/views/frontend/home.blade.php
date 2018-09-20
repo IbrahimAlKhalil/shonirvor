@@ -2,10 +2,6 @@
 
 @section('title', 'Home')
 
-@section('webpack')
-    <script src="{{ asset('assets/js/home.bundle.js') }}"></script>
-@endsection
-
 @section('content')
     <div class="container my-5">
         <div class="row mb-5">

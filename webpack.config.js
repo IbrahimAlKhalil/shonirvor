@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'home': './resources/assets/js/home.js'
+        'error': './resources/assets/js/error.js'
     },
     output: {
         path: path.resolve(__dirname, "public/assets/js"),

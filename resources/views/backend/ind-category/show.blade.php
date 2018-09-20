@@ -1,4 +1,4 @@
-@extends('layouts.backend.master')
+ @extends('layouts.backend.master')
 
 @section('title', 'ব্যক্তি সেবা প্রদানকারী বিভাগ: ' . $category->name)
 

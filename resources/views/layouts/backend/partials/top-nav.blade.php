@@ -19,6 +19,9 @@
             <li class="nav-item @if(request()->url() == route('individual-category.index') || request()->url() == route('organization-category.index')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-category.index') }}">ক্যাটাগরি</a>
             </li>
+            <li class="nav-item @if(request()->url() == route('backend.area.division')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('backend.area.division') }}">এলাকা</a>
+            </li>
             <li class="nav-item @if(request()->url() == route('notification.show')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('notification.show') }}">নোটিফিকেশন @if($notificationCount)<span class="badge badge-light">{{ $notificationCount }}</span>@endif</a>
             </li>
