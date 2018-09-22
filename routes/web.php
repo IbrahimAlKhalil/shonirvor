@@ -44,6 +44,11 @@ Route::delete('dashboard/area/district/{district}', 'Backend\AreaController@dest
 Route::delete('dashboard/area/thana/{thana}', 'Backend\AreaController@destroyThana')->name('backend.area.thana.destroy');
 Route::delete('dashboard/area/union/{union}', 'Backend\AreaController@destroyUnion')->name('backend.area.union.destroy');
 
+Route::put('dashboard/area/division/{division}', 'Backend\AreaController@updateDivision')->name('backend.area.division.update');
+Route::put('dashboard/area/district/{district}', 'Backend\AreaController@updateDistrict')->name('backend.area.district.update');
+Route::put('dashboard/area/thana/{thana}', 'Backend\AreaController@updateThana')->name('backend.area.thana.update');
+Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')->name('backend.area.union.update');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

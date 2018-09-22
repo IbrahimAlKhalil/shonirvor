@@ -20,20 +20,29 @@ class AreaController extends Controller
 
     public function district(Division $division)
     {
+        $allDivision = Division::select(['id', 'bn_name'])->get();
         $districts = District::select(['id', 'bn_name'])->where('division_id', $division->id)->get();
-        return view('backend.area.district', compact('division', 'districts'));
+
+        return view('backend.area.district', compact('division', 'districts', 'allDivision'));
     }
 
     public function thana(District $district)
     {
+        $allDivision = Division::select(['id', 'bn_name'])->get();
+        $allDistrict = District::select(['id', 'bn_name'])->get();
         $thanas = Thana::select(['id', 'bn_name'])->where('district_id', $district->id)->get();
-        return view('backend.area.thana', compact('district', 'thanas'));
+
+        return view('backend.area.thana', compact('district', 'thanas', 'allDivision', 'allDistrict'));
     }
 
     public function union(Thana $thana)
     {
+        $allDivision = Division::select(['id', 'bn_name'])->get();
+        $allDistrict = District::select(['id', 'bn_name'])->get();
+        $allThana = Thana::select(['id', 'bn_name'])->get();
         $unions = Union::select(['id', 'bn_name'])->where('thana_id', $thana->id)->get();
-        return view('backend.area.union', compact('thana', 'unions'));
+
+        return view('backend.area.union', compact('thana', 'unions', 'allDivision', 'allDistrict', 'allThana'));
     }
 
     public function storeDivision(Request $request)
@@ -73,6 +82,49 @@ class AreaController extends Controller
         $union->save();
 
         return redirect(route('backend.area.union', $thanaId))->with('success', 'নতুন ইউনিয়ন যুক্ত হয়েছে।');
+    }
+
+    public function updateDivision(Division $division, Request $request)
+    {
+        $oldName = $division->bn_name;
+
+        $division->bn_name = $request->input('bn_name');
+        $division->save();
+
+        return back()->with('success', $oldName.' বিভাগটি এডিট হয়েছে।');
+    }
+
+    public function updateDistrict(District $district, Request $request)
+    {
+        $oldName = $district->bn_name;
+
+        $district->division_id = $request->input('division_id');
+        $district->bn_name = $request->input('bn_name');
+        $district->save();
+
+        return back()->with('success', $oldName.' জেলাটি এডিট হয়েছে।');
+    }
+
+    public function updateThana(Thana $thana, Request $request)
+    {
+        $oldName = $thana->bn_name;
+
+        $thana->district_id = $request->input('district_id');
+        $thana->bn_name = $request->input('bn_name');
+        $thana->save();
+
+        return back()->with('success', $oldName.' থানাটি এডিট হয়েছে।');
+    }
+
+    public function updateUnion(Union $union, Request $request)
+    {
+        $oldName = $union->bn_name;
+
+        $union->thana_id = $request->input('thana_id');
+        $union->bn_name = $request->input('bn_name');
+        $union->save();
+
+        return back()->with('success', $oldName.' ইউনিয়নটি এডিট হয়েছে।');
     }
 
     public function destroyDivision(Division $division)

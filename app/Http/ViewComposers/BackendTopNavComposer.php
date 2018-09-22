@@ -2,15 +2,15 @@
 
 namespace App\Http\ViewComposers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
-class TopNavComposer
+class BackendTopNavComposer
 {
     public function compose(View $view)
     {
         $notificationCount = Auth::user()->unreadNotifications->count();
 
-        $view->with('notificationCount', $notificationCount);
+        $view->with(compact('notificationCount'));
     }
 }

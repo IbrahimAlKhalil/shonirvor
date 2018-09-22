@@ -32,12 +32,52 @@
                             <td>{{ $key+1 }}</td>
                             <td><a href="{{ route('backend.area.thana', $district->id) }}">{{ $district->bn_name }}</a></td>
                             <td>
-                                <a href="javascript:" class="mr-2 btn btn-outline-info btn-sm" data-toggle="modal" data-target="#editModel{{ $key }}">
+                                <a href="javascript:" class="mr-2 btn btn-outline-info btn-sm" data-toggle="modal" data-target="#editModal{{ $key }}">
                                     <i class="fa fa-pencil-square-o"></i> এডিট
                                 </a>
                                 <a href="javascript:" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ $key }}">
                                     <i class="fa fa-trash-o"></i> ডিলিট
                                 </a>
+
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="editModal{{ $key }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <p class="modal-title h5" id="exampleModalLabel">{{ $district->bn_name }} জেলাটি এডিট করুন</p>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ route('backend.area.district.update', $district->id) }}" method="post">
+                                                {{ csrf_field() }}
+                                                {{ method_field('put') }}
+                                                <div class="modal-body text-left">
+                                                    <div class="form-group row">
+                                                        <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="division_id" id="division" class="form-control">
+                                                                @foreach($allDivision as $oneDivision)
+                                                                    <option value="{{ $oneDivision->id }}" @if($oneDivision->id == $division->id){{ 'selected' }}@endif>{{ $oneDivision->bn_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="name" class="col-sm-2 col-form-label text-right">নাম:</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" name="bn_name" class="form-control" id="name" value="{{ $district->bn_name }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-top-0">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল করুন</button>
+                                                    <button type="submit" class="btn btn-success">সাবমিট করুন</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Delete Modal -->
                                 <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog">
