@@ -3,7 +3,7 @@
 @section('title', 'Not Found')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/error.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/errors/404.bundle.js') }}"></script>
 @endsection
 
 @section('content')

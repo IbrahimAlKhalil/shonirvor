@@ -2,6 +2,10 @@
 
 @section('title', 'সকল বেক্তিগত সার্ভিস রিকোয়েস্ট')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row mt-4">

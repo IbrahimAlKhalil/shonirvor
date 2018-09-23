@@ -2,6 +2,10 @@
 
 @section('title', 'ব্যক্তি সেবা প্রদানকারী নিবন্ধন')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div style="margin-top: 40px;"></div>
 

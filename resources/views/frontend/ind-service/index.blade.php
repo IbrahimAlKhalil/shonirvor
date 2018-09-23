@@ -2,6 +2,10 @@
 
 @section('title', 'সকল বেক্তিগত সার্ভিস প্রভাইডার')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row my-5">

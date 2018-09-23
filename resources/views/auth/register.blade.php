@@ -1,5 +1,11 @@
 @extends('layouts.auth.master')
 
+@section('title', 'রেজিস্ট্রেশান')
+
+@section('webpack')
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">

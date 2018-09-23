@@ -1,6 +1,10 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Home')
+@section('title', 'হোম')
+
+@section('webpack')
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+@endsection
 
 @section('content')
     <div class="container my-5">
