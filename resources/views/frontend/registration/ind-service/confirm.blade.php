@@ -67,7 +67,7 @@
                         <div class="col-8">
                             <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
                                    class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}"
-                                   placeholder="01xxxxxxxxx" required>
+                                   placeholder="01xxxxxxxxx">
                             @include('components.invalid', ['name' => 'referrer'])
                         </div>
                     </div>
@@ -111,14 +111,14 @@
 
 
                     <div class="form-group row">
-                        <label class="col-4 col-form-label">এরিয়া <span class="text-danger">*</span></label>
+                        <label class="col-4 col-form-label">এলাকা <span class="text-danger">*</span></label>
                         <div class="col-8">
                             <div class="row">
                                 <div class="col-md">
                                     <select name="district" class="form-control">
                                         <option value="">-- জেলা নির্বাচন করুন --</option>
                                         @foreach($districts as $district)
-                                            <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                            <option value="{{ $district->id }}">{{ $district->bn_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -126,7 +126,7 @@
                                     <select name="thana" class="form-control">
                                         <option value="">-- থানা নির্বাচন করুন --</option>
                                         @foreach($thanas as $thana)
-                                            <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                            <option value="{{ $thana->id }}">{{ $thana->bn_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

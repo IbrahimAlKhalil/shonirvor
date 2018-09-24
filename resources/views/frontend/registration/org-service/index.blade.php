@@ -25,7 +25,7 @@
                             class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="name" name="name" type="text" value="{{ old('name') }}"
-                           class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required>
+                           class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}">
                     @include('components.invalid', ['name' => 'name'])
                 </div>
             </div>
@@ -98,7 +98,7 @@
 
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">এরিয়া <span
+                <label class="col-4 col-form-label">এলাকা <span
                             class="text-danger">*</span></label>
                 <div class="col-8">
                     <div class="row">
@@ -106,7 +106,7 @@
                             <select name="district" class="form-control">
                                 <option value="">-- জেলা নির্বাচন করুন --</option>
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                    <option value="{{ $district->id }}">{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                             <select name="thana" class="form-control">
                                 <option value="">-- থানা নির্বাচন করুন --</option>
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                    <option value="{{ $thana->id }}">{{ $thana->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -258,7 +258,7 @@
                             class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                           class="form-control" multiple>
+                           class="form-control">
                     @include('components.invalid', ['name' => 'trade-license'])
                 </div>
             </div>

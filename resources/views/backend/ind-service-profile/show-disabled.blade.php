@@ -10,46 +10,36 @@
                     <figure class="col-md-3">
                         <img class="img-thumbnail rounded" src="{{ asset('storage/' . $provider->user->photo) }}"
                              alt="{{ $provider->user->name }}">
-                        <figcaption class="text-center">{{ $provider->name }}</figcaption>
+                        <figcaption class="text-center">{{ $provider->user->name }}</figcaption>
                     </figure>
                     <div class="col-md-9">
-                        <div class="btn-group-vertical">
-                            <a href="{{ route('profile.backend.organization-service.edit', $provider->id) }}"
-                               class="btn btn-secondary mt-1">আপনার প্রোফাইল সম্পাদনা করুন</a>
-                            {{--<span class="btn btn-secondary btn-warning mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">প্রোফাইলটী সাময়িকের বন্ধ করে দিন</span>--}}
-                            <span class="btn btn-secondary btn-danger rounded-right mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">প্রোফাইলটী মুছে দিন</span>
-
-                            <form id="deactivate-account"
-                                  action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <input type="hidden" name="type" value="deactivate">
-                            </form>
-                            <form id="remove-account"
-                                  action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <input type="hidden" name="type" value="remove">
-                            </form>
-                        </div>
                     </div>
+                    <div class="badge badge-danger">আপনার প্রোফাইলটি নিষ্ক্রিয়</div>
                     <table class="table table-striped table-bordered table-hover table-sm">
                         <tbody>
                         <tr>
-                            <th scope="row">নাম (ব্যাক্তিগত)</th>
-                            <td><a href="#">{{ $provider->user->name }}</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">মোবাইল</th>
+                            <th scope="row">কাজের মোবাইল নম্বর</th>
                             <td>{{ $provider->mobile }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">ইমেইল</th>
+                            <th scope="row">ব্যক্তিগত মোবাইল নম্বর</th>
+                            <td>{{ $provider->user->mobile }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">কাজের ইমেইল</th>
+                            <td>{{ $provider->user->email }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">ব্যক্তিগত ইমেইল</th>
                             <td>{{ $provider->email }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">বয়স</th>
+                            <td>{{ $provider->user->age }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
+                            <td>{{ $provider->user->qualification }}</td>
                         </tr>
                         <tr>
                             <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
@@ -61,14 +51,12 @@
                         </tr>
                         <tr>
                             <th scope="row">থানা</th>
-                            <td>{{ $provider->thana->bn_name}} @if($provider->thana->is_pending) <span
-                                        class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            <td>{{ $provider->thana->bn_name}}</td>
                         </tr>
 
                         <tr>
                             <th scope="row">ইউনিয়ন</th>
-                            <td>{{ $provider->union->bn_name}}  @if($provider->union->is_pending) <span
-                                        class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                            <td>{{ $provider->union->bn_name}}</td>
                         </tr>
                         <tr>
                             <th scope="row">ঠিকানা</th>
@@ -93,8 +81,8 @@
                     <h3 class="my-4 col-12">নথিপত্র</h3>
                     <div class="col-md-3">
                         {{--<span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>--}}
-                        <a href="{{ asset('storage/' . $provider->trade_license) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $provider->trade_license) }}"
+                        <a href="{{ asset('storage/' . $provider->experience_certificate) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $provider->experience_certificate) }}"
                                  class="img-responsive img-thumbnail">
                         </a>
                     </div>

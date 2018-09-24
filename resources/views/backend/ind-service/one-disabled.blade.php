@@ -24,11 +24,11 @@
                                 <td>{{ $ind->user->name }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">কাজের ফোন নম্বর</th>
+                                <th scope="row">কাজের মোবাইল নম্বর</th>
                                 <td>{{ $ind->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">ব্যক্তিগত ফোন নম্বর</th>
+                                <th scope="row">ব্যক্তিগত মোবাইল নম্বর</th>
                                 <td>{{ $ind->user->mobile }}</td>
                             </tr>
                             <tr>
@@ -111,12 +111,21 @@
                 <div class="row">
                     <h3 class="my-4 col-12">নথিপত্র</h3>
                     <div class="col-md-3">
-                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                        {{--<span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>--}}
                         <a href="{{ asset('storage/' . $ind->experience_certificate) }}" target="_blank">
                             <img src="{{ asset('storage/' . $ind->experience_certificate) }}"
                                  class="img-responsive img-thumbnail">
                         </a>
                     </div>
+
+                    @foreach($ind->user->identities as $identity)
+                        <div class="col-md-3">
+                            <a href="{{ asset('storage/' . $identity->path) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $identity->path) }}"
+                                     class="img-responsive img-thumbnail">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="row">

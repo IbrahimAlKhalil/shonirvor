@@ -210,10 +210,15 @@ class IndServiceRegistrationController extends Controller
     public function update(UpdateInd $request, $id)
     {
 
-        DB::beginTransaction();
-
         $user = Auth::user();
         $ind = Ind::find($id);
+
+        // TODO:: Move this validation to a requests class
+        if ($ind->user_id != Auth::id()) {
+            return redirect(route('individual-service-registration.index'));
+        }
+
+        DB::beginTransaction();
 
         // handle category  and sub-category request
         // TODO:: Do some custom validation for category and subcategory
@@ -355,12 +360,17 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'Done!');
+        return back()->with('success', 'সম্পন্ন!');
     }
 
     public function edit($id)
     {
         $ind = Ind::find($id);
+
+        // TODO:: Move this validation to a requests class
+        if ($ind->user_id != Auth::id()) {
+            return redirect(route('individual-service-registration.index'));
+        }
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();

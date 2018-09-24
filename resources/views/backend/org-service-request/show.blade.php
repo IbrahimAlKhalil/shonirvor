@@ -104,10 +104,13 @@
                                             ক্যাটাগরি {{ en2bnNumber($loop->iteration) }} <span
                                                     class="text-danger">*</span></label>
                                         <div class="col-8">
-                                            <input id="sub-categories" name="sub-categories[]" type="text"
+                                            <input id="sub-categories"
+                                                   name="sub-categories[{{ $loop->iteration-1 }}][name]" type="text"
                                                    value="{{ oldOrData('sub-categories.' . $key, $subCategory->name) }}"
                                                    class="form-control{{ $errors->has('sub-categories') ? ' is-invalid' : '' }}"
                                                    required>
+                                            <input type="hidden" value="{{ $subCategory->id }}"
+                                                   name="sub-categories[{{ $loop->iteration-1 }}][id]">
                                             @include('components.invalid', ['name' => 'sub-categories'])
                                         </div>
                                     </div>
@@ -149,9 +152,9 @@
 
                             <div class="btn-group mx-auto" role="group">
                                 <span class="btn btn-secondary btn-success"
-                                      onclick="document.getElementById('approve-request').submit();">Approve</span>
+                                      onclick="document.getElementById('approve-request').submit();">গ্রহন করুন</span>
                                 <span class="btn btn-secondary btn-danger rounded-right"
-                                      onclick="document.getElementById('reject-request').submit();">Reject</span>
+                                      onclick="document.getElementById('reject-request').submit();">প্রত্যাখ্যান করুন</span>
                                 <form id="reject-request"
                                       action="{{ route('organization-service-request.destroy', $serviceRequest->id) }}"
                                       method="post">

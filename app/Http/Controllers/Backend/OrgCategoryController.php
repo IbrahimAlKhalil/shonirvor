@@ -34,7 +34,7 @@ class OrgCategoryController extends Controller
         ServiceType::getThe('org')->categories()->save($category);
 
         DB::commit();
-        return redirect(route('organization-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
+        return redirect(route('organization-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" সফলভাবে যুক্ত হয়েছে!');
     }
 
 
@@ -64,7 +64,7 @@ class OrgCategoryController extends Controller
         $category->delete();
 
         DB::commit();
-        return redirect(route('organization-category.index'))->with('success', 'Category Deleted Successfully!');
+        return redirect(route('organization-category.index'))->with('success', 'ক্যাটাগরিটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 
     private function navs()

@@ -14,20 +14,10 @@
                     </figure>
                     <div class="col-md-9">
                         <div class="btn-group-vertical">
-                            <a href="{{ route('profile.backend.organization-service.edit', $provider->id) }}"
-                               class="btn btn-secondary mt-1">আপনার প্রোফাইল সম্পাদনা করুন</a>
-                            {{--<span class="btn btn-secondary btn-warning mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">প্রোফাইলটী সাময়িকের বন্ধ করে দিন</span>--}}
+                            <a href="{{ route('organization-service-registration.edit', $provider->id) }}"
+                               class="btn btn-primary mt-1">আপনার অনুরোধ সম্পাদনা করুন</a>
                             <span class="btn btn-secondary btn-danger rounded-right mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">প্রোফাইলটী মুছে দিন</span>
-
-                            <form id="deactivate-account"
-                                  action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <input type="hidden" name="type" value="deactivate">
-                            </form>
+                                  onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">অনুরোধটী মুছে দিন</span>
                             <form id="remove-account"
                                   action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
                                   method="post">
@@ -37,6 +27,7 @@
                             </form>
                         </div>
                     </div>
+                    <div class="badge badge-secondary">আপনার রেজিস্ট্রেশন এখনও প্রক্রিয়াধীন আছে</div>
                     <table class="table table-striped table-bordered table-hover table-sm">
                         <tbody>
                         <tr>

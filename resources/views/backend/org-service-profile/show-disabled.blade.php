@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', $provider->user->name)
+@section('title', $provider->name)
 
 @section('content')
     <div class="container my-5">
@@ -13,30 +13,8 @@
                         <figcaption class="text-center">{{ $provider->name }}</figcaption>
                     </figure>
                     <div class="col-md-9">
-                        <div class="btn-group-vertical">
-                            <a href="{{ route('profile.backend.organization-service.edit', $provider->id) }}"
-                               class="btn btn-secondary mt-1">আপনার প্রোফাইল সম্পাদনা করুন</a>
-                            {{--<span class="btn btn-secondary btn-warning mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">প্রোফাইলটী সাময়িকের বন্ধ করে দিন</span>--}}
-                            <span class="btn btn-secondary btn-danger rounded-right mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">প্রোফাইলটী মুছে দিন</span>
-
-                            <form id="deactivate-account"
-                                  action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <input type="hidden" name="type" value="deactivate">
-                            </form>
-                            <form id="remove-account"
-                                  action="{{ route('profile.backend.organization-service.destroy', $provider->id) }}"
-                                  method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <input type="hidden" name="type" value="remove">
-                            </form>
-                        </div>
                     </div>
+                    <div class="badge badge-danger">আপনার প্রোফাইলটি নিষ্ক্রিয়</div>
                     <table class="table table-striped table-bordered table-hover table-sm">
                         <tbody>
                         <tr>

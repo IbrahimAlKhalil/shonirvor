@@ -1,6 +1,6 @@
-@extends('layouts.frontend.master')
+@extends('layouts.backend.master')
 
-@section('title', 'Edit Individual Service Provider Request')
+@section('title', 'Edit Your Individual Service Provider Profile')
 
 @section('content')
     <div style="margin-top: 40px;"></div>
@@ -12,7 +12,7 @@
         @include('components.success')
 
         <form method="post" enctype="multipart/form-data"
-              action="{{ route('individual-service-registration.update', $ind->id) }}">
+              action="{{ route('profile.backend.individual-service.update', $provider->id) }}">
             {{ method_field('put') }}
             {{ csrf_field() }}
 
@@ -20,37 +20,17 @@
                 <label for="mobile" class="col-4 col-form-label">মোবাইল নম্বর <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="mobile" name="mobile" type="number"
-                           value="{{ oldOrData('mobile', $ind->mobile) }}"
+                           value="{{ oldOrData('mobile', $provider->mobile) }}"
                            class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
                     @include('components.invalid', ['name' => 'mobile'])
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="referrer" class="col-4 col-form-label">রেফারার</label>
-                <div class="col-8">
-                    <input id="referrer" name="referrer" type="number"
-                           value="{{ oldOrData('referrer', $ind->referrer) }}"
-                           class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}">
-                    @include('components.invalid', ['name' => 'referrer'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="personal-email" class="col-4 col-form-label">ব্যক্তিগত ইমেইল</label>
-                <div class="col-8">
-                    <input id="personal-email" name="personal-email" type="text"
-                           value="{{ oldOrData('personal-email', $ind->user->email) }}"
-                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'personal-email'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="email" class="col-4 col-form-label">কাজের ইমেইল</label>
+                <label for="email" class="col-4 col-form-label">ইমেইল</label>
                 <div class="col-8">
                     <input id="email" name="email" type="text"
-                           value="{{ oldOrData('email', $ind->email) }}"
+                           value="{{ oldOrData('email', $provider->email) }}"
                            class="form-control @if($errors->has('email')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'email'])
                 </div>
@@ -60,7 +40,7 @@
                 <label for="website" class="col-4 col-form-label">ওয়েবসাইট</label>
                 <div class="col-8">
                     <input id="website" name="website" type="url"
-                           value="{{ oldOrData('website', $ind->website) }}"
+                           value="{{ oldOrData('website', $provider->website) }}"
                            class="form-control @if($errors->has('website')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'website'])
                 </div>
@@ -70,7 +50,7 @@
                 <label for="facebook" class="col-4 col-form-label">ফেসবুক</label>
                 <div class="col-8">
                     <input id="facebook" name="facebook" type="url"
-                           value="{{ oldOrData('facebook', $ind->facebook) }}"
+                           value="{{ oldOrData('facebook', $provider->facebook) }}"
                            class="form-control @if($errors->has('facebook')) is-invalid @endif">
                     @include('components.invalid', ['name' => 'facebook'])
                 </div>
@@ -84,7 +64,7 @@
                             <select name="district" class="form-control">
                                 <option value="">-- জেলা নির্বাচন করুন --</option>
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}" {{ selectOpt($ind->district->id, $district->id) }}>{{ $district->bn_name }}</option>
+                                    <option value="{{ $district->id }}" {{ selectOpt($provider->district->id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -92,7 +72,7 @@
                             <select name="thana" class="form-control">
                                 <option value="">-- থানা নির্বাচন করুন --</option>
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}" {{ selectOpt($ind->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
+                                    <option value="{{ $thana->id }}" {{ selectOpt($provider->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -100,22 +80,22 @@
                             <select name="union" class="form-control">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
-                                    <option value="{{ $union->id }}" {{ selectOpt($ind->union->id, $union->id) }}>{{ $union->bn_name }}</option>
+                                    <option value="{{ $union->id }}" {{ selectOpt($provider->union->id, $union->id) }}>{{ $union->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-thana" class="mt-2 no-something"
-                           name="no-thana" {{ checkBox($ind->thana->is_pending) }}>
+                           name="no-thana" {{ checkBox($provider->thana->is_pending) }}>
                     <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $ind->thana->bn_name }}">
+                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $provider->thana->bn_name }}">
                     <br>
                     <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-union" class="mt-2 no-something"
-                           name="no-union" {{ checkBox($ind->union->is_pending) }}>
+                           name="no-union" {{ checkBox($provider->union->is_pending) }}>
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।" value="{{ $ind->union->bn_name }}">
+                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।" value="{{ $provider->union->bn_name }}">
                 </div>
             </div>
 
@@ -123,7 +103,7 @@
                 <label for="address" class="col-4 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $ind->address) }}</textarea>
+                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $provider->address) }}</textarea>
                     @include('components.invalid', ['name' => 'address'])
                 </div>
             </div>
@@ -132,19 +112,10 @@
                 <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
                 <div class="col-8">
                     <select id="category" name="category"
+                            disabled
                             class="form-control @if($errors->has('category')) is-invalid @endif">
-                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
-                        @endforeach
+                        <option>{{ $provider->category->name }}</option>
                     </select>
-
-                    @include('components.invalid', ['name' => 'category'])
-                    <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                    <input type="checkbox" id="no-category" name="no-category"
-                           class="mt-2 no-something" {{ checkBox(!$ind->category->is_confirmed) }}>
-                    <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।" value="{{ $ind->category->name }}">
                 </div>
             </div>
 
@@ -156,7 +127,7 @@
                     <select id="sub-categories" name="sub-categories[]"
                             class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
                         <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
-                        @php($selectedSubCategories = $ind->subCategories->pluck('id')->toArray())
+                        @php($selectedSubCategories = $provider->subCategories->pluck('id')->toArray())
 
                         @foreach($subCategories as $subCategory)
                             <option value="{{ $subCategory->id }}" {{ in_array($subCategory->id, $selectedSubCategories)?'selected':'' }}>{{ $subCategory->name }}</option>
@@ -164,7 +135,7 @@
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
 
-                    @php($requestedSubCategories = $ind->subCategories('requested')->get())
+                    @php($requestedSubCategories = $provider->subCategories('requested')->get())
                     <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                            class="mt-2 no-something" {{ checkBox($requestedSubCategories->count() >= 1) }}>
@@ -187,11 +158,11 @@
             <div class="form-group row">
                 <label class="col-4 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
                 <div class="col-8">
-                    @php($indWorkMethods = $ind->workMethods->pluck('id')->toArray())
+                    @php($providerWorkMethods = $provider->workMethods->pluck('id')->toArray())
                     @foreach($workMethods as $workMethod)
                         <div class="accordion">
                             <div class="card mt-2">
-                                @php($checked = checkBox(in_array($workMethod->id, $indWorkMethods)))
+                                @php($checked = checkBox(in_array($workMethod->id, $providerWorkMethods)))
                                 <div class="card-header pb-0 pt-2"><label
                                             for="work-{{ $workMethod->id }}"
                                             data-toggle="collapse"
@@ -213,7 +184,7 @@
                                                class="form-control"
                                                id="work-price-{{ $workMethod->id }}"
                                                name="work-methods[{{ $loop->iteration-1 }}][rate]"
-                                               value="@if($checked){{ $ind->workMethods->find($workMethod->id)->pivot->rate }}@endif">
+                                               value="@if($checked){{ $provider->workMethods->find($workMethod->id)->pivot->rate }}@endif">
                                     </div>
                                 </div>
                             </div>
@@ -224,19 +195,10 @@
             </div>
 
             <div class="form-group row">
-                <label for="age" class="col-4 col-form-label">বয়স <span class="text-danger">*</span></label>
-                <div class="col-8">
-                    <input id="age" name="age" type="number"
-                           value="{{ oldOrData('age', $ind->user->age) }}" required="required"
-                           class="form-control @if($errors->has('age')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'age'])
-                </div>
-            </div>
-            <div class="form-group row">
                 <label for="qualification" class="col-4 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
                 <div class="col-8">
                     <input id="qualification" name="qualification" type="text" class="form-control here"
-                           value="{{ oldOrData('qualification', $ind->user->qualification) }}">
+                           value="{{ oldOrData('qualification', $provider->user->qualification) }}">
                 </div>
             </div>
             <div class="form-group row">
@@ -244,22 +206,11 @@
                             class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="nid" name="nid" type="number"
-                           value="{{ oldOrData('nid', $ind->user->nid) }}"
+                           value="{{ oldOrData('nid', $provider->user->nid) }}"
                            class="form-control @if($errors->has('nid')) is-invalid @endif" required>
                     @include('components.invalid', ['name' => 'nid'])
                 </div>
             </div>
-
-            @if(!$isPicExists)
-                <div class="form-group row">
-                    <label for="photo" class="col-4 col-form-label">প্রোফাইল ছবি</label>
-                    <div class="col-8">
-                        <input id="photo" name="photo" type="file" accept="image/*"
-                               class="form-control @if($errors->has('photo')) is-invalid @endif">
-                        @include('components.invalid', ['name' => 'photo'])
-                    </div>
-                </div>
-            @endif
 
             <div class="form-group row">
                 <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span

@@ -9,19 +9,19 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="{{ asset('storage/' . $org->user->photo) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $org->user->photo) }}"
-                                 class="img-responsive img-thumbnail" alt="{{ $org->user->name }}">
+                        <a href="{{ asset('storage/' . $org->logo) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $org->logo) }}"
+                                 class="img-responsive img-thumbnail" alt="{{ $org->name }}">
                         </a>
                     </div>
 
                     <div class="col-md-8">
-                        <h4 class="mb-3">{{ $org->user->name }}</h4>
+                        <h4 class="mb-3">{{ $org->name }}</h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
-                                <th scope="row">নাম</th>
-                                <td>{{ $org->name }}</td>
+                                <th scope="row">নাম (ব্যাক্তিগত)</th>
+                                <td><a href="#">{{ $org->user->name }}</a></td>
                             </tr>
                             <tr>
                                 <th scope="row">মোবাইল</th>
@@ -97,12 +97,20 @@
                 <div class="row">
                     <h3 class="my-4 col-12">নথিপত্র</h3>
                     <div class="col-md-3">
-                        <span class="text-muted">ট্রেড লাইসেন্স</span>
+                        {{--<span class="text-muted">ট্রেড লাইসেন্স</span>--}}
                         <a href="{{ asset('storage/' . $org->trade_license) }}" target="_blank">
                             <img src="{{ asset('storage/' . $org->trade_license) }}"
                                  class="img-responsive img-thumbnail">
                         </a>
                     </div>
+                    @foreach($org->user->identities as $identity)
+                        <div class="col-md-3">
+                            <a href="{{ asset('storage/' . $identity->path) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $identity->path) }}"
+                                     class="img-responsive img-thumbnail">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="row">
