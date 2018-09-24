@@ -2,14 +2,16 @@
 
 @section('title', 'সকল প্রাতিষ্ঠানিক ক্যাটাগরি')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('organization-category.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('organization-category.index')){{ 'active' }}@endif">organization</a>
-                <a href="{{ route('organization-category.index') }}"
-                   class="btn btn-secondary @if(request()->url() == route('organization-category.index')){{ 'active' }}@endif">Organization</a>
+                <a href="{{ route('individual-category.index') }}" class="btn btn-secondary">Individual</a>
+                <a href="{{ route('organization-category.index') }}" class="btn btn-secondary active">Organization</a>
             </div>
         </div>
 

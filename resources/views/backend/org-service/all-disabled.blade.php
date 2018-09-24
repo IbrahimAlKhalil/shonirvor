@@ -2,6 +2,10 @@
 
 @section('title', 'সকল বাতিল প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row mt-4">

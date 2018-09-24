@@ -13,20 +13,20 @@ class CreateBdgeocodeTables extends Migration
 
         Schema::create('divisions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name')->unique()->nullable();
             $table->string('bn_name')->unique();
         });
 
         Schema::create('districts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('division_id');
-            $table->string('name')->unique();
+            $table->string('name')->unique()->nullable();
             $table->string('bn_name')->unique();
             $table->double('lat')->nullable();
             $table->double('lon')->nullable();
             $table->string('website')->nullable();
 
-            $table->foreign('division_id')->references('id')->on('divisions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('division_id')->references('id')->on('divisions')->onUpdate('cascade');
         });
 
         Schema::create('thanas', function (Blueprint $table) {
@@ -36,7 +36,7 @@ class CreateBdgeocodeTables extends Migration
             $table->string('bn_name');
             $table->boolean('is_pending')->default(0);
 
-            $table->foreign('district_id')->references('id')->on('districts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('district_id')->references('id')->on('districts')->onUpdate('cascade');
         });
 
         Schema::create('unions', function (Blueprint $table) {
@@ -46,7 +46,7 @@ class CreateBdgeocodeTables extends Migration
             $table->string('bn_name');
             $table->boolean('is_pending')->default(0);
 
-            $table->foreign('thana_id')->references('id')->on('thanas')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('thana_id')->references('id')->on('thanas')->onUpdate('cascade');
         });
 
         DB::commit();

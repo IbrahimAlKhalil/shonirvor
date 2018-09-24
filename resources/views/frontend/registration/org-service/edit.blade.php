@@ -2,6 +2,10 @@
 
 @section('title', 'সেবা প্রদানকারী অনুরোধ সম্পাদনা করুন')
 
+@section('webpack')
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+@endsection
+
 @section('content')
     <div style="margin-top: 40px;"></div>
 

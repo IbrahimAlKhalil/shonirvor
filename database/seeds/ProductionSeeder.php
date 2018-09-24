@@ -2,14 +2,17 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Sandofvega\Bdgeocode\Seeds\BdgeocodeSeeder;
 
 class ProductionSeeder extends Seeder
 {
     public function run()
     {
+        $this->call(BdgeocodeSeeder::class);
+
         /***** Creating Roles *****/
         DB::table('roles')->insert([
-            ['name' => 'superadmin'],
+            ['name' => 'admin'],
             ['name' => 'ind'],
             ['name' => 'org'],
         ]);

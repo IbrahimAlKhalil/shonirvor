@@ -1,6 +1,10 @@
-@extends('layouts.backend.master')
+ @extends('layouts.backend.master')
 
 @section('title', 'ব্যক্তি সেবা প্রদানকারী ক্যাটাগরি: ' . $category->name)
+
+ @section('webpack')
+     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+ @endsection
 
 @section('content')
     <div class="container">

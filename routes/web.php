@@ -21,10 +21,30 @@ Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceContr
 Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
 Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
 
-Route::get('notifications', 'NotificationController@show')->name('notification.show');
-Route::post('notification/send/{user}', 'NotificationController@send')->name('notification.send');
+Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
+Route::post('dashboard/notification/send/{user}', 'NotificationController@send')->name('notification.send');
 
-Route::post('sms/send/{user}', 'SmsController@send')->name('sms.send');
+Route::post('dashboard/sms/send/{user}', 'SmsController@send')->name('sms.send');
+
+Route::get('dashboard/area/division', 'Backend\AreaController@division')->name('backend.area.division');
+Route::get('dashboard/area/district/{division}', 'Backend\AreaController@district')->name('backend.area.district');
+Route::get('dashboard/area/thana/{district}', 'Backend\AreaController@thana')->name('backend.area.thana');
+Route::get('dashboard/area/union/{thana}', 'Backend\AreaController@union')->name('backend.area.union');
+
+Route::post('dashboard/area/division', 'Backend\AreaController@storeDivision')->name('backend.area.division.store');
+Route::post('dashboard/area/district/{divisionId}', 'Backend\AreaController@storeDistrict')->name('backend.area.district.store');
+Route::post('dashboard/area/thana/{districtId}', 'Backend\AreaController@storeThana')->name('backend.area.thana.store');
+Route::post('dashboard/area/union/{thanaId}', 'Backend\AreaController@storeUnion')->name('backend.area.union.store');
+
+Route::delete('dashboard/area/division/{division}', 'Backend\AreaController@destroyDivision')->name('backend.area.division.destroy');
+Route::delete('dashboard/area/district/{district}', 'Backend\AreaController@destroyDistrict')->name('backend.area.district.destroy');
+Route::delete('dashboard/area/thana/{thana}', 'Backend\AreaController@destroyThana')->name('backend.area.thana.destroy');
+Route::delete('dashboard/area/union/{union}', 'Backend\AreaController@destroyUnion')->name('backend.area.union.destroy');
+
+Route::put('dashboard/area/division/{division}', 'Backend\AreaController@updateDivision')->name('backend.area.division.update');
+Route::put('dashboard/area/district/{district}', 'Backend\AreaController@updateDistrict')->name('backend.area.district.update');
+Route::put('dashboard/area/thana/{thana}', 'Backend\AreaController@updateThana')->name('backend.area.thana.update');
+Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')->name('backend.area.union.update');
 
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');

@@ -1,6 +1,10 @@
-@extends('layouts.frontend.master')
+@extends('layouts.backend.master')
 
 @section('title', 'নোটিফিকেশন')
+
+@section('webpack')
+    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+@endsection
 
 @section('content')
     <div class="container my-5">
