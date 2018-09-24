@@ -14,7 +14,7 @@
                     </figure>
                     <div class="col-md-9">
                         <div class="btn-group-vertical">
-                            <a href="{{ route('profile.backend.individual-service.edit', $provider->id) }}"
+                            <a href="{{ route('individual-service-registration.edit', $provider->id) }}"
                                class="btn btn-primary mt-1">আপনার অনুরোধ সম্পাদনা করুন</a>
                             <span class="btn btn-secondary btn-danger rounded-right mt-1"
                                   onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">অনুরোধটী মুছে দিন</span>
@@ -96,7 +96,6 @@
                 <div class="row">
                     <h3 class="my-4 col-12">নথিপত্র</h3>
                     <div class="col-md-3">
-                        {{--<span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>--}}
                         <a href="{{ asset('storage/' . $provider->experience_certificate) }}" target="_blank">
                             <img src="{{ asset('storage/' . $provider->experience_certificate) }}"
                                  class="img-responsive img-thumbnail">

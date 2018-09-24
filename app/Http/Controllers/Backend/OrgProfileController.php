@@ -25,6 +25,10 @@ class OrgProfileController extends Controller
             return redirect(route('organization-service-registration.index'));
         }
 
+        if ($provider->edit()->exists()) {
+            return back()->with('error', 'ইতোমধ্যেই আপনার প্রোফাইলের একটি সম্পাদনা প্রক্রিয়াধীন আছে');
+        }
+
         $categories = Category::getAll('org')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('org')->get();

@@ -26,9 +26,9 @@ class IndProfileController extends Controller
         if ($provider->user_id != Auth::id()) {
             return redirect(route('individual-service-registration.index'));
         }
-        /*if ($provider->edit()->exists()) {
+        if ($provider->edit()->exists()) {
             return back()->with('error', 'ইতোমধ্যেই আপনার প্রোফাইলের একটি সম্পাদনা প্রক্রিয়াধীন আছে');
-        }*/
+        }
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
