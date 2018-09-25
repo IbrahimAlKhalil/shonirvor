@@ -12,7 +12,7 @@
             <div class="col-md-9">
                 <div class="row">
                     <figure class="col-md-3">
-                        <img class="img-thumbnail rounded" src="{{ asset('storage/' . $provider->user->photo) }}"
+                        <img class="img-thumbnail rounded" src="{{ asset('storage/' . $provider->logo) }}"
                              alt="{{ $provider->user->name }}">
                         <figcaption class="text-center">{{ $provider->name }}</figcaption>
                     </figure>
@@ -20,8 +20,6 @@
                         <div class="btn-group-vertical">
                             <a href="{{ route('profile.backend.organization-service.edit', $provider->id) }}"
                                class="btn btn-secondary mt-1">আপনার প্রোফাইল সম্পাদনা করুন</a>
-                            {{--<span class="btn btn-secondary btn-warning mt-1"
-                                  onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">প্রোফাইলটী সাময়িকের বন্ধ করে দিন</span>--}}
                             <span class="btn btn-secondary btn-danger rounded-right mt-1"
                                   onclick="confirm('Are You Sure?') && document.getElementById('remove-account').submit()">প্রোফাইলটী মুছে দিন</span>
 

@@ -85,6 +85,7 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     Route::resource('organization-sub-category', 'OrgSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['organization-sub-category' => 'sub_category']]);
 
     Route::name('profile.backend.')->prefix('profile')->group(function () {
+        Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
         Route::resource('individual-service', 'IndProfileController', ['only' => ['show', 'destroy', 'update', 'edit', 'updatePending'], 'parameters' => ['individual-service' => 'provider']]);
         Route::resource('organization-service', 'OrgProfileController', ['only' => ['show', 'destroy', 'update', 'edit'], 'parameters' => ['organization-service' => 'provider']]);
     }, '');

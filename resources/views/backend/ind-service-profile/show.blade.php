@@ -20,7 +20,8 @@
                     <div class="col-md-9">
                         <div class="btn-group-vertical">
                             <a href="{{ route('profile.backend.individual-service.edit', $provider->id) }}"
-                               class="btn btn-secondary mt-1 @if($provider->edit()->exists()){{ 'disabled' }}@endif">আপনার প্রোফাইল সম্পাদনা করুন</a>
+                               class="btn btn-secondary mt-1 @if($provider->edit()->exists()){{ 'disabled' }}@endif">আপনার
+                                প্রোফাইল সম্পাদনা করুন</a>
                             {{--<span class="btn btn-secondary btn-warning mt-1"
                                   onclick="confirm('Are You Sure?') && document.getElementById('deactivate-account').submit()">প্রোফাইলটী সাময়িকের বন্ধ করে দিন</span>--}}
                             <span class="btn btn-secondary btn-danger rounded-right mt-1"
@@ -150,6 +151,11 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         @include('components.feedback-counter', compact('countFeedbacks'))
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.current-status', ['action' => route('profile.backend.individual-service.update-status'), 'isAvailable' => $provider->is_available, 'message' => $provider->status, 'id'=> $provider->id])
                     </div>
                 </div>
             </div>

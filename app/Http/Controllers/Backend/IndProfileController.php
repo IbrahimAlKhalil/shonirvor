@@ -148,6 +148,22 @@ class IndProfileController extends Controller
         return back()->with('success', 'সম্পন্ন!');
     }
 
+    public function updateStatus(Request $request)
+    {
+        // TODO:: Validation will be needed
+        $provider = Ind::find($request->post('id'));
+        $provider->status = $request->post('message');
+        switch ($request->post('is-available')) {
+            case 'yes':
+                $provider->is_available = 1;
+                break;
+            case 'no':
+                $provider->is_available = 0;
+        }
+        $provider->save();
+        return back()->with('success', 'সম্পন্ন!');
+    }
+
     public function destroy(Request $request, Ind $provider)
     {
         // TODO:: Some validation will be needed, make sure that someone can't reach to this method without permission

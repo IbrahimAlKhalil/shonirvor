@@ -153,7 +153,7 @@ class OrgServiceRegistrationController extends Controller
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
         }
         if ($request->hasFile('logo')) {
-            $org->trade_license = $request->file('logo')->store('org/' . $org->id);
+            $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
 

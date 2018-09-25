@@ -61,6 +61,20 @@ function checkBox($data)
 }
 
 /**
+ * @param $data integer|boolean
+ * @return string
+ */
+
+function isActive($data)
+{
+    if (boolval($data)) {
+        return 'active';
+    }
+
+    return '';
+}
+
+/**
  * Returns array of random elements from given array
  *
  * @param $array array
