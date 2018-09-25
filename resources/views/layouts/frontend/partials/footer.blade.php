@@ -1,4 +1,4 @@
-        <footer class="container">
+        <footer class="container-fluid">
             <hr>
             <p class="float-right go-top">
                 <a href="#">
@@ -7,7 +7,7 @@
                     </button>
                 </a>
             </p>
-            <p>© {{ date('Y') }} {{ config('app.name') }} - সর্বস্বত্ব সংরক্ষিত · <a href="javascript:">গোপনীয়তার নীতি</a> · <a href="javascript:">ব্যবহারের শর্তাবলী</a></p>
+            <p>© {{ date('Y') }} {{ config('app.name') }} - সর্বস্বত্ব সংরক্ষিত</p>
         </footer>
     </body>
 </html>

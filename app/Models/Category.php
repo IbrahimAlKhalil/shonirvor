@@ -9,11 +9,25 @@ class Category extends Model
 
     protected $fillable = ['name', 'is_confirmed'];
 
+    public function type()
+    {
+        return $this->belongsTo(ServiceType::class, 'service_type_id');
+    }
+
+    public function indServices()
+    {
+        return $this->hasMany(Ind::class);
+    }
+
+    public function orgServices()
+    {
+        return $this->hasMany(Org::class);
+    }
+
     /**
      * @param $status
      * @return object
      * */
-
     public function subCategories($status = null)
     {
         $result = $this->hasMany(SubCategory::class);
@@ -33,7 +47,6 @@ class Category extends Model
      * @param $serviceType string
      * @return object|null
      * */
-
     public static function getAll($serviceType)
     {
         $result = null;
