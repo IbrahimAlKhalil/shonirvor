@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /**
  * Check if form old data exist
  *
@@ -109,4 +111,22 @@ function randomElements($array, $howMany = 2)
     }
 
     return $returnArray;
+}
+
+// ************ helper function for api ************** //
+
+/**
+ * Checks what if route has an "id" parameter and return that id if exists
+ *
+ * @return int|boolean
+ */
+
+function theId()
+{
+    $result = false;
+    if (array_key_exists('id', Route::current()->parameters)) {
+        $result = Route::current()->parameters['id'];
+    }
+
+    return $result;
 }

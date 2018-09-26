@@ -190,11 +190,18 @@
                                 </div>
                                 <div id="work-method-{{ $workMethod->id }}" class="collapse">
                                     <div class="card-body">
-                                        <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="work-price-{{ $workMethod->id }}"
-                                               name="work-methods[{{ $loop->iteration-1 }}][rate]">
+                                        <div class="form-group">
+                                            <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="work-price-{{ $workMethod->id }}"
+                                                   name="work-methods[{{ $loop->iteration-1 }}][rate]">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="is-negotiable-{{ $workMethod->id }}">আলোচনা সাপেক্ষে</label>
+                                            <input type="checkbox" id="is-negotiable-{{ $workMethod->id }}"
+                                                   name="work-methods[{{ $loop->iteration-1 }}][is-negotiable]">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +249,7 @@
             @endif
 
             <div class="form-group row">
-                <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ  <span
+                <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                             class="text-danger">*</span></label>
                 <div class="col-8">
                     <input id="identities" name="identities[]" type="file" accept="image/*"

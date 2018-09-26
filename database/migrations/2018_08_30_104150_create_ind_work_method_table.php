@@ -13,6 +13,7 @@ class CreateIndWorkMethodTable extends Migration
             $table->unsignedInteger('ind_id');
             $table->unsignedInteger('work_method_id');
             $table->float('rate');
+            $table->boolean('is_negotiable')->default(0);
             $table->timestamps();
 
             $table->foreign('ind_id')

@@ -31,10 +31,11 @@ class Category extends Model
 
     /**
      * @param $serviceType string
+     * @param $isConfirmed boolean|integer
      * @return object|null
      * */
 
-    public static function getAll($serviceType)
+    public static function getAll($serviceType, $isConfirmed = 1)
     {
         $result = null;
 
@@ -42,7 +43,9 @@ class Category extends Model
             $result = ServiceType::where('name', $serviceType)
                 ->first()
                 ->categories()
-                ->where('is_confirmed', 1);
+                ->where('is_confirmed', $isConfirmed);
+        } else {
+            $result = Category::where('is_confirmed', $isConfirmed);
         }
 
         return $result;

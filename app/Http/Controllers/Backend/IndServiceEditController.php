@@ -86,7 +86,8 @@ class IndServiceEditController extends Controller
             array_key_exists('id', $workMethod) && array_push($workMethods, [
                 'work_method_id' => $workMethod['id'],
                 'ind_id' => $ind->id,
-                'rate' => $workMethod['rate']
+                'rate' => $workMethod['rate'],
+                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
             ]);
         }
         DB::table('ind_work_method')->insert($workMethods);

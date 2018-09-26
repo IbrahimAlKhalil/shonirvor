@@ -163,12 +163,14 @@ class IndServiceRegistrationController extends Controller
 
         // ind_work_method table
         // TODO:: Some custom validation will be needed for workmethods
+
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
             array_key_exists('id', $workMethod) && array_push($workMethods, [
                 'work_method_id' => $workMethod['id'],
                 'ind_id' => $ind->id,
-                'rate' => $workMethod['rate']
+                'rate' => $workMethod['rate'],
+                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
             ]);
         }
 
@@ -323,7 +325,8 @@ class IndServiceRegistrationController extends Controller
             array_key_exists('id', $workMethod) && array_push($workMethods, [
                 'work_method_id' => $workMethod['id'],
                 'ind_id' => $ind->id,
-                'rate' => $workMethod['rate']
+                'rate' => $workMethod['rate'],
+                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
             ]);
         }
 
