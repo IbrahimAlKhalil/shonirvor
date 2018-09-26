@@ -36,7 +36,7 @@ class orgServiceController extends Controller
             switch ($request->post('type')) {
                 case 'deactivate':
                     $org->delete();
-                    $msg = 'Account Deactivated Successfully!';
+                    $msg = 'অ্যাকাউন্টটি সফলভাবে নিষ্ক্রিয় করা হয়েছে!';
                     $route = route('organization-service.show-disabled', $org->id);
                     break;
                 default:
@@ -50,7 +50,7 @@ class orgServiceController extends Controller
                     }
 
                     $org->forceDelete();
-                    $msg = 'Account Removed Successfully!';
+                    $msg = 'একাউন্ট সফলভাবে মুছে ফেলা হয়েছে!';
                     $route = route('organization-service.index');
             }
 
@@ -78,7 +78,7 @@ class orgServiceController extends Controller
     public function activate(Request $request)
     {
         Org::onlyTrashed()->find($request->post('id'))->restore();
-        return redirect(route('organization-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+        return redirect(route('organization-service.show', $request->post('id')))->with('success', 'একাউন্ট সফলভাবে সক্রিয় করা হয়েছে!');
     }
 
     private function navs()
@@ -87,6 +87,7 @@ class orgServiceController extends Controller
             ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('organization-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
+            ['url' => route('organization-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];
     }
 }

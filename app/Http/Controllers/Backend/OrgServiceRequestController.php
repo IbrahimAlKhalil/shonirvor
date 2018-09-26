@@ -14,7 +14,7 @@ class OrgServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = Org::getOnly('pending')->paginate(15);
+        $serviceRequests = Org::getOnly('pending')->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
         return view('backend.org-service-request.index', compact('serviceRequests', 'navs'));
     }
@@ -37,9 +37,7 @@ class OrgServiceRequestController extends Controller
         $union = Union::find($org->union->id);
 
         if ($category->is_confirmed == 0) {
-            $category->name = $request->post('category');
-            $category->is_confirmed = 1;
-            $category->save();
+            $category->update(['name' => $request->post('category'), 'is_confirmed' => 1]);
         }
 
         if ($thana->is_pending == 1) {
@@ -54,23 +52,10 @@ class OrgServiceRequestController extends Controller
             $union->save();
         }
 
-
-        $previousRequested = $org->subCategories('requested');
-        $previousRequested->detach();
-        $previousRequested->delete();
-
         if ($request->has('sub-categories')) {
-            $data = [];
-            foreach ($request->post('sub-categories') as $subCategoryName) {
-                // TODO:: Please check null in the request file, not here!
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
-                    'is_confirmed' => 0
-                ]);
+            foreach ($request->post('sub-categories') as $subCategory) {
+                $org->subCategories()->find($subCategory['id'])->update(['name' => $subCategory['name'], 'is_confirmed' => 1]);
             }
-            $requestedSubCategories = $category->subCategories()->createMany($data);
-            // associate sub-categories
-            $org->subCategories()->saveMany($requestedSubCategories);
         }
 
         $org->is_pending = 0;
@@ -78,7 +63,7 @@ class OrgServiceRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
     public function destroy(Org $serviceRequest)
@@ -99,7 +84,7 @@ class OrgServiceRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('organization-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('organization-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 
     private function navs()
@@ -108,6 +93,7 @@ class OrgServiceRequestController extends Controller
             ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('organization-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
+            ['url' => route('organization-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];
     }
 }

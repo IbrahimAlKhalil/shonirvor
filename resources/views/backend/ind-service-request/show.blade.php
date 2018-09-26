@@ -21,14 +21,14 @@
 
                     <div class="col-md-8">
                         <h4 class="mb-3">{{ $serviceRequest->user->name }}</h4>
-                        <table class="table table-striped table-bordered table-hover table-sm">
+                        <table class="table table-responsive table-striped table-bordered table-hover table-sm">
                             <tbody>
                             <tr>
-                                <th scope="row">কাজের ফোন নম্বর</th>
+                                <th scope="row">কাজের মোবাইল নম্বর</th>
                                 <td>{{ $serviceRequest->mobile }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">ব্যক্তিগত ফোন নম্বর</th>
+                                <th scope="row">ব্যক্তিগত মোবাইল নম্বর</th>
                                 <td>{{ $serviceRequest->user->mobile }}</td>
                             </tr>
                             <tr>
@@ -82,7 +82,7 @@
                                 <td>{{ $serviceRequest->longitude }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">সেবা বিভাগ</th>
+                                <th scope="row">ক্যাটাগরি</th>
                                 <td>{{ $serviceRequest->category->name }} @if(!$serviceRequest->category->is_confirmed)
                                         <span class="pull-right badge badge-primary">অনুরোধকৃত</span> @endif</td>
                             </tr>
@@ -104,7 +104,7 @@
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                             @if(!$serviceRequest->category->is_confirmed)
                                 <div class="form-group row">
-                                    <label for="category" class="col-4 col-form-label">সেবা বিভাগ
+                                    <label for="category" class="col-4 col-form-label">ক্যাটাগরি
                                         <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-8">
@@ -125,10 +125,13 @@
                                             ক্যাটাগরি {{ en2bnNumber($loop->iteration) }} <span
                                                     class="text-danger">*</span></label>
                                         <div class="col-8">
-                                            <input id="sub-categories" name="sub-categories[]" type="text"
+                                            <input id="sub-categories"
+                                                   name="sub-categories[{{ $loop->iteration-1 }}][name]" type="text"
                                                    value="{{ oldOrData('sub-categories.' . $key, $subCategory->name) }}"
                                                    class="form-control{{ $errors->has('sub-categories') ? ' is-invalid' : '' }}"
                                                    required>
+                                            <input type="hidden" value="{{ $subCategory->id }}"
+                                                   name="sub-categories[{{ $loop->iteration-1 }}][id]">
                                             @include('components.invalid', ['name' => 'sub-categories'])
                                         </div>
                                     </div>
@@ -170,9 +173,9 @@
 
                             <div class="btn-group mx-auto" role="group">
                                 <span class="btn btn-secondary btn-success"
-                                      onclick="document.getElementById('approve-request').submit();">Approve</span>
+                                      onclick="document.getElementById('approve-request').submit();">গ্রহন করুন</span>
                                 <span class="btn btn-secondary btn-danger rounded-right"
-                                      onclick="document.getElementById('reject-request').submit();">Reject</span>
+                                      onclick="document.getElementById('reject-request').submit();">প্রত্যাখ্যান করুন</span>
 
                                 <form id="reject-request"
                                       action="{{ route('individual-service-request.destroy', $serviceRequest->id) }}"

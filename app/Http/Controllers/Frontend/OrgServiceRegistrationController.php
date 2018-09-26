@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateOrg;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -151,6 +152,9 @@ class OrgServiceRegistrationController extends Controller
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
         }
+        if ($request->hasFile('logo')) {
+            $org->logo = $request->file('logo')->store('org/' . $org->id);
+        }
         $org->save();
 
         // associate sub-categories$org
@@ -174,6 +178,14 @@ class OrgServiceRegistrationController extends Controller
             $org->workImages()->createMany($images);
         }
 
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+        }
+
         DB::commit();
 
         return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
@@ -182,11 +194,15 @@ class OrgServiceRegistrationController extends Controller
 
     public function update(UpdateOrg $request, $id)
     {
-
-        DB::beginTransaction();
-
         $user = Auth::user();
         $org = Org::find($id);
+
+        // TODO:: Move this validation to a requests class
+        if ($org->user_id != Auth::id()) {
+            return redirect(route('individual-service-registration.index'));
+        }
+
+        DB::beginTransaction();
 
         // handle category  and sub-category request
         // TODO:: Do some custom validation for category and subcategory
@@ -259,10 +275,16 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->save();
 
         if ($request->hasFile('trade-license')) {
+            // delete old file
+            Storage::delete($org->trade_license);
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
+        }
+        if ($request->hasFile('logo')) {
+            // delete old file
+            Storage::delete($org->logo);
+            $org->trade_license = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
 
@@ -302,15 +324,27 @@ class OrgServiceRegistrationController extends Controller
             }
             $org->workImages()->createMany($images);
         }
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+        }
 
         DB::commit();
 
-        return back()->with('success', 'Done!');
+        return back()->with('success', 'সম্পন্ন!');
     }
 
     public function edit($id)
     {
         $org = Org::find($id);
+
+        if ($org->user_id != Auth::id() && $org->is_pending == 0) {
+            return redirect(route('organization-service-registration.index'));
+        }
+
         $categories = Category::getAll('org')->get();
         $subCategories = SubCategory::getAll('org')->get();
         $districts = District::take(20)->get();

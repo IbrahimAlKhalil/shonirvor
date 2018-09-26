@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সকল ব্যক্তি সেবা প্রদানকারী বিভাগ')
+@section('title', 'সকল ব্যক্তি সেবা প্রদানকারী ক্যাটাগরি')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -17,7 +17,7 @@
 
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">সকল ব্যক্তি সেবা প্রদানকারী বিভাগ</h4>
+                <h4 class="mb-4">সকল ব্যক্তি সেবা প্রদানকারী ক্যাটাগরি</h4>
                 @include('components.success')
             </div>
             <div class="col-md-9">
@@ -25,7 +25,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">বিভাগ</th>
+                        <th scope="col">ক্যাটাগরি</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -39,7 +39,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">কোনো সেবা বিভাগ খুঁজে পাওয়া যায়নি ।</td>
+                            <td colspan="4">কোনো ক্যাটাগরি খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>

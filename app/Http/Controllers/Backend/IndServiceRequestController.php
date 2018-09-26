@@ -22,10 +22,8 @@ class IndServiceRequestController extends Controller
 
     public function show(Ind $serviceRequest)
     {
-        $categories = Category::getAll('ind')->get();
-        $subCategories = SubCategory::getAll('ind')->get();
         $navs = $this->navs();
-        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'categories', 'subCategories'));
+        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs'));
     }
 
     public function store(Request $request)
@@ -40,9 +38,7 @@ class IndServiceRequestController extends Controller
         $union = Union::find($ind->union->id);
 
         if ($category->is_confirmed == 0) {
-            $category->name = $request->post('category');
-            $category->is_confirmed = 1;
-            $category->save();
+            $category->update(['name' => $request->post('category'), 'is_confirmed' => 1]);
         }
 
         if ($thana->is_pending == 1) {
@@ -57,23 +53,10 @@ class IndServiceRequestController extends Controller
             $union->save();
         }
 
-
-        $previousRequested = $ind->subCategories('requested');
-        $previousRequested->detach();
-        $previousRequested->delete();
-
         if ($request->has('sub-categories')) {
-            $data = [];
-            foreach ($request->post('sub-categories') as $subCategoryName) {
-                // TODO:: Please check null in the request file, not here!
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
-                    'is_confirmed' => 0
-                ]);
+            foreach ($request->post('sub-categories') as $subCategory) {
+                $ind->subCategories()->find($subCategory['id'])->update(['name' => $subCategory['name'], 'is_confirmed' => 1]);
             }
-            $requestedSubCategories = $category->subCategories()->createMany($data);
-            // associate sub-categories
-            $ind->subCategories()->saveMany($requestedSubCategories);
         }
 
         $ind->is_pending = 0;
@@ -81,7 +64,7 @@ class IndServiceRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider approved successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
     public function destroy(Ind $serviceRequest)
@@ -103,7 +86,7 @@ class IndServiceRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('individual-service-request.index'))->with('success', 'Service Provider request rejected successfully!');
+        return redirect(route('individual-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 
     private function navs()
@@ -112,6 +95,7 @@ class IndServiceRequestController extends Controller
             ['url' => route('individual-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('individual-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('individual-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
+            ['url' => route('individual-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];
     }
 }

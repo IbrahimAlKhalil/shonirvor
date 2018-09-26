@@ -61,6 +61,7 @@ class IndServiceRegistrationController extends Controller
 
     public function store(StoreInd $request)
     {
+
         DB::beginTransaction();
 
         $user = Auth::user();
@@ -162,11 +163,14 @@ class IndServiceRegistrationController extends Controller
 
         // ind_work_method table
         // TODO:: Some custom validation will be needed for workmethods
+
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
-            array_push($workMethods, [
-                'work_method_id' => $workMethod,
-                'ind_id' => $ind->id
+            array_key_exists('id', $workMethod) && array_push($workMethods, [
+                'work_method_id' => $workMethod['id'],
+                'ind_id' => $ind->id,
+                'rate' => $workMethod['rate'],
+                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
             ]);
         }
 
@@ -191,6 +195,15 @@ class IndServiceRegistrationController extends Controller
             $ind->workImages()->createMany($images);
         }
 
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+            DB::table('identities')->insert($identities);
+        }
+
         DB::commit();
 
         return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
@@ -199,10 +212,15 @@ class IndServiceRegistrationController extends Controller
     public function update(UpdateInd $request, $id)
     {
 
-        DB::beginTransaction();
-
         $user = Auth::user();
         $ind = Ind::find($id);
+
+        // TODO:: Move this validation to a requests class
+        if ($ind->user_id != Auth::id()) {
+            return redirect(route('individual-service-registration.index'));
+        }
+
+        DB::beginTransaction();
 
         // handle category  and sub-category request
         // TODO:: Do some custom validation for category and subcategory
@@ -304,9 +322,11 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = [];
         foreach ($request->post('work-methods') as $workMethod) {
-            array_push($workMethods, [
-                'work_method_id' => $workMethod,
-                'ind_id' => $ind->id
+            array_key_exists('id', $workMethod) && array_push($workMethods, [
+                'work_method_id' => $workMethod['id'],
+                'ind_id' => $ind->id,
+                'rate' => $workMethod['rate'],
+                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
             ]);
         }
 
@@ -331,15 +351,29 @@ class IndServiceRegistrationController extends Controller
             $ind->workImages()->createMany($images);
         }
 
+        // identities
+        if ($request->hasFile('identities')) {
+            $identities = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+            }
+            DB::table('identities')->insert($identities);
+        }
+
 
         DB::commit();
 
-        return back()->with('success', 'Done!');
+        return back()->with('success', 'সম্পন্ন!');
     }
 
     public function edit($id)
     {
         $ind = Ind::find($id);
+
+        // TODO:: Move this validation to a requests class
+        if ($ind->user_id != Auth::id()) {
+            return redirect(route('individual-service-registration.index'));
+        }
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();

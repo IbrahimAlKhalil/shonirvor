@@ -19,9 +19,9 @@ class ProductionSeeder extends Seeder
 
         /***** Service Provider Contract Method *****/
         DB::table('work_methods')->insert([
-            ['name' => 'hourly'],
-            ['name' => 'daily'],
-            ['name' => 'monthly']
+            ['name' => 'ঘন্টা ভিত্তিক'],
+            ['name' => 'দৈনিক'],
+            ['name' => 'মাসিক']
         ]);
 
         /***** Service Type *****/

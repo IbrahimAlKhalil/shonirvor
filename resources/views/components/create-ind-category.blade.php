@@ -1,9 +1,9 @@
 <div class="card mt-4">
-    <h5 class="card-header">নতুন বিভাগ জুড়ুন</h5>
+    <h5 class="card-header">নতুন ক্যাটাগরি জুড়ুন</h5>
     <div class="card-body">
         <form method="post" action="{{ route('individual-category.store') }}">
             {{ csrf_field() }}
-            <label for="category" class="label">বিভাগের নাম</label>
+            <label for="category" class="label">ক্যাটাগরিের নাম</label>
             <input id="category"
                    class="form-control @if($errors->has('category')){{ 'is-invalid' }}@endif"
                    type="text" name="category">

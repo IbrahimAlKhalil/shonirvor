@@ -38,7 +38,8 @@ class IndsTableSeeder extends Seeder
                 foreach (randomElements($workMethodIds) as $workMethodId) {
                     array_push($data, [
                         'ind_id' => $ind->id,
-                        'work_method_id' => $workMethodId
+                        'work_method_id' => $workMethodId,
+                        'rate' => randomElement([500, 50, 60, 520, 100, 300, 150])
                     ]);
                 }
                 DB::table('ind_work_method')->insert($data);

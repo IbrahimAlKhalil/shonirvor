@@ -22,12 +22,17 @@ class Ind extends Model
 
     public function workMethods()
     {
-        return $this->belongsToMany(WorkMethod::class);
+        return $this->belongsToMany(WorkMethod::class)->withPivot('rate');
     }
 
     public function workImages()
     {
         return $this->morphMany(WorkImages::class, 'work_imagable');
+    }
+
+    public function edit()
+    {
+        return $this->morphOne(ServiceEdit::class, 'service_editable');
     }
 
     public function category()

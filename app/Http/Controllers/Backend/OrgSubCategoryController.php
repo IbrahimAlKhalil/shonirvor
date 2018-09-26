@@ -24,7 +24,7 @@ class OrgSubCategoryController extends Controller
         ]);
 
         DB::commit();
-        return back()->with('success', 'Sub-category "' . $request->post('category') . '" Added Successfully!');
+        return back()->with('success', 'Sub-category "' . $request->post('category') . '" সফলভাবে যুক্ত হয়েছে!');
     }
 
 
@@ -37,7 +37,7 @@ class OrgSubCategoryController extends Controller
         ]);
 
         DB::commit();
-        return back()->with('success', 'Sub-Category Renamed Successfully!');
+        return back()->with('success', 'সাব-ক্যাটাগরিটি সফলভাবে পুনঃনামকরণ হয়েছে!');
     }
 
 
@@ -49,6 +49,6 @@ class OrgSubCategoryController extends Controller
         $subCategory->delete();
 
         DB::commit();
-        return back()->with('success', 'Sub-category Deleted Successfully!');
+        return back()->with('success', 'সাব-ক্যাটাগরিটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 }

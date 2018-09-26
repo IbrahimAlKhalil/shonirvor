@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'বিভাগ: ' . $category->name)
+@section('title', 'ক্যাটাগরি: ' . $category->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -18,10 +18,10 @@
                 @endforeach
                 @include('components.success')
                 <div class="card">
-                    <h5 class="card-header">বিভাগ: {{ $category->name }}
+                    <h5 class="card-header">ক্যাটাগরি: {{ $category->name }}
                         <div class="btn-group pull-right">
                             <a href="#" class="btn btn-secondary"
-                               onclick="document.getElementById('edit-category').value = prompt('বিভাগের নাম:', '{{ $category->name }}'); document.getElementById('update-form').submit(); return false">
+                               onclick="document.getElementById('edit-category').value = prompt('ক্যাটাগরিের নাম:', '{{ $category->name }}'); document.getElementById('update-form').submit(); return false">
                                 <i class="fa fa-pencil-square-o"></i>
                             </a>
                             <a href="#" onclick="document.getElementById('delete-form').submit(); return false"
@@ -66,7 +66,7 @@
                             <td>
                                 <div class="btn-group mx-auto">
                                     <a href="#" class="mr-4"
-                                       onclick="document.getElementById('edit-category-{{ $subCategory->id }}').value = prompt('বিভাগের নাম:', '{{ $subCategory->name }}'); document.getElementById('update-form-{{ $subCategory->id }}').submit(); return false"><i
+                                       onclick="document.getElementById('edit-category-{{ $subCategory->id }}').value = prompt('ক্যাটাগরিের নাম:', '{{ $subCategory->name }}'); document.getElementById('update-form-{{ $subCategory->id }}').submit(); return false"><i
                                                 class="fa fa-pencil-square-o"></i></a>
                                     <a href="#"
                                        onclick="document.getElementById('delete-form-{{ $subCategory->id }}').submit(); return false">
@@ -91,7 +91,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">কোনো বিভাগ খুঁজে পাওয়া যায়নি ।</td>
+                            <td colspan="4">কোনো ক্যাটাগরি খুঁজে পাওয়া যায়নি ।</td>
                         </tr>
                     @endforelse
                     </tbody>

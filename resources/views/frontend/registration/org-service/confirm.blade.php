@@ -89,7 +89,7 @@
                         <label for="referrer" class="col-4 col-form-label">রেফারার</label>
                         <div class="col-8">
                             <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
-                                   class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}" required>
+                                   class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}">
                             @include('components.invalid', ['name' => 'referrer'])
                         </div>
                     </div>
@@ -97,7 +97,8 @@
                     <div class="form-group row">
                         <label for="personal-email" class="col-4 col-form-label">ব্যক্তিগত ইমেইল</label>
                         <div class="col-8">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
+                            <input id="personal-email" name="personal-email" type="text"
+                                   value="{{ old('personal-email') }}"
                                    class="form-control @if($errors->has('personal-email')) is-invalid @endif">
                             @include('components.invalid', ['name' => 'personal-email'])
                         </div>
@@ -132,7 +133,7 @@
 
 
                     <div class="form-group row">
-                        <label class="col-4 col-form-label">এরিয়া <span
+                        <label class="col-4 col-form-label">এলাকা <span
                                     class="text-danger">*</span></label>
                         <div class="col-8">
                             <div class="row">
@@ -140,7 +141,7 @@
                                     <select name="district" class="form-control">
                                         <option value="">-- জেলা নির্বাচন করুন --</option>
                                         @foreach($districts as $district)
-                                            <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                            <option value="{{ $district->id }}">{{ $district->bn_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -148,7 +149,7 @@
                                     <select name="thana" class="form-control">
                                         <option value="">-- থানা নির্বাচন করুন --</option>
                                         @foreach($thanas as $thana)
-                                            <option value="{{ $thana->id }}">{{ $thana->name }}</option>
+                                            <option value="{{ $thana->id }}">{{ $thana->bn_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -161,12 +162,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
                             <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
                             <br>
-                            <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                             <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
@@ -184,19 +185,20 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="category" class="col-4 col-form-label">সেবা বিভাগ <span class="text-danger">*</span></label>
+                        <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
                         <div class="col-8">
                             <select id="category" name="category"
                                     class="form-control @if($errors->has('category')) is-invalid @endif">
-                                <option>-- শ্রেণী নির্বাচন করুন --</option>
+                                <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                             @include('components.invalid', ['name' => 'category'])
-                            <label for="no-category">আমার শ্রেণীবিভাগ এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-category" class="mt-2" name="no-category">
-                            <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
+                            <input type="text" id="category-request" name="category-request"
+                                   class="form-control mt-3 mb-4"
                                    style="display: none"
                                    placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
                             <style>
@@ -212,14 +214,15 @@
                                     class="text-danger">*</span></label>
                         <div class="col-8">
                             <select id="sub-categories" name="sub-categories[]"
-                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
+                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                    multiple>
                                 <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
                                 @foreach($subCategories as $subCategory)
                                     <option value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
                                 @endforeach
                             </select>
                             @include('components.invalid', ['name' => 'sub-categories'])
-                            <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নয় ।</label>
+                            <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2">
                             <div style="display: none">
                                 <input type="text" name="sub-category-requests[]" class="form-control mt-3"
@@ -259,6 +262,27 @@
                     @endif
 
                     <div class="form-group row">
+                        <label for="identities" class="col-4 col-form-label">লোগো <span
+                                    class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input id="logo" name="logo" type="file" accept="image/*"
+                                   class="form-control @if($errors->has('logo')) is-invalid @endif">
+                            @include('components.invalid', ['name' => 'logo'])
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="identities" class="col-4 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম
+                            সনদ <span
+                                    class="text-danger">*</span></label>
+                        <div class="col-8">
+                            <input id="identities" name="identities[]" type="file" accept="image/*"
+                                   class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
+                            @include('components.invalid', ['name' => 'identities'])
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label for="images" class="col-4 col-form-label">কাজের ছবি</label>
                         <div class="col-8">
                             <input id="images" name="images[]" type="file" accept="image/*"
@@ -272,7 +296,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-8">
                             <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                   class="form-control" multiple>
+                                   class="form-control">
                             @include('components.invalid', ['name' => 'trade-license'])
                         </div>
                     </div>

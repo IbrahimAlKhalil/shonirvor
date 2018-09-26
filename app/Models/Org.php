@@ -29,6 +29,11 @@ class Org extends Model
         return $this->morphMany(WorkImages::class, 'work_imagable');
     }
 
+    public function edit()
+    {
+        return $this->morphOne(ServiceEdit::class, 'service_editable');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
