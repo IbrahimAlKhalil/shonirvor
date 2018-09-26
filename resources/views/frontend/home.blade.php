@@ -142,23 +142,12 @@
                 </div>
             </div>
             <div class="col-md-3">
-                @foreach($indServices as $service)
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->user->name }}</a>
-                                    <span class="badge badge-secondary float-right">বিজ্ঞাপন</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="media">
-                                        <img class="mr-3 w-25" src="{{ asset('storage/'.$service->user->photo) }}" alt="Generic placeholder image">
-                                        <div class="media-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, porro.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                @foreach($ads as $ad)
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <a href="{{ $ad->url }}" target="_blank">
+                                <img src="{{ asset('storage/'.$ad->image) }}" class="img-fluid rounded">
+                            </a>
                         </div>
                     </div>
                 @endforeach

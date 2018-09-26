@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class WorkImagablesTableSeeder extends Seeder
+class WorkImagesTableSeeder extends Seeder
 {
     public function run()
     {
@@ -18,7 +18,6 @@ class WorkImagablesTableSeeder extends Seeder
      * @param $class Model|string
      * @param $workImagableType string
      * */
-
     private function seed($class, $workImagableType)
     {
         $serviceIds = $class::all()->pluck('id')->toArray();
