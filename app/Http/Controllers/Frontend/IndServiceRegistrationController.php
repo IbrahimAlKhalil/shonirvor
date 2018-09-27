@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateInd;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -28,12 +29,10 @@ class IndServiceRegistrationController extends Controller
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('ind')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
-        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
+        $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories', 'subCategories');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -189,9 +188,13 @@ class IndServiceRegistrationController extends Controller
         // work images
         if ($request->has('images')) {
             $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
+            foreach ($request->post('images') as $image) {
+                array_push($images, ['description' => $image['description']]);
             }
+            foreach ($request->file('images') as $key => $image) {
+                $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+            }
+
             $ind->workImages()->createMany($images);
         }
 
@@ -345,9 +348,13 @@ class IndServiceRegistrationController extends Controller
         // work images
         if ($request->has('images')) {
             $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, ['path' => $image->store('ind/' . $ind->id . '/' . 'images')]);
+            foreach ($request->post('images') as $image) {
+                array_push($images, ['description' => $image['description']]);
             }
+            foreach ($request->file('images') as $key => $image) {
+                $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+            }
+
             $ind->workImages()->createMany($images);
         }
 

@@ -249,11 +249,19 @@
             </div>
 
             <div class="form-group row">
-                <label for="images" class="col-4 col-form-label">কাজের ছবি</label>
-                <div class="col-8">
-                    <input id="images" name="images[]" type="file" accept="image/*"
-                           class="form-control @if($errors->has('images')) is-invalid @endif" multiple>
-                    @include('components.invalid', ['name' => 'images'])
+                <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
+                <div class="col-9">
+                    <div class="row">
+                        @for($i=0; $i<4; $i++)
+                            <div class="col-md-6 shadow-sm p-2 mb-2 bg-white rounded">
+                                <input id="images" name="images[{{ $i }}][file]" type="file" accept="image/*"
+                                       class="form-control-file @if($errors->has('images')) is-invalid @endif" multiple>
+                                @include('components.invalid', ['name' => 'images'])
+                                <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
+                                <textarea id="images-{{ $i }}-text" type="text" class="form-control" name="images[{{ $i }}][description]"></textarea>
+                            </div>
+                        @endfor
+                    </div>
                 </div>
             </div>
 

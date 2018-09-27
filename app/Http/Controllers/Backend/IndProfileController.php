@@ -125,8 +125,11 @@ class IndProfileController extends Controller
         // work images
         if ($request->has('images')) {
             $data['images'] = [];
-            foreach ($request->file('images') as $image) {
-                array_push($data['images'], $image->store('ind/' . $ind->id . '/' . 'images'));
+            foreach ($request->post('images') as $image) {
+                array_push($data['images'], ['description' => $image['description']]);
+            }
+            foreach ($request->file('images') as $key => $image) {
+                $data['images'][$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
             }
         }
 

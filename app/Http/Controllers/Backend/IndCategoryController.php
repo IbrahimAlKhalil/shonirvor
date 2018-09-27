@@ -25,9 +25,10 @@ class IndCategoryController extends Controller
     {
         $category = new Category([
             'name' => $request->post('category'),
-            'is_confirmed' => 1
+            'is_confirmed' => 1,
+            'image' => $request->file('image')->store('category-images')
         ]);
-        ServiceType::getThe('ind')->categories()->save($category);
+        ServiceType::where('name', 'ind')->first()->categories()->save($category);
 
         return redirect(route('individual-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" Added Successfully!');
     }
@@ -52,7 +53,7 @@ class IndCategoryController extends Controller
     public function destroy(Category $category)
     {
         // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
-
+        // TODO:: Delete image
         $category->delete();
         return redirect(route('individual-category.index'))->with('success', 'Category Deleted Successfully!');
     }

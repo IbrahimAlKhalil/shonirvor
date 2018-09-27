@@ -13,6 +13,7 @@ class CreateCategoriesTable extends Migration
             $table->unsignedInteger('service_type_id');
             $table->string('name');
             $table->boolean('is_confirmed')->default(1);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

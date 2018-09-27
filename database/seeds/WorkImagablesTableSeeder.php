@@ -29,7 +29,8 @@ class WorkImagablesTableSeeder extends Seeder
                 array_push($workImagables, [
                     'path' => "seed/ind/$i.jpg",
                     'work_imagable_id' => $serviceId,
-                    'work_imagable_type' => $workImagableType
+                    'work_imagable_type' => $workImagableType,
+                    'description' => 'blablabla'
                 ]);
             }
         }
