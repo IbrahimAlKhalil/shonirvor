@@ -9,6 +9,7 @@ Route::prefix('command')->group(function () {
 }, '');
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
+Route::get('filter', 'Frontend\FilterController@index')->name('frontend.filter');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
 Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
 

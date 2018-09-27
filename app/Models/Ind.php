@@ -43,8 +43,7 @@ class Ind extends Model
     /**
      * @param $status string
      * @return object
-     * */
-
+     **/
     public function subCategories($status = null)
     {
         $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
@@ -78,8 +77,7 @@ class Ind extends Model
     /**
      * @param $status string
      * @return object|null
-     * */
-
+     **/
     public static function getOnly($status)
     {
         $result = null;

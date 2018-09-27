@@ -18,8 +18,8 @@ class HomeController extends Controller
         $indCategories = Category::where('service_type_id', 1)->get();
         $orgCategories = Category::where('service_type_id', 2)->get();
 
-        $indServices = Ind::take(5)->get();
-        $orgServices = Org::take(5)->get();
+        $indServices = Ind::all()->random(10);
+        $orgServices = Org::all()->random(10);
 
         $ads = Ad::all();
         if ($ads->count() >= 3) {

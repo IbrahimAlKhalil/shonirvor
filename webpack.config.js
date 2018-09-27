@@ -3,7 +3,10 @@ const path = require('path');
 module.exports = {
     entry: {
         'frontend/home': './resources/assets/js/frontend/home.js',
+        'frontend/filter': './resources/assets/js/frontend/filter.js',
+
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
+
         'errors/404': './resources/assets/js/errors/404.js'
     },
     output: {
