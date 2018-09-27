@@ -18,6 +18,7 @@ class CreateOrgsTable extends Migration
 
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('category_id');
+            $table->unsignedInteger('division_id');
             $table->unsignedInteger('district_id')->nullable();
             $table->unsignedInteger('thana_id')->nullable();
             $table->unsignedInteger('union_id')->nullable();
@@ -49,6 +50,12 @@ class CreateOrgsTable extends Migration
                 ->references('id')
                 ->on('categories')
                 ->onUpdate('cascade');
+
+            $table->foreign('division_id')
+                ->references('id')
+                ->on('divisions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->foreign('district_id')
                 ->references('id')

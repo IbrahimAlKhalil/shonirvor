@@ -57,6 +57,7 @@ class IndServiceEditController extends Controller
         }
 
         // District, thana, union
+        $ind->division_id = $data['division'];
         $ind->district_id = $data['district'];
 
         if ($request->has('thana')) {

@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateInd;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -21,7 +22,7 @@ class IndProfileController extends Controller
 
     public function edit($id)
     {
-        $provider = Ind::find($id);
+        $provider = Ind::with(['division', 'district', 'thana', 'union'])->find($id);
         // TODO:: Move this validations to requests class
         if ($provider->user_id != Auth::id()) {
             return redirect(route('individual-service-registration.index'));
@@ -32,14 +33,14 @@ class IndProfileController extends Controller
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
-        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('ind')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
-        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
+        $divisions = Division::all();
+        $districts = $provider->division()->with('districts')->first()->districts;
+        $thanas = $provider->district->thanas()->where('is_pending', 0)->get();
+        $unions = $provider->thana->unions()->where('is_pending', 0)->get();
 
         $isPicExists = $provider->user->photo;
-        return view('backend.ind-service-profile.edit', compact('provider', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
+        return view('backend.ind-service-profile.edit', compact('provider', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
     }
 
     public function show($id)
@@ -71,6 +72,7 @@ class IndProfileController extends Controller
             'email',
             'website',
             'facebook',
+            'division',
             'district',
             'thana',
             'union',
@@ -122,15 +124,20 @@ class IndProfileController extends Controller
         if ($request->hasFile('experience-certificate')) {
             $data['experience-certificate'] = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
+
         // work images
-        if ($request->has('images')) {
-            $data['images'] = [];
+        if ($request->has('images') && $request->hasFile('images')) {
+            $images = [];
+
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($data['images'], ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $data['images'][$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
             }
+
+            $data['images'] = $images;
         }
 
         // identities

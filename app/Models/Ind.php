@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 
@@ -58,6 +59,11 @@ class Ind extends Model
         }
 
         return $result;
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
     }
 
     public function district()

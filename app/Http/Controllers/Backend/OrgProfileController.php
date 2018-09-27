@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\District;
@@ -19,7 +20,7 @@ class OrgProfileController extends Controller
 {
     public function edit($id)
     {
-        $provider = Org::find($id);
+        $provider = Org::with(['division', 'district', 'thana', 'union'])->find($id);
         // TODO:: Move this validation to requests class
         if ($provider->user_id != Auth::id()) {
             return redirect(route('organization-service-registration.index'));
@@ -32,12 +33,13 @@ class OrgProfileController extends Controller
         $categories = Category::getAll('org')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('org')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
-        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
+        $divisions = Division::all();
+        $districts = $provider->division()->with('districts')->first()->districts;
+        $thanas = $provider->district->thanas()->where('is_pending', 0)->get();
+        $unions = $provider->thana->unions()->where('is_pending', 0)->get();
 
         $isPicExists = $provider->user->photo;
-        return view('backend.org-service-profile.edit', compact('provider', 'isPicExists', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
+        return view('backend.org-service-profile.edit', compact('provider', 'isPicExists', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
     }
 
     public function show($id)
@@ -122,15 +124,20 @@ class OrgProfileController extends Controller
         if ($request->hasFile('trade-license')) {
             $data['trade-license'] = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
         }
+
         // work images
-        if ($request->has('images')) {
-            $data['images'] = [];
+        if ($request->has('images') && $request->hasFile('images')) {
+            $images = [];
+
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($data['images'], ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $data['images'][$key]['path'] = $image['file']->store('org/' . $org->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
             }
+
+            $data['images'] = $images;
         }
 
         // identities
