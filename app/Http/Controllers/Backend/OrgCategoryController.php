@@ -29,9 +29,10 @@ class OrgCategoryController extends Controller
 
         $category = new Category([
             'name' => $request->post('category'),
-            'is_confirmed' => 1
+            'is_confirmed' => 1,
+            'image' => $request->file('image')->store('category-images')
         ]);
-        ServiceType::getThe('org')->categories()->save($category);
+        ServiceType::where('name', 'org')->first()->categories()->save($category);
 
         DB::commit();
         return redirect(route('organization-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" সফলভাবে যুক্ত হয়েছে!');
@@ -60,7 +61,7 @@ class OrgCategoryController extends Controller
     {
         DB::beginTransaction();
         // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
-
+        // TODO:: Delete image
         $category->delete();
 
         DB::commit();

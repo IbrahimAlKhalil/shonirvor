@@ -4,3 +4,4 @@ import '../../scss/frontend/home.scss';
 
 /***** JS *****/
 import 'bootstrap'; // Bootstrap JS
+import '../modules/option-loader';

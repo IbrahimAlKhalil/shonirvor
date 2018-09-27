@@ -172,9 +172,13 @@ class OrgServiceRegistrationController extends Controller
         // work images
         if ($request->has('images')) {
             $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
+            foreach ($request->post('images') as $image) {
+                array_push($images, ['description' => $image['description']]);
             }
+            foreach ($request->file('images') as $key => $image) {
+                $images[$key]['path'] = $image['file']->store('org/' . $org->id . '/' . 'images');
+            }
+
             $org->workImages()->createMany($images);
         }
 
@@ -319,9 +323,13 @@ class OrgServiceRegistrationController extends Controller
         // work images
         if ($request->has('images')) {
             $images = [];
-            foreach ($request->file('images') as $image) {
-                array_push($images, ['path' => $image->store('org/' . $org->id . '/' . 'images')]);
+            foreach ($request->post('images') as $image) {
+                array_push($images, ['description' => $image['description']]);
             }
+            foreach ($request->file('images') as $key => $image) {
+                $images[$key]['path'] = $image['file']->store('org/' . $org->id . '/' . 'images');
+            }
+
             $org->workImages()->createMany($images);
         }
         // identities

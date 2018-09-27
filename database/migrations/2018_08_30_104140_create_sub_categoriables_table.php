@@ -10,9 +10,9 @@ class CreateSubCategoriablesTable extends Migration
     {
         Schema::create('sub_categoriables', function (Blueprint $table) {
             $table->unsignedInteger('sub_category_id');
-            /*$table->morphs('sub_categoriable');*/
             $table->unsignedInteger('sub_categoriable_id');
             $table->string('sub_categoriable_type');
+            $table->float('rate')->nullable();
             $table->timestamps();
 
             $table->foreign('sub_category_id')

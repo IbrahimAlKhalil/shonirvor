@@ -25,6 +25,7 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">ছবি</th>
                         <th scope="col">ক্যাটাগরি</th>
                     </tr>
                     </thead>
@@ -33,6 +34,8 @@
                         @php($serial = $categories->perPage() * ($categories->currentPage() - 1) + $loop->iteration)
                         <tr>
                             <td>{{ en2bnNumber($serial) }}</td>
+                            <td><img class="w-25" src="{{ asset('storage/' . $category->image) }}"
+                                     alt="{{ $category->name }}"></td>
                             <td>
                                 <a href="{{ route('individual-category.show', $category->id) }}">{{ $category->name }}</a>
                             </td>
@@ -52,7 +55,7 @@
             </div>
             <div class="col-md-3">
                 @include('components.side-nav', compact('navs'))
-                @include('components.create-ind-category')
+                @include('components.create-category', ['action' => route('individual-category.store')])
             </div>
         </div>
     </div>
