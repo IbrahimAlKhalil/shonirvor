@@ -12,62 +12,7 @@
     <div class="container-fluid">
         <div class="row pt-4">
             <div class="col-md-2">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header text-center">ফিল্টার করুন</div>
-                            <form action="{{ route('frontend.filter') }}">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="division">এলাকা</label>
-                                        <select name="division" id="division" class="form-control mb-3">
-                                            <option value="">-- বিভাগ --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select name="district" id="district" class="form-control mb-3">
-                                            <option value="">-- জেলা --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select name="thana" id="thana" class="form-control mb-3">
-                                            <option value="">-- থানা --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select name="union" id="union" class="form-control mb-3">
-                                            <option value="">-- ইউনিয়ন --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="category">ক্যাটাগরি</label>
-                                        <select name="category" id="category" class="form-control mb-3">
-                                            <option value="">-- ক্যাটাগরি --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select name="sub-category" id="subCategory" class="form-control">
-                                            <option value="">-- সাব ক্যাটাগরি --</option>
-                                            @foreach($divisions as $division)
-                                                <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <button type="submit" class="btn btn-primary">ফিল্টার</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                @include('components.filter')
             </div>
             <div class="col-md-7">
                 <div class="row">

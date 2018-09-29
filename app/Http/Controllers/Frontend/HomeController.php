@@ -14,6 +14,7 @@ class HomeController extends Controller
     public function index()
     {
         $divisions = Division::select('id', 'bn_name')->get();
+        $categories = Category::select('id', 'name')->get();
 
         $indCategories = Category::where('service_type_id', 1)->get();
         $orgCategories = Category::where('service_type_id', 2)->get();
@@ -26,6 +27,6 @@ class HomeController extends Controller
             $ads = $ads->random(3);
         }
 
-        return view('frontend.home', compact('divisions', 'ads', 'indCategories', 'orgCategories', 'indServices', 'orgServices'));
+        return view('frontend.home', compact('divisions', 'categories', 'ads', 'indCategories', 'orgCategories', 'indServices', 'orgServices'));
     }
 }

@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loadOptions(`${select.getAttribute('data-option-loader-url')}?${select.getAttribute('data-option-loader-param')}=${select.value}`, target)
                 .then(() => {
                     let placeholder = document.createElement('option');
-                    placeholder.selected;
+                    placeholder.selected=true;
+                    placeholder.value="";
                     placeholder.innerHTML = target.getAttribute('data-placeholder');
                     target.insertBefore(placeholder, target.firstElementChild);
                 });
