@@ -308,7 +308,7 @@
 
                     <div class="form-group row">
                         <div class="offset-4 col-9">
-                            <button type="submit" class="btn btn-primary">জমা দিন</button>
+                            <button type="submit" class="btn btn-primary">সাবমিট</button>
                         </div>
                     </div>
                 </form>
