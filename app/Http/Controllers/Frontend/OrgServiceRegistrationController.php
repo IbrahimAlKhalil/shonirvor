@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -25,13 +26,10 @@ class OrgServiceRegistrationController extends Controller
         $orgs = $user->orgs('pending')->get();
 
         $categories = Category::getAll('org')->get();
-        $subCategories = SubCategory::getAll('org')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::take(20)->get();
-        $unions = Union::take(20)->get();
+        $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'orgs', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+        $compact = compact('classesToAdd', 'orgs', 'divisions', 'isPicExists', 'categories');
         $view = 'frontend.registration.org-service.confirm';
         $count = $orgs->count();
 
@@ -69,13 +67,10 @@ class OrgServiceRegistrationController extends Controller
             // reached at the maximum
             // redirect them to the confirmation page
             $categories = Category::getAll('org')->get();
-            $subCategories = SubCategory::getAll('org')->get();
-            $districts = District::take(20)->get();
-            $thanas = Thana::take(20)->get();
-            $unions = Union::take(20)->get();
+            $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
             $isPicExists = $user->photo;
-            $compact = compact('classesToAdd', 'orgs', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+            $compact = compact('classesToAdd', 'orgs', 'divisions', 'isPicExists', 'categories');
             return view('frontend.registration.org-service.confirm', $compact);
         }
 
@@ -135,6 +130,7 @@ class OrgServiceRegistrationController extends Controller
 
         $org = new Org;
         $org->user_id = $user->id;
+        $org->division_id = $request->post('division');
         $org->district_id = $request->post('district');
         $org->thana_id = $thana->id;
         $org->union_id = $union->id;
@@ -170,13 +166,14 @@ class OrgServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images')) {
+        if ($request->has('images') && $request->hasFile('images')) {
             $images = [];
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($images, ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $images[$key]['path'] = $image['file']->store('org/' . $org->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $org->id . '/' . 'images');
             }
 
             $org->workImages()->createMany($images);
@@ -268,6 +265,7 @@ class OrgServiceRegistrationController extends Controller
             $union->save();
         }
 
+        $org->division_id = $request->post('division');
         $org->district_id = $request->post('district');
         $org->thana_id = $thana->id;
         $org->union_id = $union->id;
@@ -321,17 +319,19 @@ class OrgServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images')) {
+        if ($request->has('images') && $request->hasFile('images')) {
             $images = [];
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($images, ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $images[$key]['path'] = $image['file']->store('org/' . $org->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $org->id . '/' . 'images');
             }
 
             $org->workImages()->createMany($images);
         }
+
         // identities
         if ($request->hasFile('identities')) {
             $identities = [];
@@ -347,7 +347,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::find($id);
+        $org = Org::with(['division', 'district', 'thana', 'union'])->find($id);
 
         if ($org->user_id != Auth::id() && $org->is_pending == 0) {
             return redirect(route('organization-service-registration.index'));
@@ -355,11 +355,12 @@ class OrgServiceRegistrationController extends Controller
 
         $categories = Category::getAll('org')->get();
         $subCategories = SubCategory::getAll('org')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::take(20)->get();
-        $unions = Union::take(20)->get();
+        $divisions = Division::all();
+        $districts = $org->division()->with('districts')->first()->districts;
+        $thanas = $org->district->thanas()->where('is_pending', 0)->get();
+        $unions = $org->thana->unions()->where('is_pending', 0)->get();
 
         $isPicExists = $org->user->photo;
-        return view('frontend.registration.org-service.edit', compact('org', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
+        return view('frontend.registration.org-service.edit', compact('org', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
     }
 }

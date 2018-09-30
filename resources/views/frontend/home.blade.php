@@ -83,7 +83,7 @@
                                 <li class="media mt-3 p-2 bg-light">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('frontend.ind-service.show', $service->id) }}">{{ str_limit($service->name, 20) }}</a>
+                                            <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ str_limit($service->name, 20) }}</a>
                                         </p>
                                         <p>
                                             <i>{{ str_limit($service->category->name, 25) }}</i>

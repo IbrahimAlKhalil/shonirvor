@@ -3,3 +3,4 @@ import './../../../../node_modules/bootstrap/dist/css/bootstrap.css'; // Bootstr
 
 /***** JS *****/
 import 'bootstrap'; // Bootstrap JS
+import '../modules/option-loader';

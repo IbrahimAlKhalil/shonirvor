@@ -12,6 +12,7 @@ class CreateIndsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('category_id');
+            $table->unsignedInteger('division_id');
             $table->unsignedInteger('district_id');
             $table->unsignedInteger('thana_id');
             $table->unsignedInteger('union_id');
@@ -33,6 +34,12 @@ class CreateIndsTable extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('division_id')
+                ->references('id')
+                ->on('divisions')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 

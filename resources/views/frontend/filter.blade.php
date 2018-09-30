@@ -34,7 +34,7 @@
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('frontend.ind-service.show', $provider->id) }}">{{ $provider->name }}</a>
+                                            <a href="{{ route('frontend.'.$provider->type.'-service.show', $provider->id) }}">{{ $provider->name }}</a>
                                         </p>
                                         <p>
                                             <i>{{ str_limit($provider->category_name, 25) }}</i>
@@ -50,11 +50,23 @@
                         </div>
                     @endforeach
                 </div>
-                <div class="row">
-                    <div class="mx-auto">
-                        {{--{{ $providers->links('pagination::bootstrap-4') }}--}}
-                    </div>
-                </div>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div class="col-md-3">
                 @foreach($ads as $ad)

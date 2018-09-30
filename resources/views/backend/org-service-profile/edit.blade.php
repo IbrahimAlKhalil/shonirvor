@@ -82,19 +82,42 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-4 col-form-label">এলাকা <span class="text-danger">*</span></label>
-                <div class="col-8">
+                <label class="col-3 col-form-label">এলাকা <span class="text-danger">*</span></label>
+                <div class="col-9">
                     <div class="row">
                         <div class="col-md">
-                            <select name="district" class="form-control">
-                                <option value="">-- জেলা নির্বাচন করুন --</option>
+                            <select name="division" id="division" class="form-control"
+                                    data-option-loader-url="{{ route('api.districts') }}"
+                                    data-option-loader-target="#district"
+                                    data-option-loader-param="division"
+                                    data-option-loader-nodisable="true">
+                                <option value="">-- বিভাগ নির্বাচন করুন --</option>
+                                @foreach($divisions as $division)
+                                    <option value="{{ $division->id }}" {{ selectOpt($provider->division->id, $division->id) }}>{{ $division->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select id="district" name="district" class="form-control"
+                                    data-placeholder="-- জেলা নির্বাচন করুন --"
+                                    data-option-loader-url="{{ route('api.thanas') }}"
+                                    data-option-loader-target="#thana"
+                                    data-option-loader-param="district"
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 @foreach($districts as $district)
                                     <option value="{{ $district->id }}" {{ selectOpt($provider->district->id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
-                            <select name="thana" class="form-control">
+                            <select name="thana" id="thana" class="form-control"
+                                    data-placeholder="-- থানা নির্বাচন করুন --"
+                                    data-option-loader-url="{{ route('api.unions') }}"
+                                    data-option-loader-target="#union"
+                                    data-option-loader-param="thana"
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- থানা নির্বাচন করুন --</option>
                                 @foreach($thanas as $thana)
                                     <option value="{{ $thana->id }}" {{ selectOpt($provider->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
@@ -102,7 +125,9 @@
                             </select>
                         </div>
                         <div class="col-md">
-                            <select name="union" class="form-control">
+                            <select name="union" id="union" class="form-control"
+                                    data-placeholder="-- ইউনিয়ন নির্বাচন করুন --"
+                                    data-option-loader-properties="value=id,text=bn_name">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
                                     <option value="{{ $union->id }}" {{ selectOpt($provider->union->id, $union->id) }}>{{ $union->bn_name }}</option>
@@ -134,22 +159,36 @@
             </div>
 
             <div class="form-group row">
-                <label for="category" class="col-4 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
-                <div class="col-8">
+                <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
+                <div class="col-9">
                     <select id="category" name="category"
-                            disabled
+                            data-option-loader-url="{{ route('api.sub-categories') }}"
+                            data-option-loader-target="#sub-categories"
+                            data-option-loader-param="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
-                        <option>{{ $provider->category->name }}</option>
+                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ selectOpt($provider->category->id, $category->id) }}>{{ $category->name }}</option>
+                        @endforeach
                     </select>
+
+                    @include('components.invalid', ['name' => 'category'])
+                    <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-category" name="no-category"
+                           class="mt-2 no-something" {{ checkBox(!$provider->category->is_confirmed) }}>
+                    <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।" value="{{ $provider->category->name }}">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="sub-categories" class="col-4 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                             class="text-danger">*</span></label>
-                <div class="col-8">
+                <div class="col-9">
 
                     <select id="sub-categories" name="sub-categories[]"
+                            data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                            data-option-loader-properties="value=id,text=name"
                             class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
                         <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
                         @php($selectedSubCategories = $provider->subCategories->pluck('id')->toArray())
@@ -163,8 +202,8 @@
                     @php($requestedSubCategories = $provider->subCategories('requested')->get())
                     <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
-                           class="mt-2" {{ checkBox($requestedSubCategories->count() >= 1) }}>
-                    <div style="display: none">
+                           class="mt-2 no-something" {{ checkBox($requestedSubCategories->count() >= 1) }}>
+                    <div class="input-div">
 
                         @foreach($requestedSubCategories as $subcategory)
                             <input type="text" name="sub-category-requests[]" class="form-control mt-3"
@@ -177,12 +216,6 @@
                         <input type="text" name="sub-category-requests[]" class="form-control mt-3"
                                placeholder="Type your sub-category here.">
                     </div>
-
-                    <style>
-                        #no-sub-category:checked + div {
-                            display: block !important;
-                        }
-                    </style>
                 </div>
             </div>
 

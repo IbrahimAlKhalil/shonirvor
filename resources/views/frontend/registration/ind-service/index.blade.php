@@ -80,11 +80,11 @@
                 <div class="col-9">
                     <div class="row">
                         <div class="col-md">
-                            <select name="divisions" id="division" class="form-control"
+                            <select name="division" id="division" class="form-control"
                                     data-option-loader-url="{{ route('api.districts') }}"
-                                    data-target-select="#district"
+                                    data-option-loader-target="#district"
                                     data-option-loader-param="division">
-                                <option>-- বিভাগ নির্বাচন করুন --</option>
+                                <option value="">-- বিভাগ নির্বাচন করুন --</option>
                                 @foreach($divisions as $division)
                                     <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
                                 @endforeach
@@ -94,7 +94,7 @@
                             <select name="district" id="district" class="form-control"
                                     data-placeholder="-- জেলা নির্বাচন করুন --"
                                     data-option-loader-url="{{ route('api.thanas') }}"
-                                    data-target-select="#thana"
+                                    data-option-loader-target="#thana"
                                     data-option-loader-param="district"
                                     data-option-loader-properties="value=id,text=bn_name"></select>
                         </div>
@@ -102,7 +102,7 @@
                             <select name="thana" id="thana" class="form-control"
                                     data-placeholder="-- থানা নির্বাচন করুন --"
                                     data-option-loader-url="{{ route('api.unions') }}"
-                                    data-target-select="#union"
+                                    data-option-loader-target="#union"
                                     data-option-loader-param="thana"
                                     data-option-loader-properties="value=id,text=bn_name">
                             </select>
@@ -141,7 +141,7 @@
                     <select id="category" name="category"
                             class="form-control @if($errors->has('category')) is-invalid @endif"
                             data-option-loader-url="{{ route('api.sub-categories') }}"
-                            data-target-select="#sub-categories"
+                            data-option-loader-target="#sub-categories"
                             data-option-loader-param="category">
                         <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
 
@@ -277,7 +277,7 @@
                         @for($i=0; $i<4; $i++)
                             <div class="col-md-6 shadow-sm p-2 mb-2 bg-white rounded">
                                 <input id="images" name="images[{{ $i }}][file]" type="file" accept="image/*"
-                                       class="form-control-file @if($errors->has('images')) is-invalid @endif" multiple>
+                                       class="form-control-file @if($errors->has('images')) is-invalid @endif">
                                 @include('components.invalid', ['name' => 'images'])
                                 <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
                                 <textarea id="images-{{ $i }}-text" type="text" class="form-control"

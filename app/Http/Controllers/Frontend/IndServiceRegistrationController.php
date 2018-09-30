@@ -28,11 +28,10 @@ class IndServiceRegistrationController extends Controller
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
-        $subCategories = SubCategory::getAll('ind')->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories', 'subCategories');
+        $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -68,15 +67,13 @@ class IndServiceRegistrationController extends Controller
 
         // check what if current user didn't reach at the maximum pending request
         if ($inds->count() >= 3) {
+
             $workMethods = WorkMethod::all();
             $categories = Category::getAll('ind')->get();
-            $subCategories = SubCategory::getAll('ind')->get();
-            $districts = District::take(20)->get();
-            $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
-            $unions = Union::where('is_pending', '=', 0)->take(20)->get();
+            $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
             $isPicExists = $user->photo;
-            $compact = compact('classesToAdd', 'inds', 'workMethods', 'districts', 'thanas', 'unions', 'isPicExists', 'categories', 'subCategories');
+            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories');
 
             // reached at the maximum
             // redirect them to the confirmation page
@@ -139,6 +136,7 @@ class IndServiceRegistrationController extends Controller
 
         $ind = new Ind;
         $ind->user_id = $user->id;
+        $ind->division_id = $request->post('division');
         $ind->district_id = $request->post('district');
         $ind->thana_id = $thana->id;
         $ind->union_id = $union->id;
@@ -186,13 +184,14 @@ class IndServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images')) {
+        if ($request->has('images') && $request->hasFile('images')) {
             $images = [];
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($images, ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
             }
 
             $ind->workImages()->createMany($images);
@@ -285,6 +284,7 @@ class IndServiceRegistrationController extends Controller
             $union->save();
         }
 
+        $ind->division_id = $request->post('division');
         $ind->district_id = $request->post('district');
         $ind->thana_id = $thana->id;
         $ind->union_id = $union->id;
@@ -346,13 +346,15 @@ class IndServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images')) {
+        if ($request->has('images') && $request->hasFile('images')) {
             $images = [];
+
+            // TODO:: Validation
             foreach ($request->post('images') as $image) {
-                array_push($images, ['description' => $image['description']]);
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
             }
             foreach ($request->file('images') as $key => $image) {
-                $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
             }
 
             $ind->workImages()->createMany($images);
@@ -375,7 +377,7 @@ class IndServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $ind = Ind::find($id);
+        $ind = Ind::with(['division', 'district', 'thana', 'union'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
@@ -386,11 +388,12 @@ class IndServiceRegistrationController extends Controller
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $subCategories = SubCategory::getAll('ind')->get();
-        $districts = District::take(20)->get();
-        $thanas = Thana::where('is_pending', '=', 0)->take(20)->get();
-        $unions = Union::where('is_pending', '=', 0)->take(20)->get();
+        $divisions = Division::all();
+        $districts = $ind->division()->with('districts')->first()->districts;
+        $thanas = $ind->district->thanas()->where('is_pending', 0)->get();
+        $unions = $ind->thana->unions()->where('is_pending', 0)->get();
 
         $isPicExists = $ind->user->photo;
-        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'districts', 'thanas', 'unions'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
     }
 }

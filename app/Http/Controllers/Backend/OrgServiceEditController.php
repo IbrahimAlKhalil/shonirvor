@@ -56,6 +56,7 @@ class OrgServiceEditController extends Controller
         }
 
         // District, thana, union
+        $org->division_id = $data['division'];
         $org->district_id = $data['district'];
 
         if ($request->has('thana')) {
