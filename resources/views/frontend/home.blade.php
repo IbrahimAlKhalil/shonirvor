@@ -36,6 +36,7 @@
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         @foreach($indCategories as $category)
                             <p>
+                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
                                 <a href="#">{{ $category->name }}</a>
                             </p>
                         @endforeach
@@ -45,6 +46,7 @@
                         @foreach($orgCategories as $category)
                             <p>
                                 <a href="#">{{ $category->name }}</a>
+                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
                             </p>
                         @endforeach
                     </div>

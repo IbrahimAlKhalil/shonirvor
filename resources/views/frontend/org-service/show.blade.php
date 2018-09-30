@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', $provider->user->name)
+@section('title', $provider->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>

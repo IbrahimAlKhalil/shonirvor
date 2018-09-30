@@ -13,9 +13,12 @@ use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Division;
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
 class FilterController extends Controller
 {
+    private $showPerPage = 14;
+
     public function index(Request $request)
     {
         $divisions = Division::select('id', 'bn_name')->get();
@@ -67,8 +70,10 @@ class FilterController extends Controller
 
             switch ($subCategoryType) {
                 case 'ind':
-                    $indProviders = Ind::join('sub_categories', 'inds.category_id', 'sub_categories.category_id')
-                        ->where('sub_categories.id', $request->get('sub-category'))
+                    $indProviders = Ind::join('sub_categoriables', 'inds.id', 'sub_categoriables.sub_categoriable_id')
+                        ->join('sub_categories', 'sub_categoriables.sub_category_id', 'sub_categories.id')
+                        ->where('sub_categoriables.sub_category_id', $request->get('sub-category'))
+                        ->where('sub_categoriables.sub_categoriable_type', 'ind')
                         ->where('sub_categories.is_confirmed', 1);
 
                     if ($request->filled('union')) {
@@ -91,8 +96,10 @@ class FilterController extends Controller
                     break;
 
                 case 'org':
-                    $orgProviders = Org::join('sub_categories', 'inds.category_id', 'sub_categories.category_id')
-                        ->where('sub_categories.id', $request->get('sub-category'))
+                    $orgProviders = Org::join('sub_categoriables', 'orgs.id', 'sub_categoriables.sub_categoriable_id')
+                        ->join('sub_categories', 'sub_categoriables.sub_category_id', 'sub_categories.id')
+                        ->where('sub_categoriables.sub_category_id', $request->get('sub-category'))
+                        ->where('sub_categoriables.sub_categoriable_type', 'org')
                         ->where('sub_categories.is_confirmed', 1);
 
                     if ($request->filled('union')) {
@@ -195,6 +202,7 @@ class FilterController extends Controller
         function indJoinNfetch($instance)
         {
             return $instance
+                ->with('feedbacks')
                 ->join('users', 'inds.user_id', 'users.id')
                 ->join('categories', 'inds.category_id', 'categories.id')
                 ->join('service_types', 'categories.service_type_id', 'service_types.id')
@@ -220,6 +228,7 @@ class FilterController extends Controller
         function orgJoinNfetch($instance)
         {
             return $instance
+                ->with('feedbacks')
                 ->join('users', 'orgs.user_id', 'users.id')
                 ->join('categories', 'orgs.category_id', 'categories.id')
                 ->join('service_types', 'categories.service_type_id', 'service_types.id')
@@ -247,11 +256,11 @@ class FilterController extends Controller
 
             if (isset($indProviders)) {
 
-                $providers = indJoinNfetch($indProviders);
+                $services = indJoinNfetch($indProviders)->sortByDesc('feedbacks');
 
             } elseif ($orgProviders) {
 
-                $providers = orgJoinNfetch($orgProviders);
+                $services = orgJoinNfetch($orgProviders)->sortByDesc('feedbacks');
 
             }
 
@@ -260,16 +269,19 @@ class FilterController extends Controller
             $indProviders = indJoinNfetch($indProviders);
             $orgProviders = orgJoinNfetch($orgProviders);
 
-//            dd($indProviders);
-
             foreach ($orgProviders as $orgProvider) {
 
                 $indProviders->push($orgProvider);
 
             }
-            $providers = $indProviders;
+            $services = $indProviders->sortByDesc('feedbacks');
 
         }
+
+        $perPagedData = $services->slice(($request->get('page')-1) * $this->showPerPage, $this->showPerPage)->all();
+        $providers = new Paginator($perPagedData, count($services), $this->showPerPage, $request->get('page'), [
+            'path' => route('frontend.filter')
+        ]);
 
         return view('frontend.filter', compact(
             'divisions',
