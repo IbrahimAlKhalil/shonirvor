@@ -109,7 +109,8 @@
                             <select name="division" id="division" class="form-control"
                                     data-option-loader-url="{{ route('api.districts') }}"
                                     data-option-loader-target="#district"
-                                    data-option-loader-param="division">
+                                    data-option-loader-param="division"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- বিভাগ নির্বাচন করুন --</option>
                                 @foreach($divisions as $division)
                                     <option value="{{ $division->id }}" {{ selectOpt($org->division->id, $division->id) }}>{{ $division->bn_name }}</option>
@@ -122,7 +123,8 @@
                                     data-option-loader-url="{{ route('api.thanas') }}"
                                     data-option-loader-target="#thana"
                                     data-option-loader-param="district"
-                                    data-option-loader-properties="value=id,text=bn_name">
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 @foreach($districts as $district)
                                     <option value="{{ $district->id }}" {{ selectOpt($org->district->id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
@@ -134,7 +136,8 @@
                                     data-option-loader-url="{{ route('api.unions') }}"
                                     data-option-loader-target="#union"
                                     data-option-loader-param="thana"
-                                    data-option-loader-properties="value=id,text=bn_name">
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- থানা নির্বাচন করুন --</option>
                                 @foreach($thanas as $thana)
                                     <option value="{{ $thana->id }}" {{ selectOpt($org->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
@@ -278,7 +281,8 @@
                                        class="form-control-file @if($errors->has('images')) is-invalid @endif" multiple>
                                 @include('components.invalid', ['name' => 'images'])
                                 <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
-                                <textarea id="images-{{ $i }}-text" type="text" class="form-control" name="images[{{ $i }}][description]"></textarea>
+                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
+                                          name="images[{{ $i }}][description]"></textarea>
                             </div>
                         @endfor
                     </div>

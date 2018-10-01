@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateIndsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('inds', function (Blueprint $table) {
@@ -21,7 +16,6 @@ class CreateIndsTable extends Migration
             $table->unsignedInteger('district_id');
             $table->unsignedInteger('thana_id');
             $table->unsignedInteger('union_id');
-
             $table->string('email');
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
@@ -75,11 +69,6 @@ class CreateIndsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('inds');

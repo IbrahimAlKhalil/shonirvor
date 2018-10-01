@@ -14,8 +14,7 @@ class ServiceType extends Model
     /**
      * @param $type string
      * @return object|$this
-     * */
-
+     **/
     public static function getThe($type)
     {
         $result = null;

@@ -9,6 +9,7 @@ Route::prefix('command')->group(function () {
 }, '');
 
 Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
+Route::get('filter', 'Frontend\FilterController@index')->name('frontend.filter');
 Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
 Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
 
@@ -45,6 +46,8 @@ Route::put('dashboard/area/division/{division}', 'Backend\AreaController@updateD
 Route::put('dashboard/area/district/{district}', 'Backend\AreaController@updateDistrict')->name('backend.area.district.update');
 Route::put('dashboard/area/thana/{thana}', 'Backend\AreaController@updateThana')->name('backend.area.thana.update');
 Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')->name('backend.area.union.update');
+
+Route::resource('dashboard/ad', 'Backend\AdController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.ad');
 
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');

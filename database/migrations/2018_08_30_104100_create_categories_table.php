@@ -15,6 +15,8 @@ class CreateCategoriesTable extends Migration
             $table->boolean('is_confirmed')->default(1);
             $table->string('image')->nullable();
             $table->timestamps();
+
+            $table->foreign('service_type_id')->references('id')->on('service_types')->onUpdate('cascade');
         });
     }
 

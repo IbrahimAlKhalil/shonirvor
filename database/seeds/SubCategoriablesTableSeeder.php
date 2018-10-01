@@ -19,12 +19,11 @@ class SubCategoriablesTableSeeder extends Seeder
     /**
      * @param $class Model|string
      * @param $subCategoriableType string
-     * */
-
+     **/
     private function seed($class, $subCategoriableType)
     {
         $class::all()->each(function ($service) use ($subCategoriableType) {
-            $subCategoryIds = SubCategory::getAll($subCategoriableType)->pluck('id')->toArray();
+            $subCategoryIds = $service->category->subCategories()->pluck('id')->toArray();
             $subCategoryIds = randomElements($subCategoryIds, rand(1, count($subCategoryIds)));
             $subCategoriables = [];
 

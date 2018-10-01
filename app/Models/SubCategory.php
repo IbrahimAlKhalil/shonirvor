@@ -10,19 +10,23 @@ class SubCategory extends Model
 
     public function inds()
     {
-        return $this->morphedByMany(Ind::class, 'sub_categoriable');
+        return $this->morphedByMany(Ind::class, 'sub_categoriable')->where('is_pending', 0);
     }
 
     public function orgs()
     {
-        return $this->morphedByMany(Org::class, 'sub_categoriable');
+        return $this->morphedByMany(Org::class, 'sub_categoriable')->where('is_pending', 0);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**
      * @param $serviceType string
      * @return object|null
-     * */
-
+     **/
     public static function getAll($serviceType)
     {
         $result = null;

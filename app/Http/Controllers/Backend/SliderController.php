@@ -21,9 +21,9 @@ class SliderController extends Controller
             $sliders[$key]['id'] = $slider['id'];
         }
 
-        usort($sliders, function ($a, $b) {
+        /*usort($sliders, function ($a, $b) {
             return $a['order'] <=> $b['order'];
-        });
+        });*/
 
         $id = ContentType::where('name', 'slider')->first()->id;
         return view('backend.contents.slider', compact('navs', 'sliders', 'id'));

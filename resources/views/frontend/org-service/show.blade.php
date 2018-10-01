@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', $provider->user->name)
+@section('title', $provider->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <p class="lead text-center pt-5">আমার নাম {{ $provider->org_name }}..<br> আমি একজন <mark>বেক্তিগত</mark> সার্ভিস প্রভাইডার...</p>
+                <p class="lead text-center pt-5">আমার প্রতিষ্ঠানের নাম {{ $provider->name }}..<br> আমি একজন <mark>প্রাতিষ্ঠানিক</mark> সার্ভিস প্রভাইডার...</p>
             </div>
         </div>
         @if($canFeedback)

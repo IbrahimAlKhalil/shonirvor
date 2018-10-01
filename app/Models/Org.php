@@ -12,6 +12,7 @@ use Sandofvega\Bdgeocode\Models\Union;
 class Org extends Model
 {
     use SoftDeletes;
+
     protected $dates = ['deleted_at'];
 
     public function user()
@@ -43,8 +44,7 @@ class Org extends Model
     /**
      * @param $status string
      * @return object
-     * */
-
+     **/
     public function subCategories($status = null)
     {
         $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
@@ -83,8 +83,7 @@ class Org extends Model
     /**
      * @param $status string
      * @return object|null
-     * */
-
+     **/
     public static function getOnly($status)
     {
         $result = null;
