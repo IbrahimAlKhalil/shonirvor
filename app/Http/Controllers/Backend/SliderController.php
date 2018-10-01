@@ -34,16 +34,39 @@ class SliderController extends Controller
         DB::beginTransaction();
         // TODO:: Delete previous images
 
+        $data = [];
+
         ContentType::find($id)->contents()->delete();
 
-        $data = [];
-        if ($request->hasFile('sliders')) {
-            foreach ($request->file('sliders') as $key => $slider) {
+        foreach ($request->post('images') as $key => $image) {
+            if (array_key_exists('prev-image', $image)) {
+                switch ($request->hasFile('sliders') && array_key_exists($key, $request->file('sliders'))) {
+                    case true:
+                        array_push($data, [
+                            'data' => json_encode([
+                                'order' => $image['order'],
+                                'link' => $image['link'],
+                                'image' => $request->file('sliders.' . $key)->store('slider')
+                            ]),
+                            'content_type_id' => $id
+                        ]);
+                        break;
+                    case false:
+                        array_push($data, [
+                            'data' => json_encode([
+                                'order' => $image['order'],
+                                'link' => $image['link'],
+                                'image' => $image['prev-image']
+                            ]),
+                            'content_type_id' => $id
+                        ]);
+                }
+            } else if (array_key_exists($key, $request->file('sliders'))) {
                 array_push($data, [
                     'data' => json_encode([
-                        'image' => $slider->store('slider'),
-                        'link' => $request->post('images')[$key]['link'],
-                        'order' => $request->post('images')[$key]['order']
+                        'order' => $image['order'],
+                        'link' => $image['link'],
+                        'image' => $request->file('sliders.' . $key)->store('slider')
                     ]),
                     'content_type_id' => $id
                 ]);

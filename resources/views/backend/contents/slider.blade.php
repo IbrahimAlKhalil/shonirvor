@@ -36,6 +36,12 @@
                                                            class="form-control w-100 mb-2 action-link"
                                                            placeholder="লিঙ্ক"
                                                            value="{{ $slider['link'] }}">
+                                                    <input type="hidden"
+                                                           name="images[image-{{ $loop->iteration-1 }}][prev-image]"
+                                                           value="{{ $slider['image'] }}">
+                                                    <input type="hidden"
+                                                           name="images[image-{{ $loop->iteration-1 }}][id]"
+                                                           value="{{ $slider['id'] }}">
                                                     <div>
                                                         <button class="btn btn-primary change-image" type="button">ছবি
                                                             পরিবর্তন
