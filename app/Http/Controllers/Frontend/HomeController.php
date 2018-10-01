@@ -23,13 +23,11 @@ class HomeController extends Controller
         $indServices = Ind::all()->random(10);
         $orgServices = Org::all()->random(10);
 
-        $notices = Notice::all();
-
         $ads = Ad::all();
         if ($ads->count() >= 3) {
             $ads = $ads->random(3);
         }
 
-        return view('frontend.home', compact('divisions', 'categories', 'ads', 'notices', 'indCategories', 'orgCategories', 'indServices', 'orgServices'));
+        return view('frontend.home', compact('divisions', 'categories', 'ads', 'indCategories', 'orgCategories', 'indServices', 'orgServices'));
     }
 }
