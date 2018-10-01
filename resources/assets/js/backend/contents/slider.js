@@ -6,6 +6,7 @@ import '../../../scss/backend/contents/slider.scss';
 import $ from 'jquery';
 import 'bootstrap'; // Bootstrap JS
 import Sortable from 'sortablejs';
+import {Repeater} from "../../modules/repeater";
 
 
 /*function handleSorting(event) {
@@ -30,16 +31,13 @@ function shoImage(element) {
 document.addEventListener('DOMContentLoaded', () => {
     let noImage = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAACqBAMAAAA5NBsAAAAAHlBMVEX///+5ubnKysrT09PFxcXb29v4+Pjm5ubx8fG/v79jhCz7AAACiUlEQVR42u3bS2sTURjG8ZfUmZztkws2u7TCAXcGsXRpRFx3pN52gxa1u4qXxl0UN1mOC/XjGuPMScZDWnKwJ+/Q5/cJ/jxvAiHJCBEREREREREREREREZFe5v3+pm5NJLJ0hAAHEtc3hOhNJSZTIMgviekEYXq5RJQh0JHEkxYI9EPiaf853pNNHQO4KfG0g1ZJi7iVOwCGsrE9oCvrsZKVrFRZ+XaSq680x8D3p8or0xeYGxzprvyKhW6uudJ97BhqrnyFUl9z5TtUpnor0zEqQ72VbTi7eit34PT1Vt6A0xXPa32VHflXup/rqDy9qPIlrI7Kiy6e7qGTq6hswen7UwJWRWUCZ9efEvMxNVSaApVH/pRzVkOlZKic+VMuxtRQeYJSx59ywWqoNO7g/pTlmAoq5UMZM/WmLFkNlebvaAf+lG5MBZXSvg0MDsWb0rEaKiX9+OyT+FOujKmh8tKfBqzOSlMA3phbqrwv68xQZzVWuim9MSNXtvxKf8olq2/LasramOoqZ/BZJRfPa1P6Y6rYMrG1KT1WRWXWyWtT+mMquHgC2NqUHqtgy6xcy03p6Wy/MnFrzbBOvvWLZ9VLz4w1Vda3TNxLbwa9lVn1PjaFqsraxROU7AyqKmtbZij1xnorEyzpqly9eKa2cmXLBE2ozPRWLi+eQG/lcsusCZUJFFe6i2eaK6stEzSh8ovqylYjKpuxZTMqefHrVsmLX7fKZl38zfnlJgvn2/8GRun/L1uNqGzGls2o5MX/nyTogSJTxH/aY3B3E/e28EyKQROe75ERAt2RiE4RZpBLRO0CQX5KVJ/DpjyTqMwIAQ4lMvP44aYePBciIiIiIiIiIiIiIrpyvwGPXU9VynS3IQAAAABJRU5ErkJggg==`;
     let container = document.getElementById("image-list");
-    let sort = Sortable.create(container, {
+    Sortable.create(container, {
         animation: 150,
         draggable: ".list-group-item",
         handle: '.list-group-item',
         sort: true/*,
         onUpdate: handleSorting*/
     });
-
-    window.sort = sort;
-    window.Sortable = Sortable;
 
     let deleteForm = document.getElementById('delete-form');
     document.querySelectorAll('.delete-image').forEach(element => element.addEventListener('click', event => {
@@ -57,37 +55,33 @@ document.addEventListener('DOMContentLoaded', () => {
         shoImage(element);
     }));
 
-    document.getElementById('add-new').addEventListener('click', () => {
-        let newList = Sortable.utils.clone(container.lastElementChild);
+
+    function process(item) {
+        let linkInput = item.querySelector('.action-link');
         let order = container.children.length;
-        let orderInput = newList.querySelector('.image-order');
-        let linkInput = newList.querySelector('.action-link');
 
-        newList.querySelector('.slider-image').src = noImage;
-
-        orderInput.name = `images[image-${order}][order]`;
-        orderInput.value = order;
+        item.querySelector('.slider-image').src = noImage;
 
         linkInput.name = `images[image-${order}][link]`;
         linkInput.value = '';
 
-        newList.querySelector('.image-field').name = `sliders[image-${order}]`;
+        item.querySelector('.image-field').name = `sliders[image-${order}]`;
 
-        container.appendChild(newList);
-
-        newList.querySelector('.change-image').addEventListener('click', event => {
+        item.querySelector('.change-image').addEventListener('click', event => {
             handleChangeBtnClick(event.target);
         });
 
-        newList.querySelector('.image-field').addEventListener('change', event => {
+        item.querySelector('.image-field').addEventListener('change', event => {
             shoImage(event.target);
         });
+    }
 
-        newList.querySelector('.delete-image').addEventListener('click', () => {
-            $(newList).fadeOut(400, () => {
-                $(newList).remove();
-                newList = null;
-            });
-        });
+
+    let repeater = new Repeater(container, {
+        process: process
+    });
+
+    document.getElementById('add-new').addEventListener('click', () => {
+        repeater.repeat();
     });
 });

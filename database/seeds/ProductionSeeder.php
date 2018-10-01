@@ -43,17 +43,14 @@ class ProductionSeeder extends Seeder
             ['data' => json_encode([
                 'image' => 'seed/home-slider/1.jpg',
                 'link' => 'https://www.google.com',
-                'order' => 1
             ])],
             ['data' => json_encode([
                 'image' => 'seed/home-slider/2.jpg',
                 'link' => 'https://www.google.com',
-                'order' => 2
             ])],
             ['data' => json_encode([
                 'image' => 'seed/home-slider/3.jpg',
                 'link' => 'https://www.google.com',
-                'order' => 3
             ])]
         ]);
 

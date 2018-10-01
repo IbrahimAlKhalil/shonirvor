@@ -111,7 +111,7 @@
                                     data-option-loader-target="#district"
                                     data-option-loader-param="division"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- বিভাগ নির্বাচন করুন --</option>
+                                <option value="">-- বিভাগ --</option>
                                 @foreach($divisions as $division)
                                     <option value="{{ $division->id }}" {{ selectOpt($org->division->id, $division->id) }}>{{ $division->bn_name }}</option>
                                 @endforeach
@@ -119,7 +119,7 @@
                         </div>
                         <div class="col-md">
                             <select name="district" id="district" class="form-control"
-                                    data-placeholder="-- জেলা নির্বাচন করুন --"
+                                    data-placeholder="-- জেলা --"
                                     data-option-loader-url="{{ route('api.thanas') }}"
                                     data-option-loader-target="#thana"
                                     data-option-loader-param="district"
@@ -132,13 +132,13 @@
                         </div>
                         <div class="col-md">
                             <select name="thana" id="thana" class="form-control"
-                                    data-placeholder="-- থানা নির্বাচন করুন --"
+                                    data-placeholder="-- থানা --"
                                     data-option-loader-url="{{ route('api.unions') }}"
                                     data-option-loader-target="#union"
                                     data-option-loader-param="thana"
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- থানা নির্বাচন করুন --</option>
+                                <option value="">-- থানা --</option>
                                 @foreach($thanas as $thana)
                                     <option value="{{ $thana->id }}" {{ selectOpt($org->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
                                 @endforeach
@@ -146,7 +146,7 @@
                         </div>
                         <div class="col-md">
                             <select name="union" id="union" class="form-control"
-                                    data-placeholder="-- ইউনিয়ন নির্বাচন করুন --"
+                                    data-placeholder="-- ইউনিয়ন --"
                                     data-option-loader-properties="value=id,text=bn_name">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
