@@ -49,6 +49,8 @@ Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')
 
 Route::resource('dashboard/ad', 'Backend\AdController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.ad');
 
+Route::resource('dashboard/notice', 'Backend\NoticeController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.notice');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

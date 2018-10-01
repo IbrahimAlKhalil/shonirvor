@@ -12,7 +12,7 @@ class AdController extends Controller
     public function index()
     {
         $ads = Ad::select('id', 'image', 'url')->paginate(10);
-        return view('backend.ad.index', compact('ads'));
+        return view('backend.ad', compact('ads'));
     }
 
     public function store(Request $request)
@@ -42,6 +42,6 @@ class AdController extends Controller
         Storage::delete($ad->image);
         $ad->delete();
 
-        return back()->with('success', 'বিজ্ঞাপন  মুছে ফেলা হয়েছে।');
+        return back()->with('success', 'বিজ্ঞাপন মুছে ফেলা হয়েছে।');
     }
 }

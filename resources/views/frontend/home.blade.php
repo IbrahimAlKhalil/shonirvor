@@ -8,6 +8,7 @@
 
 @section('content')
     @include('components.slider')
+    @include('components.notice')
 
     <div class="container-fluid">
         <div class="row pt-4">

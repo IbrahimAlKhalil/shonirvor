@@ -25,6 +25,9 @@
             <li class="nav-item @if(request()->is('dashboard/ad*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.ad.index') }}">বিজ্ঞাপন</a>
             </li>
+            <li class="nav-item @if(request()->is('dashboard/notice*')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('backend.notice.index') }}">নোটিশ</a>
+            </li>
             <li class="nav-item @if(request()->is('dashboard/notifications')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('notification.show') }}">নোটিফিকেশন @if($notificationCount)<span class="badge badge-light">{{ $notificationCount }}</span>@endif</a>
             </li>

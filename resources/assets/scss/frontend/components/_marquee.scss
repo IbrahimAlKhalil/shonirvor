@@ -1,0 +1,22 @@
+.marquee-parent{
+  overflow: hidden;
+  .marquee {
+    will-change: transform;
+    animation: scroll-right-left 30s linear infinite;
+    white-space: nowrap;
+  }
+  &:hover {
+    .marquee {
+      animation-play-state: paused;
+    }
+  }
+}
+
+@keyframes scroll-right-left {
+  from {
+    transform: translateX(105%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
