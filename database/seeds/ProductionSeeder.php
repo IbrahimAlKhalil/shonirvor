@@ -41,15 +41,15 @@ class ProductionSeeder extends Seeder
         $homeSlider->save();
         $homeSlider->contents()->createMany([
             ['data' => json_encode([
-                'image' => 'seed/home-slider/1.jpg',
+                'image' => 'default/home-slider/1.jpg',
                 'link' => 'https://www.google.com',
             ])],
             ['data' => json_encode([
-                'image' => 'seed/home-slider/2.jpg',
+                'image' => 'default/home-slider/2.jpg',
                 'link' => 'https://www.google.com',
             ])],
             ['data' => json_encode([
-                'image' => 'seed/home-slider/3.jpg',
+                'image' => 'default/home-slider/3.jpg',
                 'link' => 'https://www.google.com',
             ])]
         ]);

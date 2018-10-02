@@ -21,49 +21,6 @@ class FilterController extends Controller
 
     public function index(Request $request)
     {
-        $divisions = Division::select('id', 'bn_name')->get();
-
-        if ($request->filled('division')) {
-
-            $districts = District::select('id', 'bn_name')
-                ->where('division_id', $request->get('division'))
-                ->get();
-
-        }
-        if ($request->filled('district')) {
-
-            $thanas = Thana::select('id', 'bn_name')
-                ->where('district_id', $request->get('district'))
-                ->where('is_pending', 0)
-                ->get();
-
-        }
-
-        if ($request->filled('thana')) {
-
-            $unions = Union::select('id', 'bn_name')
-                ->where('thana_id', $request->get('thana'))
-                ->where('is_pending', 0)
-                ->get();
-
-        }
-
-        $categories = Category::select('id', 'name')->where('is_confirmed', 1)->get();
-
-        if ($request->filled('category')) {
-
-            $subCategories = SubCategory::select('id', 'name')
-                ->where('category_id', $request->get('category'))
-                ->where('is_confirmed', 1)
-                ->get();
-
-        }
-
-        $ads = Ad::all();
-        if ($ads->count() >= 3) {
-            $ads = $ads->random(3);
-        }
-
         if ($request->filled('sub-category')) {
 
             $subCategoryType = SubCategory::find($request->get('sub-category'))->category->type->name;
@@ -221,7 +178,10 @@ class FilterController extends Controller
                     'thanas.bn_name as thana_name',
                     'unions.bn_name as union_name'
                 ])
+                ->where('inds.is_pending', 0)
                 ->where('categories.is_confirmed', 1)
+                ->where('thanas.is_pending', 0)
+                ->where('unions.is_pending', 0)
                 ->get();
         }
 
@@ -247,7 +207,10 @@ class FilterController extends Controller
                     'thanas.bn_name as thana_name',
                     'unions.bn_name as union_name'
                 ])
+                ->where('orgs.is_pending', 0)
                 ->where('categories.is_confirmed', 1)
+                ->where('thanas.is_pending', 0)
+                ->where('unions.is_pending', 0)
                 ->get();
         }
 
@@ -283,15 +246,6 @@ class FilterController extends Controller
             'path' => route('frontend.filter')
         ]);
 
-        return view('frontend.filter', compact(
-            'divisions',
-            'districts',
-            'thanas',
-            'unions',
-            'categories',
-            'subCategories',
-            'ads',
-            'providers'
-        ));
+        return view('frontend.filter', compact('providers'));
     }
 }

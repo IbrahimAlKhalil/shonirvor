@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SubCategoriablesTableSeeder::class);
         $this->call(WorkImagesTableSeeder::class);
         $this->call(AdsTableSeeder::class);
+        $this->call(NoticesTableSeeder::class);
     }
 }

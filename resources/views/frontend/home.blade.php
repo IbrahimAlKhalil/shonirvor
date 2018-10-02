@@ -8,6 +8,7 @@
 
 @section('content')
     @include('components.slider')
+    @include('components.notice')
 
     <div class="container-fluid">
         <div class="row pt-4">
@@ -37,7 +38,7 @@
                         @foreach($indCategories as $category)
                             <p>
                                 <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
-                                <a href="#">{{ $category->name }}</a>
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }}</a>
                             </p>
                         @endforeach
                     </div>
@@ -45,7 +46,7 @@
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         @foreach($orgCategories as $category)
                             <p>
-                                <a href="#">{{ $category->name }}</a>
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }}</a>
                                 <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
                             </p>
                         @endforeach
@@ -104,15 +105,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                @foreach($ads as $ad)
-                    <div class="row">
-                        <div class="col-12 mb-5">
-                            <a href="{{ $ad->url }}" target="_blank">
-                                <img src="{{ asset('storage/'.$ad->image) }}" class="img-fluid rounded">
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
+                @include('components.ad')
             </div>
         </div>
     </div>

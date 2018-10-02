@@ -10,7 +10,6 @@ class BackendTopNavComposer
     public function compose(View $view)
     {
         $notificationCount = Auth::user()->unreadNotifications->count();
-
         $view->with(compact('notificationCount'));
     }
 }
