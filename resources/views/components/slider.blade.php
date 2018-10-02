@@ -5,14 +5,13 @@
         <li data-target="#slider" data-slide-to="2"></li>
     </ol>
     <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img class="first-slide" src="{{ asset('assets/images/slider/2.jpg') }}" alt="First slide">
-        </div>
-        <div class="carousel-item">
-            <img class="second-slide" src="{{ asset('assets/images/slider/1.jpg') }}" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-            <img class="third-slide" src="{{ asset('assets/images/slider/6.jpg') }}" alt="Third slide">
-        </div>
+        @foreach($sliders as $slider)
+            @php($data = json_decode($slider->data))
+            <div class="carousel-item @if($loop->first){{ 'active' }}@endif">
+                <a href="{{ $data->link }}" target="_blank">
+                    <img class="d-block w-100" src="{{ asset('storage/'.$data->image) }}">
+                </a>
+            </div>
+        @endforeach
     </div>
 </div>

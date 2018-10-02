@@ -97,4 +97,10 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
 
     Route::resource('individual-service-edit', 'IndServiceEditController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['individual-service-edit' => 'service-edit']]);
     Route::resource('organization-service-edit', 'OrgServiceEditController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['organization-service-edit' => 'service-edit']]);
+
+    Route::name('contents.')->prefix('contents')->group(function () {
+        Route::resource('registration-instruction', 'RegistrationInstructionController', ['only' => ['index', 'update']]);
+        Route::resource('slider', 'SliderController', ['only' => ['index', 'update', 'destroy']]);
+    }, '');
+
 }, '');

@@ -6,7 +6,8 @@ module.exports = {
         'frontend/filter': './resources/assets/js/frontend/filter.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
-
+        'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',
+        'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
         'errors/404': './resources/assets/js/errors/404.js'
     },
     output: {

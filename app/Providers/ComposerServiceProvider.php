@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
-use App\Http\ViewComposers\BackendTopNavComposer;
-use App\Http\ViewComposers\NoticeComposer;
-use App\Http\ViewComposers\SliderComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Http\ViewComposers\AdComponentComposer;
+use App\Http\ViewComposers\BackendTopNavComposer;
+use App\Http\ViewComposers\FilterComponentComposer;
+use App\Http\ViewComposers\NoticeComponentComposer;
+use App\Http\ViewComposers\SliderComponentComposer;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -17,11 +19,19 @@ class ComposerServiceProvider extends ServiceProvider
         );
 
         View::composer(
-            'components.notice', NoticeComposer::class
+            'components.notice', NoticeComponentComposer::class
         );
 
         View::composer(
-            'components.slider', SliderComposer::class
+            'components.slider', SliderComponentComposer::class
+        );
+
+        View::composer(
+            'components.ad', AdComponentComposer::class
+        );
+
+        View::composer(
+            'components.filter', FilterComponentComposer::class
         );
     }
 

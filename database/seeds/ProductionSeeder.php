@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ContentType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Sandofvega\Bdgeocode\Seeds\BdgeocodeSeeder;
@@ -28,6 +29,32 @@ class ProductionSeeder extends Seeder
         DB::table('service_types')->insert([
             ['name' => 'ind'],
             ['name' => 'org']
+        ]);
+
+
+        /********** Content Type ***********/
+        $registrationInstruction = new ContentType(['name' => 'registration-instruction']);
+        $registrationInstruction->save();
+        $registrationInstruction->contents()->create(['data' => null]);
+
+        $homeSlider = new ContentType(['name' => 'slider']);
+        $homeSlider->save();
+        $homeSlider->contents()->createMany([
+            ['data' => json_encode([
+                'image' => 'default/home-slider/1.jpg',
+                'link' => 'https://www.google.com',
+                'order' => 1
+            ])],
+            ['data' => json_encode([
+                'image' => 'default/home-slider/2.jpg',
+                'link' => 'https://www.google.com',
+                'order' => 2
+            ])],
+            ['data' => json_encode([
+                'image' => 'default/home-slider/3.jpg',
+                'link' => 'https://www.google.com',
+                'order' => 3
+            ])]
         ]);
 
     }

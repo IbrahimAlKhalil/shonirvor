@@ -18,15 +18,14 @@ export default function loadOptions(url, selectElement) {
                     option.innerHTML = data[properties.text];
                     selectElement.appendChild(option);
                 });
-                resolve(json);
                 document.body.style.cursor = previousCursor;
+                resolve(json);
             });
         });
     });
 }
 
 function cleanSelect(select) {
-    select.innerHTML = '';
     if (select.hasAttribute('data-option-loader-target')) {
         let target = document.querySelector(select.getAttribute('data-option-loader-target'));
         target.innerHTML = '';

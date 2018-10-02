@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ContentType;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -112,6 +113,32 @@ function randomElements($array, $howMany = 2)
 
     return $returnArray;
 }
+
+
+/**
+ * Get dynamic contents from database
+ * Note: This function is intended only for the contentType witch can have multiple contents, such as slider
+ *
+ * @param $name string
+ * @return mixed
+ */
+function getContents($name)
+{
+    return ContentType::where('name', $name)->with('contents')->first()->contents();
+}
+
+
+/**
+ * Get dynamic contents from database
+ *
+ * @param $name string
+ * @return string|null
+ */
+function getContent($name)
+{
+    return ContentType::where('name', $name)->with('contents')->first()->contents()->first();
+}
+
 
 // ************ helper function for api ************** //
 

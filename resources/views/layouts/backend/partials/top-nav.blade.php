@@ -22,6 +22,11 @@
             <li class="nav-item @if(request()->is('dashboard/area/*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.area.division') }}">এলাকা</a>
             </li>
+
+            <li class="nav-item @if(request()->is('dashboard/contents/*')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('contents.registration-instruction.index') }}">কন্টেন্ট ম্যানেজমেন্ট</a>
+            </li>
+
             <li class="nav-item @if(request()->is('dashboard/ad*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.ad.index') }}">বিজ্ঞাপন</a>
             </li>
@@ -29,11 +34,13 @@
                 <a class="nav-link" href="{{ route('backend.notice.index') }}">নোটিশ</a>
             </li>
             <li class="nav-item @if(request()->is('dashboard/notifications')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('notification.show') }}">নোটিফিকেশন @if($notificationCount)<span class="badge badge-light">{{ $notificationCount }}</span>@endif</a>
+                <a class="nav-link" href="{{ route('notification.show') }}">নোটিফিকেশন @if($notificationCount)<span
+                            class="badge badge-light">{{ $notificationCount }}</span>@endif</a>
             </li>
             @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">লগ আউট</a>
+                    <a class="nav-link" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">লগ আউট</a>
                     <form action="{{ route('logout') }}" method="post" id="logout-form" class="hidden">
                         {{ csrf_field() }}
                     </form>

@@ -42,7 +42,7 @@
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $provider->mobile }}
                                             <br>
-                                            <span class="fa fa-map-marker"></span> {{ $provider->district_name }}, {{ $provider->thana_name }}, {{ $provider->union_name }}
+                                            <span class="fa fa-map-marker"></span> {{ $provider->union_name }}, {{ $provider->thana_name }}, {{ $provider->district_name }}
                                         </p>
                                     </div>
                                 </li>
@@ -61,15 +61,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                @foreach($ads as $ad)
-                    <div class="row">
-                        <div class="col-12 mb-5">
-                            <a href="{{ $ad->url }}" target="_blank">
-                                <img src="{{ asset('storage/'.$ad->image) }}" class="img-fluid rounded">
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
+                @include('components.ad')
             </div>
         </div>
     </div>
