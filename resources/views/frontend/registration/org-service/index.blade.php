@@ -175,7 +175,7 @@
                             data-option-loader-url="{{ route('api.sub-categories') }}"
                             data-option-loader-target="#sub-categories"
                             data-option-loader-param="category">
-                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                        <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
 
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -192,13 +192,15 @@
             <div class="form-group row">
                 <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                             class="text-danger">*</span></label>
-                <div class="col-9">
-                    <select id="sub-categories" name="sub-categories[]"
-                            class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif"
-                            data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
-                            data-option-loader-properties="value=id,text=name"
-                            multiple>
-                    </select>
+                <div class="col-9" id="sub-category-parent">
+                    <div class="repeater-clone row mt-2">
+                        <select id="sub-categories" name="sub-categories[0][id]"
+                                class="form-control col-md-9 @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                data-option-loader-properties="value=id,text=name">
+                        </select>
+                        <input type="number" class="form-control col-md-3" name="sub-categories[0][rate]" placeholder="রেট">
+                    </div>
                     @include('components.invalid', ['name' => 'sub-categories'])
                     <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
@@ -264,7 +266,8 @@
                                        class="form-control-file @if($errors->has('images')) is-invalid @endif" multiple>
                                 @include('components.invalid', ['name' => 'images'])
                                 <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
-                                <textarea id="images-{{ $i }}-text" type="text" class="form-control" name="images[{{ $i }}][description]"></textarea>
+                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
+                                          name="images[{{ $i }}][description]"></textarea>
                             </div>
                         @endfor
                     </div>

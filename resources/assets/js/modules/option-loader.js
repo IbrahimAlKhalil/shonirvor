@@ -1,9 +1,9 @@
 export class OptionLoader {
-    constructor(select, callback) {
+    constructor(select, options) {
         if (select instanceof Element) {
             select = [select];
         }
-        this.callback = callback;
+        this.options = {...options};
 
         select.forEach(select => {
             let target = document.querySelector(select.getAttribute('data-option-loader-target'));
@@ -14,6 +14,7 @@ export class OptionLoader {
                     evt.preventDefault();
                     evt.stopPropagation();
                     this.clean(target);
+                    typeof this.options.emptyCallback === 'function' && this.options.emptyCallback.call(this, target, select);
                     return;
                 }
 
@@ -21,7 +22,7 @@ export class OptionLoader {
                 this.loadOptions(`${select.getAttribute('data-option-loader-url')}?${select.getAttribute('data-option-loader-param')}=${select.value}`, target)
                     .then((data) => {
                         target.disabled = false;
-                        typeof this.callback === 'function' && this.callback.call(this, target, data, select);
+                        typeof this.options.callback === 'function' && this.options.callback.call(this, target, data, select);
                     });
             });
         });

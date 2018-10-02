@@ -18,7 +18,7 @@
                           method="post" enctype="multipart/form-data">
                         <ul class="list-group w-100" id="image-list">
                             @foreach($sliders as $slider)
-                                <li class="list-group-item mb-2 shadow-sm">
+                                <li class="list-group-item mb-2 shadow-sm @if($loop->last){{ 'repeater-clone' }}@endif">
                                     <div class="row">
                                         <div class="col-md-9">
                                             <div class="row">
