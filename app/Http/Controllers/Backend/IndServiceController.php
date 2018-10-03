@@ -15,9 +15,9 @@ class indServiceController extends Controller
     {
         $inds = Ind::getOnly('approved')->paginate(15);
         $navs = $this->navs();
+
         return view('backend.ind-service.index', compact('inds', 'navs'));
     }
-
 
     public function show(Ind $ind)
     {
@@ -77,6 +77,21 @@ class indServiceController extends Controller
     {
         Ind::onlyTrashed()->find($request->post('id'))->restore();
         return redirect(route('individual-service.show', $request->post('id')))->with('success', 'Account Activated Successfully!');
+    }
+
+    public function isTop(Ind $ind, Request $request)
+    {
+        $ind->is_top = $request->input('is_top');
+        $ind->save();
+
+        if ($ind->is_top) {
+            $message = 'এই সার্ভিসকে এখন টপ সার্ভিসে রাখা হয়েছে।';
+        }
+        else {
+            $message = 'এই সার্ভিসকে এখন টপ সার্ভিস থেকে সরিয়ে ফেলা হয়েছে।';
+        }
+
+        return back()->with('success', $message);
     }
 
     private function navs()

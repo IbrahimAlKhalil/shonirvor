@@ -6,23 +6,16 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateOrgsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('orgs', function (Blueprint $table) {
             $table->increments('id');
-
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('division_id');
             $table->unsignedInteger('district_id')->nullable();
             $table->unsignedInteger('thana_id')->nullable();
             $table->unsignedInteger('union_id')->nullable();
-
             $table->string('email');
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
@@ -37,6 +30,7 @@ class CreateOrgsTable extends Migration
             $table->string('address');
             $table->string('trade_license')->nullable();
             $table->boolean('is_pending')->default(1);
+            $table->boolean('is_top')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
@@ -77,11 +71,6 @@ class CreateOrgsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('orgs');

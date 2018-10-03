@@ -51,6 +51,9 @@ Route::resource('dashboard/ad', 'Backend\AdController', ['only' => ['index', 'st
 
 Route::resource('dashboard/notice', 'Backend\NoticeController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.notice');
 
+Route::post('individual-service/top/{ind}', 'Backend\IndServiceController@isTop')->name('ind-service.top');
+Route::post('organization-service/top/{org}', 'Backend\OrgServiceController@isTop')->name('org-service.top');
+
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 

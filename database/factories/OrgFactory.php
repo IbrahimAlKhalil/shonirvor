@@ -21,6 +21,7 @@ $factory->define(App\Models\Org::class, function (Faker $faker) {
         'longitude' => $faker->longitude,
         'address' => $faker->address,
         'trade_license' => 'seed/org/trade-license.png',
-        'is_pending' => rand(0, 1)
+        'is_pending' => rand(0, 1),
+        'is_top' =>  rand(0, 1)
     ];
 });

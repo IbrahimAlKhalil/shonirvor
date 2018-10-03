@@ -28,8 +28,8 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        $indServices = Ind::all()->random(10);
-        $orgServices = Org::all()->random(10);
+        $indServices = Ind::where('is_top', 1)->get()->shuffle();
+        $orgServices = Org::where('is_top', 1)->get()->shuffle();
 
         return view('frontend.home', compact('indCategories', 'orgCategories', 'indServices', 'orgServices'));
     }
