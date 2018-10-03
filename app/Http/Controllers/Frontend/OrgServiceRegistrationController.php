@@ -11,10 +11,10 @@ use App\Http\Requests\UpdateOrg;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Illuminate\Support\Facades\Storage;
+use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\District;
 
 class OrgServiceRegistrationController extends Controller

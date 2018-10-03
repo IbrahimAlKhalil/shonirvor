@@ -1,4 +1,8 @@
 *
-!/default
-!/seed
 !.gitignore
+
+!default
+!seed
+
+default/*
+seed/*
