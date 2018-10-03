@@ -1,8 +1,0 @@
-*
-!.gitignore
-
-!default
-!seed
-
-default/*
-seed/*

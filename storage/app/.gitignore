@@ -1,0 +1,8 @@
+!.gitignore
+
+!public
+
+public/*
+
+!public/default/
+!public/seed/
