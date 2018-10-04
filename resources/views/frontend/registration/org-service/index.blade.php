@@ -4,7 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/org/index.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -107,7 +107,7 @@
                 <div class="col-9">
                     <div class="row">
                         <div class="col-md">
-                            <select name="division" id="division" class="form-control option-loader"
+                            <select name="division" id="division" class="form-control"
                                     data-option-loader-url="{{ route('api.districts') }}"
                                     data-option-loader-target="#district"
                                     data-option-loader-param="division">
@@ -118,7 +118,7 @@
                             </select>
                         </div>
                         <div class="col-md">
-                            <select name="district" id="district" class="form-control option-loader"
+                            <select name="district" id="district" class="form-control"
                                     data-placeholder="-- জেলা --"
                                     data-option-loader-url="{{ route('api.thanas') }}"
                                     data-option-loader-target="#thana"
@@ -128,7 +128,7 @@
                             </select>
                         </div>
                         <div class="col-md">
-                            <select name="thana" id="thana" class="form-control option-loader"
+                            <select name="thana" id="thana" class="form-control"
                                     data-placeholder="-- থানা --"
                                     data-option-loader-url="{{ route('api.unions') }}"
                                     data-option-loader-target="#union"
@@ -199,7 +199,8 @@
                                 data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                 data-option-loader-properties="value=id,text=name">
                         </select>
-                        <input type="number" class="form-control col-md-3" name="sub-categories[0][rate]" placeholder="রেট">
+                        <input type="number" class="form-control col-md-3" name="sub-categories[0][rate]"
+                               placeholder="রেট">
                     </div>
                     @include('components.invalid', ['name' => 'sub-categories'])
                     <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>

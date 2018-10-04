@@ -4,7 +4,8 @@ module.exports = {
     entry: {
         'frontend/home': './resources/assets/js/frontend/home.js',
         'frontend/filter': './resources/assets/js/frontend/filter.js',
-        'frontend/registration/common': './resources/assets/js/frontend/registration/common.js',
+        'frontend/registration/ind/index': './resources/assets/js/frontend/registration/ind/index.js',
+        'frontend/registration/org/index': './resources/assets/js/frontend/registration/org/index.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',

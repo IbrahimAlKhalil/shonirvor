@@ -22,7 +22,8 @@ class ProductionSeeder extends Seeder
         DB::table('work_methods')->insert([
             ['name' => 'ঘন্টা ভিত্তিক'],
             ['name' => 'দৈনিক'],
-            ['name' => 'মাসিক']
+            ['name' => 'মাসিক'],
+            ['name' => 'চুক্তি ভিত্তিক']
         ]);
 
         /***** Service Type *****/

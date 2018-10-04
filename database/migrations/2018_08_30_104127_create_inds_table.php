@@ -16,6 +16,8 @@ class CreateIndsTable extends Migration
             $table->unsignedInteger('district_id');
             $table->unsignedInteger('thana_id');
             $table->unsignedInteger('union_id');
+            $table->unsignedInteger('village_id');
+
             $table->string('email');
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
@@ -58,6 +60,12 @@ class CreateIndsTable extends Migration
             $table->foreign('union_id')
                 ->references('id')
                 ->on('unions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('village_id')
+                ->references('id')
+                ->on('villages')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 

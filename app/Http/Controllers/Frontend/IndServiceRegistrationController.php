@@ -25,13 +25,12 @@ class IndServiceRegistrationController extends Controller
         $user = Auth::user();
         $inds = $user->inds('pending')->get();
 
-        $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
         $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories');
+        $compact = compact('classesToAdd', 'inds', 'divisions', 'isPicExists', 'categories');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -61,6 +60,8 @@ class IndServiceRegistrationController extends Controller
     {
 
         DB::beginTransaction();
+
+        dd($request->all());
 
         $user = Auth::user();
         $inds = $user->inds('pending')->get();
@@ -102,9 +103,9 @@ class IndServiceRegistrationController extends Controller
         // Create sub categories
         if ($isSubCategoryRequest) {
             $data = [];
-            foreach ($request->post('sub-category-requests') as $subCategoryName) {
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
+            foreach ($request->post('sub-category-requests') as $subCategory) {
+                !is_null($subCategory) && array_push($data, [
+                    'name' => $subCategory,
                     'is_confirmed' => 0
                 ]);
             }

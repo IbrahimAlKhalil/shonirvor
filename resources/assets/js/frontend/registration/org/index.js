@@ -1,5 +1,5 @@
-import {Repeater} from '../../modules/repeater';
-import {OptionLoader} from "../../modules/option-loader";
+import {Repeater} from '../../../modules/repeater';
+import {OptionLoader} from "../../../modules/option-loader";
 
 document.addEventListener('DOMContentLoaded', () => {
     function removeAllAndRepeat() {
@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function removeAfterAndRepeat() {
+        while (this.parentElement.nextElementSibling) {
+            this.parentElement.nextElementSibling.remove();
+        }
         repeater.repeat();
     }
 
@@ -18,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             select.removeAttribute('id');
             select.name = `sub-categories[${repeater.length}][id]`;
             input.name = `sub-categories[${repeater.length}][rate]`;
+
             select.addEventListener('change', removeAfterAndRepeat);
         }
     });

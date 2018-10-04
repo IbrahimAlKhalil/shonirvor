@@ -80,6 +80,10 @@ export class OptionLoader {
 
 }
 
+export function foo() {
+
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    new OptionLoader(document.querySelectorAll('.option-loader'));
+    new OptionLoader(document.querySelectorAll('[data-option-loader-url]'));
 });

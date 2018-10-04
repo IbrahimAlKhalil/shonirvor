@@ -23,6 +23,11 @@ class SubCategory extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function workMethods()
+    {
+        return $this->belongsToMany(WorkMethod::class, 'ind_work_method')->withPivot('rate');
+    }
+
     /**
      * @param $serviceType string
      * @return object|null

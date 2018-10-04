@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Village;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Sandofvega\Bdgeocode\Models\District;
@@ -200,5 +201,10 @@ class AreaController extends Controller
         }
 
         return Union::all();
+    }
+
+    public function villages(Request $request)
+    {
+        return Village::where('union_id', $request->get('union'))->get();
     }
 }

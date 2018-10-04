@@ -49,6 +49,15 @@ class CreateBdgeocodeTables extends Migration
             $table->foreign('thana_id')->references('id')->on('thanas')->onUpdate('cascade');
         });
 
+        Schema::create('villages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('union_id');
+            $table->string('bn_name');
+            $table->boolean('is_pending')->default(0);
+
+            $table->foreign('union_id')->references('id')->on('unions')->onUpdate('cascade');
+        });
+
         DB::commit();
     }
 
@@ -58,5 +67,6 @@ class CreateBdgeocodeTables extends Migration
         Schema::dropIfExists('thanas');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('divisions');
+        Schema::dropIfExists('villages');
     }
 }
