@@ -81,6 +81,21 @@ class orgServiceController extends Controller
         return redirect(route('organization-service.show', $request->post('id')))->with('success', 'একাউন্ট সফলভাবে সক্রিয় করা হয়েছে!');
     }
 
+    public function isTop(Org $org, Request $request)
+    {
+        $org->is_top = $request->input('is_top');
+        $org->save();
+
+        if ($org->is_top) {
+            $message = 'এই সার্ভিসকে এখন টপ সার্ভিসে রাখা হয়েছে।';
+        }
+        else {
+            $message = 'এই সার্ভিসকে এখন টপ সার্ভিস থেকে সরিয়ে ফেলা হয়েছে।';
+        }
+
+        return back()->with('success', $message);
+    }
+
     private function navs()
     {
         return [

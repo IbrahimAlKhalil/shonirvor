@@ -143,6 +143,37 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
+                        <button type="button" href="javascript:" class="btn w-100 @if($org->is_top){{ 'btn-success' }}@else{{ 'btn-info' }}@endif" data-toggle="modal" data-target="#isTopModal">টপ সার্ভিস</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="isTopModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">এই সার্ভিস প্রভাইদারকে কি টপে রাখতে চান?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="{{ route('org-service.top', $org->id) }}" method="post">
+                                        {{ csrf_field() }}
+                                        <div class="modal-body">
+                                            <select name="is_top" class="form-control">
+                                                <option value="1" @if($org->is_top){{ 'selected' }}@endif>হ্যাঁ</option>
+                                                <option value="0" @if(!$org->is_top){{ 'selected' }}@endif>না</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer  border-top-0">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল</button>
+                                            <button type="submit" class="btn btn-primary">সাবমিট</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
                         @include('components.notification', ['userId' => $org->user->id])
                     </div>
                 </div>

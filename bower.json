@@ -1,0 +1,13 @@
+{
+  "name": "shonirvor",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap-star-rating": "^4.0.4"
+  }
+}

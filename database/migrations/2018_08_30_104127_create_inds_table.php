@@ -28,8 +28,9 @@ class CreateIndsTable extends Migration
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
             $table->string('status')->nullable();
-            $table->string('is_available')->default(1);
+            $table->boolean('is_available')->default(1);
             $table->boolean('is_pending')->default(1);
+            $table->boolean('is_top')->default(0);
             $table->softDeletes();
             $table->timestamps();
 

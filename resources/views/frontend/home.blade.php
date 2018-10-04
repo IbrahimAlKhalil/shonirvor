@@ -67,7 +67,7 @@
                                             <a href="{{ route('frontend.ind-service.show', $service->id) }}">{{ $service->user->name }}</a>
                                         </p>
                                         <p>
-                                            <i>{{ str_limit($service->category->name, 25) }}</i>
+                                            <i>{{ $service->category->name }}</i>
                                         </p>
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $service->mobile }}
@@ -86,13 +86,13 @@
                                 <li class="media mt-3 p-2 bg-light">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ str_limit($service->name, 20) }}</a>
+                                            <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->name }}</a>
                                         </p>
                                         <p>
-                                            <i>{{ str_limit($service->category->name, 25) }}</i>
+                                            <i>{{ $service->category->name }}</i>
                                         </p>
                                         <p class="mb-0">
-                                            {{ $service->mobile }} <span class="fa fa-phone" style="transform: rotateY(180deg)"></span>
+                                            {{ $service->mobile }} <span class="fa fa-phone flipX"></span>
                                             <br>
                                             {{ $service->union->bn_name }}, {{ $service->thana->bn_name }}, {{ $service->district->bn_name }} <span class="fa fa-map-marker"></span>
                                         </p>

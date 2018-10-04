@@ -3,7 +3,7 @@
 @section('title', $provider->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/org-service/show.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -20,6 +20,7 @@
                     <form action="{{ route('org-feedback.store') }}" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
+                        <input id="storeStar" type="number" name="star">
                         <textarea name="say" class="form-control"></textarea>
                         <div class="my-2 text-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -38,6 +39,7 @@
                             <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
                         </div>
                         <div class="col-10">
+                            <input id="showStar" value="{{ $feedback->star }}">
                             <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
                             <p>{{ $feedback->say }}</p>
                         </div>

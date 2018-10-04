@@ -19,8 +19,8 @@ Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceControl
 Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
 Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
 
-Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
-Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
+Route::post('individual-feedback', 'Frontend\FeedbackController@indStore')->name('ind-feedback.store');
+Route::post('organization-feedback', 'Frontend\FeedbackController@orgStore')->name('org-feedback.store');
 
 Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
 Route::post('dashboard/notification/send/{user}', 'NotificationController@send')->name('notification.send');
@@ -50,6 +50,9 @@ Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')
 Route::resource('dashboard/ad', 'Backend\AdController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.ad');
 
 Route::resource('dashboard/notice', 'Backend\NoticeController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.notice');
+
+Route::post('individual-service/top/{ind}', 'Backend\IndServiceController@isTop')->name('ind-service.top');
+Route::post('organization-service/top/{org}', 'Backend\OrgServiceController@isTop')->name('org-service.top');
 
 /*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
