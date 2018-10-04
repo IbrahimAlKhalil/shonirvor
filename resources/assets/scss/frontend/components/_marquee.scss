@@ -11,8 +11,11 @@
   animation: marquee linear infinite;
   animation-delay: 2s;
 }
-.marquee span:hover {
-  animation-play-state: paused
+
+.marquee:hover {
+  span {
+    animation-play-state: paused
+  }
 }
 
 /* Make it move */

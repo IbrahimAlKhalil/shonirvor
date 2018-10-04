@@ -3,7 +3,7 @@
 @section('title', $provider->user->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/ind-service/show.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -20,6 +20,7 @@
                 <form action="{{ route('ind-feedback.store') }}" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
+                    <input id="storeStar" type="number" name="star">
                     <textarea name="say" class="form-control"></textarea>
                     <div class="my-2 text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -32,19 +33,20 @@
             <div class="col-6">
                 @include('components.success')
                 <p class="h5">মতামত সমূহ:</p>
-                    @forelse($provider->feedbacks as $feedback)
-                    <div class="row my-3">
-                        <div class="col-2">
-                            <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
-                        </div>
-                        <div class="col-10">
-                            <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
-                            <p>{{ $feedback->say }}</p>
-                        </div>
+                @forelse($provider->feedbacks as $feedback)
+                <div class="row my-3">
+                    <div class="col-2">
+                        <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
                     </div>
-                    @empty
-                        <p>পূর্বের কোন মতামত নেই</p>
-                    @endforelse
+                    <div class="col-10">
+                        <input id="showStar" value="{{ $feedback->star }}">
+                        <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
+                        <p>{{ $feedback->say }}</p>
+                    </div>
+                </div>
+                @empty
+                    <p>পূর্বের কোন মতামত নেই</p>
+                @endforelse
             </div>
         </div>
     </div>

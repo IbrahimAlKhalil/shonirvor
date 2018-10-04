@@ -19,8 +19,8 @@ Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceControl
 Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
 Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
 
-Route::post('individual-feedback', 'Frontend\IndFeedbackController@store')->name('ind-feedback.store');
-Route::post('organization-feedback', 'Frontend\OrgFeedbackController@store')->name('org-feedback.store');
+Route::post('individual-feedback', 'Frontend\FeedbackController@indStore')->name('ind-feedback.store');
+Route::post('organization-feedback', 'Frontend\FeedbackController@orgStore')->name('org-feedback.store');
 
 Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
 Route::post('dashboard/notification/send/{user}', 'NotificationController@send')->name('notification.send');
