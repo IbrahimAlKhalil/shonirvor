@@ -9,7 +9,7 @@ class CategoriesTableSeeder extends Seeder
 
     public function run()
     {
-        factory(Category::class, 15)->create()->each(function ($category) {
+        factory(Category::class, 30)->create()->each(function ($category) {
             $category->subCategories()
                 ->saveMany(factory(SubCategory::class, 15)->make());
         });

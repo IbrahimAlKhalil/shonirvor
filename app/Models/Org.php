@@ -17,7 +17,9 @@ class Org extends Model
     protected $dates = ['deleted_at'];
 
 
+    /*********************/
     /***** Relations *****/
+    /*********************/
 
     public function user()
     {
@@ -86,7 +88,9 @@ class Org extends Model
     }
 
 
+    /*******************/
     /***** Scopes *****/
+    /*******************/
 
     public function scopeOnlyApproved($query)
     {
@@ -111,17 +115,5 @@ class Org extends Model
             })
             ->addSelect(DB::raw('orgs.id, avg(star) as feedbacks_avg'))
             ->groupBy('id');
-    }
-
-
-    /***** Accessors & Mutators *****/
-
-    public function getFeedbacksAvgAttribute($value)
-    {
-        if ($value === null) {
-            return 0;
-        } else {
-            return $value;
-        }
     }
 }

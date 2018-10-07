@@ -10,9 +10,9 @@ class UsersTableSeeder extends Seeder
         $customer = new User;
         $customer->name = "Hujaifa Islam";
         $customer->mobile = '0';
-        $customer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
+        $customer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC'; // 123456
         $customer->save();
 
-        factory(User::class, 5)->create();
+        factory(User::class, 10)->create();
     }
 }

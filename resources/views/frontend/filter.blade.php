@@ -38,7 +38,7 @@
                                             <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
-                                            <i>{{ str_limit($provider->category_name, 25) }}</i>
+                                            <i>{{ $provider->category_name, 25 }}</i>
                                         </p>
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $provider->mobile }}

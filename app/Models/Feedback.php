@@ -17,13 +17,4 @@ class Feedback extends Model
     {
         return $this->morphTo();
     }
-
-    public function setStarAttribute($value)
-    {
-        if ($value === null) {
-            $this->attributes['star'] = 0;
-        } else {
-            $this->attributes['star'] = $value;
-        }
-    }
 }

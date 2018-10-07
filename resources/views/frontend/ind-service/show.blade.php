@@ -20,7 +20,7 @@
                 <form action="{{ route('ind-feedback.store') }}" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
-                    <input id="storeStar" type="number" name="star">
+                    <input id="storeStar" type="number" name="star" required>
                     <textarea name="say" class="form-control"></textarea>
                     <div class="my-2 text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>

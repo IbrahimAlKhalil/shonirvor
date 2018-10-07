@@ -15,7 +15,11 @@ class CreateContentsTable extends Migration
             $table->mediumText('data')->nullable();
             $table->timestamps();
 
-            $table->foreign('content_type_id')->references('id')->on('content_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('content_type_id')
+                ->references('id')
+                ->on('content_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

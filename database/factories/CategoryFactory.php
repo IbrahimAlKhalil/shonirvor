@@ -11,7 +11,7 @@ $factory->define(Category::class, function (Faker $faker) {
     return [
         'service_type_id' => $faker->randomElement($serviceTypeIds),
         'name' => $faker->jobTitle,
-        'is_confirmed' => 1,
+        'is_confirmed' => rand(0, 1),
         'image' => 'seed/category-images/'.rand(1, 4).'.png'
     ];
 });

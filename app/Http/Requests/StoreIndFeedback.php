@@ -19,7 +19,7 @@ class StoreIndFeedback extends FormRequest
     public function rules()
     {
         return [
-            //
+            'star' => 'required'
         ];
     }
 }
