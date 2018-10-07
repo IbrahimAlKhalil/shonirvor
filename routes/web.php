@@ -4,13 +4,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+
 Route::prefix('command')->group(function () {
     Route::get('storage-link', 'CommandController@storage');
 }, '');
 
-Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
-Route::get('filter', 'Frontend\FilterController@index')->name('frontend.filter');
-Route::get('dashboard', 'Backend\HomeController@index')->name('backend.home');
+Route::get('/', 'Frontend\HomeController')->name('home');
+Route::get('dashboard', 'Backend\DashboardController')->name('dashboard');
+
+Route::get('filter', 'Frontend\FilterController')->name('frontend.filter');
 Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
 
 Route::get('individual-service-provider', 'Frontend\IndServiceController@index')->name('frontend.ind-service.index');

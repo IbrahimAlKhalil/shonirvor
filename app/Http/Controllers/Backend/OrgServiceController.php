@@ -63,7 +63,7 @@ class orgServiceController extends Controller
 
     public function showDisabledAccounts()
     {
-        $orgs = Org::getOnly('approved')->onlyTrashed()->paginate(15);
+        $orgs = Org::onlyApproved()->onlyTrashed()->paginate(15);
         $navs = $this->navs();
         return view('backend.org-service.all-disabled', compact('orgs', 'navs'));
     }

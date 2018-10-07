@@ -25,14 +25,14 @@ $(document).ready(function () {
         clearButton: '<i class="fa fa-lg fa-minus-circle"></i>'
     });
 
-    $('#showStar').rating({
+    $('[id^="showStar"]').rating({
         step: 1,
         size: 'xm',
         filledStar: '<i class="fa fa-star"></i>',
         emptyStar: '<i class="fa fa-star-o"></i>',
-        clearButton: '<i class="fa fa-lg fa-minus-circle"></i>',
         showClear: false,
         showCaption: false,
+        showCaptionAsTitle: false,
         displayOnly: true
     });
 });

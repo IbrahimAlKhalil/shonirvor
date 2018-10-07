@@ -33,13 +33,13 @@
             <div class="col-6">
                 @include('components.success')
                 <p class="h5">মতামত সমূহ:</p>
-                @forelse($provider->feedbacks as $feedback)
+                @forelse($provider->feedbacks as $key => $feedback)
                     <div class="row my-3">
                         <div class="col-2">
                             <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
                         </div>
                         <div class="col-10">
-                            <input id="showStar" value="{{ $feedback->star }}">
+                            <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
                             <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
                             <p>{{ $feedback->say }}</p>
                         </div>

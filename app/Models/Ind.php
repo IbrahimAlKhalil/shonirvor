@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
@@ -11,10 +12,14 @@ use Sandofvega\Bdgeocode\Models\Union;
 
 class Ind extends Model
 {
-
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
+
+
+    /**********************/
+    /***** Relations *****/
+    /**********************/
 
     public function user()
     {
@@ -41,25 +46,6 @@ class Ind extends Model
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * @param $status string
-     * @return object
-     **/
-    public function subCategories($status = null)
-    {
-        $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
-
-        switch ($status) {
-            case 'confirmed':
-                $result = $result->where('is_confirmed', '=', 1);
-                break;
-            case 'requested':
-                $result = $result->where('is_confirmed', '=', 0);
-        }
-
-        return $result;
-    }
-
     public function division()
     {
         return $this->belongsTo(Division::class);
@@ -80,27 +66,70 @@ class Ind extends Model
         return $this->belongsTo(Union::class);
     }
 
-    /**
-     * @param $status string
-     * @return object|null
-     **/
-    public static function getOnly($status)
+    public function feedbacks()
     {
-        $result = null;
+        return $this->morphMany(Feedback::class, 'feedbackable');
+    }
+
+    public function subCategories($status = null)
+    {
+        $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
 
         switch ($status) {
-            case 'pending':
-                $result = Ind::where('is_pending', 1);
+            case 'confirmed':
+                $result = $result->where('is_confirmed', '=', 1);
                 break;
-            case 'approved':
-                $result = Ind::where('is_pending', 0);
+            case 'requested':
+                $result = $result->where('is_confirmed', '=', 0);
         }
 
         return $result;
     }
 
-    public function feedbacks()
+
+    /******************/
+    /***** Scopes *****/
+    /******************/
+
+    public function scopeOnlyApproved($query)
     {
-        return $this->morphMany(Feedback::class, 'feedbackable');
+        return $query->where('is_pending', 0);
+    }
+
+    public function scopeOnlyPending($query)
+    {
+        return $query->where('is_pending', 1);
+    }
+
+    public function scopeOnlyTop($query)
+    {
+        return $query->where('is_top', 1);
+    }
+
+    /**
+     * Add this method after select() method
+     */
+    public function scopeWithFeedbacksAvg($query)
+    {
+        return $query->leftJoin('feedbacks', function ($join) {
+            $join->on('inds.id', 'feedbacks.feedbackable_id')
+                ->where('feedbackable_type', 'ind');
+            })
+            ->addSelect(DB::raw('inds.id, avg(star) as feedbacks_avg'))
+            ->groupBy('id');
+    }
+
+
+    /********************************/
+    /***** Accessors & Mutators *****/
+    /********************************/
+
+    public function getFeedbacksAvgAttribute($value)
+    {
+        if ($value === null) {
+            return 0;
+        } else {
+            return $value;
+        }
     }
 }

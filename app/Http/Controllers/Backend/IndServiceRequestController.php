@@ -15,7 +15,7 @@ class IndServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = Ind::getOnly('pending')->orderBy('updated_at', 'DSC')->paginate(15);
+        $serviceRequests = Ind::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
         return view('backend.ind-service-request.index', compact('serviceRequests', 'navs'));
     }

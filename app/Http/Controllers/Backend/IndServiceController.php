@@ -13,7 +13,7 @@ class indServiceController extends Controller
 {
     public function index()
     {
-        $inds = Ind::getOnly('approved')->paginate(15);
+        $inds = Ind::onlyApproved()->paginate(15);
         $navs = $this->navs();
 
         return view('backend.ind-service.index', compact('inds', 'navs'));
@@ -61,7 +61,7 @@ class indServiceController extends Controller
 
     public function showDisabledAccounts()
     {
-        $inds = Ind::getOnly('approved')->onlyTrashed()->paginate(15);
+        $inds = Ind::onlyApproved()->onlyTrashed()->paginate(15);
         $navs = $this->navs();
         return view('backend.ind-service.all-disabled', compact('inds', 'navs'));
     }

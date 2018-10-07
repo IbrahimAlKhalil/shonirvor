@@ -11,7 +11,7 @@ class IndServiceController extends Controller
 {
     public function index()
     {
-        $providers = Ind::getOnly('approved')->paginate(15);
+        $providers = Ind::onlyApproved()->paginate(15);
         return view('frontend.ind-service.index', compact('providers'));
     }
 
