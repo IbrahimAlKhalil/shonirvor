@@ -15,7 +15,7 @@
                                 data-option-loader-param="division">
                             <option value="">-- বিভাগ --</option>
                             @foreach($divisions as $division)
-                                <option value="{{ $division->id }}" @if(request()->get('division') == $division->id){{ 'selected' }}@endif>{{ $division->bn_name }}</option>
+                                <option value="{{ $division->id }}" @if(request()->get('division') == $division->id){{ 'selected' }}@endif>{{ $division->name }}</option>
                             @endforeach
                         </select>
                         <select name="district" id="district" class="form-control mb-3"
@@ -30,7 +30,7 @@
                             <option value="">-- জেলা --</option>
                             @isset($districts)
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}" @if(request()->get('district') == $district->id){{ 'selected' }}@endif>{{ $district->bn_name }}</option>
+                                    <option value="{{ $district->id }}" @if(request()->get('district') == $district->id){{ 'selected' }}@endif>{{ $district->name }}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -46,7 +46,7 @@
                             <option value="">-- থানা --</option>
                             @isset($thanas)
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}" @if(request()->get('thana') == $thana->id){{ 'selected' }}@endif>{{ $thana->bn_name }}</option>
+                                    <option value="{{ $thana->id }}" @if(request()->get('thana') == $thana->id){{ 'selected' }}@endif>{{ $thana->name }}</option>
                                 @endforeach
                             @endisset
                         </select>

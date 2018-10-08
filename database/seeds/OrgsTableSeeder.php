@@ -22,7 +22,6 @@ class OrgsTableSeeder extends Seeder
         $villageIds = Village::pluck('id')->toArray();
 
         factory(User::class, rand(15, 20))->create()->each(function ($user) use ($categoryIds, $divisionIds, $districtIds, $thanaIds, $unionIds, $villageIds) {
-            $user->roles()->attach('2');
 
             factory(Org::class, rand(1, 3))->create([
                 'user_id' => $user->id,

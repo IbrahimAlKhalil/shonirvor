@@ -8,15 +8,19 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategory;
 use App\Http\Requests\UpdateCategory;
+use Illuminate\Support\Facades\Storage;
 
-// TODO:: Some of these requests classes are empty, so fill these with whatever you can.
+// TODO:: Need to do request validation.
 
 class OrgCategoryController extends Controller
 {
 
     public function index()
     {
-        $categories = Category::getAll('org')->orderBy('updated_at', 'DSC')->paginate(15);
+        $categories = Category::getAll('org')
+            ->orderBy('updated_at', 'DSC')
+            ->paginate(15);
+
         $navs = $this->navs();
 
         return view('backend.org-category.index', compact('categories', 'navs'));
@@ -25,53 +29,61 @@ class OrgCategoryController extends Controller
 
     public function store(StoreCategory $request)
     {
-        DB::beginTransaction();
+        $category = new Category();
+        $category->name = $request->input('category');
+        $category->service_type_id = 2;
+        $category->image = $request->file('image')->store('category-images');
+        $category->save();
 
-        $category = new Category([
-            'name' => $request->post('category'),
-            'is_confirmed' => 1,
-            'image' => $request->file('image')->store('category-images')
-        ]);
-        ServiceType::where('name', 'org')->first()->categories()->save($category);
-
-        DB::commit();
-        return redirect(route('organization-category.show', $category->id))->with('success', 'Category "' . $request->post('category') . '" সফলভাবে যুক্ত হয়েছে!');
+        return back()->with('success', $request->input('category').' ক্যাটাগরিটি তৈরি হয়েছে।');
     }
 
 
     public function show(Category $category)
     {
+        $subCategories = $category->subCategories('confirmed')
+            ->orderBy('updated_at', 'DSC')
+            ->paginate(10);
+
         $navs = $this->navs();
-        $subCategories = $category->subCategories('confirmed')->orderBy('updated_at', 'DSC')->paginate(10);
+
         return view('backend.org-category.show', compact('category', 'subCategories', 'navs'));
     }
 
 
     public function update(UpdateCategory $request, Category $category)
     {
-        DB::beginTransaction();
-        $category->update([
-            'name' => $request->post('category')
-        ]);
-        DB::commit();
-        return back()->with('success', 'Category Renamed Successfully!');
+        $oldName = $category->name;
+
+        $category->name = $request->input('name');
+        if ($request->hasFile('image')) {
+            Storage::delete($category->image);
+            $category->image = $request->file('image')->store('category-images');
+        }
+        $category->save();
+
+        return back()->with('success', $oldName.' ক্যাটাগরিটি এডিট হয়েছে।');
     }
 
     public function destroy(Category $category)
     {
-        DB::beginTransaction();
-        // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
-        // TODO:: Delete image
-        $category->delete();
+        if ($category->subCategories->isNotEmpty()) {
+            return back()->with('error', $category->name.' ক্যাটাগরিটির ভিতর সাব-ক্যাটাগরি রয়েছে তাই এটি ডিলিট হবে না।');
+        }
+        else
+        {
+            $category->delete();
+            Storage::delete($category->image);
 
-        DB::commit();
-        return redirect(route('organization-category.index'))->with('success', 'ক্যাটাগরিটি সফলভাবে মুছে ফেলা হয়েছে!');
+            return back()->with('success', $category->name.' ক্যাটাগরিটি ডিলিট হয়েছে।');
+        }
     }
 
     private function navs()
     {
         return [
-            ['url' => route('organization-category.index'), 'text' => 'Organization Categories']
+            ['url' => route('individual-category.index'), 'text' => 'বেক্তিগত ক্যাটাগরি সমূহ'],
+            ['url' => route('organization-category.index'), 'text' => 'প্রাতিষ্ঠানিক ক্যাটাগরি সমূহ']
         ];
     }
 }

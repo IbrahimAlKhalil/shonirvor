@@ -13,9 +13,7 @@ class ProductionSeeder extends Seeder
 
         /***** Creating Roles *****/
         DB::table('roles')->insert([
-            ['name' => 'admin'],
-            ['name' => 'ind'],
-            ['name' => 'org'],
+            ['name' => 'admin']
         ]);
 
         /***** Service Provider Contract Method *****/
@@ -38,6 +36,8 @@ class ProductionSeeder extends Seeder
         $registrationInstruction->save();
         $registrationInstruction->contents()->create(['data' => null]);
 
+
+        /********** Slider ***********/
         $homeSlider = new ContentType(['name' => 'slider']);
         $homeSlider->save();
         $homeSlider->contents()->createMany([

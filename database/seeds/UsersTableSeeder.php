@@ -7,12 +7,13 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        $customer = new User;
-        $customer->name = "Hujaifa Islam";
-        $customer->mobile = '0';
-        $customer->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC';
-        $customer->save();
+        $user = new User;
+        $user->name = "Hujaifa Islam";
+        $user->mobile = '0';
+        $user->photo = 'seed/user-photos/'.rand(1, 190).'.jpg';
+        $user->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC'; // 123456
+        $user->save();
 
-        factory(User::class, 5)->create();
+        factory(User::class, 10)->create();
     }
 }

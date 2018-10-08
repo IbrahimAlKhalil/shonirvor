@@ -11,6 +11,7 @@ $(document).ready(function () {
     $('#storeStar').rating({
         step: 1,
         size: 'sm',
+        showClear: false,
         starCaptions: {
             1: 'এক তারা',
             2: 'দুই তারা',
@@ -18,7 +19,6 @@ $(document).ready(function () {
             4: 'চার তারা',
             5: 'পাঁচ তারা'
         },
-        clearButtonTitle: 'মুছে ফেলুন',
         clearCaption: 'কোন তারা নেই',
         filledStar: '<i class="fa fa-star"></i>',
         emptyStar: '<i class="fa fa-star-o"></i>',

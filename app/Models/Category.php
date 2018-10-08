@@ -9,6 +9,11 @@ class Category extends Model
 
     protected $fillable = ['name', 'is_confirmed', 'image'];
 
+
+    /**********************/
+    /***** Relations *****/
+    /**********************/
+
     public function type()
     {
         return $this->belongsTo(ServiceType::class, 'service_type_id');
@@ -24,10 +29,6 @@ class Category extends Model
         return $this->hasMany(Org::class);
     }
 
-    /**
-     * @param $status
-     * @return object
-     * */
     public function subCategories($status = null)
     {
         $result = $this->hasMany(SubCategory::class);
@@ -43,11 +44,18 @@ class Category extends Model
         return $result;
     }
 
+
+    /******************/
+    /***** Scopes *****/
+    /******************/
+
     /**
-     * @param $serviceType string
-     * @param $isConfirmed boolean|integer
-     * @return object|null
-     * */
+     * TODO:: This method will removed. When uses of this method will replace with onlyInd(), onlyOrg(), onlyConfirmed(), onlyPending()
+     *
+     * @param $serviceType
+     * @param int $isConfirmed
+     * @return null
+     */
     public static function getAll($serviceType, $isConfirmed = 1)
     {
         $result = null;
@@ -62,5 +70,25 @@ class Category extends Model
         }
 
         return $result;
+    }
+
+    public function scopeOnlyInd($query)
+    {
+        return $query->where('service_type_id', 1);
+    }
+
+    public function scopeOnlyOrg($query)
+    {
+        return $query->where('service_type_id', 2);
+    }
+
+    public function scopeOnlyConfirmed($query)
+    {
+        return $query->where('is_confirmed', 1);
+    }
+
+    public function scopeOnlyPending($query)
+    {
+        return $query->where('is_confirmed', 0);
     }
 }

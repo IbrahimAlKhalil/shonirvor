@@ -123,18 +123,4 @@ class Ind extends Model
             ->addSelect(DB::raw('inds.id, avg(star) as feedbacks_avg'))
             ->groupBy('id');
     }
-
-
-    /********************************/
-    /***** Accessors & Mutators *****/
-    /********************************/
-
-    public function getFeedbacksAvgAttribute($value)
-    {
-        if ($value === null) {
-            return 0;
-        } else {
-            return $value;
-        }
-    }
 }

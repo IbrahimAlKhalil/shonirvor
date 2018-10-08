@@ -20,7 +20,7 @@ $factory->define(Feedback::class, function (Faker $faker) {
         'user_id' => $faker->randomElement($userIDs),
         'feedbackable_id' => $faker->randomElement($feedbackableId),
         'feedbackable_type' => $faker->randomElement(['ind', 'org']),
-        'star' => rand(0, 5),
+        'star' => rand(1, 5),
         'say' => $faker->realText()
     ];
 });

@@ -1,15 +1,7 @@
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   background: url('./../../../images/frontend-bg-pattern.png') fixed;
 }
 
 a:hover {
   text-decoration: none;
-}
-
-.flipX {
-  transform: rotateY(180deg)
 }

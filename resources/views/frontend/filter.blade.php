@@ -26,11 +26,11 @@
                         </form>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-4 bg-white rounded">
                     @forelse($providers as $key => $provider)
                         <div class="col-md-6">
                             <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 bg-light">
+                                <li class="media mt-3 p-2 service-card-shadow">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
@@ -38,7 +38,7 @@
                                             <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
-                                            <i>{{ str_limit($provider->category_name, 25) }}</i>
+                                            <i>{{ $provider->category_name, 25 }}</i>
                                         </p>
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $provider->mobile }}

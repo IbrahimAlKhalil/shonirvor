@@ -19,7 +19,7 @@ class StoreOrgFeedback extends FormRequest
     public function rules()
     {
         return [
-            //
+            'star' => 'required'
         ];
     }
 }

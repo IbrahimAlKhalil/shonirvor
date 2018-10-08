@@ -11,32 +11,36 @@ class HomeController extends Controller
 {
     public function __invoke()
     {
-        $indCategories = Category::withCount(['indServices' => function ($query) {
-                $query->where('is_pending', 0);
+        $indCategories = Category::onlyInd()
+            ->select('id', 'name', 'image')
+            ->withCount(['indServices' => function ($query) {
+                $query->onlyApproved();
             }])
-            ->where('is_confirmed', 1)
-            ->where('service_type_id', 1)
+            ->onlyConfirmed()
             ->orderBy('ind_services_count', 'desc')
-            ->take(5)
+            ->take(10)
             ->get();
 
-        $orgCategories = Category::withCount(['orgServices' => function ($query) {
-                $query->where('is_pending', 0);
+        $orgCategories = Category::onlyOrg()
+            ->select('id', 'name', 'image')
+            ->withCount(['orgServices' => function ($query) {
+                $query->onlyApproved();
             }])
-            ->where('is_confirmed', 1)
-            ->where('service_type_id', 2)
+            ->onlyConfirmed()
             ->orderBy('org_services_count', 'desc')
-            ->take(5)
+            ->take(10)
             ->get();
 
         $indServices = Ind::onlyTop()
-            ->select('inds.*')
+            ->select('inds.id', 'mobile', 'inds.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->get();
 
         $orgServices = Org::onlyTop()
-            ->select('orgs.*')
+            ->select('orgs.id', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->get();

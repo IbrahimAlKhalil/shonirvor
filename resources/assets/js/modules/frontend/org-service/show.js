@@ -11,6 +11,7 @@ $(document).ready(function () {
     $('#storeStar').rating({
         step: 1,
         size: 'sm',
+        showClear: false,
         starCaptions: {
             1: 'এক তারা',
             2: 'দুই তারা',

@@ -1,8 +1,8 @@
 <div id="slider" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
-        <li data-target="#slider" data-slide-to="0" class="active"></li>
-        <li data-target="#slider" data-slide-to="1"></li>
-        <li data-target="#slider" data-slide-to="2"></li>
+        @foreach($sliders as $key => $slider)
+            <li data-target="#slider" data-slide-to="{{ $key }}" class="@if($loop->first){{ 'active' }}@endif"></li>
+        @endforeach
     </ol>
     <div class="carousel-inner">
         @foreach($sliders as $slider)

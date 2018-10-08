@@ -7,9 +7,9 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container my-5">
         <div class="row">
-            <div class="col-12 mt-4">
+            <div class="col-12 pl-0">
                 @include('components.success')
             </div>
             <div class="col-md-9">

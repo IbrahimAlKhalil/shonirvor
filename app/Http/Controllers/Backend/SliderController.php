@@ -83,8 +83,8 @@ class SliderController extends Controller
     public function navs()
     {
         return [
-            ['url' => route('contents.registration-instruction.index'), 'text' => 'রেজিস্ট্রেশন নির্দেশিকা'],
-            ['url' => route('contents.slider.index'), 'text' => 'হোমপেজ এর স্লাইডার']
+            ['url' => route('contents.slider.index'), 'text' => 'হোমপেজ এর স্লাইডার'],
+            ['url' => route('contents.registration-instruction.index'), 'text' => 'রেজিস্ট্রেশন নির্দেশিকা']
         ];
     }
 }

@@ -29,7 +29,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-4 bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom text-center">টপ ক্যাটাগরি</p>
                     </div>
@@ -38,7 +38,7 @@
                         @foreach($indCategories as $category)
                             <p>
                                 <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
-                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }}</a>
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }} ({{ $category->ind_services_count }})</a>
                             </p>
                         @endforeach
                     </div>
@@ -46,13 +46,13 @@
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         @foreach($orgCategories as $category)
                             <p>
-                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }}</a>
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>
                                 <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
                             </p>
                         @endforeach
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-4 bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom text-center">টপ সার্ভিস প্রভাইডার</p>
                     </div>
@@ -60,7 +60,7 @@
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         @foreach($indServices as $key => $service)
                             <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 bg-light">
+                                <li class="media mt-3 p-2 service-card-shadow">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
@@ -73,7 +73,7 @@
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $service->mobile }}
                                             <br>
-                                            <span class="fa fa-map-marker"></span> {{ $service->union->bn_name }}, {{ $service->thana->bn_name }}, {{ $service->district->bn_name }}
+                                            <span class="fa fa-map-marker"></span> {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }}
                                         </p>
                                     </div>
                                 </li>
@@ -84,7 +84,7 @@
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         @foreach($orgServices as $service)
                             <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 bg-light">
+                                <li class="media mt-3 p-2 service-card-shadow">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->name }}</a>
@@ -96,7 +96,7 @@
                                         <p class="mb-0">
                                             {{ $service->mobile }} <span class="fa fa-phone flipX"></span>
                                             <br>
-                                            {{ $service->union->bn_name }}, {{ $service->thana->bn_name }}, {{ $service->district->bn_name }} <span class="fa fa-map-marker"></span>
+                                            {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }} <span class="fa fa-map-marker"></span>
                                         </p>
                                     </div>
                                     <img class="ml-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->logo) }}" alt="logo">

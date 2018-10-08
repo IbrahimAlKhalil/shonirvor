@@ -24,7 +24,7 @@
             </li>
 
             <li class="nav-item @if(request()->is('dashboard/contents/*')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('contents.registration-instruction.index') }}">কন্টেন্ট ম্যানেজমেন্ট</a>
+                <a class="nav-link" href="{{ route('contents.slider.index') }}">কন্টেন্ট ম্যানেজমেন্ট</a>
             </li>
 
             <li class="nav-item @if(request()->is('dashboard/ad*')){{ 'active' }}@endif">
