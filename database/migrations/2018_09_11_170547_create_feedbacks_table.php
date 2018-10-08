@@ -13,7 +13,7 @@ class CreateFeedbacksTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('feedbackable_id');
             $table->string('feedbackable_type');
-            $table->integer('star')->nullable();
+            $table->integer('star');
             $table->mediumText('say');
             $table->timestamps();
 

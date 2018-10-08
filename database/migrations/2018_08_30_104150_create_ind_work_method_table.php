@@ -21,6 +21,18 @@ class CreateIndWorkMethodTable extends Migration
                 ->on('inds')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->foreign('work_method_id')
+                ->references('id')
+                ->on('work_methods')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('sub_category_id')
+                ->references('id')
+                ->on('sub_categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

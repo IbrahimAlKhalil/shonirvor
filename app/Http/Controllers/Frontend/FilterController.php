@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Sandofvega\Bdgeocode\Models\District;
@@ -18,36 +19,83 @@ use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 class FilterController extends Controller
 {
     private $showPerPage = 14;
+    private $page = 1;
+    private $paginatorPath = '';
+    private $divisionId = false;
+    private $districtId = false;
+    private $thanaId = false;
+    private $unionId = false;
+    private $categoryId = false;
+    private $subCategoryId = false;
 
-    public function index(Request $request)
+    public function __construct(Request $request)
     {
-        if ($request->filled('sub-category')) {
+        $this->paginatorPath = route('frontend.filter').'?';
 
-            $subCategoryType = SubCategory::find($request->get('sub-category'))->category->type->name;
+        if ($request->filled('page')) {
+            $this->page = $request->get('page');
+        }
+
+        if ($request->filled('division')) {
+            $this->divisionId = $request->get('division');
+            $this->paginatorPath .= '&division='.$this->divisionId;
+        }
+
+        if ($request->filled('district')) {
+            $this->districtId = $request->get('district');
+            $this->paginatorPath .= '&district='.$this->districtId;
+        }
+
+        if ($request->filled('thana')) {
+            $this->thanaId = $request->get('thana');
+            $this->paginatorPath .= '&thana='.$this->thanaId;
+        }
+
+        if ($request->filled('union')) {
+            $this->unionId = $request->get('union');
+            $this->paginatorPath .= '&union='.$this->unionId;
+        }
+
+        if ($request->filled('category')) {
+            $this->categoryId = $request->get('category');
+            $this->paginatorPath .= '&category='.$this->categoryId;
+        }
+
+        if ($request->filled('sub-category')) {
+            $this->subCategoryId = $request->get('sub-category');
+            $this->paginatorPath .= '&sub-category='.$this->subCategoryId;
+        }
+    }
+
+    public function __invoke()
+    {
+        if ($this->subCategoryId) {
+
+            $subCategoryType = SubCategory::find($this->subCategoryId)->category->type->name;
 
             switch ($subCategoryType) {
                 case 'ind':
                     $indProviders = Ind::join('sub_categoriables', 'inds.id', 'sub_categoriables.sub_categoriable_id')
                         ->join('sub_categories', 'sub_categoriables.sub_category_id', 'sub_categories.id')
-                        ->where('sub_categoriables.sub_category_id', $request->get('sub-category'))
+                        ->where('sub_categoriables.sub_category_id', $this->subCategoryId)
                         ->where('sub_categoriables.sub_categoriable_type', 'ind')
                         ->where('sub_categories.is_confirmed', 1);
 
-                    if ($request->filled('union')) {
+                    if ($this->unionId) {
 
-                        $indProviders->where('inds.union_id', $request->get('union'));
+                        $indProviders->where('inds.union_id', $this->unionId);
 
-                    } elseif ($request->filled('thana')) {
+                    } elseif ($this->thanaId) {
 
-                        $indProviders->where('inds.thana_id', $request->get('thana'));
+                        $indProviders->where('inds.thana_id', $this->thanaId);
 
-                    } elseif ($request->filled('district')) {
+                    } elseif ($this->districtId) {
 
-                        $indProviders->where('inds.district_id', $request->get('district'));
+                        $indProviders->where('inds.district_id', $this->districtId);
 
-                    } elseif ($request->filled('division')) {
+                    } elseif ($this->divisionId) {
 
-                        $indProviders->where('inds.division_id', $request->get('division'));
+                        $indProviders->where('inds.division_id', $this->divisionId);
 
                     }
                     break;
@@ -55,99 +103,99 @@ class FilterController extends Controller
                 case 'org':
                     $orgProviders = Org::join('sub_categoriables', 'orgs.id', 'sub_categoriables.sub_categoriable_id')
                         ->join('sub_categories', 'sub_categoriables.sub_category_id', 'sub_categories.id')
-                        ->where('sub_categoriables.sub_category_id', $request->get('sub-category'))
+                        ->where('sub_categoriables.sub_category_id', $this->subCategoryId)
                         ->where('sub_categoriables.sub_categoriable_type', 'org')
                         ->where('sub_categories.is_confirmed', 1);
 
-                    if ($request->filled('union')) {
+                    if ($this->unionId) {
 
-                        $orgProviders->where('orgs.union_id', $request->get('union'));
+                        $orgProviders->where('orgs.union_id', $this->unionId);
 
-                    } elseif ($request->filled('thana')) {
+                    } elseif ($this->thanaId) {
 
-                        $orgProviders->where('orgs.thana_id', $request->get('thana'));
+                        $orgProviders->where('orgs.thana_id', $this->thanaId);
 
-                    } elseif ($request->filled('district')) {
+                    } elseif ($this->districtId) {
 
-                        $orgProviders->where('orgs.district_id', $request->get('district'));
+                        $orgProviders->where('orgs.district_id', $this->districtId);
 
-                    } elseif ($request->filled('division')) {
+                    } elseif ($this->divisionId) {
 
-                        $orgProviders->where('orgs.division_id', $request->get('division'));
+                        $orgProviders->where('orgs.division_id', $this->divisionId);
 
                     }
                     break;
             }
 
-        } elseif ($request->filled('category')) {
+        } elseif ($this->categoryId) {
 
-            $categoryType = Category::find($request->get('category'))->type->name;
+            $categoryType = Category::find($this->categoryId)->type->name;
 
             switch ($categoryType) {
                 case 'ind':
-                    $indProviders = Ind::where('categories.id', $request->get('category'));
+                    $indProviders = Ind::where('categories.id', $this->categoryId);
 
-                    if ($request->filled('union')) {
+                    if ($this->unionId) {
 
-                        $indProviders->where('inds.union_id', $request->get('union'));
+                        $indProviders->where('inds.union_id', $this->unionId);
 
-                    } elseif ($request->filled('thana')) {
+                    } elseif ($this->thanaId) {
 
-                        $indProviders->where('inds.thana_id', $request->get('thana'));
+                        $indProviders->where('inds.thana_id', $this->thanaId);
 
-                    } elseif ($request->filled('district')) {
+                    } elseif ($this->districtId) {
 
-                        $indProviders->where('inds.district_id', $request->get('district'));
+                        $indProviders->where('inds.district_id', $this->districtId);
 
-                    } elseif ($request->filled('division')) {
+                    } elseif ($this->divisionId) {
 
-                        $indProviders->where('inds.division_id', $request->get('division'));
+                        $indProviders->where('inds.division_id', $this->divisionId);
 
                     }
                     break;
 
                 case 'org':
-                    $orgProviders = Org::where('categories.id', $request->get('category'));
+                    $orgProviders = Org::where('categories.id', $this->categoryId);
 
-                    if ($request->filled('union')) {
+                    if ($this->unionId) {
 
-                        $orgProviders->where('orgs.union_id', $request->get('union'));
+                        $orgProviders->where('orgs.union_id', $this->unionId);
 
-                    } elseif ($request->filled('thana')) {
+                    } elseif ($this->thanaId) {
 
-                        $orgProviders->where('orgs.thana_id', $request->get('thana'));
+                        $orgProviders->where('orgs.thana_id', $this->thanaId);
 
-                    } elseif ($request->filled('district')) {
+                    } elseif ($this->districtId) {
 
-                        $orgProviders->where('orgs.district_id', $request->get('district'));
+                        $orgProviders->where('orgs.district_id', $this->districtId);
 
-                    } elseif ($request->filled('division')) {
+                    } elseif ($this->divisionId) {
 
-                        $orgProviders->where('orgs.division_id', $request->get('division'));
+                        $orgProviders->where('orgs.division_id', $this->divisionId);
 
                     }
                     break;
             }
 
-        } elseif ($request->filled('union')) {
+        } elseif ($this->unionId) {
 
-            $indProviders = Ind::where('inds.union_id', $request->get('union'));
-            $orgProviders = Org::where('orgs.union_id', $request->get('union'));
+            $indProviders = Ind::where('inds.union_id', $this->unionId);
+            $orgProviders = Org::where('orgs.union_id', $this->unionId);
 
-        } elseif ($request->filled('thana')) {
+        } elseif ($this->thanaId) {
 
-            $indProviders = Ind::where('inds.thana_id', $request->get('thana'));
-            $orgProviders = Org::where('orgs.thana_id', $request->get('thana'));
+            $indProviders = Ind::where('inds.thana_id', $this->thanaId);
+            $orgProviders = Org::where('orgs.thana_id', $this->thanaId);
 
-        } elseif ($request->filled('district')) {
+        } elseif ($this->districtId) {
 
-            $indProviders = Ind::where('inds.district_id', $request->get('district'));
-            $orgProviders = Org::where('orgs.district_id', $request->get('district'));
+            $indProviders = Ind::where('inds.district_id', $this->districtId);
+            $orgProviders = Org::where('orgs.district_id', $this->districtId);
 
-        } elseif ($request->filled('division')) {
+        } elseif ($this->divisionId) {
 
-            $indProviders = Ind::where('inds.division_id', $request->get('division'));
-            $orgProviders = Org::where('orgs.division_id', $request->get('division'));
+            $indProviders = Ind::where('inds.division_id', $this->divisionId);
+            $orgProviders = Org::where('orgs.division_id', $this->divisionId);
 
         } else {
 
@@ -159,7 +207,6 @@ class FilterController extends Controller
         function indJoinNfetch($instance)
         {
             return $instance
-                ->with('feedbacks')
                 ->join('users', 'inds.user_id', 'users.id')
                 ->join('categories', 'inds.category_id', 'categories.id')
                 ->join('service_types', 'categories.service_type_id', 'service_types.id')
@@ -178,10 +225,13 @@ class FilterController extends Controller
                     'thanas.bn_name as thana_name',
                     'unions.bn_name as union_name'
                 ])
-                ->where('inds.is_pending', 0)
-                ->where('categories.is_confirmed', 1)
-                ->where('thanas.is_pending', 0)
-                ->where('unions.is_pending', 0)
+                ->withFeedbacksAvg()
+                ->where([
+                    ['inds.is_pending', 0],
+                    ['thanas.is_pending', 0],
+                    ['unions.is_pending', 0],
+                    ['categories.is_confirmed', 1]
+                ])
                 ->get();
         }
 
@@ -207,23 +257,26 @@ class FilterController extends Controller
                     'thanas.bn_name as thana_name',
                     'unions.bn_name as union_name'
                 ])
-                ->where('orgs.is_pending', 0)
-                ->where('categories.is_confirmed', 1)
-                ->where('thanas.is_pending', 0)
-                ->where('unions.is_pending', 0)
+                ->withFeedbacksAvg()
+                ->where([
+                    ['orgs.is_pending', 0],
+                    ['thanas.is_pending', 0],
+                    ['unions.is_pending', 0],
+                    ['categories.is_confirmed', 1]
+                ])
                 ->get();
         }
 
-        if ($request->filled('sub-category') || $request->filled('category'))
+        if ($this->subCategoryId || $this->categoryId)
         {
 
             if (isset($indProviders)) {
 
-                $services = indJoinNfetch($indProviders)->sortByDesc('feedbacks');
+                $services = indJoinNfetch($indProviders)->sortByDesc('feedbacks_avg');
 
             } elseif ($orgProviders) {
 
-                $services = orgJoinNfetch($orgProviders)->sortByDesc('feedbacks');
+                $services = orgJoinNfetch($orgProviders)->sortByDesc('feedbacks_avg');
 
             }
 
@@ -237,13 +290,16 @@ class FilterController extends Controller
                 $indProviders->push($orgProvider);
 
             }
-            $services = $indProviders->sortByDesc('feedbacks');
+            $services = $indProviders->sortByDesc('feedbacks_avg');
 
         }
 
-        $perPagedData = $services->slice(($request->get('page')-1) * $this->showPerPage, $this->showPerPage)->all();
-        $providers = new Paginator($perPagedData, count($services), $this->showPerPage, $request->get('page'), [
-            'path' => route('frontend.filter')
+        $perPagedData = $services
+            ->slice(($this->page - 1) * $this->showPerPage, $this->showPerPage)
+            ->all();
+
+        $providers = new Paginator($perPagedData, count($services), $this->showPerPage, $this->page, [
+            'path' => $this->paginatorPath
         ]);
 
         return view('frontend.filter', compact('providers'));

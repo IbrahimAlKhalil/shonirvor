@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
 use App\Models\Category;
+use App\Models\Village;
 use App\Models\WorkMethod;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
@@ -61,8 +62,6 @@ class IndServiceRegistrationController extends Controller
 
         DB::beginTransaction();
 
-        dd($request->all());
-
         $user = Auth::user();
         $inds = $user->inds('pending')->get();
 
@@ -104,11 +103,13 @@ class IndServiceRegistrationController extends Controller
         if ($isSubCategoryRequest) {
             $data = [];
             foreach ($request->post('sub-category-requests') as $subCategory) {
-                !is_null($subCategory) && array_push($data, [
-                    'name' => $subCategory,
+                array_key_exists('name', $subCategory) && array_push($data, [
+                    'name' => $subCategory['name'],
                     'is_confirmed' => 0
                 ]);
             }
+
+
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
@@ -116,31 +117,45 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
-        $thana = Thana::find($request->post('thana'));
-        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+        $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
+        $thana = $request->post('thana');
+        $union = $request->post('union');
+        $village = $request->post('village');
 
         if ($isThanaRequest) {
-            $thana = new Thana;
-            $thana->district_id = $request->post('district');
-            $thana->bn_name = $request->post('thana-request');
-            $thana->is_pending = 1;
-            $thana->save();
+            $newThana = new Thana;
+            $newThana->district_id = $request->post('district');
+            $newThana->bn_name = $request->post('thana-request');
+            $newThana->is_pending = 1;
+            $newThana->save();
+            $thana = $newThana->id;
         }
 
         if ($isUnionRequest) {
-            $union = new Union;
-            $union->thana_id = $thana->id;
-            $union->bn_name = $request->post('union-request');
-            $union->is_pending = 1;
-            $union->save();
+            $newUnion = new Union;
+            $newUnion->thana_id = $thana;
+            $newUnion->bn_name = $request->post('union-request');
+            $newUnion->is_pending = 1;
+            $newUnion->save();
+            $union = $newUnion->id;
+        }
+
+        if ($isVillageRequest) {
+            $newVillage = new Village;
+            $newVillage->union_id = $union;
+            $newVillage->bn_name = $request->post('village-request');
+            $newVillage->is_pending = 1;
+            $newVillage->save();
+            $village = $newVillage->id;
         }
 
         $ind = new Ind;
         $ind->user_id = $user->id;
         $ind->division_id = $request->post('division');
         $ind->district_id = $request->post('district');
-        $ind->thana_id = $thana->id;
-        $ind->union_id = $union->id;
+        $ind->thana_id = $thana;
+        $ind->union_id = $union;
+        $ind->village_id = $village;
 
         $ind->mobile = $request->post('mobile');
         $ind->referrer = $request->post('referrer');
@@ -163,17 +178,38 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Some custom validation will be needed for workmethods
 
         $workMethods = [];
-        foreach ($request->post('work-methods') as $workMethod) {
-            array_key_exists('id', $workMethod) && array_push($workMethods, [
-                'work_method_id' => $workMethod['id'],
-                'ind_id' => $ind->id,
-                'rate' => $workMethod['rate'],
-                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
-            ]);
+        // sub category rates
+        foreach ($request->post('sub-category-rates') as $subCategoryRate) {
+            if (array_key_exists('id', $subCategoryRate)) {
+                foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                    if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                        array_push($workMethods, [
+                            'work_method_id' => $workMethod['id'],
+                            'ind_id' => $ind->id,
+                            'sub_category_id' => $subCategoryRate['id'],
+                            'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                        ]);
+                    }
+                }
+            }
+        }
+        // requested subcategory rates
+        foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
+            if (array_key_exists('name', $subCategoryRate)) {
+                foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                    if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                        array_push($workMethods, [
+                            'work_method_id' => $workMethod['id'],
+                            'ind_id' => $ind->id,
+                            'sub_category_id' => $requestedSubCategories[$index]->id,
+                            'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                        ]);
+                    }
+                }
+            }
         }
 
         DB::table('ind_work_method')->insert($workMethods);
-
         // User
         $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
@@ -378,23 +414,26 @@ class IndServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $ind = Ind::with(['division', 'district', 'thana', 'union'])->find($id);
+        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
             return redirect(route('individual-service-registration.index'));
         }
 
-        $workMethods = WorkMethod::all();
-        $categories = Category::getAll('ind')->get();
-        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
-        $subCategories = SubCategory::getAll('ind')->get();
+        $categories = Category::whereServiceTypeId(1)->get();
+        $subCategories = SubCategory::whereCategoryId($ind->category_id)->whereIsConfirmed(1)->get();
+        $indSubCategories = $ind->subCategories()->whereIsConfirmed(1)->get();
+        $pendingSubCategories = $ind->subCategories()->whereIsConfirmed(0)->get();
         $divisions = Division::all();
-        $districts = $ind->division()->with('districts')->first()->districts;
-        $thanas = $ind->district->thanas()->where('is_pending', 0)->get();
-        $unions = $ind->thana->unions()->where('is_pending', 0)->get();
+        $districts = District::whereDivisionId($ind->division_id)->get();
+        $thanas = $ind->district->thanas()->whereIsPending(0)->get();
+        $unions = $ind->thana->unions()->whereIsPending(0)->get();
+        $villages = Village::whereUnionId($ind->union->id)->whereIsPending(0)->get();
+        $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
+        $workMethods = WorkMethod::all();
 
         $isPicExists = $ind->user->photo;
-        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories'));
     }
 }

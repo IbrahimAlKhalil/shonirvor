@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-secondary">
-    <a class="navbar-brand" href="{{ route('backend.home') }}">{{ config('app.name') }}</a>
+    <a class="navbar-brand" href="{{ route('dashboard') }}">{{ config('app.name') }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,10 +8,10 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('frontend.home') }}">হোম</a>
+                <a class="nav-link" href="{{ route('home') }}">হোম</a>
             </li>
             <li class="nav-item @if(request()->is('dashboard')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.home') }}">ড্যাশবোর্ড</a>
+                <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
             </li>
             <li class="nav-item @if(request()->is('dashboard/*service*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-service.index') }}">সার্ভিস সমূহ</a>

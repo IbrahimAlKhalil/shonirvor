@@ -58,13 +58,14 @@
                     </div>
                     <div class="col-md-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
-                        @foreach($indServices as $service)
+                        @foreach($indServices as $key => $service)
                             <ul class="list-unstyled">
                                 <li class="media mt-3 p-2 bg-light">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.ind-service.show', $service->id) }}">{{ $service->user->name }}</a>
+                                            <input id="topIndStar{{ $key }}" value="{{ $service->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
                                             <i>{{ $service->category->name }}</i>
@@ -87,6 +88,7 @@
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->name }}</a>
+                                            <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
                                             <i>{{ $service->category->name }}</i>

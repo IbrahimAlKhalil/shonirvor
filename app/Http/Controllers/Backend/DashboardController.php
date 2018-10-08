@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
         $inds = Auth::user()->inds()->withTrashed()->get();
         $orgs = Auth::user()->orgs()->withTrashed()->get();
@@ -23,11 +23,17 @@ class HomeController extends Controller
         $navs = [];
 
         foreach ($inds as $ind) {
-            array_push($navs, ['url' => route('profile.backend.individual-service.show', $ind->id), 'text' => $ind->category->name, 'after' => '&nbsp;<span class="badge badge-primary pull-right">ব্যাক্তিগত</span>']);
+            array_push($navs, [
+                'url' => route('profile.backend.individual-service.show', $ind->id),
+                'text' => $ind->category->name, 'after' => '&nbsp;<span class="badge badge-primary pull-right">ব্যাক্তিগত</span>'
+            ]);
         }
 
         foreach ($orgs as $org) {
-            array_push($navs, ['url' => route('profile.backend.organization-service.show', $org->id), 'text' => $org->name, 'after' => '&nbsp;<span class="badge badge-primary pull-right">প্রাতিষ্ঠানিক</span>']);
+            array_push($navs, [
+                'url' => route('profile.backend.organization-service.show', $org->id),
+                'text' => $org->name, 'after' => '&nbsp;<span class="badge badge-primary pull-right">প্রাতিষ্ঠানিক</span>'
+            ]);
         }
 
         return $navs;

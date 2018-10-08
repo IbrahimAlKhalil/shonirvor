@@ -14,7 +14,7 @@ class OrgServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = Org::getOnly('pending')->orderBy('updated_at', 'DSC')->paginate(15);
+        $serviceRequests = Org::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = $this->navs();
         return view('backend.org-service-request.index', compact('serviceRequests', 'navs'));
     }

@@ -23,8 +23,6 @@ class CreateIndsTable extends Migration
             $table->string('referrer', 11)->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
             $table->string('status')->nullable();

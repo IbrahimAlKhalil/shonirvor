@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.querySelector('.remove-btn').classList.remove('d-none');
                 item.lastElementChild.innerHTML = '';
                 requestFields(item.lastElementChild, workMethods, repeater2.length);
+
+                item.firstElementChild.firstElementChild.innerHTML = `<input type="text" class="form-control" name="sub-category-requests[${repeater2.length}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম">`;
             });
         });
 

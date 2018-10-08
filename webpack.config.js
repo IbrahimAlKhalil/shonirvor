@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpack = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -12,6 +13,8 @@ module.exports = {
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',
         'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
+        'backend/area/modal': './resources/assets/js/backend/area/modal.js',
+        'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',
 
         'errors/404': './resources/assets/js/errors/404.js'
     },
@@ -76,6 +79,11 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new CopyWebpack([
+            {from: './resources/assets/js/backend/contents/skins', to: 'backend/contents/skins'}
+        ])
+    ],
     performance: {
         maxAssetSize: 500000,
         maxEntrypointSize: 800000

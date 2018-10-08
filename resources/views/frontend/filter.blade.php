@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="row mt-4">
-                    @forelse($providers as $provider)
+                    @forelse($providers as $key => $provider)
                         <div class="col-md-6">
                             <ul class="list-unstyled">
                                 <li class="media mt-3 p-2 bg-light">
@@ -35,6 +35,7 @@
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.'.$provider->type.'-service.show', $provider->id) }}">{{ $provider->name }}</a>
+                                            <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
                                             <i>{{ str_limit($provider->category_name, 25) }}</i>
@@ -56,7 +57,7 @@
                 </div>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $providers->links('components.filter-pagination') }}
+                        {{ $providers->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

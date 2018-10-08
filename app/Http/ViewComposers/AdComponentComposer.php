@@ -10,10 +10,7 @@ class AdComponentComposer
 {
     public function compose(View $view)
     {
-        $ads = Ad::all();
-        if ($ads->count() >= 3) {
-            $ads = $ads->random(3);
-        }
+        $ads = Ad::inRandomOrder()->take(3)->get();
         $view->with(compact('ads'));
     }
 }

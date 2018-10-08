@@ -15,6 +15,7 @@ class CreateOrgSubCategoryRatesTable extends Migration
     {
         Schema::create('org_sub_category_rates', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('org_id');
             $table->unsignedInteger('sub_category_id');
             $table->float('rate')->nullable();
             $table->timestamps();
@@ -22,6 +23,12 @@ class CreateOrgSubCategoryRatesTable extends Migration
             $table->foreign('sub_category_id')
                 ->references('id')
                 ->on('sub_categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('org_id')
+                ->references('id')
+                ->on('orgs')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

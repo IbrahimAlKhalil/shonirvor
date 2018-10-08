@@ -37,7 +37,6 @@ export class OptionLoader {
             let keyVal = item.split('=');
             properties[keyVal[0]] = keyVal[1];
         });
-        let previousCursor = getComputedStyle(document.body).cursor;
         document.body.style.cursor = 'wait';
         return new Promise(resolve => {
             fetch(url).then(response => {
@@ -48,7 +47,7 @@ export class OptionLoader {
                         option.innerHTML = data[properties.text];
                         selectElement.appendChild(option);
                     });
-                    document.body.style.cursor = previousCursor;
+                    document.body.style.cursor = 'auto';
                     resolve(json);
                 });
             });
@@ -77,10 +76,6 @@ export class OptionLoader {
         placeholder.innerHTML = select.getAttribute('data-placeholder');
         select.insertBefore(placeholder, select.firstElementChild);
     }
-
-}
-
-export function foo() {
 
 }
 

@@ -17,8 +17,6 @@ class IndWorkMethodTableSeeder extends Seeder
     {
         $data = [];
 
-        // TODO:: Start here.
-
         Ind::all()->each(function ($ind) use ($data) {
             $ind->subCategories->each(function ($subCategory) use ($ind, $data) {
                 $workMethods = randomElements(WorkMethod::pluck('id')->toArray(), rand(1, 4));

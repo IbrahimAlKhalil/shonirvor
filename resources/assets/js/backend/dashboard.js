@@ -2,5 +2,7 @@
 import './../../../../node_modules/bootstrap/dist/css/bootstrap.css'; // Bootstrap CSS
 
 /***** JS *****/
+import $ from 'jquery';
 import 'bootstrap'; // Bootstrap JS
-import '../modules/option-loader';
+
+window.$ = $;
