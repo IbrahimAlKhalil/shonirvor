@@ -18,11 +18,11 @@
                 </nav>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-md-9">
                 @include('components.success')
                 @include('components.error')
-                <table class="table table-striped table-bordered table-hover table-sm text-center mt-3">
+                <table class="table table-striped table-bordered table-hover table-sm text-center">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -117,7 +117,7 @@
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-12">
-                        <div class="card mt-3">
+                        <div class="card">
                             <h5 class="card-header">{{ $division->bn_name }} বিভাগে নতুন জেলা তৈরি করুন</h5>
                             <div class="card-body">
                                 <form method="post" action="{{ route('backend.area.district.store', $division->id) }}">

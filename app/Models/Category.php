@@ -50,6 +50,8 @@ class Category extends Model
     /******************/
 
     /**
+     * TODO:: This method will removed. When uses of this method will replace with onlyInd(), onlyOrg(), onlyConfirmed(), onlyPending()
+     *
      * @param $serviceType
      * @param int $isConfirmed
      * @return null

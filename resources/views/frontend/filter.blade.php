@@ -26,11 +26,11 @@
                         </form>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-4 bg-white rounded">
                     @forelse($providers as $key => $provider)
                         <div class="col-md-6">
                             <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 bg-light">
+                                <li class="media mt-3 p-2 service-card-shadow">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
@@ -54,8 +54,6 @@
                             <p class="text-center h4"> আপনার ফিল্টার অনুযায়ী কোন সার্ভিস প্রভাইডার পাওয়া যায়নি।</p>
                         </div>
                     @endforelse
-                </div>
-                <div class="row">
                     <div class="mx-auto">
                         {{ $providers->links('pagination::bootstrap-4') }}
                     </div>

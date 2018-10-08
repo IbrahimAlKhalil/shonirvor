@@ -17,38 +17,30 @@ class OrgSubCategoryController extends Controller
 
     public function store(StoreSubCategory $request)
     {
-        DB::beginTransaction();
+        $subCategory = new SubCategory();
+        $subCategory->name = $request->input('name');
+        $subCategory->category_id = $request->input('category-id');
+        $subCategory->save();
 
-        Category::find($request->post('category-id'))->subCategories()->create([
-            'name' => $request->post('sub-category')
-        ]);
-
-        DB::commit();
-        return back()->with('success', 'Sub-category "' . $request->post('category') . '" সফলভাবে যুক্ত হয়েছে!');
+        return back()->with('success', $request->input('name').' সাব-ক্যাটাগরিটি যুক্ত হয়েছে!');
     }
 
 
     public function update(UpdateCategory $request, SubCategory $subCategory)
     {
-        DB::beginTransaction();
+        $oldName = $subCategory->name;
 
-        $subCategory->update([
-            'name' => $request->post('edit-sub-category')
-        ]);
+        $subCategory->name = $request->input('name');
+        $subCategory->save();
 
-        DB::commit();
-        return back()->with('success', 'সাব-ক্যাটাগরিটি সফলভাবে পুনঃনামকরণ হয়েছে!');
+        return back()->with('success', $oldName.' সাব-ক্যাটাগরিটি এডিট হয়েছে।');
     }
 
 
     public function destroy(SubCategory $subCategory)
     {
-        DB::beginTransaction();
-        // TODO:: There can be some kind of gotcha about 'Cascade' deleting or updating, I'm not sure!.
-
         $subCategory->delete();
 
-        DB::commit();
-        return back()->with('success', 'সাব-ক্যাটাগরিটি সফলভাবে মুছে ফেলা হয়েছে!');
+        return back()->with('success', $subCategory->name.' সাব-ক্যাটাগরিটি ডিলিট হয়েছে।');
     }
 }

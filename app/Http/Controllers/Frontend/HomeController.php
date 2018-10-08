@@ -32,13 +32,15 @@ class HomeController extends Controller
             ->get();
 
         $indServices = Ind::onlyTop()
-            ->select('inds.*')
+            ->select('inds.id', 'mobile', 'inds.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->get();
 
         $orgServices = Org::onlyTop()
-            ->select('orgs.*')
+            ->select('orgs.id', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->get();

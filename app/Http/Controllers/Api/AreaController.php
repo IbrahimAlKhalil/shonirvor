@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Division;
 
 class AreaController extends Controller
 {
 
-    public function divisions(Request $request)
+    public function divisions()
     {
         $result = null;
         $id = theId();
