@@ -54,6 +54,8 @@
                             <p class="text-center h4"> আপনার ফিল্টার অনুযায়ী কোন সার্ভিস প্রভাইডার পাওয়া যায়নি।</p>
                         </div>
                     @endforelse
+                </div>
+                <div class="row">
                     <div class="mx-auto">
                         {{ $providers->links('pagination::bootstrap-4') }}
                     </div>

@@ -12,7 +12,7 @@ $factory->define(User::class, function (Faker $faker) {
         'age' => $faker->numberBetween(15, 70),
         'qualification' => $faker->randomElement(['SSC', 'HSC', 'BBA', 'MBA', '1 Year Experience', '2 Years Experience', '3 Years Experience']),
         'address' => $faker->address,
-        'photo' => 'default/user-photos/person.jpg',
+        'photo' => 'seed/user-photos/'.rand(1, 190).'.jpg',
         'password' => '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC', // 123456
         'remember_token' => str_random(10)
     ];
