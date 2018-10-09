@@ -39,7 +39,7 @@ class HomeController extends Controller
             ->get();
 
         $orgServices = Org::onlyTop()
-            ->select('orgs.id', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->select('orgs.id', 'name', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
             ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()

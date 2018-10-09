@@ -20,8 +20,8 @@
                     <div class="col-12">
                         <form action="{{ route('frontend.filter') }}">
                             <div class="input-group">
-                                <input type="text" name="area" class="form-control" placeholder="এলাকা সার্চ করুন">
-                                <input type="text" name="category" class="form-control" placeholder="ক্যাটাগরি সার্চ করুন">
+                                <input type="text" name="village" id="searchVillageInput" class="form-control" placeholder="এলাকা সার্চ করুন">
+                                <input type="text" name="category" id="searchCategoryInput" class="form-control" placeholder="ক্যাটাগরি সার্চ করুন">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary" type="submit">সার্চ</button>
                                 </div>
