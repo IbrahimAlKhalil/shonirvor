@@ -17,8 +17,6 @@ $factory->define(App\Models\Org::class, function (Faker $faker) {
         'logo' => 'seed/org/logo/'.rand(1, 13).'.png',
         'website' => $faker->url,
         'facebook' => $faker->url,
-        'latitude' => $faker->latitude,
-        'longitude' => $faker->longitude,
         'address' => $faker->address,
         'trade_license' => 'seed/org/trade-license.png',
         'is_pending' => rand(0, 1),

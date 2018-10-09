@@ -66,15 +66,6 @@
             </div>
 
             <div class="form-group row">
-                <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                <div class="col-9">
-                    <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
-                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'personal-email'])
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
                 <div class="col-9">
                     <input id="email" name="email" type="text" value="{{ old('email') }}"
@@ -140,8 +131,18 @@
                         <div class="col-md">
                             <select name="union" id="union" class="form-control"
                                     data-placeholder="-- ইউনিয়ন --"
+                                    data-option-loader-url="{{ route('api.villages') }}"
+                                    data-option-loader-target="#village"
+                                    data-option-loader-param="union"
                                     data-option-loader-properties="value=id,text=bn_name">
                                 <option value="">-- ইউনিয়ন --</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="village" id="village" class="form-control"
+                                    data-placeholder="-- এলাকা --"
+                                    data-option-loader-properties="value=id,text=bn_name">
+                                <option value="">-- এলাকা --</option>
                             </select>
                         </div>
                     </div>
@@ -154,6 +155,12 @@
                     <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+
+                    <br>
+                    <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
+                    <input type="text" id="village-request" name="village-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
                 </div>
             </div>
 
@@ -203,16 +210,10 @@
                                placeholder="রেট">
                     </div>
                     @include('components.invalid', ['name' => 'sub-categories'])
-                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                    {{--<label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
                     <div class="input-div">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                    </div>
+                    </div>--}}
                 </div>
             </div>
 
@@ -225,17 +226,6 @@
                     @include('components.invalid', ['name' => 'nid'])
                 </div>
             </div>
-
-            @if(!$isPicExists)
-                <div class="form-group row">
-                    <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                    <div class="col-9">
-                        <input id="photo" name="photo" type="file" accept="image/*"
-                               class="form-control @if($errors->has('photo')) is-invalid @endif">
-                        @include('components.invalid', ['name' => 'photo'])
-                    </div>
-                </div>
-            @endif
 
             <div class="form-group row">
                 <label for="identities" class="col-3 col-form-label">লোগো <span

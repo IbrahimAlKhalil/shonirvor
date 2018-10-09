@@ -14,7 +14,7 @@ export class Repeater {
             let newItem = this.original.cloneNode(true);
             let removeBtn = newItem.querySelector('.remove-btn');
             if (typeof this.options.process === 'function') {
-                this.options.process.call(this, newItem, this.lastCloned);
+                this.options.process.call(this, newItem, this.lastCloned, instance);
             }
 
             if (typeof process === 'function') {

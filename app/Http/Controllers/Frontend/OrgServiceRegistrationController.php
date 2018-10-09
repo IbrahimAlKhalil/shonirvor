@@ -8,6 +8,7 @@ use App\Models\ServiceType;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreOrg;
 use App\Http\Requests\UpdateOrg;
+use App\Models\Village;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -28,8 +29,7 @@ class OrgServiceRegistrationController extends Controller
         $categories = Category::getAll('org')->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'orgs', 'divisions', 'isPicExists', 'categories');
+        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories');
         $view = 'frontend.registration.org-service.confirm';
         $count = $orgs->count();
 
@@ -69,8 +69,7 @@ class OrgServiceRegistrationController extends Controller
             $categories = Category::getAll('org')->get();
             $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
-            $isPicExists = $user->photo;
-            $compact = compact('classesToAdd', 'orgs', 'divisions', 'isPicExists', 'categories');
+            $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories');
             return view('frontend.registration.org-service.confirm', $compact);
         }
 
@@ -80,7 +79,9 @@ class OrgServiceRegistrationController extends Controller
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
         $category = Category::find($request->post('category'));
-        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
+        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', array_map(function ($item) {
+            return $item['id'];
+        }, $request->post('sub-categories'))) : null;
         $requestedSubCategories = [];
 
         // Create categories
@@ -109,31 +110,45 @@ class OrgServiceRegistrationController extends Controller
         // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
-        $thana = Thana::find($request->post('thana'));
-        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+        $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
+        $thana = $request->post('thana');
+        $union = $request->post('union');
+        $village = $request->post('village');
 
         if ($isThanaRequest) {
-            $thana = new Thana;
-            $thana->district_id = $request->post('district');
-            $thana->bn_name = $request->post('thana-request');
-            $thana->is_pending = 1;
-            $thana->save();
+            $newThana = new Thana;
+            $newThana->district_id = $request->post('district');
+            $newThana->bn_name = $request->post('thana-request');
+            $newThana->is_pending = 1;
+            $newThana->save();
+            $thana = $newThana->id;
         }
 
         if ($isUnionRequest) {
-            $union = new Union;
-            $union->thana_id = $thana->id;
-            $union->bn_name = $request->post('union-request');
-            $union->is_pending = 1;
-            $union->save();
+            $newUnion = new Union;
+            $newUnion->thana_id = $thana;
+            $newUnion->bn_name = $request->post('union-request');
+            $newUnion->is_pending = 1;
+            $newUnion->save();
+            $union = $newUnion->id;
+        }
+
+        if ($isVillageRequest) {
+            $newVillage = new Village;
+            $newVillage->union_id = $union;
+            $newVillage->bn_name = $request->post('village-request');
+            $newVillage->is_pending = 1;
+            $newVillage->save();
+            $village = $newVillage->id;
         }
 
         $org = new Org;
         $org->user_id = $user->id;
         $org->division_id = $request->post('division');
         $org->district_id = $request->post('district');
-        $org->thana_id = $thana->id;
-        $org->union_id = $union->id;
+        $org->thana_id = $thana;
+        $org->union_id = $union;
+        $org->village_id = $village;
 
         $org->name = $request->post('name');
         $org->description = $request->post('description');
@@ -157,12 +172,21 @@ class OrgServiceRegistrationController extends Controller
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
         $org->subCategories()->saveMany($requestedSubCategories);
 
-        // User
-        $user->email = $request->post('personal-email');
-        $user->nid = $request->post('nid');
-        if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photos');
+        $data = [];
+        foreach ($request->post('sub-categories') as $subCategory) {
+            if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
+                array_push($data, [
+                    'org_id' => $org->id,
+                    'sub_category_id' => $subCategory['id'],
+                    'rate' => $subCategory['rate']
+                ]);
+            }
         }
+        DB::table('org_sub_category_rates')->insert($data);
+
+
+        // User
+        $user->nid = $request->post('nid');
         $user->save();
 
         // work images
@@ -242,33 +266,48 @@ class OrgServiceRegistrationController extends Controller
 
         // handle thana and union request
         // TODO:: Do some custom validation for thana and union
-        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
-        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
         $previousThana = $org->thana;
         $previousUnion = $org->union;
-        $thana = Thana::find($request->post('thana'));
-        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+        $previousVillage = $org->village;
+        $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
+        $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
+        $thana = $request->post('thana');
+        $union = $request->post('union');
+        $village = $request->post('village');
 
         if ($isThanaRequest) {
-            $thana = new Thana;
-            $thana->district_id = $request->post('district');
-            $thana->bn_name = $request->post('thana-request');
-            $thana->is_pending = 1;
-            $thana->save();
+            $newThana = new Thana;
+            $newThana->district_id = $request->post('district');
+            $newThana->bn_name = $request->post('thana-request');
+            $newThana->is_pending = 1;
+            $newThana->save();
+            $thana = $newThana->id;
         }
 
         if ($isUnionRequest) {
-            $union = new Union;
-            $union->thana_id = $thana->id;
-            $union->bn_name = $request->post('union-request');
-            $union->is_pending = 1;
-            $union->save();
+            $newUnion = new Union;
+            $newUnion->thana_id = $thana;
+            $newUnion->bn_name = $request->post('union-request');
+            $newUnion->is_pending = 1;
+            $newUnion->save();
+            $union = $newUnion->id;
+        }
+
+        if ($isVillageRequest) {
+            $newVillage = new Village;
+            $newVillage->union_id = $union;
+            $newVillage->bn_name = $request->post('village-request');
+            $newVillage->is_pending = 1;
+            $newVillage->save();
+            $village = $newVillage->id;
         }
 
         $org->division_id = $request->post('division');
         $org->district_id = $request->post('district');
-        $org->thana_id = $thana->id;
-        $org->union_id = $union->id;
+        $org->thana_id = $thana;
+        $org->union_id = $union;
+        $org->village_id = $village;
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
@@ -291,9 +330,15 @@ class OrgServiceRegistrationController extends Controller
         $org->save();
 
         // delete category and subcategories
+        DB::table('org_sub_category_rates')->where('org_id', $org->id)->delete();
         $previousRequested = $org->subCategories('requested');
         $org->subCategories()->detach();
         $previousRequested->delete();
+
+        if (!$isVillageRequest && $previousVillage->is_pending == 1) {
+            $previousVillage->delete();
+        }
+
         if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
             $previousCategory->delete();
         }
@@ -310,8 +355,19 @@ class OrgServiceRegistrationController extends Controller
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
         $org->subCategories()->saveMany($requestedSubCategories);
 
+        $data = [];
+        foreach ($request->post('sub-categories') as $subCategory) {
+            if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
+                array_push($data, [
+                    'org_id' => $org->id,
+                    'sub_category_id' => $subCategory['id'],
+                    'rate' => $subCategory['rate']
+                ]);
+            }
+        }
+        DB::table('org_sub_category_rates')->insert($data);
+
         // User
-        $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');
@@ -353,14 +409,16 @@ class OrgServiceRegistrationController extends Controller
             return redirect(route('organization-service-registration.index'));
         }
 
-        $categories = Category::getAll('org')->get();
-        $subCategories = SubCategory::getAll('org')->get();
+        $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
+        $subCategories = SubCategory::whereCategoryId($org->category_id)->whereIsConfirmed(1)->get();
+        $orgSubCategories = $org->subCategoryRates('confirmed')->withPivot('rate')->get();
+        /*$pendingSubCategories = $org->subCategories()->whereIsConfirmed(0)->get();*/
         $divisions = Division::all();
-        $districts = $org->division()->with('districts')->first()->districts;
-        $thanas = $org->district->thanas()->where('is_pending', 0)->get();
-        $unions = $org->thana->unions()->where('is_pending', 0)->get();
+        $districts = District::whereDivisionId($org->division_id)->get();
+        $thanas = $org->district->thanas()->whereIsPending(0)->get();
+        $unions = $org->thana->unions()->whereIsPending(0)->get();
+        $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
 
-        $isPicExists = $org->user->photo;
-        return view('frontend.registration.org-service.edit', compact('org', 'isPicExists', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions'));
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories'));
     }
 }

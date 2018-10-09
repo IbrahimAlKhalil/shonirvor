@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('sub-categories').addEventListener('change', removeAllAndRepeat);
+    repeater.clones.forEach(clone => {
+        clone.firstElementChild.addEventListener('change', removeAfterAndRepeat);
+    });
+
+    console.log(repeater.clones);
 
     let subCategoryLoader = new OptionLoader(document.getElementById('category'), {
         callback: () => {

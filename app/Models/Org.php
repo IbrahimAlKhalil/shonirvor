@@ -67,6 +67,11 @@ class Org extends Model
         return $this->belongsTo(Union::class);
     }
 
+    public function village()
+    {
+        return $this->belongsTo(Village::class);
+    }
+
     public function feedbacks()
     {
         return $this->morphMany(Feedback::class, 'feedbackable');
@@ -82,6 +87,21 @@ class Org extends Model
                 break;
             case 'requested':
                 $result = $result->where('is_confirmed', 0);
+        }
+
+        return $result;
+    }
+
+    function subCategoryRates($status = null)
+    {
+        $result = $this->belongsToMany(SubCategory::class, 'org_sub_category_rates');
+
+        switch ($status) {
+            case 'confirmed':
+                $result = $result->where('is_confirmed', 1)->withPivot('rate');
+                break;
+            case 'requested':
+                $result = $result->where('is_confirmed', 0)->withPivot('rate');
         }
 
         return $result;
@@ -109,10 +129,10 @@ class Org extends Model
 
     public function scopeWithFeedbacksAvg($query)
     {
-        return $query->leftJoin('feedbacks', function ($join){
+        return $query->leftJoin('feedbacks', function ($join) {
             $join->on('orgs.id', 'feedbacks.feedbackable_id')
                 ->where('feedbackable_type', 'org');
-            })
+        })
             ->addSelect(DB::raw('orgs.id, avg(star) as feedbacks_avg'))
             ->groupBy('id');
     }

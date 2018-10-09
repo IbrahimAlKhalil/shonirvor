@@ -25,6 +25,7 @@ class CreateIndsTable extends Migration
             $table->string('facebook')->nullable();
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
+            $table->string('cv')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_available')->default(1);
             $table->boolean('is_pending')->default(1);

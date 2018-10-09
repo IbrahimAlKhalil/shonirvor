@@ -77,15 +77,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                        <div class="col-9">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
-                                   class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'personal-email'])
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
                         <div class="col-9">
                             <input id="email" name="email" type="text" value="{{ old('email') }}"
@@ -281,17 +272,6 @@
                         </div>
                     </div>
 
-                    @if(!$isPicExists)
-                        <div class="form-group row">
-                            <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                            <div class="col-9">
-                                <input id="photo" name="photo" type="file" accept="image/*"
-                                       class="form-control @if($errors->has('photo')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'photo'])
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="form-group row">
                         <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                     class="text-danger">*</span></label>
@@ -317,6 +297,15 @@
                                     </div>
                                 @endfor
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
+                        <div class="col-9">
+                            <input id="cv" name="cv" type="file" accept="image/*"
+                                   class="form-control">
+                            @include('components.invalid', ['name' => 'cv'])
                         </div>
                     </div>
 

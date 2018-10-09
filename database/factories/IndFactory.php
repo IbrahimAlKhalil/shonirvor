@@ -15,10 +15,9 @@ $factory->define(Ind::class, function (Faker $faker) {
         'referrer' => $faker->randomElement($userMobiles),
         'website' => $faker->url,
         'facebook' => $faker->url,
-        'latitude' => $faker->latitude,
-        'longitude' => $faker->longitude,
         'address' => $faker->address,
         'experience_certificate' => 'seed/ind/exp-cert.png',
+        'cv' => 'seed/ind/exp-cert.png',
         'is_pending' =>  rand(0, 1),
         'is_top' =>  rand(0, 1)
     ];

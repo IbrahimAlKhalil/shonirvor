@@ -30,8 +30,7 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $isPicExists = $user->photo;
-        $compact = compact('classesToAdd', 'inds', 'divisions', 'isPicExists', 'categories');
+        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -72,8 +71,7 @@ class IndServiceRegistrationController extends Controller
             $categories = Category::getAll('ind')->get();
             $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
-            $isPicExists = $user->photo;
-            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'isPicExists', 'categories');
+            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'categories');
 
             // reached at the maximum
             // redirect them to the confirmation page
@@ -108,8 +106,6 @@ class IndServiceRegistrationController extends Controller
                     'is_confirmed' => 0
                 ]);
             }
-
-
             $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
@@ -168,6 +164,10 @@ class IndServiceRegistrationController extends Controller
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
+
+        if ($request->hasFile('cv')) {
+            $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
+        }
         $ind->save();
 
         // associate sub-categories
@@ -179,45 +179,46 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = [];
         // sub category rates
-        foreach ($request->post('sub-category-rates') as $subCategoryRate) {
-            if (array_key_exists('id', $subCategoryRate)) {
-                foreach ($subCategoryRate['work-methods'] as $workMethod) {
-                    if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
-                        array_push($workMethods, [
-                            'work_method_id' => $workMethod['id'],
-                            'ind_id' => $ind->id,
-                            'sub_category_id' => $subCategoryRate['id'],
-                            'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
-                        ]);
+        if (!$isCategoryRequest) {
+            foreach ($request->post('sub-category-rates') as $subCategoryRate) {
+                if (array_key_exists('id', $subCategoryRate)) {
+                    foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                        if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                            array_push($workMethods, [
+                                'work_method_id' => $workMethod['id'],
+                                'ind_id' => $ind->id,
+                                'sub_category_id' => $subCategoryRate['id'],
+                                'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                            ]);
+                        }
                     }
                 }
             }
         }
         // requested subcategory rates
-        foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
-            if (array_key_exists('name', $subCategoryRate)) {
-                foreach ($subCategoryRate['work-methods'] as $workMethod) {
-                    if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
-                        array_push($workMethods, [
-                            'work_method_id' => $workMethod['id'],
-                            'ind_id' => $ind->id,
-                            'sub_category_id' => $requestedSubCategories[$index]->id,
-                            'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
-                        ]);
+        if ($isSubCategoryRequest) {
+            foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
+                if (array_key_exists('name', $subCategoryRate)) {
+                    foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                        if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                            array_push($workMethods, [
+                                'work_method_id' => $workMethod['id'],
+                                'ind_id' => $ind->id,
+                                'sub_category_id' => $requestedSubCategories[$index]->id,
+                                'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                            ]);
+                        }
                     }
                 }
             }
         }
 
         DB::table('ind_work_method')->insert($workMethods);
+
         // User
-        $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
         $user->age = $request->post('age');
-        if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photos');
-        }
         $user->save();
 
         // work images
@@ -287,9 +288,9 @@ class IndServiceRegistrationController extends Controller
         // Create sub categories
         if ($isSubCategoryRequest) {
             $data = [];
-            foreach ($request->post('sub-category-requests') as $subCategoryName) {
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
+            foreach ($request->post('sub-category-requests') as $subCategory) {
+                array_key_exists('name', $subCategory) && array_push($data, [
+                    'name' => $subCategory['name'],
                     'is_confirmed' => 0
                 ]);
             }
@@ -300,31 +301,46 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
+        $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
+        $thana = $request->post('thana');
+        $union = $request->post('union');
+        $village = $request->post('village');
         $previousThana = $ind->thana;
         $previousUnion = $ind->union;
-        $thana = Thana::find($request->post('thana'));
-        $union = !$isThanaRequest ? Union::find($request->post('union')) : null;
+        $previousVillage = $ind->village;
 
         if ($isThanaRequest) {
-            $thana = new Thana;
-            $thana->district_id = $request->post('district');
-            $thana->bn_name = $request->post('thana-request');
-            $thana->is_pending = 1;
-            $thana->save();
+            $newThana = new Thana;
+            $newThana->district_id = $request->post('district');
+            $newThana->bn_name = $request->post('thana-request');
+            $newThana->is_pending = 1;
+            $newThana->save();
+            $thana = $newThana->id;
         }
 
         if ($isUnionRequest) {
-            $union = new Union;
-            $union->thana_id = $thana->id;
-            $union->bn_name = $request->post('union-request');
-            $union->is_pending = 1;
-            $union->save();
+            $newUnion = new Union;
+            $newUnion->thana_id = $thana;
+            $newUnion->bn_name = $request->post('union-request');
+            $newUnion->is_pending = 1;
+            $newUnion->save();
+            $union = $newUnion->id;
+        }
+
+        if ($isVillageRequest) {
+            $newVillage = new Village;
+            $newVillage->union_id = $union;
+            $newVillage->bn_name = $request->post('village-request');
+            $newVillage->is_pending = 1;
+            $newVillage->save();
+            $village = $newVillage->id;
         }
 
         $ind->division_id = $request->post('division');
         $ind->district_id = $request->post('district');
-        $ind->thana_id = $thana->id;
-        $ind->union_id = $union->id;
+        $ind->thana_id = $thana;
+        $ind->union_id = $union;
+        $ind->village_id = $village;
         $ind->mobile = $request->post('mobile');
         $ind->email = $request->post('email');
         $ind->category_id = $category->id;
@@ -335,14 +351,23 @@ class IndServiceRegistrationController extends Controller
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
+
+        if ($request->hasFile('cv')) {
+            $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
+        }
         $ind->save();
 
         // delete category and subcategories
+        $ind->workMethods()->detach();
         $previousRequested = $ind->subCategories('requested');
         $ind->subCategories()->detach();
         $previousRequested->delete();
         if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
             $previousCategory->delete();
+        }
+
+        if (!$isVillageRequest && $previousVillage->is_pending == 1) {
+            $previousVillage->delete();
         }
 
         if (!$isUnionRequest && $previousUnion->is_pending == 1) {
@@ -358,28 +383,49 @@ class IndServiceRegistrationController extends Controller
         $ind->subCategories()->saveMany($requestedSubCategories);
 
         // ind_work_method table
-        $ind->workMethods()->detach();
 
         $workMethods = [];
-        foreach ($request->post('work-methods') as $workMethod) {
-            array_key_exists('id', $workMethod) && array_push($workMethods, [
-                'work_method_id' => $workMethod['id'],
-                'ind_id' => $ind->id,
-                'rate' => $workMethod['rate'],
-                'is_negotiable' => array_key_exists('is-negotiable', $workMethod) && $workMethod['is-negotiable'] == 'on'
-            ]);
+        // sub category rates
+        if (!$isCategoryRequest) {
+            foreach ($request->post('sub-category-rates') as $subCategoryRate) {
+                if (array_key_exists('id', $subCategoryRate)) {
+                    foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                        if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                            array_push($workMethods, [
+                                'work_method_id' => $workMethod['id'],
+                                'ind_id' => $ind->id,
+                                'sub_category_id' => $subCategoryRate['id'],
+                                'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+        // requested subcategory rates
+        if ($isSubCategoryRequest) {
+            foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
+                if (array_key_exists('name', $subCategoryRate)) {
+                    foreach ($subCategoryRate['work-methods'] as $workMethod) {
+                        if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
+                            array_push($workMethods, [
+                                'work_method_id' => $workMethod['id'],
+                                'ind_id' => $ind->id,
+                                'sub_category_id' => $requestedSubCategories[$index]->id,
+                                'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
+                            ]);
+                        }
+                    }
+                }
+            }
         }
 
         DB::table('ind_work_method')->insert($workMethods);
 
         // User
-        $user->email = $request->post('personal-email');
         $user->nid = $request->post('nid');
         $user->qualification = $request->post('qualification');
         $user->age = $request->post('age');
-        if ($request->hasFile('photo')) {
-            $user->photo = $request->file('photo')->store('user-photos');
-        }
         $user->save();
 
         // work images
@@ -414,14 +460,14 @@ class IndServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories'])->find($id);
+        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
             return redirect(route('individual-service-registration.index'));
         }
 
-        $categories = Category::whereServiceTypeId(1)->get();
+        $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
         $subCategories = SubCategory::whereCategoryId($ind->category_id)->whereIsConfirmed(1)->get();
         $indSubCategories = $ind->subCategories()->whereIsConfirmed(1)->get();
         $pendingSubCategories = $ind->subCategories()->whereIsConfirmed(0)->get();
@@ -433,7 +479,6 @@ class IndServiceRegistrationController extends Controller
         $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
         $workMethods = WorkMethod::all();
 
-        $isPicExists = $ind->user->photo;
-        return view('frontend.registration.ind-service.edit', compact('ind', 'isPicExists', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories'));
     }
 }

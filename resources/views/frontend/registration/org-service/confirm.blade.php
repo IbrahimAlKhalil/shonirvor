@@ -4,6 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/org/index.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -95,15 +96,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                        <div class="col-9">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
-                                   class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'personal-email'])
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
                         <div class="col-9">
                             <input id="email" name="email" type="text" value="{{ old('email') }}"
@@ -152,7 +144,9 @@
                                             data-option-loader-url="{{ route('api.thanas') }}"
                                             data-option-loader-target="#thana"
                                             data-option-loader-param="district"
-                                            data-option-loader-properties="value=id,text=bn_name"></select>
+                                            data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- জেলা --</option>
+                                    </select>
                                 </div>
                                 <div class="col-md">
                                     <select name="thana" id="thana" class="form-control"
@@ -161,12 +155,24 @@
                                             data-option-loader-target="#union"
                                             data-option-loader-param="thana"
                                             data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- থানা --</option>
                                     </select>
                                 </div>
                                 <div class="col-md">
                                     <select name="union" id="union" class="form-control"
                                             data-placeholder="-- ইউনিয়ন --"
+                                            data-option-loader-url="{{ route('api.villages') }}"
+                                            data-option-loader-target="#village"
+                                            data-option-loader-param="union"
                                             data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- ইউনিয়ন --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md">
+                                    <select name="village" id="village" class="form-control"
+                                            data-placeholder="-- এলাকা --"
+                                            data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- এলাকা --</option>
                                     </select>
                                 </div>
                             </div>
@@ -179,6 +185,13 @@
                             <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                             <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+
+                            <br>
+                            <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
+                            <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
+                            <input type="text" id="village-request" name="village-request"
+                                   class="form-control mt-3 mb-4"
+                                   placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
                         </div>
                     </div>
 
@@ -200,7 +213,7 @@
                                     data-option-loader-url="{{ route('api.sub-categories') }}"
                                     data-option-loader-target="#sub-categories"
                                     data-option-loader-param="category">
-                                <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
 
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -209,7 +222,8 @@
                             @include('components.invalid', ['name' => 'category'])
                             <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-category" class="mt-2 no-something" name="no-category">
-                            <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
+                            <input type="text" id="category-request" name="category-request"
+                                   class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
                         </div>
                     </div>
@@ -217,24 +231,21 @@
                     <div class="form-group row">
                         <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                     class="text-danger">*</span></label>
-                        <div class="col-9">
-                            <select id="sub-categories" name="sub-categories[]"
-                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif"
-                                    data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
-                                    data-option-loader-properties="value=id,text=name"
-                                    multiple>
-                            </select>
+                        <div class="col-9" id="sub-category-parent">
+                            <div class="repeater-clone row mt-2">
+                                <select id="sub-categories" name="sub-categories[0][id]"
+                                        class="form-control col-md-9 @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                        data-option-loader-properties="value=id,text=name">
+                                </select>
+                                <input type="number" class="form-control col-md-3" name="sub-categories[0][rate]"
+                                       placeholder="রেট">
+                            </div>
                             @include('components.invalid', ['name' => 'sub-categories'])
-                            <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                            {{--<label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
                             <div class="input-div">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
 
@@ -248,17 +259,6 @@
                         </div>
                     </div>
 
-                    @if(!$isPicExists)
-                        <div class="form-group row">
-                            <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                            <div class="col-9">
-                                <input id="photo" name="photo" type="file" accept="image/*"
-                                       class="form-control @if($errors->has('photo')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'photo'])
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="form-group row">
                         <label for="identities" class="col-3 col-form-label">লোগো <span
                                     class="text-danger">*</span></label>
@@ -270,7 +270,8 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                        <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম
+                            সনদ <span
                                     class="text-danger">*</span></label>
                         <div class="col-9">
                             <input id="identities" name="identities[]" type="file" accept="image/*"
@@ -286,10 +287,12 @@
                                 @for($i=0; $i<4; $i++)
                                     <div class="col-md-6 shadow-sm p-2 mb-2 bg-white rounded">
                                         <input id="images" name="images[{{ $i }}][file]" type="file" accept="image/*"
-                                               class="form-control-file @if($errors->has('images')) is-invalid @endif" multiple>
+                                               class="form-control-file @if($errors->has('images')) is-invalid @endif"
+                                               multiple>
                                         @include('components.invalid', ['name' => 'images'])
                                         <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
-                                        <textarea id="images-{{ $i }}-text" type="text" class="form-control" name="images[{{ $i }}][description]"></textarea>
+                                        <textarea id="images-{{ $i }}-text" type="text" class="form-control"
+                                                  name="images[{{ $i }}][description]"></textarea>
                                     </div>
                                 @endfor
                             </div>
@@ -315,4 +318,14 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .no-something + input, .no-something + .input-div {
+            display: none;
+        }
+
+        .no-something:checked + input, .no-something:checked + .input-div {
+            display: block;
+        }
+    </style>
 @endsection

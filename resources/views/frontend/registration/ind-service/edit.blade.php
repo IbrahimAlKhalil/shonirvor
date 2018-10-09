@@ -4,7 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/ind/index.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind/edit.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -38,16 +38,6 @@
                            value="{{ oldOrData('referrer', $ind->referrer) }}"
                            class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}">
                     @include('components.invalid', ['name' => 'referrer'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                <div class="col-9">
-                    <input id="personal-email" name="personal-email" type="text"
-                           value="{{ oldOrData('personal-email', $ind->user->email) }}"
-                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'personal-email'])
                 </div>
             </div>
 
@@ -93,7 +83,7 @@
                                     data-option-loader-nodisable="true">
                                 <option value="">-- বিভাগ --</option>
                                 @foreach($divisions as $division)
-                                    <option value="{{ $division->id }}" {{ selectOpt($ind->division->id, $division->id) }}>{{ $division->bn_name }}</option>
+                                    <option value="{{ $division->id }}" {{ selectOpt($ind->division_id, $division->id) }}>{{ $division->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -106,7 +96,7 @@
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}" {{ selectOpt($ind->district->id, $district->id) }}>{{ $district->bn_name }}</option>
+                                    <option value="{{ $district->id }}" {{ selectOpt($ind->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -120,17 +110,21 @@
                                     data-option-loader-nodisable="true">
                                 <option value="">-- থানা --</option>
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}" {{ selectOpt($ind->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
+                                    <option value="{{ $thana->id }}" {{ selectOpt($ind->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="union" id="union" class="form-control"
                                     data-placeholder="-- ইউনিয়ন --"
-                                    data-option-loader-properties="value=id,text=bn_name">
+                                    data-option-loader-url="{{ route('api.villages') }}"
+                                    data-option-loader-target="#village"
+                                    data-option-loader-param="union"
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
-                                    <option value="{{ $union->id }}" {{ selectOpt($ind->union->id, $union->id) }}>{{ $union->bn_name }}</option>
+                                    <option value="{{ $union->id }}" {{ selectOpt($ind->union_id, $union->id) }}>{{ $union->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -140,7 +134,7 @@
                                     data-option-loader-properties="value=id,text=bn_name">
                                 <option value="">-- এলাকা --</option>
                                 @foreach($villages as $village)
-                                    <option value="{{ $village->id }}" {{ selectOpt($ind->village->id, $village->id) }}>{{ $village->bn_name }}</option>
+                                    <option value="{{ $village->id }}" {{ selectOpt($ind->village_id, $village->id) }}>{{ $village->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -265,7 +259,6 @@
                             </div>
                         </div>
                     @endforeach
-
                     <div class="card mt-2 repeater-clone d-none">
                         <div class="card-header pb-0 pt-2"></div>
                         <div class="card-body"></div>
@@ -277,7 +270,7 @@
                         @foreach($pendingSubCategories as $subCategoryCount => $subCategory)
                             <div class="card mt-2 repeater-clone" data-cloned="true">
                                 <div class="card-header pt-2 m-0 row">
-                                    <div class="col-md-9"><input type="text" class="form-control" name="sub-category-requests[1][name]" placeholder="আমার সাব-ক্যাটাগরির নাম"></div>
+                                    <div class="col-md-9"><input type="text" class="form-control" name="sub-category-requests[{{ $subCategoryCount }}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম" value="{{ $subCategory->name }}"></div>
                                     <div class="col-md-3">
                                         <a class="fa fa-trash float-right text-danger remove-btn" href="#"></a>
                                     </div>
@@ -291,20 +284,20 @@
                                         @if($method->id != 4)
                                             <div class="row mt-2">
                                                 <div class="col-md-8">
-                                                    <label for="req-work-method-1-1">ঘন্টা ভিত্তিক</label>
-                                                    <input type="checkbox" id="req-work-method-1-1" name="sub-category-requests[1][work-methods][0][checkbox]">
+                                                    <label for="req-work-method-{{ $method->id }}-{{ $methodCount }}">{{ $method->name }}</label>
+                                                    <input type="checkbox" id="req-work-method-{{ $method->id }}-{{ $methodCount }}" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[1][work-methods][0][rate]">
-                                                    <input type="hidden" name="sub-category-requests[1][work-methods][0][id]" value="1">
+                                                    <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][rate]" value="@if(in_array($method->id, $methodIds)){{ $methods->filter(function($item)use($method){return $item->id == $method->id;})->first()->pivot->rate }}@endif">
+                                                    <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]" value="{{ $method->id }}">
                                                 </div>
                                             </div>
                                         @else
                                             <div class="row mt-2">
                                                 <div class="col-md-8">
-                                                    <label for="req-work-method-4-0">চুক্তি ভিত্তিক</label>
-                                                    <input type="checkbox" id="req-work-method-4-0" name="sub-category-requests[0][work-methods][3][checkbox]">
-                                                    <input type="hidden" name="sub-category-requests[0][work-methods][3][id]" value="4">
+                                                    <label for="req-work-method-{{ $method->id }}-{{ $methodCount }}">চুক্তি ভিত্তিক</label>
+                                                    <input type="checkbox" id="req-work-method-{{ $method->id }}-{{ $methodCount }}" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
+                                                    <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]" value="{{ $method->id }}">
                                                 </div>
                                             </div>
                                         @endif
@@ -317,7 +310,7 @@
 
 
 
-                        <div class="card mt-2 repeater-clone">
+                        <div class="card mt-2 repeater-clone d-none">
                             <div class="card-header pt-2 m-0 row">
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" name="sub-category-requests[0][name]"
@@ -365,17 +358,6 @@
                 </div>
             </div>
 
-            @if(!$isPicExists)
-                <div class="form-group row">
-                    <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                    <div class="col-9">
-                        <input id="photo" name="photo" type="file" accept="image/*"
-                               class="form-control @if($errors->has('photo')) is-invalid @endif">
-                        @include('components.invalid', ['name' => 'photo'])
-                    </div>
-                </div>
-            @endif
-
             <div class="form-group row">
                 <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                             class="text-danger">*</span></label>
@@ -383,6 +365,15 @@
                     <input id="identities" name="identities[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
                     @include('components.invalid', ['name' => 'identities'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
+                <div class="col-9">
+                    <input id="cv" name="cv" type="file" accept="image/*"
+                           class="form-control">
+                    @include('components.invalid', ['name' => 'cv'])
                 </div>
             </div>
 
