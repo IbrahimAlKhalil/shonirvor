@@ -78,5 +78,8 @@ module.exports = {
         maxAssetSize: 500000,
         maxEntrypointSize: 800000
     },
+    externals: {
+        jquery: 'jQuery'
+    },
     devtool: "source-map"
 };

@@ -17,15 +17,14 @@ import '../../scss/frontend/home.scss';
 /***** JS *****/
 /**************/
 
-// jQuery
-import jquery from 'jquery';
-window.$ = window.jQuery = jquery;
-
 // Bootstrap JS
 import 'bootstrap';
 
 // Ajax Area & Category loader
 import '../modules/option-loader';
+
+// Search
+import '../modules/search';
 
 // BS Star Rating
 import './../../../../bower_components/bootstrap-star-rating/css/star-rating.css';

@@ -23,9 +23,8 @@ import 'bootstrap';
 // Ajax Area & Category loader
 import '../modules/option-loader';
 
-// jQuery
-import jquery from 'jquery';
-window.$ = window.jQuery = jquery;
+// Search
+import '../modules/search';
 
 // BS Star Rating
 import './../../../../bower_components/bootstrap-star-rating/css/star-rating.css';

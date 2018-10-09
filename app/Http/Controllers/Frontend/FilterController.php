@@ -71,7 +71,7 @@ class FilterController extends Controller
     {
         if ($this->subCategoryId) {
 
-            $subCategoryType = SubCategory::find($this->subCategoryId)->category->type->name;
+            $subCategoryType = SubCategory::findOrFail($this->subCategoryId)->category->type->name;
 
             switch ($subCategoryType) {
                 case 'ind':
@@ -129,7 +129,7 @@ class FilterController extends Controller
 
         } elseif ($this->categoryId) {
 
-            $categoryType = Category::find($this->categoryId)->type->name;
+            $categoryType = Category::findOrFail($this->categoryId)->type->name;
 
             switch ($categoryType) {
                 case 'ind':

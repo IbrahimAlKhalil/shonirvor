@@ -8,6 +8,12 @@ class SubCategory extends Model
 {
     protected $fillable = ['name', 'is_confirmed'];
 
+
+
+    /**********************/
+    /***** Relations *****/
+    /**********************/
+
     public function inds()
     {
         return $this->morphedByMany(Ind::class, 'sub_categoriable')->where('is_pending', 0);
@@ -23,10 +29,18 @@ class SubCategory extends Model
         return $this->belongsTo(Category::class);
     }
 
+
+
+    /******************/
+    /***** Scopes *****/
+    /******************/
+
     /**
-     * @param $serviceType string
-     * @return object|null
-     **/
+     * TODO:: This method will removed. When uses of this method will replace with onlyInd(), onlyOrg(), onlyConfirmed(), onlyPending()
+     *
+     * @param $serviceType
+     * @return null
+     */
     public static function getAll($serviceType)
     {
         $result = null;
@@ -42,5 +56,15 @@ class SubCategory extends Model
         }
 
         return $result;
+    }
+
+    public function scopeOnlyConfirmed($query)
+    {
+        return $query->where('sub_categories.is_confirmed', 1);
+    }
+
+    public function scopeOnlyPending($query)
+    {
+        return $query->where('sub_categories.is_confirmed', 0);
     }
 }

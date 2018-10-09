@@ -8,6 +8,7 @@
     <title>@yield('title') - {{ config('app.name') }}</title>
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
+    <script src="{{ asset('assets/plugins/jquery/dist/jquery.min.js') }}"></script>
     @yield('webpack')
 </head>
 <body>

@@ -23,10 +23,6 @@ import 'bootstrap';
 // Ajax Area & Category loader
 import './../../../js/modules/option-loader';
 
-// jQuery
-import jquery from 'jquery';
-window.$ = window.jQuery = jquery;
-
 // BS Star Rating
 import './../../../../../bower_components/bootstrap-star-rating/css/star-rating.css';
 import './../../../../../bower_components/bootstrap-star-rating/themes/krajee-fa/theme.css';

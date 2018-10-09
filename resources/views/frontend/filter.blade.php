@@ -15,15 +15,7 @@
             <div class="col-md-7">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('frontend.filter') }}">
-                            <div class="input-group">
-                                <input type="text" name="category" class="form-control" placeholder="ক্যাটাগরি সার্চ করুন">
-                                <input type="text" name="area" class="form-control" placeholder="এলাকা সার্চ করুন">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary" type="submit">সার্চ</button>
-                                </div>
-                            </div>
-                        </form>
+                        @include('components.search')
                     </div>
                 </div>
                 <div class="row mt-4 bg-white rounded">

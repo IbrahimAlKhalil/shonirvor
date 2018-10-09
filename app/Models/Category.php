@@ -74,21 +74,21 @@ class Category extends Model
 
     public function scopeOnlyInd($query)
     {
-        return $query->where('service_type_id', 1);
+        return $query->where('categories.service_type_id', 1);
     }
 
     public function scopeOnlyOrg($query)
     {
-        return $query->where('service_type_id', 2);
+        return $query->where('categories.service_type_id', 2);
     }
 
     public function scopeOnlyConfirmed($query)
     {
-        return $query->where('is_confirmed', 1);
+        return $query->where('categories.is_confirmed', 1);
     }
 
     public function scopeOnlyPending($query)
     {
-        return $query->where('is_confirmed', 0);
+        return $query->where('categories.is_confirmed', 0);
     }
 }
