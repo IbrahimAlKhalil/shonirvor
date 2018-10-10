@@ -4,6 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind/edit.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -37,16 +38,6 @@
                            value="{{ oldOrData('referrer', $ind->referrer) }}"
                            class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}">
                     @include('components.invalid', ['name' => 'referrer'])
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                <div class="col-9">
-                    <input id="personal-email" name="personal-email" type="text"
-                           value="{{ oldOrData('personal-email', $ind->user->email) }}"
-                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'personal-email'])
                 </div>
             </div>
 
@@ -90,46 +81,60 @@
                                     data-option-loader-target="#district"
                                     data-option-loader-param="division"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- বিভাগ নির্বাচন করুন --</option>
+                                <option value="">-- বিভাগ --</option>
                                 @foreach($divisions as $division)
-                                    <option value="{{ $division->id }}" {{ selectOpt($ind->division->id, $division->id) }}>{{ $division->bn_name }}</option>
+                                    <option value="{{ $division->id }}" {{ selectOpt($ind->division_id, $division->id) }}>{{ $division->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="district" id="district" class="form-control"
-                                    data-placeholder="-- জেলা নির্বাচন করুন --"
+                                    data-placeholder="-- জেলা --"
                                     data-option-loader-url="{{ route('api.thanas') }}"
                                     data-option-loader-target="#thana"
                                     data-option-loader-param="district"
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}" {{ selectOpt($ind->district->id, $district->id) }}>{{ $district->bn_name }}</option>
+                                    <option value="{{ $district->id }}" {{ selectOpt($ind->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="thana" id="thana" class="form-control"
-                                    data-placeholder="-- থানা নির্বাচন করুন --"
+                                    data-placeholder="-- থানা --"
                                     data-option-loader-url="{{ route('api.unions') }}"
                                     data-option-loader-target="#union"
                                     data-option-loader-param="thana"
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- থানা নির্বাচন করুন --</option>
+                                <option value="">-- থানা --</option>
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}" {{ selectOpt($ind->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
+                                    <option value="{{ $thana->id }}" {{ selectOpt($ind->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="union" id="union" class="form-control"
-                                    data-placeholder="-- ইউনিয়ন নির্বাচন করুন --"
-                                    data-option-loader-properties="value=id,text=bn_name">
+                                    data-placeholder="-- ইউনিয়ন --"
+                                    data-option-loader-url="{{ route('api.villages') }}"
+                                    data-option-loader-target="#village"
+                                    data-option-loader-param="union"
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
-                                    <option value="{{ $union->id }}" {{ selectOpt($ind->union->id, $union->id) }}>{{ $union->bn_name }}</option>
+                                    <option value="{{ $union->id }}" {{ selectOpt($ind->union_id, $union->id) }}>{{ $union->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="village" id="village" class="form-control"
+                                    data-placeholder="-- এলাকা --"
+                                    data-option-loader-properties="value=id,text=bn_name">
+                                <option value="">-- এলাকা --</option>
+                                @foreach($villages as $village)
+                                    <option value="{{ $village->id }}" {{ selectOpt($ind->village_id, $village->id) }}>{{ $village->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -139,12 +144,20 @@
                            name="no-thana" {{ checkBox($ind->thana->is_pending) }}>
                     <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $ind->thana->bn_name }}">
+
                     <br>
                     <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-union" class="mt-2 no-something"
                            name="no-union" {{ checkBox($ind->union->is_pending) }}>
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।" value="{{ $ind->union->bn_name }}">
+
+                    <br>
+                    <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-village" class="mt-2 no-something"
+                           name="no-village" {{ checkBox($ind->village->is_pending) }}>
+                    <input type="text" id="village-request" name="village-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।" value="{{ $ind->village->bn_name }}">
                 </div>
             </div>
 
@@ -184,15 +197,13 @@
             <div class="form-group row">
                 <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                             class="text-danger">*</span></label>
-                <div class="col-9">
-
+                <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                     <select id="sub-categories" name="sub-categories[]"
+                            class="form-control @if($errors->has('sub-categories')) is-invalid @endif"
                             data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                             data-option-loader-properties="value=id,text=name"
-                            data-option-loader-nodisable="true"
-                            class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
-                        <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
-                        @php($selectedSubCategories = $ind->subCategories->pluck('id')->toArray())
+                            multiple>
+                        @php($selectedSubCategories = $indSubCategories->pluck('id')->toArray())
 
                         @foreach($subCategories as $subCategory)
                             <option value="{{ $subCategory->id }}" {{ in_array($subCategory->id, $selectedSubCategories)?'selected':'' }}>{{ $subCategory->name }}</option>
@@ -200,62 +211,123 @@
                     </select>
                     @include('components.invalid', ['name' => 'sub-categories'])
 
-                    @php($requestedSubCategories = $ind->subCategories('requested')->get())
-                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                    <input type="checkbox" id="no-sub-category" name="no-sub-category"
-                           class="mt-2 no-something" {{ checkBox($requestedSubCategories->count() >= 1) }}>
-                    <div class="input-div">
+                    @foreach($indSubCategories as $subCategoryCount => $subCategory)
+                        <div class="card mt-2" data-cloned="true">
+                            <div class="card-header pb-0 pt-2">{{ $subCategory->name }}</div>
+                            <div class="card-body">
+                                @php($methods = $indWorkMethods[$subCategory->id])
+                                @php($methodIds = $methods->pluck('id')->toArray())
 
-                        @foreach($requestedSubCategories as $subcategory)
-                            <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                   placeholder="Type your sub-category here." value="{{ $subcategory->name }}">
-                        @endforeach
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-3 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
-                <div class="col-9">
-                    @php($indWorkMethods = $ind->workMethods->pluck('id')->toArray())
-                    @foreach($workMethods as $workMethod)
-                        <div class="accordion">
-                            <div class="card mt-2">
-                                @php($checked = checkBox(in_array($workMethod->id, $indWorkMethods)))
-                                <div class="card-header pb-0 pt-2"><label
-                                            for="work-{{ $workMethod->id }}"
-                                            data-toggle="collapse"
-                                            data-target="#work-method-{{ $workMethod->id }}">{{ $workMethod->name }}
-                                    </label>
-                                    <input type="checkbox"
-                                           class="pull-right"
-                                           id="work-{{ $workMethod->id }}"
-                                           value="{{ $workMethod->id }}"
-                                           name="work-methods[{{ $loop->iteration-1 }}][id]"
-                                           data-toggle="collapse"
-                                           data-target="#work-method-{{ $workMethod->id }}" {{ $checked }}>
-                                </div>
-                                <div id="work-method-{{ $workMethod->id }}"
-                                     class="collapse @if($checked){{ 'show' }}@endif">
-                                    <div class="card-body">
-                                        <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="work-price-{{ $workMethod->id }}"
-                                               name="work-methods[{{ $loop->iteration-1 }}][rate]"
-                                               value="@if($checked){{ $ind->workMethods->find($workMethod->id)->pivot->rate }}@endif">
-                                    </div>
-                                </div>
+                                @foreach($workMethods as $methodCount => $method)
+                                    @if($method->id != 4)
+                                        <div class="row mt-2">
+                                            <div class="col-md-8">
+                                                <label for="work-method-{{ $method->id }}-{{ $subCategoryCount }}">{{ $method->name }}</label>
+                                                <input type="checkbox"
+                                                       id="work-method-{{ $method->id }}-{{ $subCategoryCount }}"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
+                                                <input type="hidden"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][id]"
+                                                       value="{{ $subCategory->id }}">
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control" placeholder="রেট"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][rate]"
+                                                       value="@if(in_array($method->id, $methodIds)){{ $methods->filter(function($item)use($method){return $item->id == $method->id;})->first()->pivot->rate }}@endif">
+                                                <input type="hidden"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]"
+                                                       value="{{ $method->id }}">
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row mt-2">
+                                            <div class="col-md-8">
+                                                <label for="work-method-4-0">চুক্তি ভিত্তিক</label>
+                                                <input type="checkbox"
+                                                       id="work-method-{{ $method->id }}-{{ $subCategoryCount }}"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]">
+                                                <input type="hidden"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][id]"
+                                                       value="{{ $subCategory->id }}">
+                                                <input type="hidden"
+                                                       name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]"
+                                                       value="{{ $method->id }}">
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                     @endforeach
-                    @include('components.invalid', ['name' => 'work-methods'])
+                    <div class="card mt-2 repeater-clone d-none">
+                        <div class="card-header pb-0 pt-2"></div>
+                        <div class="card-body"></div>
+                    </div>
+
+                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something" {{ checkBox(!!$pendingSubCategories) }}>
+                    <div class="input-div" id="sub-category-request">
+                        @foreach($pendingSubCategories as $subCategoryCount => $subCategory)
+                            <div class="card mt-2 repeater-clone" data-cloned="true">
+                                <div class="card-header pt-2 m-0 row">
+                                    <div class="col-md-9"><input type="text" class="form-control" name="sub-category-requests[{{ $subCategoryCount }}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম" value="{{ $subCategory->name }}"></div>
+                                    <div class="col-md-3">
+                                        <a class="fa fa-trash float-right text-danger remove-btn" href="#"></a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    @php($methods = $indWorkMethods[$subCategory->id])
+                                    @php($methodIds = $methods->pluck('id')->toArray())
+
+                                    @foreach($workMethods as $methodCount => $method)
+                                        @if($method->id != 4)
+                                            <div class="row mt-2">
+                                                <div class="col-md-8">
+                                                    <label for="req-work-method-{{ $method->id }}-{{ $methodCount }}">{{ $method->name }}</label>
+                                                    <input type="checkbox" id="req-work-method-{{ $method->id }}-{{ $methodCount }}" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][rate]" value="@if(in_array($method->id, $methodIds)){{ $methods->filter(function($item)use($method){return $item->id == $method->id;})->first()->pivot->rate }}@endif">
+                                                    <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]" value="{{ $method->id }}">
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="row mt-2">
+                                                <div class="col-md-8">
+                                                    <label for="req-work-method-{{ $method->id }}-{{ $methodCount }}">চুক্তি ভিত্তিক</label>
+                                                    <input type="checkbox" id="req-work-method-{{ $method->id }}-{{ $methodCount }}" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
+                                                    <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][id]" value="{{ $method->id }}">
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+
+                            </div>
+                        @endforeach
+
+
+
+
+                        <div class="card mt-2 repeater-clone d-none">
+                            <div class="card-header pt-2 m-0 row">
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="sub-category-requests[0][name]"
+                                           placeholder="আমার সাব-ক্যাটাগরির নাম">
+                                </div>
+                                <div class="col-md-3">
+                                    <a class="fa fa-trash float-right text-danger remove-btn d-none" href="#"></a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+                                    class="fa fa-plus"></i> আরও
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -286,17 +358,6 @@
                 </div>
             </div>
 
-            @if(!$isPicExists)
-                <div class="form-group row">
-                    <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                    <div class="col-9">
-                        <input id="photo" name="photo" type="file" accept="image/*"
-                               class="form-control @if($errors->has('photo')) is-invalid @endif">
-                        @include('components.invalid', ['name' => 'photo'])
-                    </div>
-                </div>
-            @endif
-
             <div class="form-group row">
                 <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                             class="text-danger">*</span></label>
@@ -304,6 +365,15 @@
                     <input id="identities" name="identities[]" type="file" accept="image/*"
                            class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
                     @include('components.invalid', ['name' => 'identities'])
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
+                <div class="col-9">
+                    <input id="cv" name="cv" type="file" accept="image/*"
+                           class="form-control">
+                    @include('components.invalid', ['name' => 'cv'])
                 </div>
             </div>
 

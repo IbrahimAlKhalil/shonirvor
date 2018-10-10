@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Village;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class AreaController extends Controller
     public function thana(District $district)
     {
         $allDivision = Division::select(['id', 'bn_name'])->get();
-        $allDistrict = District::select(['id', 'bn_name'])->get();
+        $allDistrict = District::select(['id', 'bn_name'])->where('division_id', $district->division_id)->get();
         $thanas = Thana::select(['id', 'bn_name'])->where('district_id', $district->id)->get();
 
         return view('backend.area.thana', compact('district', 'thanas', 'allDivision', 'allDistrict'));
@@ -37,12 +38,28 @@ class AreaController extends Controller
 
     public function union(Thana $thana)
     {
+        $divisionId = $thana->division->id;
+
         $allDivision = Division::select(['id', 'bn_name'])->get();
-        $allDistrict = District::select(['id', 'bn_name'])->get();
-        $allThana = Thana::select(['id', 'bn_name'])->get();
+        $allDistrict = District::select(['id', 'bn_name'])->where('division_id', $divisionId)->get();
+        $allThana = Thana::select(['id', 'bn_name'])->where('district_id', $thana->district_id)->get();
         $unions = Union::select(['id', 'bn_name'])->where('thana_id', $thana->id)->get();
 
         return view('backend.area.union', compact('thana', 'unions', 'allDivision', 'allDistrict', 'allThana'));
+    }
+
+    public function village(Union $union)
+    {
+        $divisionId = $union->division->id;
+        $districtId = $union->district->id;
+
+        $allDivision = Division::select(['id', 'bn_name'])->get();
+        $allDistrict = District::select(['id', 'bn_name'])->where('division_id', $divisionId)->get();
+        $allThana = Thana::select(['id', 'bn_name'])->where('district_id', $districtId)->get();
+        $allUnion = Union::select(['id', 'bn_name'])->where('thana_id', $union->thana_id)->get();
+        $villages = Village::select(['id', 'bn_name'])->where('union_id', $union->id)->get();
+
+        return view('backend.area.village', compact('union', 'villages', 'unions', 'allUnion', 'allDivision', 'allDistrict', 'allThana'));
     }
 
     public function storeDivision(Request $request)
@@ -84,6 +101,16 @@ class AreaController extends Controller
         return redirect(route('backend.area.union', $thanaId))->with('success', 'নতুন ইউনিয়ন যুক্ত হয়েছে।');
     }
 
+    public function storeVillage($unionId, Request $request)
+    {
+        $village = new Village;
+        $village->union_id = $unionId;
+        $village->bn_name = $request->input('village');
+        $village->save();
+
+        return redirect(route('backend.area.village', $unionId))->with('success', 'নতুন এলাকা যুক্ত হয়েছে।');
+    }
+
     public function updateDivision(Division $division, Request $request)
     {
         $oldName = $division->bn_name;
@@ -91,7 +118,7 @@ class AreaController extends Controller
         $division->bn_name = $request->input('bn_name');
         $division->save();
 
-        return back()->with('success', $oldName.' বিভাগটি এডিট হয়েছে।');
+        return back()->with('success', $oldName . ' বিভাগটি এডিট হয়েছে।');
     }
 
     public function updateDistrict(District $district, Request $request)
@@ -102,7 +129,7 @@ class AreaController extends Controller
         $district->bn_name = $request->input('bn_name');
         $district->save();
 
-        return back()->with('success', $oldName.' জেলাটি এডিট হয়েছে।');
+        return back()->with('success', $oldName . ' জেলাটি এডিট হয়েছে।');
     }
 
     public function updateThana(Thana $thana, Request $request)
@@ -113,7 +140,7 @@ class AreaController extends Controller
         $thana->bn_name = $request->input('bn_name');
         $thana->save();
 
-        return back()->with('success', $oldName.' থানাটি এডিট হয়েছে।');
+        return back()->with('success', $oldName . ' থানাটি এডিট হয়েছে।');
     }
 
     public function updateUnion(Union $union, Request $request)
@@ -124,7 +151,18 @@ class AreaController extends Controller
         $union->bn_name = $request->input('bn_name');
         $union->save();
 
-        return back()->with('success', $oldName.' ইউনিয়নটি এডিট হয়েছে।');
+        return back()->with('success', $oldName . ' ইউনিয়নটি এডিট হয়েছে।');
+    }
+
+    public function updateVillage(Village $village, Request $request)
+    {
+        $oldName = $village->bn_name;
+
+        $village->union_id = $request->input('union_id');
+        $village->bn_name = $request->input('bn_name');
+        $village->save();
+
+        return back()->with('success', $oldName . ' এলাকাটি এডিট হয়েছে।');
     }
 
     public function destroyDivision(Division $division)
@@ -132,12 +170,10 @@ class AreaController extends Controller
         $divisionName = $division->bn_name;
 
         if ($division->districts->isNotEmpty()) {
-            return back()->with('error', $divisionName.' বিভাগটির ভিতর জেলা রয়েছে, তাই এই বিভাগটি মুছে ফেলা যাবে না।');
-        }
-        else
-        {
+            return back()->with('error', $divisionName . ' বিভাগটির ভিতর জেলা রয়েছে, তাই এই বিভাগটি মুছে ফেলা যাবে না।');
+        } else {
             $division->delete();
-            return back()->with('success', $divisionName.' বিভাগটি মুছে ফেলা হয়েছে।');
+            return back()->with('success', $divisionName . ' বিভাগটি মুছে ফেলা হয়েছে।');
         }
     }
 
@@ -146,20 +182,14 @@ class AreaController extends Controller
         $districtName = $district->bn_name;
 
         if ($district->thanas->isNotEmpty()) {
-            return back()->with('error', $districtName.' জেলাটির ভিতর থানা রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
-        }
-        elseif (DB::table('inds')->where('district_id', $district->id)->exists())
-        {
-            return back()->with('error', $districtName.' জেলাটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
-        }
-        elseif (DB::table('orgs')->where('district_id', $district->id)->exists())
-        {
-            return back()->with('error', $districtName.' জেলাটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
-        }
-        else
-        {
+            return back()->with('error', $districtName . ' জেলাটির ভিতর থানা রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('inds')->where('district_id', $district->id)->exists()) {
+            return back()->with('error', $districtName . ' জেলাটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('orgs')->where('district_id', $district->id)->exists()) {
+            return back()->with('error', $districtName . ' জেলাটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই জেলাটি মুছে ফেলা যাবে না।');
+        } else {
             $district->delete();
-            return back()->with('success', $districtName.' জেলাটি মুছে ফেলা হয়েছে।');
+            return back()->with('success', $districtName . ' জেলাটি মুছে ফেলা হয়েছে।');
         }
     }
 
@@ -168,20 +198,14 @@ class AreaController extends Controller
         $thanaName = $thana->bn_name;
 
         if ($thana->unions->isNotEmpty()) {
-            return back()->with('error', $thanaName.' থানাটির ভিতর ইউনিয়ন রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
-        }
-        elseif (DB::table('inds')->where('thana_id', $thana->id)->exists())
-        {
-            return back()->with('error', $thanaName.' থানাটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
-        }
-        elseif (DB::table('orgs')->where('thana_id', $thana->id)->exists())
-        {
-            return back()->with('error', $thanaName.' থানাটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
-        }
-        else
-        {
+            return back()->with('error', $thanaName . ' থানাটির ভিতর ইউনিয়ন রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('inds')->where('thana_id', $thana->id)->exists()) {
+            return back()->with('error', $thanaName . ' থানাটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('orgs')->where('thana_id', $thana->id)->exists()) {
+            return back()->with('error', $thanaName . ' থানাটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই থানাটি মুছে ফেলা যাবে না।');
+        } else {
             $thana->delete();
-            return back()->with('success', $thanaName.' থানাটি মুছে ফেলা হয়েছে।');
+            return back()->with('success', $thanaName . ' থানাটি মুছে ফেলা হয়েছে।');
         }
     }
 
@@ -189,18 +213,27 @@ class AreaController extends Controller
     {
         $unionName = $union->bn_name;
 
-        if (DB::table('inds')->where('union_id', $union->id)->exists())
-        {
-            return back()->with('error', $unionName.' ইউনিয়নটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
-        }
-        elseif (DB::table('orgs')->where('union_id', $union->id)->exists())
-        {
-            return back()->with('error', $unionName.' ইউনিয়নটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
-        }
-        else
-        {
+        if (DB::table('inds')->where('union_id', $union->id)->exists()) {
+            return back()->with('error', $unionName . ' ইউনিয়নটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('orgs')->where('union_id', $union->id)->exists()) {
+            return back()->with('error', $unionName . ' ইউনিয়নটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
+        } else {
             $union->delete();
-            return back()->with('success', $unionName.' ইউনিয়নটি মুছে ফেলা হয়েছে।');
+            return back()->with('success', $unionName . ' ইউনিয়নটি মুছে ফেলা হয়েছে।');
+        }
+    }
+
+    public function destroyVillage(Village $village)
+    {
+        $villageName = $village->bn_name;
+
+        if (DB::table('inds')->where('union_id', $village->id)->exists()) {
+            return back()->with('error', $villageName . ' এলাকাটির ভিতর বেক্তিগত সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
+        } elseif (DB::table('orgs')->where('union_id', $village->id)->exists()) {
+            return back()->with('error', $villageName . ' এলাকাটির ভিতর প্রাতিষ্ঠানিক সার্ভিস প্রভাইডার রয়েছে, তাই এই ইউনিয়নটি মুছে ফেলা যাবে না।');
+        } else {
+            $village->delete();
+            return back()->with('success', $villageName . ' এলাকাটি মুছে ফেলা হয়েছে।');
         }
     }
 }

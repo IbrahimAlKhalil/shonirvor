@@ -13,9 +13,11 @@ class CreateOrgsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('division_id');
-            $table->unsignedInteger('district_id')->nullable();
-            $table->unsignedInteger('thana_id')->nullable();
-            $table->unsignedInteger('union_id')->nullable();
+            $table->unsignedInteger('district_id');
+            $table->unsignedInteger('thana_id');
+            $table->unsignedInteger('union_id');
+            $table->unsignedInteger('village_id');
+
             $table->string('email');
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
@@ -25,8 +27,6 @@ class CreateOrgsTable extends Migration
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->boolean('no_area')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
             $table->string('address');
             $table->string('trade_license')->nullable();
             $table->boolean('is_pending')->default(1);
@@ -66,6 +66,12 @@ class CreateOrgsTable extends Migration
             $table->foreign('union_id')
                 ->references('id')
                 ->on('unions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('village_id')
+                ->references('id')
+                ->on('villages')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

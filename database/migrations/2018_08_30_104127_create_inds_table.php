@@ -16,15 +16,16 @@ class CreateIndsTable extends Migration
             $table->unsignedInteger('district_id');
             $table->unsignedInteger('thana_id');
             $table->unsignedInteger('union_id');
+            $table->unsignedInteger('village_id');
+
             $table->string('email');
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
+            $table->string('cv')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_available')->default(1);
             $table->boolean('is_pending')->default(1);
@@ -59,6 +60,12 @@ class CreateIndsTable extends Migration
             $table->foreign('union_id')
                 ->references('id')
                 ->on('unions')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('village_id')
+                ->references('id')
+                ->on('villages')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 

@@ -12,13 +12,25 @@ class CreateIndWorkMethodTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('ind_id');
             $table->unsignedInteger('work_method_id');
-            $table->float('rate');
-            $table->boolean('is_negotiable')->default(0);
+            $table->unsignedInteger('sub_category_id');
+            $table->float('rate')->nullable();
             $table->timestamps();
 
             $table->foreign('ind_id')
                 ->references('id')
                 ->on('inds')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('work_method_id')
+                ->references('id')
+                ->on('work_methods')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('sub_category_id')
+                ->references('id')
+                ->on('sub_categories')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

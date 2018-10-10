@@ -33,21 +33,25 @@ Route::get('dashboard/area/division', 'Backend\AreaController@division')->name('
 Route::get('dashboard/area/district/{division}', 'Backend\AreaController@district')->name('backend.area.district');
 Route::get('dashboard/area/thana/{district}', 'Backend\AreaController@thana')->name('backend.area.thana');
 Route::get('dashboard/area/union/{thana}', 'Backend\AreaController@union')->name('backend.area.union');
+Route::get('dashboard/area/village/{union}', 'Backend\AreaController@village')->name('backend.area.village');
 
 Route::post('dashboard/area/division', 'Backend\AreaController@storeDivision')->name('backend.area.division.store');
 Route::post('dashboard/area/district/{divisionId}', 'Backend\AreaController@storeDistrict')->name('backend.area.district.store');
 Route::post('dashboard/area/thana/{districtId}', 'Backend\AreaController@storeThana')->name('backend.area.thana.store');
 Route::post('dashboard/area/union/{thanaId}', 'Backend\AreaController@storeUnion')->name('backend.area.union.store');
+Route::post('dashboard/area/village/{villageId}', 'Backend\AreaController@storeVillage')->name('backend.area.village.store');
 
 Route::delete('dashboard/area/division/{division}', 'Backend\AreaController@destroyDivision')->name('backend.area.division.destroy');
 Route::delete('dashboard/area/district/{district}', 'Backend\AreaController@destroyDistrict')->name('backend.area.district.destroy');
 Route::delete('dashboard/area/thana/{thana}', 'Backend\AreaController@destroyThana')->name('backend.area.thana.destroy');
 Route::delete('dashboard/area/union/{union}', 'Backend\AreaController@destroyUnion')->name('backend.area.union.destroy');
+Route::delete('dashboard/area/village/{village}', 'Backend\AreaController@destroyVillage')->name('backend.area.village.destroy');
 
 Route::put('dashboard/area/division/{division}', 'Backend\AreaController@updateDivision')->name('backend.area.division.update');
 Route::put('dashboard/area/district/{district}', 'Backend\AreaController@updateDistrict')->name('backend.area.district.update');
 Route::put('dashboard/area/thana/{thana}', 'Backend\AreaController@updateThana')->name('backend.area.thana.update');
 Route::put('dashboard/area/union/{union}', 'Backend\AreaController@updateUnion')->name('backend.area.union.update');
+Route::put('dashboard/area/village/{village}', 'Backend\AreaController@updateVillage')->name('backend.area.village.update');
 
 Route::resource('dashboard/ad', 'Backend\AdController', ['only' => ['index', 'store', 'update', 'destroy']])->names('backend.ad');
 

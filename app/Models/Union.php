@@ -2,6 +2,7 @@
 
 namespace Sandofvega\Bdgeocode\Models;
 
+use App\Models\Village;
 use Illuminate\Database\Eloquent\Model;
 use Znck\Eloquent\Traits\BelongsToThrough;
 
@@ -10,6 +11,12 @@ class Union extends Model
     use BelongsToThrough;
 
     public $timestamps = false;
+
+    public function villages()
+    {
+        dd('sdfsadf');
+        return $this->hasMany(Village::class);
+    }
 
     public function thana()
     {

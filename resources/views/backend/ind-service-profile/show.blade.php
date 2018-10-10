@@ -94,16 +94,40 @@
                             <th scope="row">ক্যাটাগরি</th>
                             <td>{{ $provider->category->name }}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">সাব-ক্যাটাগরি</th>
-                            <td>
-                                @foreach($provider->subCategories('confirmed')->get() as $subCategory)
-                                    <span class="badge badge-success">{{ $subCategory->name }}</span>&nbsp;
-                                @endforeach
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row">
+                    <table class="table table-striped table-bordered table-hover table-sm text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">সাব-ক্যাটাগরি</th>
+                            <th scope="col">রেট</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php($subCategories = $provider->subCategories('confirmed')->paginate())
+                        @forelse($subCategories as $subCategory)
+                            @php($serial = $subCategories->perPage() * ($subCategories->currentPage() - 1) + $loop->iteration)
+                            <tr>
+                                <td>{{ en2bnNumber($serial) }}</td>
+                                <td>{{ $subCategory->name }}</td>
+                                <td>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4">কোনো সাব-ক্যাটাগরি খুঁজে পাওয়া যায়নি ।</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="mx-auto">
+                        {{ $subCategories->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
                 <div class="row">
                     <h3 class="my-4 col-12">নথিপত্র</h3>

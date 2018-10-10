@@ -4,6 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/org/edit.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -62,16 +63,6 @@
             </div>
 
             <div class="form-group row">
-                <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                <div class="col-9">
-                    <input id="personal-email" name="personal-email" type="text"
-                           value="{{ oldOrData('personal-email', $org->user->email) }}"
-                           class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                    @include('components.invalid', ['name' => 'personal-email'])
-                </div>
-            </div>
-
-            <div class="form-group row">
                 <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
                 <div class="col-9">
                     <input id="email" name="email" type="text"
@@ -111,46 +102,60 @@
                                     data-option-loader-target="#district"
                                     data-option-loader-param="division"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- বিভাগ নির্বাচন করুন --</option>
+                                <option value="">-- বিভাগ --</option>
                                 @foreach($divisions as $division)
-                                    <option value="{{ $division->id }}" {{ selectOpt($org->division->id, $division->id) }}>{{ $division->bn_name }}</option>
+                                    <option value="{{ $division->id }}" {{ selectOpt($org->division_id, $division->id) }}>{{ $division->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="district" id="district" class="form-control"
-                                    data-placeholder="-- জেলা নির্বাচন করুন --"
+                                    data-placeholder="-- জেলা --"
                                     data-option-loader-url="{{ route('api.thanas') }}"
                                     data-option-loader-target="#thana"
                                     data-option-loader-param="district"
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
                                 @foreach($districts as $district)
-                                    <option value="{{ $district->id }}" {{ selectOpt($org->district->id, $district->id) }}>{{ $district->bn_name }}</option>
+                                    <option value="{{ $district->id }}" {{ selectOpt($org->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="thana" id="thana" class="form-control"
-                                    data-placeholder="-- থানা নির্বাচন করুন --"
+                                    data-placeholder="-- থানা --"
                                     data-option-loader-url="{{ route('api.unions') }}"
                                     data-option-loader-target="#union"
                                     data-option-loader-param="thana"
                                     data-option-loader-properties="value=id,text=bn_name"
                                     data-option-loader-nodisable="true">
-                                <option value="">-- থানা নির্বাচন করুন --</option>
+                                <option value="">-- থানা --</option>
                                 @foreach($thanas as $thana)
-                                    <option value="{{ $thana->id }}" {{ selectOpt($org->thana->id, $thana->id) }}>{{ $thana->bn_name }}</option>
+                                    <option value="{{ $thana->id }}" {{ selectOpt($org->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md">
                             <select name="union" id="union" class="form-control"
-                                    data-placeholder="-- ইউনিয়ন নির্বাচন করুন --"
-                                    data-option-loader-properties="value=id,text=bn_name">
+                                    data-placeholder="-- ইউনিয়ন --"
+                                    data-option-loader-url="{{ route('api.villages') }}"
+                                    data-option-loader-target="#village"
+                                    data-option-loader-param="union"
+                                    data-option-loader-properties="value=id,text=bn_name"
+                                    data-option-loader-nodisable="true">
                                 <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                 @foreach($unions as $union)
-                                    <option value="{{ $union->id }}" {{ selectOpt($org->union->id, $union->id) }}>{{ $union->bn_name }}</option>
+                                    <option value="{{ $union->id }}" {{ selectOpt($org->union_id, $union->id) }}>{{ $union->bn_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <select name="village" id="village" class="form-control"
+                                    data-placeholder="-- এলাকা --"
+                                    data-option-loader-properties="value=id,text=bn_name">
+                                <option value="">-- এলাকা --</option>
+                                @foreach($villages as $village)
+                                    <option value="{{ $village->id }}" {{ selectOpt($org->village_id, $village->id) }}>{{ $village->bn_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -160,12 +165,20 @@
                            name="no-thana" {{ checkBox($org->thana->is_pending) }}>
                     <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।" value="{{ $org->thana->bn_name }}">
+
                     <br>
                     <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
                     <input type="checkbox" id="no-union" class="mt-2 no-something"
                            name="no-union" {{ checkBox($org->union->is_pending) }}>
                     <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                            placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।" value="{{ $org->union->bn_name }}">
+
+                    <br>
+                    <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-village" class="mt-2 no-something"
+                           name="no-village" {{ checkBox($org->village->is_pending) }}>
+                    <input type="text" id="village-request" name="village-request" class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।" value="{{ $org->village->bn_name }}">
                 </div>
             </div>
 
@@ -185,6 +198,7 @@
                             data-option-loader-url="{{ route('api.sub-categories') }}"
                             data-option-loader-target="#sub-categories"
                             data-option-loader-param="category"
+                            data-option-loader-nodisable="true"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
                         <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
                         @foreach($categories as $category)
@@ -204,38 +218,41 @@
             <div class="form-group row">
                 <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                             class="text-danger">*</span></label>
-                <div class="col-9">
-
-                    <select id="sub-categories" name="sub-categories[]"
-                            data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
-                            data-option-loader-properties="value=id,text=name"
-                            class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
-                        <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
-                        @php($selectedSubCategories = $org->subCategories->pluck('id')->toArray())
-
-                        @foreach($subCategories as $subCategory)
-                            <option value="{{ $subCategory->id }}" {{ in_array($subCategory->id, $selectedSubCategories)?'selected':'' }}>{{ $subCategory->name }}</option>
-                        @endforeach
-                    </select>
-                    @include('components.invalid', ['name' => 'sub-categories'])
-
-                    @php($requestedSubCategories = $org->subCategories('requested')->get())
-                    <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                    <input type="checkbox" id="no-sub-category" name="no-sub-category"
-                           class="mt-2 no-something" {{ checkBox($requestedSubCategories->count() >= 1) }}>
-                    <div class="input-div">
-
-                        @foreach($requestedSubCategories as $subcategory)
-                            <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                   placeholder="Type your sub-category here." value="{{ $subcategory->name }}">
-                        @endforeach
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
-                        <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                               placeholder="Type your sub-category here.">
+                <div class="col-9" id="sub-category-parent">
+                    @php($orgSubCategoryIds = $orgSubCategories->pluck('id')->toArray())
+                    @foreach($orgSubCategories as $count => $orgSubCategory)
+                        <div class="row mt-2"
+                             @if(!$loop->first) data-cloned="true" @endif>
+                            <select @if($loop->first) id="sub-categories" @endif name="sub-categories[{{ $count }}][id]"
+                                    class="form-control col-md-9 @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                    data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                    data-option-loader-properties="value=id,text=name">
+                                @foreach($subCategories as $subCategory)
+                                    <option value="{{ $subCategory->id }}" {{ selectOpt($subCategory->id, $orgSubCategory->id) }}>{{ $subCategory->name }}</option>
+                                @endforeach
+                            </select>
+                            <input type="number" class="form-control col-md-3" name="sub-categories[{{ $count }}][rate]"
+                                   placeholder="রেট" value="{{ $orgSubCategory->pivot->rate }}">
+                        </div>
+                    @endforeach
+                    <div class="repeater-clone row mt-2" data-cloned="true">
+                        <select name="sub-categories[{{ $count }}][id]"
+                                class="form-control col-md-9 @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                data-option-loader-properties="value=id,text=name">
+                            <option value="">-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
+                            @foreach($subCategories as $subCategory)
+                                <option value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
+                            @endforeach
+                        </select>
+                        <input type="number" class="form-control col-md-3" name="sub-categories[{{ $count }}][rate]"
+                               placeholder="রেট" value="">
                     </div>
+                    @include('components.invalid', ['name' => 'sub-categories'])
+                    {{--<label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                    <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
+                    <div class="input-div">
+                    </div>--}}
                 </div>
             </div>
 

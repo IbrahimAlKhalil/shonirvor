@@ -4,6 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind/index.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -76,15 +77,6 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="personal-email" class="col-3 col-form-label">ব্যক্তিগত ইমেইল</label>
-                        <div class="col-9">
-                            <input id="personal-email" name="personal-email" type="text" value="{{ old('personal-email') }}"
-                                   class="form-control @if($errors->has('personal-email')) is-invalid @endif">
-                            @include('components.invalid', ['name' => 'personal-email'])
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
                         <div class="col-9">
                             <input id="email" name="email" type="text" value="{{ old('email') }}"
@@ -121,7 +113,7 @@
                                             data-option-loader-url="{{ route('api.districts') }}"
                                             data-option-loader-target="#district"
                                             data-option-loader-param="division">
-                                        <option value="">-- বিভাগ নির্বাচন করুন --</option>
+                                        <option value="">-- বিভাগ --</option>
                                         @foreach($divisions as $division)
                                             <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
                                         @endforeach
@@ -129,25 +121,39 @@
                                 </div>
                                 <div class="col-md">
                                     <select name="district" id="district" class="form-control"
-                                            data-placeholder="-- জেলা নির্বাচন করুন --"
+                                            data-placeholder="-- জেলা --"
                                             data-option-loader-url="{{ route('api.thanas') }}"
                                             data-option-loader-target="#thana"
                                             data-option-loader-param="district"
-                                            data-option-loader-properties="value=id,text=bn_name"></select>
+                                            data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- জেলা --</option>
+                                    </select>
                                 </div>
                                 <div class="col-md">
                                     <select name="thana" id="thana" class="form-control"
-                                            data-placeholder="-- থানা নির্বাচন করুন --"
+                                            data-placeholder="-- থানা --"
                                             data-option-loader-url="{{ route('api.unions') }}"
                                             data-option-loader-target="#union"
                                             data-option-loader-param="thana"
                                             data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- থানা --</option>
                                     </select>
                                 </div>
                                 <div class="col-md">
                                     <select name="union" id="union" class="form-control"
-                                            data-placeholder="-- ইউনিয়ন নির্বাচন করুন --"
+                                            data-placeholder="-- ইউনিয়ন --"
+                                            data-option-loader-url="{{ route('api.villages') }}"
+                                            data-option-loader-target="#village"
+                                            data-option-loader-param="union"
                                             data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- ইউনিয়ন --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md">
+                                    <select name="village" id="village" class="form-control"
+                                            data-placeholder="-- এলাকা --"
+                                            data-option-loader-properties="value=id,text=bn_name">
+                                        <option value="">-- এলাকা --</option>
                                     </select>
                                 </div>
                             </div>
@@ -160,6 +166,12 @@
                             <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                             <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
                                    placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+
+                            <br>
+                            <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
+                            <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
+                            <input type="text" id="village-request" name="village-request" class="form-control mt-3 mb-4"
+                                   placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
                         </div>
                     </div>
 
@@ -197,68 +209,42 @@
                     <div class="form-group row">
                         <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                     class="text-danger">*</span></label>
-                        <div class="col-9">
+                        <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                             <select id="sub-categories" name="sub-categories[]"
-                                    class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif"
+                                    class="form-control @if($errors->has('sub-categories')) is-invalid @endif"
                                     data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                     data-option-loader-properties="value=id,text=name"
                                     multiple>
                             </select>
                             @include('components.invalid', ['name' => 'sub-categories'])
+
+                            <div class="card mt-2 repeater-clone d-none">
+                                <div class="card-header pb-0 pt-2"></div>
+                                <div class="card-body"></div>
+                            </div>
+
                             <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                             <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
-                            <div class="input-div">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                                <input type="text" name="sub-category-requests[]" class="form-control mt-3"
-                                       placeholder="Type your sub-category here.">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label">চুক্তি পদ্ধতি <span class="text-danger">*</span></label>
-                        <div class="col-9">
-                            @foreach($workMethods as $workMethod)
-                                <div class="accordion">
-                                    <div class="card mt-2">
-                                        <div class="card-header pb-0 pt-2"><label
-                                                    for="work-{{ $workMethod->id }}"
-                                                    data-toggle="collapse"
-                                                    data-target="#work-method-{{ $workMethod->id }}">{{ $workMethod->name }}
-                                            </label>
-                                            <input type="checkbox"
-                                                   class="pull-right"
-                                                   id="work-{{ $workMethod->id }}"
-                                                   value="{{ $workMethod->id }}"
-                                                   name="work-methods[{{ $loop->iteration-1 }}][id]"
-                                                   data-toggle="collapse"
-                                                   data-target="#work-method-{{ $workMethod->id }}">
+                            <div class="input-div" id="sub-category-request">
+                                <div class="card mt-2 repeater-clone">
+                                    <div class="card-header pt-2 m-0 row">
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" name="sub-category-requests[0][name]"
+                                                   placeholder="আমার সাব-ক্যাটাগরির নাম">
                                         </div>
-                                        <div id="work-method-{{ $workMethod->id }}" class="collapse">
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="work-price-{{ $workMethod->id }}">টাকার পরিমাণ</label>
-                                                    <input type="text"
-                                                           class="form-control"
-                                                           id="work-price-{{ $workMethod->id }}"
-                                                           name="work-methods[{{ $loop->iteration-1 }}][rate]">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="is-negotiable-{{ $workMethod->id }}">আলোচনা সাপেক্ষে</label>
-                                                    <input type="checkbox" id="is-negotiable-{{ $workMethod->id }}"
-                                                           name="work-methods[{{ $loop->iteration-1 }}][is-negotiable]">
-                                                </div>
-                                            </div>
+                                        <div class="col-md-3">
+                                            <a class="fa fa-trash float-right text-danger remove-btn d-none" href="#"></a>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-                            @include('components.invalid', ['name' => 'work-methods'])
-                        </div>
+                                    <div class="card-body">
 
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+                                            class="fa fa-plus"></i> আরও
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group row">
@@ -286,17 +272,6 @@
                         </div>
                     </div>
 
-                    @if(!$isPicExists)
-                        <div class="form-group row">
-                            <label for="photo" class="col-3 col-form-label">প্রোফাইল ছবি</label>
-                            <div class="col-9">
-                                <input id="photo" name="photo" type="file" accept="image/*"
-                                       class="form-control @if($errors->has('photo')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'photo'])
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="form-group row">
                         <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                     class="text-danger">*</span></label>
@@ -322,6 +297,15 @@
                                     </div>
                                 @endfor
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
+                        <div class="col-9">
+                            <input id="cv" name="cv" type="file" accept="image/*"
+                                   class="form-control">
+                            @include('components.invalid', ['name' => 'cv'])
                         </div>
                     </div>
 

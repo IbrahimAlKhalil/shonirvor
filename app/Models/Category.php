@@ -54,7 +54,7 @@ class Category extends Model
      *
      * @param $serviceType
      * @param int $isConfirmed
-     * @return null
+     * @return object|null
      */
     public static function getAll($serviceType, $isConfirmed = 1)
     {

@@ -21,10 +21,6 @@ class SliderController extends Controller
             $sliders[$key]['id'] = $slider['id'];
         }
 
-        /*usort($sliders, function ($a, $b) {
-            return $a['order'] <=> $b['order'];
-        });*/
-
         $id = ContentType::where('name', 'slider')->first()->id;
         return view('backend.contents.slider', compact('navs', 'sliders', 'id'));
     }
@@ -44,7 +40,6 @@ class SliderController extends Controller
                     case true:
                         array_push($data, [
                             'data' => json_encode([
-                                'order' => $image['order'],
                                 'link' => $image['link'],
                                 'image' => $request->file('sliders.' . $key)->store('slider')
                             ]),
@@ -54,17 +49,15 @@ class SliderController extends Controller
                     case false:
                         array_push($data, [
                             'data' => json_encode([
-                                'order' => $image['order'],
                                 'link' => $image['link'],
                                 'image' => $image['prev-image']
                             ]),
                             'content_type_id' => $id
                         ]);
                 }
-            } else if (array_key_exists($key, $request->file('sliders'))) {
+            } else if ($request->hasFile('sliders') && array_key_exists($key, $request->file('sliders'))) {
                 array_push($data, [
                     'data' => json_encode([
-                        'order' => $image['order'],
                         'link' => $image['link'],
                         'image' => $request->file('sliders.' . $key)->store('slider')
                     ]),

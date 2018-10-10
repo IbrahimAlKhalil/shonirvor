@@ -18,7 +18,7 @@
                           method="post" enctype="multipart/form-data">
                         <ul class="list-group w-100" id="image-list">
                             @foreach($sliders as $slider)
-                                <li class="list-group-item mb-2 shadow-sm">
+                                <li class="list-group-item mb-2 shadow-sm @if($loop->last){{ 'repeater-clone' }}@endif">
                                     <div class="row">
                                         <div class="col-md-9">
                                             <div class="row">
@@ -28,9 +28,6 @@
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <input type="hidden"
-                                                           name="images[image-{{ $loop->iteration-1 }}][order]"
-                                                           value="{{ $loop->iteration }}" class="image-order">
                                                     <input name="images[image-{{ $loop->iteration-1 }}][link]"
                                                            type="url"
                                                            class="form-control w-100 mb-2 action-link"
@@ -58,7 +55,7 @@
                                         </div>
 
                                         <div class="col-md-3">
-                                            <a class="fa fa-trash float-right text-danger delete-image"
+                                            <a class="fa fa-trash float-right text-danger delete-image remove-btn"
                                                href="#" data-content-id="{{ $slider['id'] }}"></a>
                                         </div>
                                     </div>
