@@ -1,4 +1,4 @@
-import $ from "jquery";
+
 
 export class Repeater {
     constructor(container, options) {

@@ -8,5 +8,6 @@
             </p>
             <p class="mb-0">© {{ date('Y') }} {{ config('app.name') }} - সর্বস্বত্ব সংরক্ষিত</p>
         </footer>
+        @yield('script')
     </body>
 </html>
