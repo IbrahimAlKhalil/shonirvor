@@ -23,9 +23,6 @@ import 'bootstrap';
 // Ajax Area & Category loader
 import '../modules/option-loader';
 
-// Search
-import '../modules/search';
-
 // BS Star Rating
 import './../../../../bower_components/bootstrap-star-rating/css/star-rating.css';
 import './../../../../bower_components/bootstrap-star-rating/themes/krajee-fa/theme.css';

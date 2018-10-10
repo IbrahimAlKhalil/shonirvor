@@ -9,19 +9,12 @@
 @section('content')
     @include('components.slider')
     @include('components.notice')
+    @include('components.filter')
 
     <div class="container-fluid">
-        <div class="row pt-4">
-            <div class="col-md-2">
-                @include('components.filter')
-            </div>
-            <div class="col-md-7">
-                <div class="row">
-                    <div class="col-12">
-                        @include('components.search')
-                    </div>
-                </div>
-                <div class="row mt-4 bg-white rounded shadow-sm pt-3">
+        <div class="row pt-4 justify-content-center">
+            <div class="col-md-8">
+                <div class="row bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom text-center">টপ ক্যাটাগরি</p>
                     </div>

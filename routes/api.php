@@ -11,6 +11,4 @@ Route::namespace('Api')->name('api.')->group(function () {
     Route::get('categories/{id?}', 'CategoryController@categories')->name('categories');
     Route::get('sub-categories/{id?}', 'SubCategoryController@subCategories')->name('sub-categories');
 
-    Route::get('search', 'SearchController')->name('search');
-
 }, '');

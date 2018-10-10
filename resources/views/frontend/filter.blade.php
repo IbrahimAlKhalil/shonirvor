@@ -7,18 +7,12 @@
 @endsection
 
 @section('content')
+    @include('components.filter')
+
     <div class="container-fluid">
-        <div class="row pt-4">
-            <div class="col-md-2">
-                @include('components.filter')
-            </div>
-            <div class="col-md-7">
-                <div class="row">
-                    <div class="col-12">
-                        @include('components.search')
-                    </div>
-                </div>
-                <div class="row mt-4 bg-white rounded">
+        <div class="row pt-4 justify-content-center">
+            <div class="col-md-8">
+                <div class="row bg-white rounded">
                     @forelse($providers as $key => $provider)
                         <div class="col-md-6">
                             <ul class="list-unstyled">
@@ -47,7 +41,7 @@
                         </div>
                     @endforelse
                 </div>
-                <div class="row">
+                <div class="row bg-white">
                     <div class="mx-auto">
                         {{ $providers->links('pagination::bootstrap-4') }}
                     </div>
