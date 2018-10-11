@@ -26,18 +26,18 @@ class SubCategoryController extends Controller
         if ($hasServiceType) {
             switch ($hasCategory) {
                 case true:
-                    $result = Category::find($category)->subCategories()->where('is_confirmed', 1)->get();
+                    $result = Category::find($category)->subCategories()->onlyConfirmed()->get();
                     break;
                 case false:
-                    $result = SubCategory::getAll($serviceType)->get();
+                    $result = SubCategory::getAll($serviceType)->select('id', 'name')->get();
             }
             return $result;
         }
 
         if ($hasCategory) {
-            return Category::find($category)->subCategories()->where('is_confirmed', 1)->get();
+            return Category::find($category)->subCategories()->select('id', 'name')->onlyConfirmed()->get();
         }
 
-        return SubCategory::where('is_confirmed', 1)->get();
+        return SubCategory::select('id', 'name')->onlyConfirmed()->get();
     }
 }

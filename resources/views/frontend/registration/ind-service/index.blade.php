@@ -18,14 +18,22 @@
 
             <div id="smartwizard" class="mx-5">
                 <ul>
-                    <li><a href="#step-1">প্রথম ধাপ<br /><small>সাধারণ তথ্য</small></a></li>
-                    <li><a href="#step-2">দ্বিতীয় ধাপ<br /><small>ঠিকানা</small></a></li>
-                    <li><a href="#step-3">তৃতীয় ধাপ<br /><small>সার্ভিস ক্যাটাগরি</small></a></li>
-                    <li><a href="#step-4">চতুর্থ ধাপ<br /><small>ডকুমেন্ট</small></a></li>
+                    <li><a href="#step-1">প্রথম ধাপ<br/>
+                            <small>সাধারণ তথ্য</small>
+                        </a></li>
+                    <li><a href="#step-2">দ্বিতীয় ধাপ<br/>
+                            <small>ঠিকানা</small>
+                        </a></li>
+                    <li><a href="#step-3">তৃতীয় ধাপ<br/>
+                            <small>সার্ভিস ক্যাটাগরি</small>
+                        </a></li>
+                    <li><a href="#step-4">চতুর্থ ধাপ<br/>
+                            <small>ডকুমেন্ট</small>
+                        </a></li>
                 </ul>
 
                 <div>
-                    <div class="p-4" id="step-1" >
+                    <div class="p-4" id="step-1">
                         <div class="form-group row mx-5">
                             <label for="mobile" class="col-3 col-form-label">মোবাইল নাম্বার <span
                                         class="text-danger">*</span></label>
@@ -153,21 +161,30 @@
                                         </select>
                                     </div>
                                 </div>
-                                <label for="no-thana" class="mt-3">আমার থানা এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
-                                <input type="text" id="thana-request" name="thana-request" class="form-control mt-3 mb-4"
-                                       placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
-                                <br>
-                                <label for="no-union">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
-                                <input type="text" id="union-request" name="union-request" class="form-control mt-3 mb-4"
-                                       placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+                                <label for="no-thana" class="mt-3 checkbox">আমার থানা এখানে তালিকাভুক্ত নেই ।
+                                    <input type="checkbox" id="no-thana" class="mt-2 no-something" name="no-thana">
+                                    <span></span>
+                                    <input type="text" id="thana-request" name="thana-request"
+                                           class="form-control mt-3 mb-4"
+                                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
+                                </label>
 
-                                <br>
-                                <label for="no-village">আমার এলাকা এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
-                                <input type="text" id="village-request" name="village-request" class="form-control mt-3 mb-4"
-                                       placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
+                                <label for="no-union" class="checkbox">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।
+                                    <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
+                                    <span></span>
+                                    <input type="text" id="union-request" name="union-request"
+                                           class="form-control mt-3 mb-4"
+                                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+                                </label>
+
+                                <label for="no-village" class="checkbox">আমার এলাকা এখানে তালিকাভুক্ত নেই ।
+                                    <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
+                                    <span></span>
+                                    <input type="text" id="village-request" name="village-request"
+                                           class="form-control mt-3 mb-4"
+                                           placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
+                                </label>
+
                             </div>
                         </div>
 
@@ -182,10 +199,11 @@
                     </div>
                     <div class="p-4" id="step-3">
                         <div class="form-group row">
-                            <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span class="text-danger">*</span></label>
+                            <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="category" name="category"
-                                        class="form-control @if($errors->has('category')) is-invalid @endif"
+                                        class="@if($errors->has('category')) is-invalid @endif"
                                         data-option-loader-url="{{ route('api.sub-categories') }}"
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category">
@@ -196,10 +214,14 @@
                                     @endforeach
                                 </select>
                                 @include('components.invalid', ['name' => 'category'])
-                                <label for="no-category">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-category" class="mt-2 no-something" name="no-category">
-                                <input type="text" id="category-request" name="category-request" class="form-control mt-3 mb-4"
-                                       placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
+                                <label for="no-category" class="checkbox">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                    <input type="checkbox" id="no-category" class="mt-2 no-something"
+                                           name="no-category">
+                                    <span></span>
+                                    <input type="text" id="category-request" name="category-request"
+                                           class="form-control mt-3 mb-4"
+                                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
+                                </label>
                             </div>
                         </div>
 
@@ -208,7 +230,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
-                                        class="form-control @if($errors->has('sub-categories')) is-invalid @endif"
+                                        class="@if($errors->has('sub-categories')) is-invalid @endif"
                                         data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
                                         multiple>
@@ -220,37 +242,45 @@
                                     <div class="card-body"></div>
                                 </div>
 
-                                <label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
-                                <div class="input-div" id="sub-category-request">
-                                    <div class="card mt-2 repeater-clone">
-                                        <div class="card-header pt-2 m-0 row">
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control" name="sub-category-requests[0][name]"
-                                                       placeholder="আমার সাব-ক্যাটাগরির নাম">
+                                <div class="mt-4 checkbox">
+                                    <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                    <input type="checkbox" id="no-sub-category" name="no-sub-category"
+                                           class="mt-2 no-something">
+                                    <span></span>
+                                    <div class="input-div" id="sub-category-request">
+                                        <div class="card mt-2 repeater-clone">
+                                            <div class="card-header pt-2 m-0 row">
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control"
+                                                           name="sub-category-requests[0][name]"
+                                                           placeholder="আমার সাব-ক্যাটাগরির নাম">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a class="fa fa-trash float-right text-danger remove-btn d-none"
+                                                       href="#"></a>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <a class="fa fa-trash float-right text-danger remove-btn d-none" href="#"></a>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
+                                            <div class="card-body">
 
+                                            </div>
                                         </div>
+                                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+                                                    class="fa fa-plus"></i> আরও
+                                        </button>
                                     </div>
-                                    <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
-                                                class="fa fa-plus"></i> আরও
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="p-4" id="step-4">
                         <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
+                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control @if($errors->has('identities')) is-invalid @endif" multiple>
+                                       class="form-control-file @if($errors->has('identities')) is-invalid @endif"
+                                       multiple>
                                 @include('components.invalid', ['name' => 'identities'])
                             </div>
                         </div>
@@ -258,15 +288,15 @@
                         <div class="form-group row mx-5">
                             <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
                             <div class="col-9">
-                                <div class="row">
+                                <div class="flex">
                                     @for($i=0; $i<4; $i++)
-                                        <div class="col-md-6 shadow-sm p-2 mb-2 bg-white rounded">
-                                            <input id="images" name="images[{{ $i }}][file]" type="file" accept="image/*"
-                                                   class="form-control-file @if($errors->has('images')) is-invalid @endif">
-                                            @include('components.invalid', ['name' => 'images'])
-                                            <label for="images-{{ $i }}-text" class="mt-2">বর্ণনা</label>
+                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
+                                            <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
+                                            <input id="images" name="images[{{ $i }}][file]" type="file"
+                                                   accept="image/*"
+                                                   class="form-control-file @if($errors->has('images')) is-invalid @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -277,16 +307,18 @@
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
                                 <input id="cv" name="cv" type="file" accept="image/*"
-                                       class="form-control">
+                                       class="form-control-file">
                                 @include('components.invalid', ['name' => 'cv'])
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতা প্রত্যয়ন পত্র</label>
+                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতা প্রত্যয়ন
+                                পত্র</label>
                             <div class="col-9">
-                                <input id="experience-certificate" name="experience-certificate" type="file" accept="image/*"
-                                       class="form-control">
+                                <input id="experience-certificate" name="experience-certificate" type="file"
+                                       accept="image/*"
+                                       class="form-control-file">
                                 @include('components.invalid', ['name' => 'experience-certificate'])
                             </div>
                         </div>
@@ -301,13 +333,21 @@
             </div>
         </form>
     </div>
-    <style>
-        .no-something + input, .no-something + .input-div {
-            display: none;
-        }
-
-        .no-something:checked + input, .no-something:checked + .input-div {
-            display: block;
-        }
-    </style>
 @endsection
+
+@section('script')
+    <script>
+        $('#smartwizard').smartWizard({
+            theme: 'arrows',
+            lang: {
+                next: "পরবর্তী ধাপ",
+                previous: "আগের ধাপ"
+            }
+        });
+
+        $('select').selectize({
+            plugins: ['option-loader']
+        });
+    </script>
+@endsection
+

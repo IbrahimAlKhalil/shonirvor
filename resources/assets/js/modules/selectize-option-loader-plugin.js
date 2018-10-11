@@ -33,12 +33,11 @@ Selectize.define('option-loader', function () {
 
                     resolved.data.forEach(option => {
                         resolved.target.selectize.addOption({
-                            text: option.bn_name,
+                            text: option.name,
                             value: option.id
                         });
                     });
                     resolved.target.selectize.enable();
-                    resolved.target.selectize.focus();
                 });
             }
         });

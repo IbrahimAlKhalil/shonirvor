@@ -31,7 +31,7 @@ class AreaController extends Controller
         $id = theId();
 
         if ($id) {
-            return Thana::find($id);
+            return District::find($id)->select('id', 'bn_name as name');
         }
 
 
@@ -44,20 +44,24 @@ class AreaController extends Controller
                 case true:
                     $result = Division::find($divisionId)
                         ->districts()
+                        ->select('id', 'bn_name as name')
                         ->paginate($paginate);
                     break;
                 case false:
-                    $result = Division::find($divisionId)->districts;
+                    $result = Division::find($divisionId)
+                        ->districts()
+                        ->select('id', 'bn_name as name')
+                        ->get();
             }
 
             return $result;
         }
 
         if ($request->has('paginate')) {
-            return District::paginate($paginate);
+            return District::select('id', 'bn_name as name')->paginate($paginate);
         }
 
-        return District::all();
+        return District::select('id', 'bn_name as name')->get();
     }
 
 
@@ -67,7 +71,7 @@ class AreaController extends Controller
         $id = theId();
 
         if ($id) {
-            return Thana::find($id);
+            return Thana::find($id)->select('id', 'bn_name as name');
         }
 
 
@@ -81,11 +85,14 @@ class AreaController extends Controller
                 case true:
                     $result = District::find($districtId)
                         ->thanas()
+                        ->select('id', 'bn_name as name')
                         ->paginate($paginate)->all();
                     break;
                 case false:
                     $result = District::find($districtId)
-                        ->thanas;
+                        ->thanas()
+                        ->select('id', 'bn_name as name')
+                        ->get();
             }
             return $result;
         };
@@ -100,9 +107,12 @@ class AreaController extends Controller
                     if ($hasPaginate) {
                         $result = Division::find($divisionId)
                             ->thanas()
+                            ->select('id', 'bn_name as name')
                             ->paginate($paginate)->all();
                     } else {
-                        $result = Division::find($divisionId)->thanas;
+                        $result = Division::find($divisionId)->thanas()
+                            ->select('id', 'bn_name as name')
+                            ->get();
                     }
             }
 
@@ -114,10 +124,10 @@ class AreaController extends Controller
         }
 
         if ($hasPaginate) {
-            return Thana::paginate($paginate)->all();
+            return Thana::select('id', 'bn_name as name')->paginate($paginate)->all();
         }
 
-        return Thana::all();
+        return Thana::select('id', 'bn_name as name')->get();
     }
 
 
@@ -127,7 +137,7 @@ class AreaController extends Controller
         $id = theId();
 
         if ($id) {
-            return Union::find($id);
+            return Union::find($id)->select('id', 'bn_name as name');
         }
 
 
@@ -143,10 +153,13 @@ class AreaController extends Controller
                 case true:
                     $result = Thana::find($thanaId)
                         ->unions()
+                        ->select('id', 'bn_name as name')
                         ->paginate($paginate);
                     break;
                 case false:
-                    $result = Thana::find($thanaId)->unions;
+                    $result = Thana::find($thanaId)->unions()
+                        ->select('id', 'bn_name as name')
+                        ->get();
             }
             return $result;
         };
@@ -161,6 +174,7 @@ class AreaController extends Controller
                     if ($hasPaginate) {
                         $result = District::find($districtId)
                             ->unions()
+                            ->select('id', 'bn_name as name')
                             ->paginate($paginate);
                     } else {
                         $result = District::find($districtId)->unions;
@@ -178,10 +192,13 @@ class AreaController extends Controller
                     case true:
                         $result = Division::find($divisionId)
                             ->unions()
+                            ->select('id', 'bn_name as name')
                             ->paginate($paginate);
                         break;
                     case false:
-                        $result = Division::find($divisionId)->unions;
+                        $result = Division::find($divisionId)->unions()
+                            ->select('id', 'bn_name as name')
+                            ->get();
                 }
             }
 
@@ -197,14 +214,14 @@ class AreaController extends Controller
         }
 
         if ($hasPaginate) {
-            return Union::paginate($paginate)->all();
+            return Union::select('id', 'bn_name as name')->paginate($paginate)->all();
         }
 
-        return Union::all();
+        return Union::select('id', 'bn_name as name')->get();
     }
 
     public function villages(Request $request)
     {
-        return Village::where('union_id', $request->get('union'))->get();
+        return Village::select('id', 'bn_name as name')->where('union_id', $request->get('union'))->get();
     }
 }
