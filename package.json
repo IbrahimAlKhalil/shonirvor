@@ -13,6 +13,7 @@
         "popper.js": "^1.14.4",
         "postcss-loader": "^3.0.0",
         "sass-loader": "^7.1.0",
+        "selectize": "^0.12.6",
         "sortablejs": "^1.7.0",
         "style-loader": "^0.23.0",
         "webpack": "^4.20.2",

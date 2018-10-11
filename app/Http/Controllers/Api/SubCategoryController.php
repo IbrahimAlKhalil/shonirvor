@@ -9,35 +9,62 @@ use App\Http\Controllers\Controller;
 
 class SubCategoryController extends Controller
 {
-    public function subCategories(Request $request)
+    private $id = false;
+    private $service = false;
+    private $category = false;
+
+    public function __construct(Request $request)
     {
-        $result = null;
-        $id = theId();
-
-        if ($id) {
-            return SubCategory::find($id);
+        if (theId()) {
+            $this->id = theId();
         }
 
-        $hasServiceType = $request->has('service');
-        $hasCategory = $request->has('category');
-        $serviceType = $request->get('service');
-        $category = $request->get('category');
+        if ($request->filled('service')) {
+            $this->service = $request->get('service');
+        }
 
-        if ($hasServiceType) {
-            switch ($hasCategory) {
-                case true:
-                    $result = Category::find($category)->subCategories()->where('is_confirmed', 1)->get();
-                    break;
-                case false:
-                    $result = SubCategory::getAll($serviceType)->get();
+        if ($request->filled('category')) {
+            $this->category = $request->get('category');
+        }
+    }
+
+    public function __invoke()
+    {
+        if ($this->id) {
+
+            $data = SubCategory::find($this->id);
+
+        } elseif ($this->service) {
+
+            if ($this->service == 'ind') {
+
+                $data = SubCategory::onlyInd()
+                    ->onlyConfirmed()
+                    ->get();
+
+            } elseif ($this->service == 'org') {
+
+                $data = SubCategory::onlyOrg()
+                    ->onlyConfirmed()
+                    ->get();
+
             }
-            return $result;
+
+        } elseif ($this->category) {
+
+            $data = Category::find($this->category)
+                        ->subCategories()
+                        ->onlyConfirmed()
+                        ->get();
+
+        } else {
+
+            $data = SubCategory::onlyConfirmed()->get();
+
         }
 
-        if ($hasCategory) {
-            return Category::find($category)->subCategories()->where('is_confirmed', 1)->get();
-        }
 
-        return SubCategory::where('is_confirmed', 1)->get();
+        return response($data);
+
     }
 }

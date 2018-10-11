@@ -5,6 +5,7 @@ use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(Ind::class, function (Faker $faker) {
+
     $userMobiles = User::pluck('mobile');
 
     return [

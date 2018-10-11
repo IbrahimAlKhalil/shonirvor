@@ -14,7 +14,6 @@ class Union extends Model
 
     public function villages()
     {
-        dd('sdfsadf');
         return $this->hasMany(Village::class);
     }
 
