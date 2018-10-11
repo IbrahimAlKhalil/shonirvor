@@ -1,6 +1,5 @@
 import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
-import $ from 'jquery';
 
 
 function requestFields(element, workMethods, serial) {

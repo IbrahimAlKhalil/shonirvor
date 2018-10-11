@@ -94,7 +94,7 @@ class Org extends Model
 
     function subCategoryRates($status = null)
     {
-        $result = $this->belongsToMany(SubCategory::class, 'org_sub_category_rates');
+        $result = $this->belongsToMany(SubCategory::class, 'org_sub_category_rates')->withPivot('rate');
 
         switch ($status) {
             case 'confirmed':

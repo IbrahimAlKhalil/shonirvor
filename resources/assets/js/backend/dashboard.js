@@ -3,7 +3,4 @@ import './../../../../node_modules/bootstrap/dist/css/bootstrap.css'; // Bootstr
 import './../../scss/backend/components/_common.scss';
 
 /***** JS *****/
-import $ from 'jquery';
 import 'bootstrap'; // Bootstrap JS
-
-window.$ = $;

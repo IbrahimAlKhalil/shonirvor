@@ -1,9 +1,16 @@
+@font-face {
+  font-family: SolaimanLipi, "Sans-serif";
+  src: url("./../../../fonts/SolaimanLipi.ttf");
+  unicode-range: U+0980 - U+09FF;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   background: url('./../../../images/frontend-bg-pattern.png') fixed;
+  font-family: SolaimanLipi, "sans-serif";
 }
 
 a:hover {

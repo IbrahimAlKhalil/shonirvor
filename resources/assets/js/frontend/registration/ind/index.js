@@ -1,6 +1,11 @@
 import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
-import $ from 'jquery';
+import 'smartwizard';
+import Selectize from 'selectize';
+
+import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
 
 
 function requestFields(element, workMethods, serial) {
@@ -33,6 +38,19 @@ function requestFields(element, workMethods, serial) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    $('#smartwizard').smartWizard({
+        theme: 'arrows',
+        lang: {
+            next: "পরবর্তী ধাপ",
+            previous: "আগের ধাপ"
+        }
+    });
+
+    $('select').selectize({
+        plugins: ['option-loader']
+    });
+
     let container = document.getElementById('sub-categories-parent');
     let requestContainer = document.getElementById('sub-category-request');
     let repeater = new Repeater(container);

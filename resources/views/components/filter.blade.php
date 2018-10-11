@@ -5,20 +5,20 @@
                 <div class="pt-3 mb-0">
                     <label class="radio-container">বেক্তিগত
                         <input type="radio" name="type" value="ind" @if(request()->get('type') == 'ind'){{ 'checked' }}@endif>
-                        <span class="checkmark"></span>
+                        <span class="checkmark mt-1"></span>
                     </label>
                 </div>
                 <div class="pt-3 mb-0">
                     <label class="radio-container">প্রাতিষ্ঠানিক
                         <input type="radio" name="type" value="org" @if(request()->get('type') == 'org'){{ 'checked' }}@endif>
-                        <span class="checkmark"></span>
+                        <span class="checkmark mt-1"></span>
                     </label>
                 </div>
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex">
                     <div class="flex-fill pr-1 py-2">
-                        <select name="division" id="division" class="form-control"
+                        <select name="division" id="division"
                                 data-option-loader-url="{{ route('api.districts') }}"
                                 data-option-loader-target="#district"
                                 @if(request()->filled('division'))
@@ -32,7 +32,8 @@
                         </select>
                     </div>
                     <div class="flex-fill px-1 py-2">
-                        <select name="district" id="district" class="form-control"
+                        <select name="district" id="district"
+                                @if(! request()->filled('division')){{ 'disabled' }}@endif
                                 data-placeholder="-- জেলা --"
                                 data-option-loader-url="{{ route('api.thanas') }}"
                                 data-option-loader-target="#thana"
@@ -50,7 +51,8 @@
                         </select>
                     </div>
                     <div class="flex-fill px-1 py-2">
-                        <select name="thana" id="thana" class="form-control"
+                        <select name="thana" id="thana"
+                                @if(! request()->filled('district')){{ 'disabled' }}@endif
                                 data-placeholder="-- থানা --"
                                 data-option-loader-url="{{ route('api.unions') }}"
                                 data-option-loader-target="#union"
@@ -68,7 +70,8 @@
                         </select>
                     </div>
                     <div class="flex-fill px-1 py-2">
-                        <select name="union" id="union" class="form-control"
+                        <select name="union" id="union"
+                                @if(! request()->filled('thana')){{ 'disabled' }}@endif
                                 data-placeholder="-- ইউনিয়ন --"
                                 data-option-loader-url="{{ route('api.villages') }}"
                                 data-option-loader-target="#village"
@@ -86,7 +89,8 @@
                         </select>
                     </div>
                     <div class="flex-fill pl-1 py-2">
-                        <select name="village" id="village" class="form-control"
+                        <select name="village" id="village"
+                                @if(! request()->filled('union')){{ 'disabled' }}@endif
                                 data-placeholder="-- এলাকা --"
                                 data-option-loader-properties="value=id,text=bn_name">
                             <option value="">-- এলাকা --</option>
@@ -100,7 +104,7 @@
                 </div>
                 <div class="d-flex">
                     <div class="col-3 py-2 pl-0 pr-1">
-                        <select name="category" id="category" class="form-control"
+                        <select name="category" id="category"
                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                 data-option-loader-target="#subCategory"
                                 @if(request()->filled('category'))
@@ -114,7 +118,8 @@
                         </select>
                     </div>
                     <div class="col-3 py-2 px-1">
-                        <select name="sub-category" id="subCategory" class="form-control"
+                        <select name="sub-category" id="subCategory"
+                                @if(! request()->filled('category')){{ 'disabled' }}@endif
                                 data-placeholder="-- সাব ক্যাটাগরি --"
                                 data-option-loader-nodisable="true"
                                 data-option-loader-properties="value=id,text=name">
@@ -126,16 +131,16 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="col-3 pt-3 pb-2 pl-4 pr-0">
+                    <div class="col-3 pt-2 pb-2 pl-4 pr-0 price-field">
                         <label class="radio-container">দাম কম থেকে বেশি
                             <input type="radio" name="price" value="low" @if(request()->get('price') == 'low'){{ 'checked' }}@endif>
-                            <span class="checkmark"></span>
+                            <span class="checkmark mt-1"></span>
                         </label>
                     </div>
-                    <div class="col-3 pt-3 pb-2 pl-4 pr-0">
+                    <div class="col-3 pt-2 pb-2 pl-4 pr-0 price-field">
                         <label class="radio-container">দাম বেশি থেকে কম
                             <input type="radio" name="price" value="high" @if(request()->get('price') == 'high'){{ 'checked' }}@endif>
-                            <span class="checkmark"></span>
+                            <span class="checkmark mt-1"></span>
                         </label>
                     </div>
                 </div>

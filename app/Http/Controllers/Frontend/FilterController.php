@@ -79,6 +79,7 @@ class FilterController extends Controller
         }
     }
 
+
     public function __invoke()
     {
 
@@ -138,6 +139,11 @@ class FilterController extends Controller
                     } elseif ($this->divisionId) {
 
                         $orgProviders->where('orgs.division_id', $this->divisionId);
+
+                    } elseif ($this->price) {
+
+                        $orgProviders->join('org_sub_category_rates', 'orgs.id', 'org_sub_category_rates.org_id')
+                            ->addSelect('org_sub_category_rates.rate');
 
                     }
                     break;
@@ -325,7 +331,7 @@ class FilterController extends Controller
                 ->join('districts', 'orgs.district_id', 'districts.id')
                 ->join('thanas', 'orgs.thana_id', 'thanas.id')
                 ->join('unions', 'orgs.union_id', 'unions.id')
-                ->select([
+                ->addSelect([
                     'orgs.id',
                     'orgs.user_id',
                     'orgs.name',
@@ -356,11 +362,25 @@ class FilterController extends Controller
 
             if (isset($indProviders)) {
 
-                $services = indJoinNfetch($indProviders)->sortByDesc('feedbacks_avg');
+                $services = indJoinNfetch($indProviders);
 
             } elseif ($orgProviders) {
 
-                $services = orgJoinNfetch($orgProviders)->sortByDesc('feedbacks_avg');
+                $services = orgJoinNfetch($orgProviders);
+
+            }
+
+            if ($this->price && $this->price == 'high') {
+
+                $services = $services->sortByDesc('rate');
+
+            } elseif ($this->price && $this->price == 'low') {
+
+                $services = $services->sortBy('rate');
+
+            } else {
+
+                $services = $services->sortByDesc('feedbacks_avg');
 
             }
 
@@ -374,6 +394,7 @@ class FilterController extends Controller
                 $indProviders->push($orgProvider);
 
             }
+
             $services = $indProviders->sortByDesc('feedbacks_avg');
 
         }
@@ -389,8 +410,6 @@ class FilterController extends Controller
         $providers = new Paginator($perPagedData, count($services), $this->showPerPage, $this->page, [
             'path' => $this->paginatorPath
         ]);
-
-        dd($providers[0]);
 
 
         /***** Return *****/

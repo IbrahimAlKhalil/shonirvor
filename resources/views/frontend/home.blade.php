@@ -204,6 +204,26 @@
 
 
         // Selectize
-        // $('#division').selectize();
+        $('#division, #district, #thana, #union, #village, #category, #subCategory').selectize({
+            plugins: [
+                'option-loader'
+            ]
+        });
+
+
+        // Show/Hide Price Fields
+        $('.price-field').hide();
+
+        $('#subCategory').change(function() {
+            var subCatVal = $('#subCategory').val(),
+                priceField = $('.price-field');
+
+            if (!!subCatVal) {
+                priceField.show();
+            } else {
+                priceField.hide();
+                $("input[name='price']").prop('checked', false);
+            }
+        });
     </script>
 @endsection

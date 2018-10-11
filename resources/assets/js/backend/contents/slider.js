@@ -4,7 +4,6 @@ import './../../../scss/backend/components/_common.scss';
 import '../../../scss/backend/contents/slider.scss';
 
 /***** JS *****/
-import $ from 'jquery';
 import 'bootstrap'; // Bootstrap JS
 import Sortable from 'sortablejs';
 import {Repeater} from "../../modules/repeater";

@@ -9,22 +9,36 @@ export class OptionLoader {
             let target = document.querySelector(select.getAttribute('data-option-loader-target'));
             !select.hasAttribute('data-option-loader-nodisable') && this.disable(target);
 
+            select.optionLoader = this;
+            select.optionLoaderTarget = target;
             select.addEventListener('change', evt => {
-                if (!select.value) {
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                    this.clean(target);
-                    typeof this.options.emptyCallback === 'function' && this.options.emptyCallback.call(this, target, select);
-                    return;
-                }
-
-                this.clean(target);
-                this.loadOptions(`${select.getAttribute('data-option-loader-url')}?${select.getAttribute('data-option-loader-param')}=${select.value}`, target)
-                    .then((data) => {
-                        target.disabled = false;
-                        typeof this.options.callback === 'function' && this.options.callback.call(this, target, data, select);
-                    });
+                evt.preventDefault();
+                evt.stopPropagation();
+                this.loadProgrammatically(select, target);
             });
+        });
+    }
+
+    loadProgrammatically(select, target) {
+
+        return new Promise(resolve => {
+            if (!target) {
+                target = select.optionLoaderTarget = document.querySelector(select.getAttribute('data-option-loader-target'));
+            }
+
+            if (!select.value) {
+                this.clean(target);
+                typeof this.options.emptyCallback === 'function' && this.options.emptyCallback.call(this, target, select);
+                return;
+            }
+
+            this.clean(target);
+            this.loadOptions(`${select.getAttribute('data-option-loader-url')}?${select.getAttribute('data-option-loader-param')}=${select.value}`, target)
+                .then((data) => {
+                    target.disabled = "false";
+                    typeof this.options.callback === 'function' && this.options.callback.call(this, target, data, select);
+                    resolve({data: data, target: target});
+                });
         });
     }
 
@@ -55,7 +69,7 @@ export class OptionLoader {
     }
 
     disable(select) {
-        select.disabled = true;
+        select.disabled = "true";
     }
 
     clean(select) {

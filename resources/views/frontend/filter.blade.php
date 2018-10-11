@@ -156,5 +156,40 @@
                 5: 'badge badge-pill badge-success'
             }
         });
+
+
+        // Selectize
+        $('#division, #district, #thana, #union, #village, #category, #subCategory').selectize({
+            plugins: [
+                'option-loader'
+            ]
+        });
+
+
+        // Show/Hide Price Fields
+        function showOrHidePrice() {
+            var subCatVal = $('#subCategory').val(),
+                priceField = $('.price-field');
+
+            if (!!subCatVal) {
+                priceField.show();
+            } else {
+                priceField.hide();
+                $("input[name='price']").prop('checked', false);
+            }
+        }
+
+        showOrHidePrice();
+
+        $('#subCategory').change(function() {
+            showOrHidePrice();
+        });
+
+
+        // Category Load by Type
+        $("input[name='type']").change(function() {
+
+        });
+
     </script>
 @endsection
