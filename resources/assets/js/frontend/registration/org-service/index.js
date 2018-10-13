@@ -1,5 +1,12 @@
 import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
+import 'smartwizard';
+import '../../../modules/selectize-option-loader-plugin';
+
+import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
+import '../../../../scss/frontend/registration/common.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
     function removeAllAndRepeat() {
@@ -33,11 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('sub-categories').addEventListener('change', removeAllAndRepeat);
-    repeater.clones.forEach(clone => {
-        clone.firstElementChild.addEventListener('change', removeAfterAndRepeat);
-    });
-
-    console.log(repeater.clones);
 
     let subCategoryLoader = new OptionLoader(document.getElementById('category'), {
         callback: () => {

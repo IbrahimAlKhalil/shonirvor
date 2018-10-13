@@ -2,7 +2,6 @@ import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
 import 'smartwizard';
 import '../../../modules/selectize-option-loader-plugin';
-import Selectize from 'selectize';
 
 import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
 import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';

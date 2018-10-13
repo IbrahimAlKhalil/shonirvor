@@ -85,7 +85,6 @@ a:hover {
   cursor: pointer;
   user-select: none;
 
-
   > [type="checkbox"] {
     position: absolute;
     opacity: 0;
@@ -93,7 +92,7 @@ a:hover {
     height: 0;
     width: 0;
 
-    &:checked ~ span {
+    &:checked + span {
       background-color: #2196F3;
       &:after {
         display: block;
@@ -101,7 +100,7 @@ a:hover {
     }
   }
 
-  > span {
+  > [type="checkbox"] + span {
     position: absolute;
     top: 0;
     left: 0;
@@ -127,7 +126,18 @@ a:hover {
     }
   }
 
-  &:hover > [type="checkbox"] ~ span {
+  &:hover > [type="checkbox"] + span {
     background-color: #ccc;
+  }
+}
+
+form {
+  input[aria-invalid="true"], textarea[aria-invalid="true"] {
+    border-color: #dc3545;
+  }
+
+  .error-help-block {
+    color: #dc3545;
+    font-size: .85rem;
   }
 }

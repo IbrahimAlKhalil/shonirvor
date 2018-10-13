@@ -5,10 +5,11 @@ module.exports = {
     entry: {
         'frontend/home': './resources/assets/js/frontend/home.js',
         'frontend/filter': './resources/assets/js/frontend/filter.js',
-        'frontend/registration/ind/index': './resources/assets/js/frontend/registration/ind/index.js',
-        'frontend/registration/ind/edit': './resources/assets/js/frontend/registration/ind/edit.js',
-        'frontend/registration/org/index': './resources/assets/js/frontend/registration/org/index.js',
-        'frontend/registration/org/edit': './resources/assets/js/frontend/registration/org/edit.js',
+        'frontend/registration/ind-service/index': './resources/assets/js/frontend/registration/ind-service/index.js',
+        'frontend/registration/ind-service/edit': './resources/assets/js/frontend/registration/ind-service/edit.js',
+        'frontend/registration/org-service/index': './resources/assets/js/frontend/registration/org-service/index.js',
+        'frontend/registration/org-service/edit': './resources/assets/js/frontend/registration/org-service/edit.js',
+        'frontend/registration/common': './resources/assets/js/frontend/registration/common.js',
         'frontend/ind-service/show': './resources/assets/js/frontend/ind-service/show.js',
         'frontend/org-service/show': './resources/assets/js/frontend/org-service/show.js',
 

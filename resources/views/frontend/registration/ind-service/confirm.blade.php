@@ -4,15 +4,15 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/ind/index.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind-service/index.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
-    <div style="margin-top: 40px;"></div>
 
-    <div class="container">
+    @include('components.success')
 
-        @include('components.success')
+    <div class="container my-5">
 
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -52,10 +52,11 @@
                 </table>
             </div>
             <div class="tab-pane fade {{ $classesToAdd[1] }} show" id="request-account">
-                <form method="post" enctype="multipart/form-data" action="{{ route('individual-service-registration.store') }}">
+                <form id="registration-form" method="post" enctype="multipart/form-data"
+                      action="{{ route('individual-service-registration.store') }}">
                     {{ csrf_field() }}
 
-                    <div id="smartwizard" class="mx-5">
+                    <div id="smartwizard" class="mx-5 shadow-lg">
                         <ul>
                             <li><a href="#step-1">প্রথম ধাপ<br/>
                                     <small>সাধারণ তথ্য</small>
@@ -77,10 +78,10 @@
                                     <label for="mobile" class="col-3 col-form-label">মোবাইল নাম্বার <span
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
-                                        <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}"
-                                               class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}"
+                                        <input id="mobile" name="mobile" type="number"
+                                               value="{{ oldOrData('mobile', $user->mobile) }}"
+                                               class="form-control"
                                                placeholder="01xxxxxxxxx" required>
-                                        @include('components.invalid', ['name' => 'mobile'])
                                     </div>
                                 </div>
 
@@ -88,18 +89,17 @@
                                     <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                                     <div class="col-9">
                                         <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
-                                               class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}"
+                                               class="form-control"
                                                placeholder="01xxxxxxxxx">
-                                        @include('components.invalid', ['name' => 'referrer'])
                                     </div>
                                 </div>
 
                                 <div class="form-group row mx-5">
                                     <label for="email" class="col-3 col-form-label">ইমেইল</label>
                                     <div class="col-9">
-                                        <input id="email" name="email" type="text" value="{{ old('email') }}"
-                                               class="form-control @if($errors->has('email')) is-invalid @endif">
-                                        @include('components.invalid', ['name' => 'email'])
+                                        <input id="email" name="email" type="text"
+                                               value="{{ oldOrData('email', $user->email) }}"
+                                               class="form-control">
                                     </div>
                                 </div>
 
@@ -107,8 +107,7 @@
                                     <label for="website" class="col-3 col-form-label">ওয়েবসাইট</label>
                                     <div class="col-9">
                                         <input id="website" name="website" type="url" value="{{ old('website') }}"
-                                               class="form-control @if($errors->has('website')) is-invalid @endif">
-                                        @include('components.invalid', ['name' => 'website'])
+                                               class="form-control">
                                     </div>
                                 </div>
 
@@ -116,19 +115,22 @@
                                     <label for="facebook" class="col-3 col-form-label">ফেসবুক</label>
                                     <div class="col-9">
                                         <input id="facebook" name="facebook" type="url" value="{{ old('facebook') }}"
-                                               class="form-control @if($errors->has('facebook')) is-invalid @endif">
-                                        @include('components.invalid', ['name' => 'facebook'])
+                                               class="form-control">
                                     </div>
                                 </div>
 
-                                <div class="form-group row mx-5">
-                                    <label for="age" class="col-3 col-form-label">বয়স <span class="text-danger">*</span></label>
-                                    <div class="col-9">
-                                        <input id="age" name="age" type="number" value="{{ old('age') }}" required="required"
-                                               class="form-control @if($errors->has('age')) is-invalid @endif">
-                                        @include('components.invalid', ['name' => 'age'])
+                                @if(!$user->age)
+                                    <div class="form-group row mx-5">
+                                        <label for="age" class="col-3 col-form-label">বয়স <span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-9">
+                                            <input id="age" name="age" type="number" value="{{ old('age') }}"
+                                                   required="required"
+                                                   class="form-control">
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
+
                                 <div class="form-group row mx-5">
                                     <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
                                     <div class="col-9">
@@ -136,15 +138,16 @@
                                                value="{{ old('qualification') }}">
                                     </div>
                                 </div>
-                                <div class="form-group row mx-5">
-                                    <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                                class="text-danger">*</span></label>
-                                    <div class="col-9">
-                                        <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                               class="form-control @if($errors->has('nid')) is-invalid @endif" required>
-                                        @include('components.invalid', ['name' => 'nid'])
+                                @if(!$user->nid)
+                                    <div class="form-group row mx-5">
+                                        <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-9">
+                                            <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                                   class="form-control" required>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                             <div class="p-4" id="step-2">
                                 <div class="form-group row mx-5">
@@ -231,8 +234,7 @@
                                     <label for="address" class="col-3 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                                     <div class="col-9">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
-                                        @include('components.invalid', ['name' => 'address'])
+                              class="form-control">{{ old('address') }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +244,6 @@
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
                                         <select id="category" name="category"
-                                                class="@if($errors->has('category')) is-invalid @endif"
                                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                                 data-option-loader-target="#sub-categories"
                                                 data-option-loader-param="category">
@@ -252,8 +253,7 @@
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
-                                        @include('components.invalid', ['name' => 'category'])
-                                        <label for="no-category" class="checkbox">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                        <label for="no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
                                             <input type="checkbox" id="no-category" class="mt-2 no-something"
                                                    name="no-category">
                                             <span></span>
@@ -269,12 +269,10 @@
                                                 class="text-danger">*</span></label>
                                     <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                                         <select id="sub-categories" name="sub-categories[]"
-                                                class="@if($errors->has('sub-categories')) is-invalid @endif"
                                                 data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                                 data-option-loader-properties="value=id,text=name"
                                                 multiple>
                                         </select>
-                                        @include('components.invalid', ['name' => 'sub-categories'])
 
                                         <div class="card mt-2 repeater-clone d-none">
                                             <div class="card-header pb-0 pt-2"></div>
@@ -318,9 +316,8 @@
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
                                         <input id="identities" name="identities[]" type="file" accept="image/*"
-                                               class="form-control-file @if($errors->has('identities')) is-invalid @endif"
+                                               class="form-control-fil"
                                                multiple>
-                                        @include('components.invalid', ['name' => 'identities'])
                                     </div>
                                 </div>
 
@@ -335,7 +332,7 @@
                                                               name="images[{{ $i }}][description]"></textarea>
                                                     <input id="images" name="images[{{ $i }}][file]" type="file"
                                                            accept="image/*"
-                                                           class="form-control-file @if($errors->has('images')) is-invalid @endif">
+                                                           class="form-control-file mt-3">
                                                 </div>
                                             @endfor
                                         </div>
@@ -347,7 +344,6 @@
                                     <div class="col-9">
                                         <input id="cv" name="cv" type="file" accept="image/*"
                                                class="form-control-file">
-                                        @include('components.invalid', ['name' => 'cv'])
                                     </div>
                                 </div>
 
@@ -358,7 +354,6 @@
                                         <input id="experience-certificate" name="experience-certificate" type="file"
                                                accept="image/*"
                                                class="form-control-file">
-                                        @include('components.invalid', ['name' => 'experience-certificate'])
                                     </div>
                                 </div>
 
@@ -383,13 +378,15 @@
             lang: {
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
-            }
+            },
+            useURLhash: false
         });
 
         $('select').selectize({
             plugins: ['option-loader']
         });
+
     </script>
-    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.min.js')}}"></script>
-    {!! JsValidator::formRequest('App\Http\Requests\StoreInd') !!}
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class, '#registration-form') !!}
 @endsection

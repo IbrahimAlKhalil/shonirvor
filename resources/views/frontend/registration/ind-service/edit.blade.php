@@ -4,18 +4,16 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/ind/edit.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind-service/edit.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
-    <div style="margin-top: 40px;"></div>
+    <h3 class="text-center mb-5">আপনার তথ্য সম্পাদনা করুন</h3>
 
-    <div class="container">
+    @include('components.success')
 
-        <h3>আপনার তথ্য সম্পাদনা করুন</h3>
-
-        @include('components.success')
-
+    <div class="container my-5">
         <form method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.update', $ind->id) }}">
             {{ method_field('put') }}
@@ -108,6 +106,17 @@
                                        value="{{ oldOrData('qualification', $ind->user->qualification) }}">
                             </div>
                         </div>
+                        @if(!$user->inds()->count() >= 1)
+                            <div class="form-group row mx-5">
+                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="nid" name="nid" type="number"
+                                           value="{{ oldOrData('nid', $ind->user->nid) }}"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row">
@@ -480,7 +489,6 @@
         </form>
     </div>
 @endsection
-
 @section('script')
     <script>
         $('#smartwizard').smartWizard({
@@ -488,11 +496,15 @@
             lang: {
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
-            }
+            },
+            useURLhash: false
         });
 
         $('select').selectize({
             plugins: ['option-loader']
         });
+
     </script>
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class) !!}
 @endsection

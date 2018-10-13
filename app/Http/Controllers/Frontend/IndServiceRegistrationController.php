@@ -30,7 +30,7 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories');
+        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories', 'user');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -71,7 +71,7 @@ class IndServiceRegistrationController extends Controller
             $categories = Category::getAll('ind')->get();
             $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
-            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'categories');
+            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'categories', 'user');
 
             // reached at the maximum
             // redirect them to the confirmation page
@@ -460,7 +460,7 @@ class IndServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods'])->find($id);
+        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
@@ -479,6 +479,6 @@ class IndServiceRegistrationController extends Controller
         $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
         $workMethods = WorkMethod::all();
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user'));
     }
 }

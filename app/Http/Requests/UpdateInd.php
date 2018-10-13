@@ -18,7 +18,7 @@ class UpdateInd extends FormRequest
         $id = $this->route('ind_id');
 
         return [
-            /*'mobile' => 'required|digits:11|unique:inds,mobile,' . $id,
+            'mobile' => 'required|digits:11|unique:inds,mobile,' . $id,
             'email' => 'email|unique:inds,email,' . $id,
             'personal-email' => 'email|unique:users,email,' . Auth::id(),
             'nid' => 'required|integer|unique:users,nid,' . Auth::id(),
@@ -31,7 +31,7 @@ class UpdateInd extends FormRequest
             'facebook' => 'url',
             'photo' => 'image',
             'images.*' => 'image',
-            'work-methods.*' => 'required|exists:work_methods,id'*/
+            'work-methods.*' => 'required|exists:work_methods,id'
         ];
     }
 }

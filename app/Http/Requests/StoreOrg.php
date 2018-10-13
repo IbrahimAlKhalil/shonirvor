@@ -16,7 +16,7 @@ class StoreOrg extends FormRequest
     public function rules()
     {
         return [
-            /*'name' => 'required',
+            'name' => 'required',
             'description' => 'required',
             'mobile' => 'required|digits:11|unique:orgs',
             'email' => 'email|unique:orgs',
@@ -32,7 +32,7 @@ class StoreOrg extends FormRequest
             'category' => 'required',
             'logo' => 'required|image',
             'photo' => 'image',
-            'images.*' => 'image',*/
+            'images.*' => 'image',
         ];
     }
 }
