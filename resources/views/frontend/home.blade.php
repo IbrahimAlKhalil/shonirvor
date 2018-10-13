@@ -24,21 +24,41 @@
                     </div>
                     <div class="col-md-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
-                        @foreach($indCategories as $category)
-                            <p>
-                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
-                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }} ({{ $category->ind_services_count }})</a>
-                            </p>
-                        @endforeach
+                        <div class="row">
+                            @foreach($indCategories as $category)
+                                {{--<p>--}}
+                                    {{--<img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">--}}
+                                    {{--<a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }} ({{ $category->ind_services_count }})</a>--}}
+                                {{--</p>--}}
+                                    <div class="col-4 text-center">
+                                        <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
+                                        <p>
+                                            <a href="{{ route('frontend.filter').'?category='.$category->id }}">
+                                                {{ $category->name }} ({{ $category->ind_services_count }})
+                                            </a>
+                                        </p>
+                                    </div>
+                            @endforeach
+                        </div>
                     </div>
                     <div class="col-md-6 text-right">
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
-                        @foreach($orgCategories as $category)
-                            <p>
-                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>
-                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
-                            </p>
-                        @endforeach
+                        <div class="row">
+                            @foreach($orgCategories as $category)
+                                {{--<p>--}}
+                                    {{--<a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>--}}
+                                    {{--<img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">--}}
+                                {{--</p>--}}
+                                <div class="col-4 text-center">
+                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
+                                    <p>
+                                        <a href="{{ route('frontend.filter').'?category='.$category->id }}">
+                                            {{ $category->name }} ({{ $category->org_services_count }})
+                                        </a>
+                                    </p>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-4 bg-white rounded shadow-sm pt-3">
