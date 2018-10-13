@@ -181,14 +181,8 @@
 
         showOrHidePrice();
 
-        $('#subCategory').change(function() {
+        $('#subCategory').change(function () {
             showOrHidePrice();
-        });
-
-
-        // Category Load by Type
-        $("input[name='type']").change(function() {
-
         });
 
     </script>

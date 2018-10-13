@@ -52,15 +52,15 @@ class FilterComponentComposer
 
         }
 
-        $categories = Category::select('id', 'name')
-            ->where('is_confirmed', 1)
+        $categories = Category::select('id', 'name', 'service_type_id')
+            ->onlyConfirmed()
             ->get();
 
         if (request()->filled('category')) {
 
             $subCategories = SubCategory::select('id', 'name')
                 ->where('category_id', request()->get('category'))
-                ->where('is_confirmed', 1)
+                ->onlyConfirmed()
                 ->get();
 
         }

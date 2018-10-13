@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 class SubCategoryController extends Controller
 {
     private $id = false;
-    private $service = false;
+    private $type = false;
     private $category = false;
 
     public function __construct(Request $request)
@@ -19,8 +19,8 @@ class SubCategoryController extends Controller
             $this->id = theId();
         }
 
-        if ($request->filled('service')) {
-            $this->service = $request->get('service');
+        if ($request->filled('type')) {
+            $this->type = $request->get('type');
         }
 
         if ($request->filled('category')) {
@@ -34,15 +34,15 @@ class SubCategoryController extends Controller
 
             $data = SubCategory::find($this->id);
 
-        } elseif ($this->service) {
+        } elseif ($this->type) {
 
-            if ($this->service == 'ind') {
+            if ($this->type == 'ind') {
 
                 $data = SubCategory::onlyInd()
                     ->onlyConfirmed()
                     ->get();
 
-            } elseif ($this->service == 'org') {
+            } elseif ($this->type == 'org') {
 
                 $data = SubCategory::onlyOrg()
                     ->onlyConfirmed()
@@ -60,11 +60,9 @@ class SubCategoryController extends Controller
         } else {
 
             $data = SubCategory::onlyConfirmed()->get();
-
         }
 
 
         return response($data);
-
     }
 }

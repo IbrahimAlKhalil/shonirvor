@@ -1,11 +1,15 @@
 .no-something {
-  &+ input, & + .input-div {
-    display: none;
+  & + span {
+    & + input, & + .input-div {
+      display: none;
+    }
   }
 
   &:checked {
-    & + input, & + .input-div {
-      display: block;
+    & + span {
+      & + input, & + .input-div {
+        display: block;
+      }
     }
   }
 }

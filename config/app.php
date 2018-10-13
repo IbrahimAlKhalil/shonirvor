@@ -169,6 +169,7 @@ return [
          */
         Zizaco\Entrust\EntrustServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Proengsoft\JsValidation\JsValidationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -231,5 +232,6 @@ return [
 
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class
     ],
 ];

@@ -1,5 +1,13 @@
 import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
+import 'smartwizard';
+import '../../../modules/selectize-option-loader-plugin';
+import Selectize from 'selectize';
+
+import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
+import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
+import '../../../../scss/frontend/registration/common.scss';
 
 
 function requestFields(element, workMethods, serial) {
@@ -8,8 +16,10 @@ function requestFields(element, workMethods, serial) {
             element.innerHTML += `
                             <div class="row mt-2">
                                 <div class="col-md-8">
-                                    <label for="req-work-method-${workMethod.id}-${serial}">${workMethod.name}</label>
-                                    <input type="checkbox" id="req-work-method-${workMethod.id}-${serial}" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][checkbox]">
+                                    <label for="req-work-method-${workMethod.id}-${serial}" class="checkbox">${workMethod.name}
+                                        <input type="checkbox" id="req-work-method-${workMethod.id}-${serial}" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][checkbox]">
+                                        <span></span>
+                                    </label>
                                     <input type="hidden" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][id]" value="${workMethod.id}">
                                 </div>
                             </div>`;
@@ -19,8 +29,10 @@ function requestFields(element, workMethods, serial) {
         element.innerHTML += `
                             <div class="row mt-2">
                                 <div class="col-md-8">
-                                    <label for="req-work-method-${workMethod.id}-${serial}">${workMethod.name}</label>
-                                    <input type="checkbox" id="req-work-method-${workMethod.id}-${serial}" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][checkbox]">
+                                    <label for="req-work-method-${workMethod.id}-${serial}" class="checkbox">${workMethod.name}
+                                        <input type="checkbox" id="req-work-method-${workMethod.id}-${serial}" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][checkbox]">
+                                        <span></span>
+                                    </label>
                                 </div>
                                 <div class="col">
                                     <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][rate]">
@@ -49,22 +61,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-
-        document.getElementById('sub-categories').addEventListener('change', event => {
+        let subCategorySelect = document.getElementById('sub-categories');
+        subCategorySelect.selectize.on('change', value => {
             repeater.removeAll();
 
-            $(event.target).val().forEach((subCategoryId, subCategoryCount) => {
+            $(subCategorySelect).val().forEach((subCategoryId, subCategoryCount) => {
                 if (!subCategoryId) return;
                 repeater.repeat(function (item) {
                     item.classList.remove('d-none');
-                    item.firstElementChild.innerHTML = event.target.querySelector(`[value='${subCategoryId}']`).innerHTML;
+                    item.firstElementChild.innerHTML = subCategorySelect.querySelector(`[value='${subCategoryId}']`).innerHTML;
                     workMethods.forEach((workMethod, workMethodCount) => {
                         if (workMethod.id === 4) {
                             item.lastElementChild.innerHTML += `
                             <div class="row mt-2">
                                 <div class="col-md-8">
-                                    <label for="work-method-${workMethod.id}-${subCategoryCount}">${workMethod.name}</label>
-                                    <input type="checkbox" id="work-method-${workMethod.id}-${subCategoryCount}" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][checkbox]">
+                                    <label for="work-method-${workMethod.id}-${subCategoryCount}" class="checkbox">${workMethod.name}
+                                        <input type="checkbox" id="work-method-${workMethod.id}-${subCategoryCount}" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][checkbox]">
+                                        <span></span>
+                                    </label>
                                     <input type="hidden" name="sub-category-rates[${subCategoryCount}][id]" value="${subCategoryId}">
                                     <input type="hidden" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][id]" value="${workMethod.id}">
                                 </div>
@@ -75,8 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         item.lastElementChild.innerHTML += `
                             <div class="row mt-2">
                                 <div class="col-md-8">
-                                    <label for="work-method-${workMethod.id}-${subCategoryCount}">${workMethod.name}</label>
-                                    <input type="checkbox" id="work-method-${workMethod.id}-${subCategoryCount}" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][checkbox]">
+                                    <label for="work-method-${workMethod.id}-${subCategoryCount}" class="checkbox">${workMethod.name}
+                                        <input type="checkbox" id="work-method-${workMethod.id}-${subCategoryCount}" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][checkbox]">
+                                        <span></span>
+                                    </label>
                                     <input type="hidden" name="sub-category-rates[${subCategoryCount}][id]" value="${subCategoryId}">
                                 </div>
                                 <div class="col">
