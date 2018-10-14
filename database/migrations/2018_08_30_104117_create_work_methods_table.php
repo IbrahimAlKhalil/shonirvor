@@ -11,7 +11,6 @@ class CreateWorkMethodsTable extends Migration
         Schema::create('work_methods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->timestamps();
         });
     }
 

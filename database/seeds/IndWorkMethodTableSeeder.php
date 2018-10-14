@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Ind;
-use App\Models\SubCategory;
-use App\Models\WorkMethod;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -10,21 +8,36 @@ class IndWorkMethodTableSeeder extends Seeder
 {
     public function run()
     {
+        $inds = Ind::select('id')->get();
+
         $data = [];
 
-        Ind::all()->each(function ($ind) use ($data) {
-            $ind->subCategories->each(function ($subCategory) use ($ind, $data) {
-                $workMethods = randomElements(WorkMethod::pluck('id')->toArray(), rand(1, 4));
+        foreach ($inds as $ind) {
 
-                foreach ($workMethods as $workMethod) {
+            foreach ($ind->subCategories as $subCategory) {
+
+                $usedWorkMethodIds = [];
+                for ($i = 1; $i <= rand(1, 4); $i++) {
+
+                    $workMethodIds = range(1, 4);
+                    $nonUsedWorkMethodIds = array_diff($workMethodIds, $usedWorkMethodIds);
+                    $workMethodId = randomElement($nonUsedWorkMethodIds);
+
                     array_push($data, [
                         'ind_id' => $ind->id,
-                        'work_method_id' => $workMethod,
+                        'work_method_id' => $workMethodId,
                         'sub_category_id' => $subCategory->id,
-                        'rate' => randomElement([500, 50, 60, 520, 100, 300, 150])
+                        'rate' => randomElement([50, 10, 60, 80, 90, 40, 300, 560, 200, 560, 990, 5000])
                     ]);
+
+                    array_push($usedWorkMethodIds, $workMethodId);
+
                 }
-            });
-        });
+
+            }
+
+        }
+
+        DB::table('ind_work_method')->insert($data);
     }
 }

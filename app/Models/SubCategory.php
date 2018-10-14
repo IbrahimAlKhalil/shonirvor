@@ -31,7 +31,7 @@ class SubCategory extends Model
 
     public function workMethods()
     {
-        return $this->belongsToMany(WorkMethod::class, 'ind_work_method')->withPivot('rate');
+        return $this->belongsToMany(WorkMethod::class, 'ind_work_method')->withPivot(['ind_id', 'rate']);
     }
 
 

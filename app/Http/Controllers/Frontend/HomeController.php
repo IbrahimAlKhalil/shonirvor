@@ -18,7 +18,7 @@ class HomeController extends Controller
             }])
             ->onlyConfirmed()
             ->orderBy('ind_services_count', 'desc')
-            ->take(10)
+            ->take(9)
             ->get();
 
         $orgCategories = Category::onlyOrg()
@@ -28,7 +28,7 @@ class HomeController extends Controller
             }])
             ->onlyConfirmed()
             ->orderBy('org_services_count', 'desc')
-            ->take(10)
+            ->take(9)
             ->get();
 
         $indServices = Ind::onlyTop()

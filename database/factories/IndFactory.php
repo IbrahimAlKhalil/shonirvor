@@ -14,8 +14,8 @@ $factory->define(Ind::class, function (Faker $faker) {
             . $faker->randomElement([1, 6, 7, 8, 9])
             . $faker->unique()->randomNumber(8),
         'referrer' => $faker->randomElement($userMobiles),
-        'website' => $faker->url,
-        'facebook' => $faker->url,
+        'website' => 'https://www.sandofvega.com',
+        'facebook' => 'https://facebook.com/sandofvega',
         'address' => $faker->address,
         'experience_certificate' => 'seed/ind/exp-cert.png',
         'cv' => 'seed/ind/exp-cert.png',
