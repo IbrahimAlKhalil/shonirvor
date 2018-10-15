@@ -6,7 +6,6 @@ import '../../../modules/selectize-option-loader-plugin';
 import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
 import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
 import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
-import '../../../../scss/frontend/registration/common.scss';
 
 
 function requestFields(element, workMethods, serial) {

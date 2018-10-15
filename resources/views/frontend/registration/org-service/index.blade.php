@@ -4,7 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/org/index.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/org-service/index.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
@@ -16,11 +16,12 @@
         </div>
     @endforeach
 
-    <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
-
-    @include('components.success')
-
     <div class="container my-5">
+
+        <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
+
+        @include('components.success')
+
         <form method="post" enctype="multipart/form-data"
               action="{{ route('organization-service-registration.store') }}">
             {{ csrf_field() }}
@@ -53,7 +54,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">বর্ণনা <span
+                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea rows="6" id="description" name="description"
@@ -108,15 +109,17 @@
                                 @include('components.invalid', ['name' => 'facebook'])
                             </div>
                         </div>
-                        <div class="form-group row mx-5">
-                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                       class="form-control @if($errors->has('nid')) is-invalid @endif" required>
-                                @include('components.invalid', ['name' => 'nid'])
+                        @if(!$user->nid)
+                            <div class="form-group row mx-5">
+                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                           class="form-control @if($errors->has('nid')) is-invalid @endif" required>
+                                    @include('components.invalid', ['name' => 'nid'])
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
@@ -214,7 +217,6 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="category" name="category"
-                                        class="@if($errors->has('category')) is-invalid @endif"
                                         data-option-loader-url="{{ route('api.sub-categories') }}"
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category">
@@ -224,8 +226,7 @@
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-                                @include('components.invalid', ['name' => 'category'])
-                                <label for="no-category" class="checkbox">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                <label for="no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-category" class="mt-2 no-something"
                                            name="no-category">
                                     <span></span>
@@ -239,21 +240,53 @@
                         <div class="form-group row mx-5">
                             <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9" id="sub-category-parent">
-                                <div class="repeater-clone row mt-2">
-                                    <select id="sub-categories" name="sub-categories[0][id]"
-                                            class="col-md-9 @if($errors->has('sub-categories[]')) is-invalid @endif"
-                                            data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
-                                            data-option-loader-properties="value=id,text=name">
-                                    </select>
-                                    <input type="number" class="form-control col-md-3" name="sub-categories[0][rate]"
-                                           placeholder="রেট">
+                            <div class="col-9">
+                                <select id="sub-categories"
+                                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                        data-option-loader-properties="value=id,text=name"
+                                        multiple>
+                                </select>
+
+
+                                <ul id="repeater-container" class="list-group">
+                                    <li class="repeater-clone mt-2 border-0 list-group-item d-none">
+                                        <div class="row">
+                                            <label class="col-md-6"></label>
+                                            <input type="number" class="form-control col-md-6"
+                                                   placeholder="রেট">
+                                            <input type="hidden">
+                                        </div>
+                                    </li>
+                                </ul>
+
+
+                                <div class="mt-4 checkbox">
+                                    <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                    <input type="checkbox" id="no-sub-category" name="no-sub-category"
+                                           class="mt-2 no-something">
+                                    <span></span>
+                                    <ul id="req-repeater-container" class="list-group input-div">
+                                        <li class="repeater-clone mt-2 border-0 list-group-item">
+                                            <div class="row">
+                                                <input type="text" class="form-control col-md-5 sub-category-name"
+                                                       name="sub-category-requests[0][name]"
+                                                       placeholder="সাব-ক্যাটাগরির নাম">
+                                                <input type="number" class="form-control col-md-5 sub-category-rate"
+                                                       name="sub-category-requests[0][rate]"
+                                                       placeholder="রেট">
+                                                <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-none"
+                                                   href="#"></a>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item border-0">
+                                            <button type="button" class="btn btn-light float-left shadow-sm add-new"><i
+                                                        class="fa fa-plus"></i> আরও
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
-                                @include('components.invalid', ['name' => 'sub-categories'])
-                                {{--<label for="no-sub-category" class="mt-4">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
-                                <input type="checkbox" id="no-sub-category" name="no-sub-category" class="mt-2 no-something">
-                                <div class="input-div">
-                                </div>--}}
+
+
                             </div>
                         </div>
                     </div>
@@ -337,6 +370,6 @@
 
     </script>
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class) !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreOrg::class) !!}
 @endsection
 

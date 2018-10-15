@@ -141,3 +141,13 @@ form {
     font-size: .85rem;
   }
 }
+
+
+.selectize-dropdown-content {
+  .option {
+    cursor: pointer;
+    &:hover, &.active {
+      background: #e8f4fc;
+    }
+  }
+}

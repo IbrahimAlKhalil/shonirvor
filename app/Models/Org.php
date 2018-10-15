@@ -92,19 +92,9 @@ class Org extends Model
         return $result;
     }
 
-    function subCategoryRates($status = null)
+    function subCategoryRates()
     {
-        $result = $this->belongsToMany(SubCategory::class, 'org_sub_category_rates');
-
-        switch ($status) {
-            case 'confirmed':
-                $result = $result->where('is_confirmed', 1)->withPivot('rate');
-                break;
-            case 'requested':
-                $result = $result->where('is_confirmed', 0)->withPivot('rate');
-        }
-
-        return $result;
+        return $this->belongsToMany(SubCategory::class, 'org_sub_category_rates')->withPivot('rate');
     }
 
 

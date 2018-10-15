@@ -14,9 +14,9 @@
 
         @include('components.success')
 
-        <div class="alert alert-danger">
+        {{--<div class="alert alert-danger">
             {{ $errors }}
-        </div>
+        </div>--}}
 
         <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.store') }}">
@@ -48,6 +48,16 @@
                                        value="{{ oldOrData('mobile', $user->mobile) }}"
                                        class="form-control"
                                        placeholder="01xxxxxxxxx" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="description" class="col-3 col-form-label">বর্ণনা <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="description" name="description" type="number"
+                                       value="{{ old('description') }}"
+                                       class="form-control" required></textarea>
                             </div>
                         </div>
 

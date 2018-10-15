@@ -153,6 +153,7 @@ class IndServiceRegistrationController extends Controller
         $ind->union_id = $union;
         $ind->village_id = $village;
 
+        $ind->description = $request->post('description');
         $ind->mobile = $request->post('mobile');
         $ind->referrer = $request->post('referrer');
         $ind->email = $request->post('email');
@@ -216,9 +217,15 @@ class IndServiceRegistrationController extends Controller
         DB::table('ind_work_method')->insert($workMethods);
 
         // User
-        $user->nid = $request->post('nid');
+        if (!$user->nid && $request->has('nid')) {
+            $user->nid = $request->post('nid');
+        }
+
+        if (!$user->age && $request->has('age')) {
+            $user->age = $request->post('age');
+        }
+
         $user->qualification = $request->post('qualification');
-        $user->age = $request->post('age');
         $user->save();
 
         // work images
@@ -254,6 +261,13 @@ class IndServiceRegistrationController extends Controller
 
         $user = Auth::user();
         $ind = Ind::find($id);
+        $allInd = $user->inds();
+        $pendinInds = $user->inds();
+
+        $canEditNid = false;
+        if (!$allInd->count() || $pendinInds->onlyPending()->count() == $allInd->count()) {
+            $canEditNid = true;
+        }
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
@@ -341,6 +355,7 @@ class IndServiceRegistrationController extends Controller
         $ind->thana_id = $thana;
         $ind->union_id = $union;
         $ind->village_id = $village;
+        $ind->description = $request->post('description');
         $ind->mobile = $request->post('mobile');
         $ind->email = $request->post('email');
         $ind->category_id = $category->id;
@@ -424,8 +439,8 @@ class IndServiceRegistrationController extends Controller
 
         // User
         $user->nid = $request->post('nid');
-        $user->qualification = $request->post('qualification');
         $user->age = $request->post('age');
+        $user->qualification = $request->post('qualification');
         $user->save();
 
         // work images
@@ -460,11 +475,20 @@ class IndServiceRegistrationController extends Controller
 
     public function edit($id)
     {
+
         $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
             return redirect(route('individual-service-registration.index'));
+        }
+
+        $allInd = $ind->user->inds();
+        $pendinInds = $ind->user->inds();
+
+        $canEditNid = false;
+        if (!$allInd->count() || $pendinInds->onlyPending()->count() == $allInd->count()) {
+            $canEditNid = true;
         }
 
         $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
@@ -479,6 +503,6 @@ class IndServiceRegistrationController extends Controller
         $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
         $workMethods = WorkMethod::all();
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid'));
     }
 }

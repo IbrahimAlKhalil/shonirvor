@@ -18,7 +18,7 @@ export class Repeater {
             }
 
             if (typeof process === 'function') {
-                process.call(this, newItem, this.lastCloned);
+                process.call(this, newItem, this.lastCloned, instance);
             }
 
             this.container.insertBefore(newItem, this.lastCloned.nextElementSibling);

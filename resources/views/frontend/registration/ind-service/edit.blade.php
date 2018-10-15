@@ -9,11 +9,15 @@
 @endsection
 
 @section('content')
-    <h3 class="text-center mb-5">আপনার তথ্য সম্পাদনা করুন</h3>
-
-    @include('components.success')
-
     <div class="container my-5">
+        {{--<div class="alert alert-danger">
+            {{ $errors }}
+        </div>--}}
+
+        <h3 class="text-center mb-5">আপনার তথ্য সম্পাদনা করুন</h3>
+
+        @include('components.success')
+
         <form method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.update', $ind->id) }}">
             {{ method_field('put') }}
@@ -37,76 +41,72 @@
 
                 <div>
                     <div class="p-4" id="step-1">
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="mobile" class="col-3 col-form-label">মোবাইল নম্বর <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="mobile" name="mobile" type="number"
                                        value="{{ oldOrData('mobile', $ind->mobile) }}"
-                                       class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
-                                @include('components.invalid', ['name' => 'mobile'])
+                                       class="form-control required">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
                                        value="{{ oldOrData('referrer', $ind->referrer) }}"
-                                       class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}">
-                                @include('components.invalid', ['name' => 'referrer'])
+                                       class="form-control">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="email" class="col-3 col-form-label">ইমেইল</label>
                             <div class="col-9">
                                 <input id="email" name="email" type="text"
                                        value="{{ oldOrData('email', $ind->email) }}"
-                                       class="form-control @if($errors->has('email')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'email'])
+                                       class="form-control">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="website" class="col-3 col-form-label">ওয়েবসাইট</label>
                             <div class="col-9">
                                 <input id="website" name="website" type="url"
                                        value="{{ oldOrData('website', $ind->website) }}"
-                                       class="form-control @if($errors->has('website')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'website'])
+                                       class="form-control">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="facebook" class="col-3 col-form-label">ফেসবুক</label>
                             <div class="col-9">
                                 <input id="facebook" name="facebook" type="url"
                                        value="{{ oldOrData('facebook', $ind->facebook) }}"
-                                       class="form-control @if($errors->has('facebook')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'facebook'])
+                                       class="form-control">
                             </div>
                         </div>
 
-
-                        <div class="form-group row">
-                            <label for="age" class="col-3 col-form-label">বয়স <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <input id="age" name="age" type="number"
-                                       value="{{ oldOrData('age', $ind->user->age) }}" required="required"
-                                       class="form-control @if($errors->has('age')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'age'])
+                        @if($canEditNid)
+                            <div class="form-group row mx-5">
+                                <label for="age" class="col-3 col-form-label">বয়স <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="age" name="age" type="number"
+                                           value="{{ oldOrData('age', $ind->user->age) }}" required="required"
+                                           class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
+                        @endif
+
+                        <div class="form-group row mx-5">
                             <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
                             <div class="col-9">
                                 <input id="qualification" name="qualification" type="text" class="form-control here"
                                        value="{{ oldOrData('qualification', $ind->user->qualification) }}">
                             </div>
                         </div>
-                        @if(!$user->inds()->count() >= 1)
+                        @if($canEditNid)
                             <div class="form-group row mx-5">
                                 <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
                                             class="text-danger">*</span></label>
@@ -117,9 +117,19 @@
                                 </div>
                             </div>
                         @endif
+
+                        <div class="form-group row mx-5">
+                            <label for="description" class="col-3 col-form-label">কাজের বর্ণনা <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                    <textarea rows="6" id="description" name="description"
+                              class="form-control"
+                              required>{{ oldOrData('description', $ind->description) }}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-4" id="step-2">
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label class="col-3 col-form-label">এলাকা <span class="text-danger">*</span></label>
                             <div class="col-9">
                                 <div class="row">
@@ -221,17 +231,16 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="address" class="col-3 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ oldOrData('address', $ind->address) }}</textarea>
-                                @include('components.invalid', ['name' => 'address'])
+                              class="form-control">{{ oldOrData('address', $ind->address) }}</textarea>
                             </div>
                         </div>
                     </div>
                     <div class="p-4" id="step-3">
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
@@ -239,8 +248,7 @@
                                         data-option-loader-url="{{ route('api.sub-categories') }}"
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
-                                        data-option-loader-nodisable="true"
-                                        class="@if($errors->has('category')) is-invalid @endif">
+                                        data-option-loader-nodisable="true">
                                     <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
@@ -260,12 +268,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
-                                        class="@if($errors->has('sub-categories')) is-invalid @endif"
                                         data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
                                         multiple>
@@ -407,7 +414,7 @@
                                             <div class="card-header pt-2 m-0 row">
                                                 <div class="col-md-9">
                                                     <input type="text" class="form-control"
-                                                           name="sub-category-requests[0][name]"
+                                                           name=""
                                                            placeholder="আমার সাব-ক্যাটাগরির নাম">
                                                 </div>
                                                 <div class="col-md-3">
@@ -451,7 +458,7 @@
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="form-control-file @if($errors->has('images')) is-invalid @endif">
+                                                   class="form-control-file mt-3">
                                         </div>
                                     @endfor
                                 </div>
@@ -506,5 +513,5 @@
 
     </script>
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class) !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\UpdateInd::class) !!}
 @endsection

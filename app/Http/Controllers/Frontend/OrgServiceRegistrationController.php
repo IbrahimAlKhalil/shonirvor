@@ -29,7 +29,7 @@ class OrgServiceRegistrationController extends Controller
         $categories = Category::getAll('org')->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories');
+        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user');
         $view = 'frontend.registration.org-service.confirm';
         $count = $orgs->count();
 
@@ -69,7 +69,7 @@ class OrgServiceRegistrationController extends Controller
             $categories = Category::getAll('org')->get();
             $divisions = Division::all();
             $classesToAdd = ['active', 'disabled'];
-            $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories');
+            $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user');
             return view('frontend.registration.org-service.confirm', $compact);
         }
 
@@ -79,31 +79,17 @@ class OrgServiceRegistrationController extends Controller
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
         $category = Category::find($request->post('category'));
-        $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', array_map(function ($item) {
+        $subCategories = !$isCategoryRequest ? SubCategory::whereIn('id', array_map(function ($item) {
             return $item['id'];
-        }, $request->post('sub-categories'))) : null;
-        $requestedSubCategories = [];
+        }, $request->post('sub-categories')))->get() : null;
 
         // Create categories
         if ($isCategoryRequest) {
-            $serviceTypeId = ServiceType::getThe('org')->id;
             $category = new Category;
-            $category->service_type_id = $serviceTypeId;
+            $category->service_type_id = 2;
             $category->name = $request->post('category-request');
             $category->is_confirmed = 0;
             $category->save();
-        }
-
-        // Create sub categories
-        if ($isSubCategoryRequest) {
-            $data = [];
-            foreach ($request->post('sub-category-requests') as $subCategoryName) {
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
-                    'is_confirmed' => 0
-                ]);
-            }
-            $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
         // handle thana and union request
@@ -170,7 +156,6 @@ class OrgServiceRegistrationController extends Controller
 
         // associate sub-categories$org
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
-        $org->subCategories()->saveMany($requestedSubCategories);
 
         $data = [];
         foreach ($request->post('sub-categories') as $subCategory) {
@@ -182,6 +167,28 @@ class OrgServiceRegistrationController extends Controller
                 ]);
             }
         }
+
+        // Create sub categories
+        if ($isSubCategoryRequest) {
+            foreach ($request->post('sub-category-requests') as $subCategory) {
+                if (isset($subCategory['name'])) {
+                    $newSubCategory = new SubCategory;
+                    $newSubCategory->category_id = $category->id;
+                    $newSubCategory->name = $subCategory['name'];
+                    $newSubCategory->is_confirmed = 0;
+                    $newSubCategory->save();
+
+                    $org->subCategories()->attach($newSubCategory);
+
+                    array_push($data, [
+                        'org_id' => $org->id,
+                        'sub_category_id' => $newSubCategory->id,
+                        'rate' => $subCategory['rate']
+                    ]);
+                }
+            }
+        }
+
         DB::table('org_sub_category_rates')->insert($data);
 
 
@@ -237,31 +244,17 @@ class OrgServiceRegistrationController extends Controller
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
         $category = Category::find($request->post('category'));
         $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
-        $requestedSubCategories = [];
 
         // Create categories
         if ($isCategoryRequest && $previousCategory->is_confirmed == 0) {
             $category = $org->category;
             $org->category()->update(['name' => $request->post('category-request')]);
         } else if ($isCategoryRequest && $previousCategory->is_confirmed == 1) {
-            $serviceTypeId = ServiceType::getThe('org')->id;
             $category = new Category;
-            $category->service_type_id = $serviceTypeId;
+            $category->service_type_id = 2;
             $category->name = $request->post('category-request');
             $category->is_confirmed = 0;
             $category->save();
-        }
-
-        // Create sub categories
-        if ($isSubCategoryRequest) {
-            $data = [];
-            foreach ($request->post('sub-category-requests') as $subCategoryName) {
-                !is_null($subCategoryName) && array_push($data, [
-                    'name' => $subCategoryName,
-                    'is_confirmed' => 0
-                ]);
-            }
-            $requestedSubCategories = $category->subCategories()->createMany($data);
         }
 
         // handle thana and union request
@@ -353,7 +346,6 @@ class OrgServiceRegistrationController extends Controller
 
         // associate sub-categories
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
-        $org->subCategories()->saveMany($requestedSubCategories);
 
         $data = [];
         foreach ($request->post('sub-categories') as $subCategory) {
@@ -365,6 +357,27 @@ class OrgServiceRegistrationController extends Controller
                 ]);
             }
         }
+
+        // Create sub categories
+        if ($isSubCategoryRequest) {
+            foreach ($request->post('sub-category-requests') as $subCategory) {
+                if (isset($subCategory['name'])) {
+                    $newSubCategory = new SubCategory;
+                    $newSubCategory->category_id = $category->id;
+                    $newSubCategory->name = $subCategory['name'];
+                    $newSubCategory->save();
+
+                    $org->subCategories()->attach($newSubCategory);
+
+                    array_push($data, [
+                        'org_id' => $org->id,
+                        'sub_category_id' => $newSubCategory->id,
+                        'rate' => $subCategory['rate']
+                    ]);
+                }
+            }
+        }
+
         DB::table('org_sub_category_rates')->insert($data);
 
         // User
@@ -403,22 +416,33 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['division', 'district', 'thana', 'union'])->find($id);
+        $org = Org::with(['division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
 
         if ($org->user_id != Auth::id() && $org->is_pending == 0) {
             return redirect(route('organization-service-registration.index'));
         }
 
-        $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
-        $subCategories = SubCategory::whereCategoryId($org->category_id)->whereIsConfirmed(1)->get();
-        $orgSubCategories = $org->subCategoryRates('confirmed')->withPivot('rate')->get();
-        /*$pendingSubCategories = $org->subCategories()->whereIsConfirmed(0)->get();*/
+        $allOrg = $org->user->inds();
+        $pendingOrgs = $org->user->inds();
+
+        $canEditNid = false;
+        if (!$allOrg->count() || $pendingOrgs->onlyPending()->count() == $allOrg->count()) {
+            $canEditNid = true;
+        }
+
+        $categories = Category::onlyOrg()->onlyConfirmed()->get();
+        $subCategories = SubCategory::where('is_confirmed', 1)->whereCategoryId($org->category_id)->get();
+        $orgSubCategories = $org->subCategoryRates;
+        $isNoSubCategory = $orgSubCategories->filter(function ($sub) {
+            return $sub['is_confirmed'] == 0;
+        })->count();
+
         $divisions = Division::all();
         $districts = District::whereDivisionId($org->division_id)->get();
         $thanas = $org->district->thanas()->whereIsPending(0)->get();
         $unions = $org->thana->unions()->whereIsPending(0)->get();
         $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
 
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories'));
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'allOrg', 'isNoSubCategory'));
     }
 }

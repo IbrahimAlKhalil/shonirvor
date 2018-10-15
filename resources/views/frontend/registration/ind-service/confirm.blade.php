@@ -148,6 +148,16 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                <div class="form-group row mx-5">
+                                    <label for="description" class="col-3 col-form-label">কাজের বর্ণনা <span
+                                                class="text-danger">*</span></label>
+                                    <div class="col-9">
+                    <textarea rows="6" id="description" name="description"
+                              class="form-control"
+                              required>{{ old('description') }}</textarea>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-4" id="step-2">
                                 <div class="form-group row mx-5">

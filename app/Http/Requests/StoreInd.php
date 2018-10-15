@@ -21,8 +21,8 @@ class StoreInd extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'age' => ($user->age ? '' : 'required|') . 'integer|min:10',
-            'nid' => ($user->nid ? '' : 'required|') . 'integer|unique:users,nid',
+            'age' => /*($user->age ? '' : 'required|') . */'required|integer|min:10',
+            'nid' => /*($user->nid ? '' : 'required|') . */'required|integer|unique:users,nid',
             'division' => 'required',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana|exists:thanas,id',
@@ -34,13 +34,29 @@ class StoreInd extends FormRequest
             'address' => 'string',
             'category' => 'required_without:no-category|exists:categories,id',
             'category-request' => 'required_with:no-category',
-            'sub-categories.*' => 'required_without:no-sub-category|exists:sub_categories,id',
+            'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
             'experience-certificate' => 'image',
             'cv' => 'image'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'mobile.required' => 'মোবাইল নাম্বার দিতে হবে',
+            'mobile.digits' => 'মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
+            'referrer.digits' => 'রেফারার মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
+            'referrer.different' => 'নিজের মোবাইল নাম্বার এবং রেফারারের মোবাইল নাম্বার এক হওয়া যাবেনা',
+            'email.email' => 'ইমেইলে ভুল আছে, দয়া করে চেক করুন',
+            'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
+            'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
+            'age.required' => 'বয়স দিতে হবে',
+            'age.min' => 'বয়স সর্বনিন্ম ১৮ হতে হবে',
+            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে'
         ];
     }
 }
