@@ -117,6 +117,9 @@ class Org extends Model
         return $query->where('is_top', 1);
     }
 
+    /**
+     * Add this method after select() method
+     */
     public function scopeWithFeedbacksAvg($query)
     {
         return $query->leftJoin('feedbacks', function ($join) {

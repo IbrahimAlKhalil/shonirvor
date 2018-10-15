@@ -28,7 +28,7 @@ class Ind extends Model
 
     public function workMethods()
     {
-        return $this->belongsToMany(WorkMethod::class)->withPivot(['rate', 'sub_category_id']);
+        return $this->belongsToMany(WorkMethod::class)->withPivot(['sub_category_id', 'rate']);
     }
 
     public function workImages()
@@ -119,7 +119,7 @@ class Ind extends Model
         return $query->leftJoin('feedbacks', function ($join) {
             $join->on('inds.id', 'feedbacks.feedbackable_id')
                 ->where('feedbackable_type', 'ind');
-        })
+            })
             ->addSelect(DB::raw('inds.id, avg(star) as feedbacks_avg'))
             ->groupBy('id');
     }

@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\Org;
 use App\Models\User;
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Org::class, function (Faker $faker) {
+$factory->define(Org::class, function (Faker $faker) {
+
     $userMobiles = User::pluck('mobile');
 
     return [

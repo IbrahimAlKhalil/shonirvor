@@ -19,6 +19,5 @@
         "style-loader": "^0.23.1",
         "webpack": "^4.20.2",
         "webpack-cli": "^3.1.2"
-    },
-    "dependencies": {}
+    }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class SubCategory extends Model
 {
     protected $fillable = ['name', 'is_confirmed'];
-
 
 
     /**********************/
@@ -31,7 +31,7 @@ class SubCategory extends Model
 
     public function workMethods()
     {
-        return $this->belongsToMany(WorkMethod::class, 'ind_work_method')->withPivot('rate');
+        return $this->belongsToMany(WorkMethod::class, 'ind_work_method')->withPivot(['ind_id', 'rate']);
     }
 
 
@@ -40,27 +40,39 @@ class SubCategory extends Model
     /***** Scopes *****/
     /******************/
 
-    /**
-     * TODO:: This method will removed. When uses of this method will replace with onlyInd(), onlyOrg(), onlyConfirmed(), onlyPending()
-     *
-     * @param $serviceType
-     * @return null
-     */
-    public static function getAll($serviceType)
+    public function scopeOnlyInd($query)
     {
-        $result = null;
+        return $query->join('categories', function ($join) {
+            $join->on('sub_categories.category_id', 'categories.id')
+                ->where('categories.service_type_id', 1);
+            })
+            ->addSelect(DB::raw('
+                sub_categories.id,
+                sub_categories.category_id,
+                sub_categories.name,
+                sub_categories.is_confirmed,
+                sub_categories.created_at,
+                sub_categories.updated_at,
+                categories.service_type_id
+            '));
+    }
 
-        if ($serviceType == 'ind' || $serviceType == 'org') {
-            $categoryIds = ServiceType::where('name', $serviceType)
-                ->first()
-                ->categories()
-                ->where('is_confirmed', 1)
-                ->pluck('id')
-                ->toArray();
-            $result = SubCategory::whereIn('id', $categoryIds);
-        }
-
-        return $result;
+    public function scopeOnlyOrg($query)
+    {
+        return $query->join('categories', function ($join) {
+            $join->on('sub_categories.category_id', 'categories.id')
+                ->select('categories.id', 'categories.service_type_id')
+                ->where('categories.service_type_id', 2);
+            })
+            ->addSelect(DB::raw('
+                sub_categories.id,
+                sub_categories.category_id,
+                sub_categories.name,
+                sub_categories.is_confirmed,
+                sub_categories.created_at,
+                sub_categories.updated_at,
+                categories.service_type_id
+            '));
     }
 
     public function scopeOnlyConfirmed($query)

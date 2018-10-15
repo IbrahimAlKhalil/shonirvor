@@ -1,2 +1,3 @@
+    @yield('script')
     </body>
 </html>

@@ -33,7 +33,7 @@ class IndProfileController extends Controller
 
         $workMethods = WorkMethod::all();
         $categories = Category::getAll('ind')->get();
-        $subCategories = SubCategory::getAll('ind')->get();
+        $subCategories = SubCategory::onlyInd()->get();
         $divisions = Division::all();
         $districts = $provider->division()->with('districts')->first()->districts;
         $thanas = $provider->district->thanas()->where('is_pending', 0)->get();

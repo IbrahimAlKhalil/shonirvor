@@ -4,6 +4,7 @@ namespace App\Http\ViewComposers;
 
 
 use App\Models\Category;
+use App\Models\Village;
 use Illuminate\View\View;
 use App\Models\SubCategory;
 use Sandofvega\Bdgeocode\Models\Thana;
@@ -42,15 +43,24 @@ class FilterComponentComposer
 
         }
 
-        $categories = Category::select('id', 'name')
-            ->where('is_confirmed', 1)
+        if (request()->filled('union')) {
+
+            $villages = Village::select('id', 'bn_name as name')
+                ->where('union_id', request()->get('union'))
+                ->where('is_pending', 0)
+                ->get();
+
+        }
+
+        $categories = Category::select('id', 'name', 'service_type_id')
+            ->onlyConfirmed()
             ->get();
 
         if (request()->filled('category')) {
 
             $subCategories = SubCategory::select('id', 'name')
                 ->where('category_id', request()->get('category'))
-                ->where('is_confirmed', 1)
+                ->onlyConfirmed()
                 ->get();
 
         }
@@ -60,6 +70,7 @@ class FilterComponentComposer
             'districts',
             'thanas',
             'unions',
+            'villages',
             'categories',
             'subCategories'
         ));

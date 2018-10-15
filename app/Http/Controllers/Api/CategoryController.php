@@ -18,10 +18,10 @@ class CategoryController extends Controller
         }
 
         $hasPaginate = $request->has('paginate');
-        $hasServiceType = $request->has('service');
+        $hasServiceType = $request->has('type');
         $hasState = $request->has('state');
         $paginate = $request->get('paginate');
-        $serviceType = $request->get('service');
+        $serviceType = $request->get('type');
         $state = $request->get('state') == 'pending' ? 0 : 1;
         $getWithState = function ($serviceType) use ($hasPaginate, $paginate, $state) {
             $result = null;

@@ -32,7 +32,7 @@ class OrgProfileController extends Controller
 
         $categories = Category::getAll('org')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
-        $subCategories = SubCategory::getAll('org')->get();
+        $subCategories = SubCategory::onlyOrg()->get();
         $divisions = Division::all();
         $districts = $provider->division()->with('districts')->first()->districts;
         $thanas = $provider->district->thanas()->where('is_pending', 0)->get();
