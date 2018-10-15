@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
-use App\Models\SubCategory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +17,7 @@ class IndServiceController extends Controller
 
     public function show(Ind $provider)
     {
+        // Load relations
         $provider->load([
             'user',
             'division',
@@ -34,7 +34,33 @@ class IndServiceController extends Controller
             'feedbacks'
         ]);
 
-        // visitor counter increment.
+        // Add avarage feedback
+        $provider->feedbacks_avg = $provider->withFeedbacksAvg()->find($provider->id)->feedbacks_avg;
+
+        // Feedback star color
+        if ($provider->feedbacks_avg > 4.4) {
+
+            $avgFeedbackColor = 'success';
+
+        } elseif ($provider->feedbacks_avg > 3.4) {
+
+            $avgFeedbackColor = 'primary';
+
+        } elseif ($provider->feedbacks_avg > 2.4) {
+
+            $avgFeedbackColor = 'info';
+
+        } elseif ($provider->feedbacks_avg > 1.4) {
+
+            $avgFeedbackColor = 'warning';
+
+        } else {
+
+            $avgFeedbackColor = 'danger';
+
+        }
+
+        // Visitor counter increment.
         if (DB::table('ind_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('ind_id', $provider->id)->exists()) {
             DB::table('ind_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('ind_id', $provider->id)->increment('how_much', 1, ['updated_at' => date('Y-m-d H:i:s')]);
         } else {
@@ -50,6 +76,6 @@ class IndServiceController extends Controller
             $canFeedback = false;
         }
 
-        return view('frontend.ind-service.show', compact('provider', 'canFeedback'));
+        return view('frontend.ind-service.show', compact('provider', 'avgFeedbackColor', 'canFeedback'));
     }
 }

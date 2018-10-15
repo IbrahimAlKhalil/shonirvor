@@ -16,12 +16,12 @@ $factory->define(Org::class, function (Faker $faker) {
         'referrer' => $faker->randomElement($userMobiles),
         'name' => $faker->company,
         'description' => $faker->paragraph(5),
-        'logo' => 'seed/org/logo/'.rand(1, 13).'.png',
+        'logo' => 'seed/org/logo/'.mt_rand(1, 13).'.png',
         'website' => $faker->url,
         'facebook' => $faker->url,
         'address' => $faker->address,
         'trade_license' => 'seed/org/trade-license.png',
-        'is_pending' => rand(0, 1),
-        'is_top' =>  rand(0, 1)
+        'is_pending' => mt_rand(0, 1),
+        'is_top' =>  mt_rand(0, 1)
     ];
 });

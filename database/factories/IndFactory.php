@@ -18,8 +18,8 @@ $factory->define(Ind::class, function (Faker $faker) {
         'facebook' => 'https://facebook.com/sandofvega',
         'address' => $faker->address,
         'experience_certificate' => 'seed/ind/exp-cert.png',
-        'cv' => 'seed/ind/exp-cert.png',
-        'is_pending' =>  rand(0, 1),
-        'is_top' =>  rand(0, 1)
+        'cv' => 'seed/ind/cv.pdf',
+        'is_pending' =>  mt_rand(0, 1),
+        'is_top' =>  mt_rand(0, 1)
     ];
 });

@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
-                        <div class="row">
+                        <div class="row border-right">
                             @foreach($indCategories as $category)
                                 {{--<p>--}}
                                     {{--<img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">--}}
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
-                        <div class="row">
+                        <div class="row border-left">
                             @foreach($orgCategories as $category)
                                 {{--<p>--}}
                                     {{--<a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>--}}
@@ -67,10 +67,10 @@
                     </div>
                     <div class="col-md-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
-                        @foreach($indServices as $key => $service)
-                            <ul class="list-unstyled">
+                        <ul class="list-unstyled">
+                            @foreach($indServices as $key => $service)
                                 <li class="media mt-3 p-2 service-card-shadow">
-                                    <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}" alt="Generic placeholder image">
+                                    <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.ind-service.show', $service->id) }}">{{ $service->user->name }}</a>
@@ -86,13 +86,13 @@
                                         </p>
                                     </div>
                                 </li>
-                            </ul>
-                        @endforeach
+                            @endforeach
+                        </ul>
                     </div>
                     <div class="col-md-6 text-right">
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
-                        @foreach($orgServices as $service)
-                            <ul class="list-unstyled">
+                        <ul class="list-unstyled">
+                            @foreach($orgServices as $service)
                                 <li class="media mt-3 p-2 service-card-shadow">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
@@ -110,8 +110,8 @@
                                     </div>
                                     <img class="ml-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                 </li>
-                            </ul>
-                        @endforeach
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
