@@ -26,7 +26,6 @@ class CreateOrgsTable extends Migration
             $table->string('logo')->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
-            $table->boolean('no_area')->nullable();
             $table->string('address');
             $table->string('trade_license')->nullable();
             $table->boolean('is_pending')->default(1);

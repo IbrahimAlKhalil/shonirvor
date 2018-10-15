@@ -6,6 +6,7 @@ use App\Models\Ind;
 use App\Models\Org;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Models\WorkMethod;
 
 class HomeController extends Controller
 {

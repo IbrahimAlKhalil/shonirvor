@@ -1,7 +1,7 @@
 <div class="filter-root bg-white rounded py-3">
     <form action="{{ route('frontend.filter') }}">
         <div class="d-flex">
-            <div class="px-4">
+            {{--<div class="px-4">
                 <div class="pt-3 mb-0">
                     <label class="radio-container">বেক্তিগত
                         <input type="radio" name="type" value="ind" @if(request()->get('type') == 'ind'){{ 'checked' }}@endif>
@@ -14,9 +14,23 @@
                         <span class="checkmark mt-1"></span>
                     </label>
                 </div>
-            </div>
+            </div>--}}
             <div class="flex-grow-1">
                 <div class="d-flex">
+                    <div class="flex-fill pr-1 py-2 pl-4">
+                        <select name="type" id="service-type"
+                                data-option-loader-url="{{ route('api.categories') }}"
+                                data-option-loader-target="#category"
+                                data-option-loader-param="type">
+                            <option value="">-- বিভাগ --</option>
+                            <option value="ind" @if(request()->get('type') == 'ind'){{ 'selected' }}@endif>
+                                বেক্তিগত
+                            </option>
+                            <option value="org" @if(request()->get('type') == 'org'){{ 'selected' }}@endif>
+                                প্রাতিষ্ঠানিক
+                            </option>
+                        </select>
+                    </div>
                     <div class="flex-fill pr-1 py-2">
                         <select name="division" id="division"
                                 data-option-loader-url="{{ route('api.districts') }}"
@@ -105,12 +119,14 @@
                 <div class="d-flex">
                     <div class="col-3 py-2 pl-0 pr-1">
                         <select name="category" id="category"
+                                class="pl-4"
                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                 data-option-loader-target="#subCategory"
                                 @if(request()->filled('category'))
                                 data-option-loader-nodisable="true"
                                 @endif
-                                data-option-loader-param="category">
+                                data-option-loader-param="category"
+                                data-option-loader-properties="value=id,text=bn_name">
                             <option value="">-- ক্যাটাগরি --</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" @if(request()->get('category') == $category->id){{ 'selected' }}@endif>{{ $category->name }}</option>
@@ -131,17 +147,24 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="col-3 pt-2 pb-2 pl-4 pr-0 price-field">
-                        <label class="radio-container">দাম কম থেকে বেশি
-                            <input type="radio" name="price" value="low" @if(request()->get('price') == 'low'){{ 'checked' }}@endif>
-                            <span class="checkmark mt-1"></span>
-                        </label>
+                    <div class="col-3 py-2 pl-0 pr-1">
+                        <select name="method" id="method">
+                            <option value="">-- Work Methods --</option>
+                            @foreach($workMethods as $workMethod)
+                                <option value="{{ $workMethod->id }}" @if(request()->get('method') == $workMethod->id){{ 'selected' }}@endif>{{ $workMethod->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-3 pt-2 pb-2 pl-4 pr-0 price-field">
-                        <label class="radio-container">দাম বেশি থেকে কম
-                            <input type="radio" name="price" value="high" @if(request()->get('price') == 'high'){{ 'checked' }}@endif>
-                            <span class="checkmark mt-1"></span>
-                        </label>
+                    <div class="col-3 py-2 pl-0 pr-1">
+                        <select name="price" id="price"
+                                data-placeholder="-- দাম --">
+                            <option value="low" @if(request()->get('price') == 'low'){{ 'selected' }}@endif>দাম কম থেকে
+                                বেশি
+                            </option>
+                            <option value="high" @if(request()->get('price') == 'high'){{ 'selected' }}@endif>দাম বেশি
+                                থেকে কম
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>

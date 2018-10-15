@@ -159,7 +159,7 @@
 
 
         // Selectize
-        $('#division, #district, #thana, #union, #village, #category, #subCategory').selectize({
+        $('#division, #district, #thana, #union, #village, #category, #subCategory, #service-type, #method, #price').selectize({
             plugins: [
                 'option-loader'
             ]
