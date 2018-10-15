@@ -2,12 +2,10 @@ import {Repeater} from '../../../modules/repeater';
 import {OptionLoader} from "../../../modules/option-loader";
 import 'smartwizard';
 import '../../../modules/selectize-option-loader-plugin';
-import Selectize from 'selectize';
 
 import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
 import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
 import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
-import '../../../../scss/frontend/registration/common.scss';
 
 
 function requestFields(element, workMethods, serial) {
@@ -50,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let repeater2 = new Repeater(requestContainer);
 
     fetch(container.getAttribute('data-route')).then(response => response.json()).then(workMethods => {
+        requestFields(repeater2.original.lastElementChild, workMethods, repeater2.length - 1);
 
         document.getElementById('add-new').addEventListener('click', () => {
             repeater2.repeat(function (item) {

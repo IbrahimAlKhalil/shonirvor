@@ -19,7 +19,10 @@ Selectize.define('option-loader', function () {
 
     this.on('initialize', function () {
 
-        self.on('change', function () {
+        self.on('change', function (value) {
+            if(!value) {
+
+            }
             if (select.optionLoaderTarget) {
 
                 cleanTarget(select.optionLoaderTarget);

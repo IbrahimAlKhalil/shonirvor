@@ -18,20 +18,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function inds($status = null)
+    public function inds()
     {
-        if ($status) {
-            $result = null;
-            switch ($status) {
-                case 'pending':
-                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 1);
-                    break;
-                case 'approved':
-                    $result = $this->hasMany(Ind::class)->where('is_pending', '=', 0);
-            }
-            return $result;
-        }
-
         return $this->hasMany(Ind::class);
     }
 

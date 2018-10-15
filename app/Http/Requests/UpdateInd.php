@@ -15,23 +15,49 @@ class UpdateInd extends FormRequest
 
     public function rules()
     {
-        $id = $this->route('ind_id');
+        $user = Auth::user();
 
         return [
-            /*'mobile' => 'required|digits:11|unique:inds,mobile,' . $id,
-            'email' => 'email|unique:inds,email,' . $id,
-            'personal-email' => 'email|unique:users,email,' . Auth::id(),
-            'nid' => 'required|integer|unique:users,nid,' . Auth::id(),
-            'age' => 'required|integer|min:10',
-            'district' => 'exists:districts,id',
-            'thana' => 'exists:thanas,id',
-            'union' => 'exists:unions,id',
+            'mobile' => 'required|digits:11',
+            'referrer' => 'digits:11|different:mobile',
+            'email' => 'nullable|email',
+            'website' => 'nullable|url',
+            'facebook' => 'nullable|url',
+            'age' => /*($user->age ? 'nullable|' : 'required|') . */'required|integer|min:18',
+            'nid' => /*($user->nid ? 'nullable|' : 'required|') . */'required|integer|unique:users,nid,' . Auth::id(),
+            'division' => 'required',
+            'district' => 'required|exists:districts,id',
+            'thana' => 'required_without:no-thana|exists:thanas,id',
+            'union' => 'required_without:no-union|exists:unions,id',
+            'village' => 'required_without:no-village|exists:villages,id',
+            'thana-request' => 'required_with:no-thana',
+            'union-request' => 'required_with:no-union',
+            'village-request' => 'required_with:no-village',
             'address' => 'string',
-            'website' => 'url',
-            'facebook' => 'url',
-            'photo' => 'image',
-            'images.*' => 'image',
-            'work-methods.*' => 'required|exists:work_methods,id'*/
+            'category' => 'required_without:no-category|exists:categories,id',
+            'category-request' => 'required_with:no-category',
+            'sub-categories.*' => 'exists:sub_categories,id',
+            'images.*.description' => 'string|min:10|nullable',
+            'images.*.file' => 'image',
+            'identities.*' => 'required|image',
+            'experience-certificate' => 'image',
+            'cv' => 'image'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'mobile.required' => 'মোবাইল নাম্বার দিতে হবে',
+            'mobile.digits' => 'মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
+            'referrer.digits' => 'রেফারার মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
+            'referrer.different' => 'নিজের মোবাইল নাম্বার এবং রেফারারের মোবাইল নাম্বার এক হওয়া যাবেনা',
+            'email.email' => 'ইমেইলে ভুল আছে, দয়া করে চেক করুন',
+            'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
+            'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
+            'age.required' => 'বয়স দিতে হবে',
+            'age.min' => 'বয়স সর্বনিন্ম ১৮ হতে হবে',
+            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে'
         ];
     }
 }

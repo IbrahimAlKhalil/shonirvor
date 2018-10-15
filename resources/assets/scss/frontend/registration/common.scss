@@ -9,7 +9,20 @@
     & + span {
       & + input, & + .input-div {
         display: block;
+        & + .error-help-block {
+          display: none;
+        }
       }
     }
   }
+}
+
+.btn-toolbar.sw-toolbar.sw-toolbar-bottom {
+  justify-content: center !important;
+}
+
+.sw-btn-group {
+  justify-content: space-between;
+  display: flex;
+  width: calc(100% - 100px);
 }

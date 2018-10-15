@@ -9,6 +9,7 @@ $factory->define(Ind::class, function (Faker $faker) {
     $userMobiles = User::pluck('mobile');
 
     return [
+        'description' => $faker->unique()->paragraph(rand(5, 10)),
         'email' => $faker->unique()->email,
         'mobile' => '01'
             . $faker->randomElement([1, 6, 7, 8, 9])
