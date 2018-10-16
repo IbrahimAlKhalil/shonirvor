@@ -5,6 +5,7 @@ namespace App\Http\ViewComposers;
 
 use App\Models\Category;
 use App\Models\Village;
+use App\Models\WorkMethod;
 use Illuminate\View\View;
 use App\Models\SubCategory;
 use Sandofvega\Bdgeocode\Models\Thana;
@@ -65,6 +66,8 @@ class FilterComponentComposer
 
         }
 
+        $workMethods = WorkMethod::select('name', 'id')->get();
+
         $view->with(compact(
             'divisions',
             'districts',
@@ -72,7 +75,8 @@ class FilterComponentComposer
             'unions',
             'villages',
             'categories',
-            'subCategories'
+            'subCategories',
+            'workMethods'
         ));
     }
 }

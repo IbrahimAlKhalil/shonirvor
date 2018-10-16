@@ -14,7 +14,6 @@ class CreateIndWorkMethodTable extends Migration
             $table->unsignedInteger('work_method_id');
             $table->unsignedInteger('sub_category_id');
             $table->float('rate')->nullable();
-            $table->timestamps();
 
             $table->foreign('ind_id')
                 ->references('id')

@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Ad;
 use App\Models\Ind;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
 class FilterController extends Controller
@@ -21,13 +15,19 @@ class FilterController extends Controller
     private $showPerPage = 14;
     private $page = 1;
     private $paginatorPath = '';
+
+    private $type = false;
+
     private $divisionId = false;
     private $districtId = false;
     private $thanaId = false;
     private $unionId = false;
-    private $type = false;
+    private $villageId = false;
+
     private $categoryId = false;
     private $subCategoryId = false;
+
+    private $methodId = false;
     private $price = false;
 
     public function __construct(Request $request)
@@ -36,6 +36,11 @@ class FilterController extends Controller
 
         if ($request->filled('page')) {
             $this->page = $request->get('page');
+        }
+
+        if ($request->filled('type')) {
+            $this->type = $request->get('type');
+            $this->paginatorPath .= '&type='.$this->type;
         }
 
         if ($request->filled('division')) {
@@ -58,9 +63,9 @@ class FilterController extends Controller
             $this->paginatorPath .= '&union='.$this->unionId;
         }
 
-        if ($request->filled('type')) {
-            $this->type = $request->get('type');
-            $this->paginatorPath .= '&type='.$this->type;
+        if ($request->filled('village')) {
+            $this->villageId = $request->get('village');
+            $this->paginatorPath .= '&village='.$this->villageId;
         }
 
         if ($request->filled('category')) {
@@ -73,6 +78,11 @@ class FilterController extends Controller
             $this->paginatorPath .= '&sub-category='.$this->subCategoryId;
         }
 
+        if ($request->filled('method')) {
+            $this->methodId = $request->get('method');
+            $this->paginatorPath .= '&price='.$this->methodId;
+        }
+
         if ($request->filled('price')) {
             $this->price = $request->get('price');
             $this->paginatorPath .= '&price='.$this->price;
@@ -82,7 +92,6 @@ class FilterController extends Controller
 
     public function __invoke()
     {
-
         /***** Query Builder *****/
         /*************************/
 
@@ -98,7 +107,11 @@ class FilterController extends Controller
                         ->where('sub_categoriables.sub_categoriable_type', 'ind')
                         ->where('sub_categories.is_confirmed', 1);
 
-                    if ($this->unionId) {
+                    if ($this->villageId) {
+
+                        $indProviders->where('inds.village_id', $this->villageId);
+
+                    } elseif ($this->unionId) {
 
                         $indProviders->where('inds.union_id', $this->unionId);
 
@@ -115,6 +128,23 @@ class FilterController extends Controller
                         $indProviders->where('inds.division_id', $this->divisionId);
 
                     }
+
+                    if ($this->methodId) {
+
+                        $indProviders->join('ind_work_method', function ($join) {
+                            $join->on('inds.id', 'ind_work_method.ind_id')
+                                ->where('ind_work_method.work_method_id', $this->methodId)
+                                ->where('ind_work_method.sub_category_id', $this->subCategoryId);
+                            });
+
+                        if ($this->price) {
+
+                            $indProviders->addSelect('ind_work_method.rate');
+
+                        }
+
+                    }
+
                     break;
 
                 case 'org':
@@ -124,7 +154,11 @@ class FilterController extends Controller
                         ->where('sub_categoriables.sub_categoriable_type', 'org')
                         ->where('sub_categories.is_confirmed', 1);
 
-                    if ($this->unionId) {
+                    if ($this->villageId) {
+
+                        $orgProviders->where('orgs.village_id', $this->villageId);
+
+                    } elseif ($this->unionId) {
 
                         $orgProviders->where('orgs.union_id', $this->unionId);
 
@@ -140,13 +174,17 @@ class FilterController extends Controller
 
                         $orgProviders->where('orgs.division_id', $this->divisionId);
 
-                    } elseif ($this->price) {
+                    }
+
+                    if ($this->price) {
 
                         $orgProviders->join('org_sub_category_rates', 'orgs.id', 'org_sub_category_rates.org_id')
                             ->addSelect('org_sub_category_rates.rate');
 
                     }
+
                     break;
+
             }
 
         } elseif ($this->categoryId) {
@@ -157,7 +195,11 @@ class FilterController extends Controller
                 case 'ind':
                     $indProviders = Ind::where('categories.id', $this->categoryId);
 
-                    if ($this->unionId) {
+                    if ($this->villageId) {
+
+                        $indProviders->where('inds.village_id', $this->villageId);
+
+                    } elseif ($this->unionId) {
 
                         $indProviders->where('inds.union_id', $this->unionId);
 
@@ -179,7 +221,11 @@ class FilterController extends Controller
                 case 'org':
                     $orgProviders = Org::where('categories.id', $this->categoryId);
 
-                    if ($this->unionId) {
+                    if ($this->villageId) {
+
+                        $orgProviders->where('orgs.village_id', $this->villageId);
+
+                    } elseif ($this->unionId) {
 
                         $orgProviders->where('orgs.union_id', $this->unionId);
 
@@ -197,6 +243,23 @@ class FilterController extends Controller
 
                     }
                     break;
+            }
+
+        } elseif ($this->villageId) {
+
+            if ($this->type && $this->type == 'ind') {
+
+                $indProviders = Ind::where('inds.village_id', $this->villageId);
+
+            } elseif ($this->type && $this->type == 'org') {
+
+                $orgProviders = Org::where('orgs.village_id', $this->villageId);
+
+            } else {
+
+                $indProviders = Ind::where('inds.village_id', $this->villageId);
+                $orgProviders = Org::where('orgs.village_id', $this->villageId);
+
             }
 
         } elseif ($this->unionId) {
@@ -299,7 +362,7 @@ class FilterController extends Controller
                 ->join('districts', 'inds.district_id', 'districts.id')
                 ->join('thanas', 'inds.thana_id', 'thanas.id')
                 ->join('unions', 'inds.union_id', 'unions.id')
-                ->select([
+                ->addSelect([
                     'inds.id',
                     'inds.user_id',
                     'users.name',

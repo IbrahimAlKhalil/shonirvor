@@ -9,6 +9,19 @@
 @section('content')
     <div class="container py-5">
         @include('components.success')
+
+        {{--<div class="row">
+            <div class="col-md-3">
+                <img src="{{ asset('storage/' . $serviceRequest->user->photo) }}" alt="{{ $serviceRequest->user->name }}" class="img-thumbnail w-100">
+            </div>
+
+            <div class="col-md-7 d-flex flex-column flex-wrap justify-content-end">
+                <h1 class="">Laurine Towne DVM</h1>
+                <p class="h5">Mail Clerk</p>
+                <p class="h5">safsdf</p>
+            </div>
+        </div>--}}
+
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
@@ -190,7 +203,7 @@
                 </div>
 
                 <div class="row">
-                    <h3 class="my-4 col-12">Documents</h3>
+                    <h3 class="my-4 col-12">ডকুমেন্ট</h3>
                     @if($serviceRequest->experience_certificate)
                         <div class="col-md-3">
                             <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
@@ -199,8 +212,15 @@
                                      class="img-responsive img-thumbnail">
                             </a>
                         </div>
-                    @else
-                        <p class="text-muted col-12">No Document uploaded!</p>
+                    @endif
+                    @if($serviceRequest->cv)
+                        <div class="col-md-3">
+                            <span class="text-muted">বায়োডাটা</span>
+                            <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $serviceRequest->cv) }}"
+                                     class="img-responsive img-thumbnail">
+                            </a>
+                        </div>
                     @endif
                 </div>
 
