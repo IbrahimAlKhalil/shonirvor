@@ -37,6 +37,7 @@ class HomeController extends Controller
             ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
+            ->take(10)
             ->get();
 
         $orgServices = Org::onlyTop()
@@ -44,6 +45,7 @@ class HomeController extends Controller
             ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
+            ->take(10)
             ->get();
 
         return view('frontend.home', compact('indCategories', 'orgCategories', 'indServices', 'orgServices'));

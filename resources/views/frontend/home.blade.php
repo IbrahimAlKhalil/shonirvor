@@ -26,10 +26,12 @@
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         <div class="row border-right">
                             @foreach($indCategories as $category)
-                                {{--<p>--}}
-                                {{--<img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">--}}
-                                {{--<a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }} ({{ $category->ind_services_count }})</a>--}}
-                                {{--</p>--}}
+                                {{--
+                                <p>
+                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">{{ $category->name }} ({{ $category->ind_services_count }})</a>
+                                </p>
+                                --}}
                                 <div class="col-4 text-center">
                                     <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
                                     <p>
@@ -45,10 +47,12 @@
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <div class="row border-left">
                             @foreach($orgCategories as $category)
-                                {{--<p>--}}
-                                {{--<a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>--}}
-                                {{--<img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">--}}
-                                {{--</p>--}}
+                                {{--
+                                <p>
+                                <a href="{{ route('frontend.filter').'?category='.$category->id }}">({{ $category->org_services_count }}) {{ $category->name }}</a>
+                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid category-image">
+                                </p>
+                                --}}
                                 <div class="col-4 text-center">
                                     <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
                                     <p>
@@ -83,8 +87,7 @@
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $service->mobile }}
                                             <br>
-                                            <span class="fa fa-map-marker"></span> {{ $service->union->name }}
-                                            , {{ $service->thana->name }}, {{ $service->district->name }}
+                                            <span class="fa fa-map-marker"></span> {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }}
                                         </p>
                                     </div>
                                 </li>
@@ -99,8 +102,7 @@
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->name }}</a>
-                                            <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
-                                                   class="invisible">
+                                            <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
                                             <i>{{ $service->category->name }}</i>
@@ -108,8 +110,7 @@
                                         <p class="mb-0">
                                             {{ $service->mobile }} <span class="fa fa-phone flipX"></span>
                                             <br>
-                                            {{ $service->union->name }}, {{ $service->thana->name }}
-                                            , {{ $service->district->name }} <span class="fa fa-map-marker"></span>
+                                            {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }} <span class="fa fa-map-marker"></span>
                                         </p>
                                     </div>
                                     <img class="ml-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->logo) }}"
@@ -233,22 +234,6 @@
             plugins: [
                 'option-loader'
             ]
-        });
-
-
-        // Show/Hide Price Fields
-        $('.price-field').hide();
-
-        $('#subCategory').change(function () {
-            var subCatVal = $('#subCategory').val(),
-                priceField = $('.price-field');
-
-            if (!!subCatVal) {
-                priceField.show();
-            } else {
-                priceField.hide();
-                $("input[name='price']").prop('checked', false);
-            }
         });
     </script>
 @endsection

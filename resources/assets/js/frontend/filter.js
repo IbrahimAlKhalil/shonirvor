@@ -38,35 +38,42 @@ import './../../../../bower_components/bootstrap-star-rating/js/star-rating';
 import {UrlPerser} from "../modules/url-param-perser";
 
 document.addEventListener('DOMContentLoaded', () => {
-    let methodSelect = $('#method + .selectize-control');
-    let priceSelect = $('#price + .selectize-control');
+    let methodSelect = $('#method + .selectize-control').parent();
+    let priceSelect = $('#price + .selectize-control').parent();
     let url = new UrlPerser(location.search);
 
-    if (!url.has('sub-category')) {
-        methodSelect.addClass('d-none');
-    }
+    if ( ! url.filled('method') ) {
+        priceSelect.hide();
 
-    if(!url.has('method') || !url.has('sub-category')) {
-        priceSelect.addClass('d-none');
+        if ( ! url.filled('sub-category') ) {
+            methodSelect.hide();
+        }
     }
 
     document.getElementById('subCategory').selectize.on('change', value => {
-        priceSelect.addClass('d-none');
 
         if (!!value) {
-            methodSelect.removeClass('d-none');
+
+            $.ajax({
+                url: 'api/sub-categories/'+value,
+                success: function(result) {
+
+                    if ( result.category.service_type_id == 1) {
+                        methodSelect.show();
+                    }
+
+                    priceSelect.show();
+                }
+            });
+
             return;
+
         }
 
-        methodSelect.addClass('d-none');
-    });
+        methodSelect.hide();
+        priceSelect.hide();
+        $("#method")[0].selectize.clear();
+        $("#price")[0].selectize.clear();
 
-    document.getElementById('method').selectize.on('change', value => {
-        if (!!value) {
-            priceSelect.removeClass('d-none');
-            return;
-        }
-
-        priceSelect.addClass('d-none');
     });
 });

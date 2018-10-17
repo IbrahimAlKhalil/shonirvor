@@ -62,7 +62,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
+                        <p class="h4 border-bottom">কর্ম যোগ্যতার ছবি ও বর্ণনাঃ</p>
                         @forelse($provider->workImages->shuffle()->chunk(2) as $workImages)
                             <div class="card-deck py-2">
                                 @foreach($workImages as $image)
@@ -127,7 +127,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header h5 text-center">কাজ সমূহ</div>
+                            <div class="card-header h5 text-center">কর্ম যোগ্যতা সমূহ</div>
                             <div class="card-body">
                                 @foreach($provider->subCategories->shuffle() as $subCategory)
                                     <p class="border-bottom font-italic">{{ $subCategory->name }}</p>

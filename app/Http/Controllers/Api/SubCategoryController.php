@@ -32,7 +32,7 @@ class SubCategoryController extends Controller
     {
         if ($this->id) {
 
-            $data = SubCategory::find($this->id);
+            $data = SubCategory::with('category')->find($this->id);
 
         } elseif ($this->type) {
 
