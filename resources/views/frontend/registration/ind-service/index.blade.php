@@ -107,7 +107,7 @@
                         @endif
 
                         <div class="form-group row mx-5">
-                            <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
+                            <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>
                             <div class="col-9">
                                 <input id="qualification" name="qualification" type="text" class="form-control here"
                                        value="{{ old('qualification') }}">
@@ -308,7 +308,7 @@
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                                            <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
+                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"

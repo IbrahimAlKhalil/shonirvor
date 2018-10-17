@@ -22,9 +22,9 @@ class OrgsTableSeeder extends Seeder
 
         $categoryIds = Category::onlyOrg()->pluck('id')->toArray();
 
-        factory(User::class, rand(15, 20))->create()->each(function ($user) use ($categoryIds, $divisionIds, $districtIds, $thanaIds, $unionIds, $villageIds) {
+        factory(User::class, mt_rand(15, 20))->create()->each(function ($user) use ($categoryIds, $divisionIds, $districtIds, $thanaIds, $unionIds, $villageIds) {
 
-            factory(Org::class, rand(1, 3))->create([
+            factory(Org::class, mt_rand(1, 3))->create([
                 'user_id' => $user->id,
                 'category_id' => randomElement($categoryIds),
                 'division_id' => randomElement($divisionIds),

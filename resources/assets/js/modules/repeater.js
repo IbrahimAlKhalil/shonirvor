@@ -1,5 +1,3 @@
-
-
 export class Repeater {
     constructor(container, options) {
         this.container = container;

@@ -7,7 +7,7 @@ export class OptionLoader {
 
         select.forEach(select => {
             let target = document.querySelector(select.getAttribute('data-option-loader-target'));
-            !select.hasAttribute('data-option-loader-nodisable') && this.disable(target);
+            !select.hasAttribute('data-option-loader-nodisable');
 
             select.optionLoader = this;
             select.optionLoaderTarget = target;
@@ -68,13 +68,8 @@ export class OptionLoader {
         });
     }
 
-    disable(select) {
-        select.disabled = "true";
-    }
-
     clean(select) {
         select.innerHTML = '';
-        this.disable(select);
         this.placehlder(select);
 
         if (select.hasAttribute('data-option-loader-target')) {

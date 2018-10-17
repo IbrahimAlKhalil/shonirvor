@@ -22,7 +22,7 @@
                                 data-option-loader-url="{{ route('api.categories') }}"
                                 data-option-loader-target="#category"
                                 data-option-loader-param="type">
-                            <option value="">-- বিভাগ --</option>
+                            <option value="">-- সার্ভিসের ধরন --</option>
                             <option value="ind" @if(request()->get('type') == 'ind'){{ 'selected' }}@endif>
                                 বেক্তিগত
                             </option>
@@ -158,6 +158,7 @@
                     <div class="col-3 py-2 pl-0 pr-1">
                         <select name="price" id="price"
                                 data-placeholder="-- দাম --">
+                            <option value="">-- দাম --</option>
                             <option value="low" @if(request()->get('price') == 'low'){{ 'selected' }}@endif>দাম কম থেকে
                                 বেশি
                             </option>

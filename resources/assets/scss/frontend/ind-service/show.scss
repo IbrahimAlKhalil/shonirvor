@@ -1,16 +1,36 @@
+h1 {
+  font-size: 2rem;
+}
+
 img.cover {
   width: 100%;
   max-height: 300px;
   z-index: 0;
-  margin-bottom: 10px;
   object-fit: cover;
 }
 
 img.pp {
-  margin: -90px 10px 0px 50px;
+  margin-top: -80px;
   z-index: 9;
-  width: 20%;
+  min-width: 200px;
+  max-width: 200px;
+  min-height: 200px;
+  max-height: 200px;
   object-fit: cover;
+}
+
+.fa-stack {
+  font-size: 2.5rem;
+
+  .fa-stack-2x {
+    text-shadow: 1px 1px #999;
+    -webkit-text-stroke: 1px #777;
+  }
+
+  .fa-stack-1x {
+    font-size: 22px;
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -21,8 +41,11 @@ img.pp {
   }
 
   img.pp {
-    margin: -45px 10px 0px 25px;
-    z-index: 9;
+    margin-top: -80px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    max-height: 200px;
     width: 40%;
   }
 

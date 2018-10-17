@@ -13,4 +13,8 @@ export class UrlPerser {
     has(param) {
         return this.params.hasOwnProperty(param);
     }
+
+    filled(param) {
+        return this.params.hasOwnProperty(param) && (!! this.params[param]);
+    }
 }

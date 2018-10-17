@@ -9,17 +9,25 @@
 @section('content')
     <div class="container bg-white shadow">
         <div class="row">
-            <div class="col-12 pp-n-cover">
-                <img align="left" class="cover" src="{{ asset('storage/seed/user-covers/cover.jpg') }}"/>
-                <img align="left" class="pp img-thumbnail" src="{{ asset('storage/'.$provider->user->photo) }}"/>
-                <div class="profile-headline">
-                    <h1>{{ $provider->user->name }}</h1>
-                    <p class="h5 mt-3">{{ $provider->category->name }}</p>
-                    <p class="h5">{{ $provider->village->bn_name.', '.$provider->union->bn_name.', '.$provider->thana->bn_name.', '.$provider->district->bn_name.', '.$provider->division->bn_name }}</p>
-                </div>
+            <img class="cover" src="{{ asset('storage/seed/user-covers/cover.jpg') }}"/>
+        </div>
+        <div class="row py-3">
+            <div class="col-md-3 text-center text-md-right">
+                <img class="pp img-thumbnail" src="{{ asset('storage/'.$provider->user->photo) }}"/>
+            </div>
+            <div class="col-md-6">
+                <h1>{{ $provider->user->name }}</h1>
+                <p class="h5 mt-3">{{ $provider->category->name }}</p>
+                <p class="h5">{{ $provider->village->bn_name.', '.$provider->union->bn_name.', '.$provider->thana->bn_name.', '.$provider->district->bn_name.', '.$provider->division->bn_name }}</p>
+            </div>
+            <div class="col-md-3 pt-3 pl-5">
+                <span class="fa-stack">
+                  <i class="fa fa-star fa-stack-2x text-{{ $avgFeedbackColor }}"></i>
+                  <i class="fa-stack-1x">{{ en2bnNumber( round($provider->feedbacks_avg, 1) ) }}</i>
+                </span>
             </div>
         </div>
-        <div class="row py-4">
+        <div class="row">
             <div class="col-8 px-5">
                 <div class="row my-2">
                     <div class="col-12 text-center">
@@ -29,10 +37,11 @@
                         @if($provider->website)
                             <a class="btn btn-info fa fa-globe text-white" href="{{ $provider->website }}" target="_blank"> ওয়েবসাইট</a>
                         @endif
-                        <span class="btn btn-secondary">
+                        <a class="btn btn-secondary fa fa-file-text text-white" href="{{ 'https://docs.google.com/viewer?url='.asset('storage/'.$provider->cv) }}" target="_blank"> বায়োডাটা</a>
+                        <span class="btn btn-warning">
                             <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
                         </span>
-                        <span class="btn btn-secondary">
+                        <span class="btn btn-success">
                             <i class="fa fa-comments"></i> চ্যাট করুন
                         </span>
                     </div>
@@ -53,14 +62,12 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
+                        <p class="h4 border-bottom">কর্ম যোগ্যতার ছবি ও বর্ণনাঃ</p>
                         @forelse($provider->workImages->shuffle()->chunk(2) as $workImages)
                             <div class="card-deck py-2">
                                 @foreach($workImages as $image)
                                     <div class="card shadow-sm">
-                                        <a href="javascript:">
-                                            <img class="card-img-top img-fluid" src="{{ asset('storage/'.$image->path) }}" alt="Card image cap">
-                                        </a>
+                                        <img class="card-img-top img-fluid" src="{{ asset('storage/'.$image->path) }}" alt="Card image cap">
                                         <div class="card-body">
                                             <p class="card-text">{{ $image->description }}</p>
                                         </div>
@@ -116,15 +123,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 mb-3">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header h5 text-center">কাজ সমূহ</div>
+                            <div class="card-header h5 text-center">কর্ম যোগ্যতা সমূহ</div>
                             <div class="card-body">
                                 @foreach($provider->subCategories->shuffle() as $subCategory)
                                     <p class="border-bottom font-italic">{{ $subCategory->name }}</p>
-                                    @foreach($subCategory->workMethods as $workMethod)
+                                    @foreach($subCategory->workMethods->sortBy('id') as $workMethod)
                                         @if($workMethod->id != 4)
                                             <p>{{ $workMethod->name }}ঃ {{ en2bnNumber($workMethod->pivot->rate) }} টাকা</p>
                                         @else
@@ -172,61 +179,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{--
-<div class="row">
-    <div class="col-12">
-        <p class="lead text-center pt-5">আমার নাম {{ $provider->user->name }}..<br>আমি একজন <mark>বেক্তিগত</mark> সার্ভিস প্রভাইডার...</p>
-    </div>
-</div>
-@if($canFeedback)
-    <div class="row py-4 justify-content-center">
-        <div class="col-6">
-            <p class="h5">আপনার মতামত দিন:</p>
-            <form action="{{ route('ind-feedback.store') }}" method="post">
-                {{ csrf_field() }}
-                <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
-                <input id="storeStar" type="number" name="star" required>
-                <textarea name="say" class="form-control"></textarea>
-                <div class="my-2 text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-@endif
-<div class="row py-4 justify-content-center">
-    <div class="col-6">
-        @include('components.success')
-        <p class="h5">মতামত সমূহ:</p>
-        @forelse($provider->feedbacks as $key => $feedback)
-            <div class="row my-3">
-                <div class="col-2">
-                    <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
-                </div>
-                <div class="col-10">
-                    <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
-                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
-                    <p>{{ $feedback->say }}</p>
-                </div>
-            </div>
-        @empty
-            <p>পূর্বের কোন মতামত নেই</p>
-        @endforelse
-    </div>
-</div>
---}}
