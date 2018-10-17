@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\ContentType;
-use Illuminate\Support\Facades\Route;
 
 /**
  * Check if form old data exist
@@ -137,23 +136,4 @@ function getContents($name)
 function getContent($name)
 {
     return ContentType::where('name', $name)->with('contents')->first()->contents()->first();
-}
-
-
-// ************ helper function for api ************** //
-
-/**
- * Checks what if route has an "id" parameter and return that id if exists
- *
- * @return int|boolean
- */
-
-function theId()
-{
-    $result = false;
-    if (array_key_exists('id', Route::current()->parameters)) {
-        $result = Route::current()->parameters['id'];
-    }
-
-    return $result;
 }

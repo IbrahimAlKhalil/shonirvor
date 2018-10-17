@@ -16,7 +16,11 @@ class AreaController extends Controller
     public function divisions()
     {
         $result = null;
-        $id = theId();
+        $id = false;
+
+        if (array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
+        }
 
         if ($id) {
             return Division::find($id);
@@ -28,7 +32,11 @@ class AreaController extends Controller
     public function districts(Request $request)
     {
         $result = null;
-        $id = theId();
+        $id = false;
+
+        if (array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
+        }
 
         if ($id) {
             return District::find($id)->select('id', 'bn_name as name');
@@ -68,7 +76,11 @@ class AreaController extends Controller
     public function thanas(Request $request)
     {
         $result = null;
-        $id = theId();
+        $id = false;
+
+        if (array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
+        }
 
         if ($id) {
             return Thana::find($id)->select('id', 'bn_name as name');
@@ -134,7 +146,11 @@ class AreaController extends Controller
     public function unions(Request $request)
     {
         $result = null;
-        $id = theId();
+        $id = false;
+
+        if (array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
+        }
 
         if ($id) {
             return Union::find($id)->select('id', 'bn_name as name');

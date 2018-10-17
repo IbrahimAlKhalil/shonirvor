@@ -11,7 +11,11 @@ class CategoryController extends Controller
     public function categories(Request $request)
     {
         $result = null;
-        $id = theId();
+        $id = false;
+
+        if (array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
+        }
 
         if ($id) {
             return Category::find($id);

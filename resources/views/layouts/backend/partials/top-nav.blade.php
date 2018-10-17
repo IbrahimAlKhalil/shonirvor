@@ -13,20 +13,29 @@
             <li class="nav-item @if(request()->is('dashboard')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
             </li>
-            <li class="nav-item @if(request()->is('dashboard/*service*')){{ 'active' }}@endif">
+            <li class="nav-item @if(request()->is('dashboard/individual-service*') || request()->is('dashboard/organization-service*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-service.index') }}">সার্ভিস সমূহ</a>
             </li>
             <li class="nav-item @if(request()->is('dashboard/*category*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-category.index') }}">ক্যাটাগরি</a>
             </li>
+            <li class="nav-item dropdown @if(request()->is('dashboard/packages/*')){{ 'active' }}@endif">
+                <a class="nav-link dropdown-toggle" href="javascript:" id="packageDropdown" role="button" data-toggle="dropdown">
+                    প্যাকেজ
+                </a>
+                <div class="dropdown-menu" aria-labelledby="packageDropdown">
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/service')){{ 'active' }}@endif" href="{{ route('backend.package.service.index') }}">সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/top-service')){{ 'active' }}@endif" href="{{ route('backend.package.top-service.index') }}">টপ সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/referrer')){{ 'active' }}@endif" href="{{ route('backend.package.referrer.index') }}">রেফারার</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/ad')){{ 'active' }}@endif" href="{{ route('backend.package.ad.index') }}">এড</a>
+                </div>
+            </li>
             <li class="nav-item @if(request()->is('dashboard/area/*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.area.division') }}">এলাকা</a>
             </li>
-
             <li class="nav-item @if(request()->is('dashboard/contents/*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('contents.slider.index') }}">কন্টেন্ট ম্যানেজমেন্ট</a>
             </li>
-
             <li class="nav-item @if(request()->is('dashboard/ad*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.ad.index') }}">বিজ্ঞাপন</a>
             </li>
