@@ -15,6 +15,7 @@ module.exports = {
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',
+        'backend/ind-service-request/show': './resources/assets/js/backend/ind-service-request/show.js',
         'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
         'backend/area/modal': './resources/assets/js/backend/area/modal.js',
         'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',

@@ -135,13 +135,14 @@ class OrgServiceRegistrationController extends Controller
         $org->thana_id = $thana;
         $org->union_id = $union;
         $org->village_id = $village;
+        $org->category_id = $category->id;
 
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
         $org->referrer = $request->post('referrer');
         $org->email = $request->post('email');
-        $org->category_id = $category->id;
+        $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
@@ -301,11 +302,12 @@ class OrgServiceRegistrationController extends Controller
         $org->thana_id = $thana;
         $org->union_id = $union;
         $org->village_id = $village;
+        $org->category_id = $category->id;
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
         $org->email = $request->post('email');
-        $org->category_id = $category->id;
+        $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');

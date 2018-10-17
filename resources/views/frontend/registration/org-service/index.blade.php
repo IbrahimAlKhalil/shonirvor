@@ -10,11 +10,11 @@
 
 @section('content')
 
-    @foreach($errors as $error)
+    {{--@foreach($errors as $error)
         <div class="alert alert-danger">
             {{ $error }}
         </div>
-    @endforeach
+    @endforeach--}}
 
     <div class="container my-5">
 
@@ -48,8 +48,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="name" name="name" type="text" value="{{ old('name') }}"
-                                       class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}">
-                                @include('components.invalid', ['name' => 'name'])
+                                       class="form-control">
                             </div>
                         </div>
 
@@ -58,9 +57,8 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea rows="6" id="description" name="description"
-                              class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                              class="form-control"
                               required>{{ old('description') }}</textarea>
-                                @include('components.invalid', ['name' => 'description'])
                             </div>
                         </div>
 
@@ -69,8 +67,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="mobile" name="mobile" type="number" value="{{ old('mobile') }}"
-                                       class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" required>
-                                @include('components.invalid', ['name' => 'mobile'])
+                                       class="form-control" required>
                             </div>
                         </div>
 
@@ -78,8 +75,7 @@
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
-                                       class="form-control{{ $errors->has('referrer') ? ' is-invalid' : '' }}" required>
-                                @include('components.invalid', ['name' => 'referrer'])
+                                       class="form-control" required>
                             </div>
                         </div>
 
@@ -87,7 +83,7 @@
                             <label for="email" class="col-3 col-form-label">ইমেইল</label>
                             <div class="col-9">
                                 <input id="email" name="email" type="text" value="{{ old('email') }}"
-                                       class="form-control @if($errors->has('email')) is-invalid @endif">
+                                       class="form-control">
                                 @include('components.invalid', ['name' => 'email'])
                             </div>
                         </div>
@@ -96,8 +92,7 @@
                             <label for="website" class="col-3 col-form-label">ওয়েবসাইট</label>
                             <div class="col-9">
                                 <input id="website" name="website" type="url" value="{{ old('website') }}"
-                                       class="form-control @if($errors->has('website')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'website'])
+                                       class="form-control">
                             </div>
                         </div>
 
@@ -105,21 +100,17 @@
                             <label for="facebook" class="col-3 col-form-label">ফেসবুক</label>
                             <div class="col-9">
                                 <input id="facebook" name="facebook" type="url" value="{{ old('facebook') }}"
-                                       class="form-control @if($errors->has('facebook')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'facebook'])
+                                       class="form-control">
                             </div>
                         </div>
-                        @if(!$user->nid)
-                            <div class="form-group row mx-5">
-                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                            class="text-danger">*</span></label>
-                                <div class="col-9">
-                                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                           class="form-control @if($errors->has('nid')) is-invalid @endif" required>
-                                    @include('components.invalid', ['name' => 'nid'])
-                                </div>
+                        <div class="form-group row mx-5">
+                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                       class="form-control" required>
                             </div>
-                        @endif
+                        </div>
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
@@ -206,8 +197,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea id="address" rows="8" name="address" required="required"
-                              class="form-control @if($errors->has('address')) is-invalid @endif">{{ old('address') }}</textarea>
-                                @include('components.invalid', ['name' => 'address'])
+                              class="form-control">{{ old('address') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -289,6 +279,15 @@
 
                             </div>
                         </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ old('pricing-info') }}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-4" id="step-4">
                         <div class="form-group row mx-5">
@@ -296,8 +295,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="logo" name="logo" type="file" accept="image/*"
-                                       class="form-control-file @if($errors->has('logo')) is-invalid @endif">
-                                @include('components.invalid', ['name' => 'logo'])
+                                       class="form-control-file">
                             </div>
                         </div>
 
@@ -307,9 +305,8 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control-file @if($errors->has('identities')) is-invalid @endif"
+                                       class="form-control-file"
                                        multiple>
-                                @include('components.invalid', ['name' => 'identities'])
                             </div>
                         </div>
 
@@ -324,7 +321,7 @@
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="form-control-file @if($errors->has('images')) is-invalid @endif">
+                                                   class="form-control-file">
                                         </div>
                                     @endfor
                                 </div>
@@ -337,7 +334,6 @@
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
                                        class="form-control-file">
-                                @include('components.invalid', ['name' => 'trade-license'])
                             </div>
                         </div>
 

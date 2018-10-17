@@ -55,9 +55,8 @@
                             <label for="description" class="col-3 col-form-label">বর্ণনা <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
-                                <textarea id="description" name="description" type="number"
-                                       value="{{ old('description') }}"
-                                       class="form-control" required></textarea>
+                                <textarea id="description" name="description"
+                                       class="form-control" required>{{ old('description') }}</textarea>
                             </div>
                         </div>
 
@@ -114,16 +113,14 @@
                                        value="{{ old('qualification') }}">
                             </div>
                         </div>
-                        @if(!$user->nid)
-                            <div class="form-group row mx-5">
-                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                            class="text-danger">*</span></label>
-                                <div class="col-9">
-                                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                           class="form-control" required>
-                                </div>
+                        <div class="form-group row mx-5">
+                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                       class="form-control" required>
                             </div>
-                        @endif
+                        </div>
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
@@ -282,6 +279,14 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mx-5">
+                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ old('pricing-info') }}</textarea>
                             </div>
                         </div>
                     </div>

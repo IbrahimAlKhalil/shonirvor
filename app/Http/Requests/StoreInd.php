@@ -17,7 +17,7 @@ class StoreInd extends FormRequest
         $user = Auth::user();
         return [
             'mobile' => 'required|digits:11',
-            'referrer' => 'digits:11|different:mobile',
+            'referrer' => 'nullabel|digits:11|different:mobile',
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',

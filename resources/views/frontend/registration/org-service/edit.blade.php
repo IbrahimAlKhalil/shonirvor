@@ -15,12 +15,12 @@
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
         @include('components.success')
-        @foreach($errors as $error)
+        {{--@foreach($errors as $error)
             <div class="alert alert-danger">
                 {{ $error }}
             </div>
             {{ $errors }}
-        @endforeach
+        @endforeach--}}
 
         <form method="post" enctype="multipart/form-data"
               action="{{ route('organization-service-registration.update', $org->id) }}" id="edit-form">
@@ -359,6 +359,15 @@
                                 </div>
 
 
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
                             </div>
                         </div>
                     </div>

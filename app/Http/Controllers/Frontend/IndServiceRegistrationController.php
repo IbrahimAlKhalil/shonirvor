@@ -24,7 +24,7 @@ class IndServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $inds = $user->inds('pending')->get();
+        $inds = $user->inds()->onlyPending()->get();
 
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
@@ -161,6 +161,7 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
+        $ind->pricing_info = $request->post('pricing-info');
         $ind->save();
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
@@ -355,10 +356,11 @@ class IndServiceRegistrationController extends Controller
         $ind->thana_id = $thana;
         $ind->union_id = $union;
         $ind->village_id = $village;
+        $ind->category_id = $category->id;
         $ind->description = $request->post('description');
         $ind->mobile = $request->post('mobile');
         $ind->email = $request->post('email');
-        $ind->category_id = $category->id;
+        $ind->pricing_info = $request->post('pricing-info');
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
