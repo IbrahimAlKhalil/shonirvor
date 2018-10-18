@@ -24,7 +24,7 @@
             <div class="col-md-9">
                 @include('components.success')
                 @include('components.error')
-                <table class="table table-striped table-bordered table-hover table-sm text-center">
+                <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                     <thead>
                     <tr>
                         <th>#</th>

@@ -15,8 +15,8 @@ class SubCategoryController extends Controller
 
     public function __construct(Request $request)
     {
-        if (theId()) {
-            $this->id = theId();
+        if (request()->route() && array_key_exists('id', request()->route()->parameters)) {
+            $this->id = request()->route()->parameters['id'];
         }
 
         if ($request->filled('type')) {

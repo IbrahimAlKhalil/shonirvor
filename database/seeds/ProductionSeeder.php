@@ -31,6 +31,26 @@ class ProductionSeeder extends Seeder
         ]);
 
 
+        /***** Package Types *****/
+        DB::table('package_types')->insert([
+            ['name' => 'service'],
+            ['name' => 'top-service'],
+            ['name' => 'referrer'],
+            ['name' => 'ad']
+        ]);
+
+        /***** Package Properties *****/
+        DB::table('package_properties')->insert([
+            ['name' => 'name'],
+            ['name' => 'description'],
+            ['name' => 'duration'],
+            ['name' => 'fee'],
+            ['name' => 'refer_target'],
+            ['name' => 'refer_onetime_interest'],
+            ['name' => 'refer_renew_interest']
+        ]);
+
+
         /********** Content Type ***********/
         $registrationInstruction = new ContentType(['name' => 'registration-instruction']);
         $registrationInstruction->save();
