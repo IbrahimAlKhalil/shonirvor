@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Package;
+use App\Models\PackageValue;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ class IndServicePackageController extends Controller
     public function index()
     {
 
-        dd(Package::first()->packageProperties);
+        $packages = Package::with('properties')->where('package_type_id', 1)->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -22,12 +23,7 @@ class IndServicePackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'এড প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.service.ind-service', compact('navs'));
-    }
-
-    public function create()
-    {
-        //
+        return view('backend.packages.service.ind-service', compact('navs', 'packages'));
     }
 
     public function store(Request $request)
@@ -60,23 +56,24 @@ class IndServicePackageController extends Controller
         return back()->with('success', 'প্যাকেজ তৈরি করা হয়েছে');
     }
 
-    public function show(Package $package)
+    public function update(Request $request)
     {
-        //
-    }
+        DB::beginTransaction();
 
-    public function edit(Package $package)
-    {
-        //
-    }
+        foreach ($request->post('values') as $key => $value) {
+            $valueModel = PackageValue::find($key);
+            $valueModel->value = $value;
+            $valueModel->save();
+        }
 
-    public function update(Request $request, Package $package)
-    {
-        //
+        DB::commit();
+
+        return back()->with('success', 'প্যাকেজ আপডেট হয়েছে!');
     }
 
     public function destroy(Package $package)
     {
-        //
+        $package->delete();
+        return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে!');
     }
 }
