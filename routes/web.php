@@ -38,7 +38,8 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
 
     Route::prefix('packages')->name('package.')->group(function () {
 
-        Route::resource('service', 'ServicePackageController');
+        Route::resource('ind-service', 'IndServicePackageController');
+        Route::resource('org-service', 'OrgServicePackageController');
         Route::resource('top-service', 'TopServicePackageController');
         Route::resource('referrer', 'ReferrerPackageController');
         Route::resource('ad', 'AdPackageController');
