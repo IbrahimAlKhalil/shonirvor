@@ -34,12 +34,12 @@ import './../../../../bower_components/bootstrap-star-rating/css/star-rating.css
 import './../../../../bower_components/bootstrap-star-rating/themes/krajee-fa/theme.css';
 import './../../../../bower_components/bootstrap-star-rating/js/star-rating';
 
-import {UrlPerser} from "../modules/url-param-perser";
+import {UrlParser} from "../modules/url-parser";
 
 document.addEventListener('DOMContentLoaded', () => {
     let methodSelect = $('#method + .selectize-control').parent();
     let priceSelect = $('#price + .selectize-control').parent();
-    let url = new UrlPerser(location.search);
+    let url = new UrlParser(location.search);
 
     if ( ! url.filled('method') ) {
         priceSelect.hide();

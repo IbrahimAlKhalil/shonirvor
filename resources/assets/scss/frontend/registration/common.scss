@@ -9,9 +9,6 @@
     & + span {
       & + input, & + .input-div {
         display: block;
-        & + .error-help-block {
-          display: none;
-        }
       }
     }
   }

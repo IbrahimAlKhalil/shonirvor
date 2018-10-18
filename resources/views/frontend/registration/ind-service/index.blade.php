@@ -5,7 +5,6 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/index.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -52,11 +51,10 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">বর্ণনা <span
-                                        class="text-danger">*</span></label>
+                            <label for="description" class="col-3 col-form-label">বর্ণনা</label>
                             <div class="col-9">
                                 <textarea id="description" name="description"
-                                       class="form-control" required>{{ old('description') }}</textarea>
+                                       class="form-control">{{ old('description') }}</textarea>
                             </div>
                         </div>
 
@@ -367,5 +365,6 @@
     </script>
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class, '#registration-form') !!}
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 

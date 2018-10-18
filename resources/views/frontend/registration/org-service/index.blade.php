@@ -53,12 +53,10 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা <span
-                                        class="text-danger">*</span></label>
+                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা</label>
                             <div class="col-9">
                     <textarea rows="6" id="description" name="description"
-                              class="form-control"
-                              required>{{ old('description') }}</textarea>
+                              class="form-control">{{ old('description') }}</textarea>
                             </div>
                         </div>
 
