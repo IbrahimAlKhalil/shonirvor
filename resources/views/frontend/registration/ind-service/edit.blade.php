@@ -3,7 +3,7 @@
 @section('title', 'Edit Individual Service Provider Request')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/edit.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -243,7 +243,7 @@
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
                                         data-option-loader-nodisable="true">
-                                    <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
                                     @endforeach

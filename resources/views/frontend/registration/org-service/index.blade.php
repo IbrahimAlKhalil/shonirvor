@@ -3,7 +3,7 @@
 @section('title', 'প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/org-service/index.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection

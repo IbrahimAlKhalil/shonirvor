@@ -3,7 +3,7 @@
 @section('title', 'সেবা প্রদানকারী অনুরোধ সম্পাদনা করুন')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/org-service/edit.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -241,7 +241,7 @@
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
                                         data-option-loader-nodisable="true">
-                                    <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($org->category->id, $category->id) }}>{{ $category->name }}</option>
                                     @endforeach

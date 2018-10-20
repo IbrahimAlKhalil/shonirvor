@@ -146,7 +146,7 @@
                             data-option-loader-param="category"
                             data-option-loader-nodisable="true"
                             class="form-control @if($errors->has('category')) is-invalid @endif">
-                        <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                        <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ selectOpt($provider->category->id, $category->id) }}>{{ $category->name }}</option>
                         @endforeach
@@ -171,7 +171,7 @@
                             data-option-loader-properties="value=id,text=name"
                             data-option-loader-nodisable="true"
                             class="form-control @if($errors->has('sub-categories[]')) is-invalid @endif" multiple>
-                        <option>-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
+                        <option value="">-- সাব ক্যাটাগরি নির্বাচন করুন --</option>
                         @php($selectedSubCategories = $provider->subCategories->pluck('id')->toArray())
 
                         @foreach($subCategories as $subCategory)

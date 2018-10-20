@@ -12,6 +12,7 @@ module.exports = {
         'frontend/registration/common': './resources/assets/js/frontend/registration/common.js',
         'frontend/ind-service/show': './resources/assets/js/frontend/ind-service/show.js',
         'frontend/org-service/show': './resources/assets/js/frontend/org-service/show.js',
+        'frontend/common': './resources/assets/js/frontend/common.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',

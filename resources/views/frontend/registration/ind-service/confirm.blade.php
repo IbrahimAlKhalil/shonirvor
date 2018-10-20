@@ -3,7 +3,7 @@
 @section('title', 'Individual Service Provider Registration')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/index.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -253,7 +253,7 @@
                                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                                 data-option-loader-target="#sub-categories"
                                                 data-option-loader-param="category">
-                                            <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                            <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
 
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
