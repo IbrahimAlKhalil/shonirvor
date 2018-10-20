@@ -14,8 +14,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <a href="{{ asset('storage/' . $ind->user->photo) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $ind->user->photo) }}" class="img-responsive img-thumbnail"
-                                 alt="{{ $ind->user->name }}">
+                            <img src="{{ asset('storage/' . $ind->user->photo) }}" class="img-responsive img-thumbnail" alt="{{ $ind->user->name }}">
                         </a>
                     </div>
 

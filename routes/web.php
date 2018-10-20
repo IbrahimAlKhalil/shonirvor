@@ -41,7 +41,13 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
         Route::resource('service', 'ServicePackageController');
         Route::resource('top-service', 'TopServicePackageController');
         Route::resource('referrer', 'ReferrerPackageController');
-        Route::resource('ad', 'AdPackageController');
+
+        Route::resource('ad', 'AdPackageController', [
+            'only' => [
+                'index', 'store', 'update', 'destroy'
+            ], 'parameters' => [
+                'ad' => 'package'
+            ]]);
 
     }, '');
 

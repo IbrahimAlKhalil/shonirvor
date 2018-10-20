@@ -33,8 +33,10 @@ class ProductionSeeder extends Seeder
 
         /***** Package Types *****/
         DB::table('package_types')->insert([
-            ['name' => 'service'],
-            ['name' => 'top-service'],
+            ['name' => 'ind-service'],
+            ['name' => 'org-service'],
+            ['name' => 'ind-top-service'],
+            ['name' => 'org-top-service'],
             ['name' => 'referrer'],
             ['name' => 'ad']
         ]);
