@@ -8,12 +8,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class IndServicePackageController extends Controller
+class IndTopServiceController extends Controller
 {
+    private $packageTypeId = 3;
+
     public function index()
     {
-
-        $packages = Package::with('properties')->where('package_type_id', 1)->paginate(10);
+        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -24,7 +25,7 @@ class IndServicePackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'এড প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.service.ind-service', compact('navs', 'packages'));
+        return view('backend.packages.top-service.ind-service', compact('navs', 'packages'));
     }
 
     public function store(Request $request)
@@ -39,7 +40,7 @@ class IndServicePackageController extends Controller
         ];
 
         $package = new Package;
-        $package->package_type_id = 1;
+        $package->package_type_id = $this->packageTypeId;
         $package->save();
 
         $data = [];

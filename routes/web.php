@@ -38,13 +38,32 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
 
     Route::prefix('packages')->name('package.')->group(function () {
 
-        Route::resource('ind-service', 'IndServicePackageController', ['parameters' => [
-            'ind-service' => 'package'
-        ]]);
-        Route::resource('org-service', 'OrgServicePackageController', ['parameters' => [
-            'org-service' => 'package'
-        ]]);
-        Route::resource('top-service', 'TopServicePackageController');
+        Route::resource('ind-service', 'IndServicePackageController', [
+            'only' => [
+                'index', 'store', 'update', 'destroy'
+            ], 'parameters' => [
+                'ind-service' => 'package'
+            ]]);
+        Route::resource('org-service', 'OrgServicePackageController', [
+            'only' => [
+                'index', 'store', 'update', 'destroy'
+            ], 'parameters' => [
+                'org-service' => 'package'
+            ]]);
+        Route::resource('ind-top-service', 'IndTopServiceController', [
+            'only' => [
+                'index', 'store', 'update', 'destroy'
+            ], 'parameters' => [
+                'ind-top-service' => 'package'
+            ]
+        ]);
+        Route::resource('org-top-service', 'OrgTopServiceController', [
+            'only' => [
+                'index', 'store', 'update', 'destroy'
+            ], 'parameters' => [
+                'ind-top-service' => 'package'
+            ]
+        ]);
         Route::resource('referrer', 'ReferrerPackageController');
 
         Route::resource('ad', 'AdPackageController', [

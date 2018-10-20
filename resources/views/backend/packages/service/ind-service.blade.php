@@ -9,13 +9,13 @@
 @section('content')
     <div class="container my-5">
         <div class="row">
+            <nav aria-label="breadcrumb" class="col-md-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ</li>
+                </ol>
+            </nav>
             <div class="col-md-9">
                 @include('components.success')
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ</li>
-                    </ol>
-                </nav>
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                     <thead>
                     <tr>
@@ -49,7 +49,7 @@
 
                                 <!-- Edit Modal -->
                                 <div class="modal fade" id="editModal{{ $key }}">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-center">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">প্যাকেজ তৈরি করুন</h5>
@@ -67,23 +67,31 @@
                                                         <label for="edit-name" class="col-3 col-form-label text-right">প্যাকেজের
                                                             নামঃ</label>
                                                         <div class="col-9">
-                                                            <input id="edit-name" name="values[{{ $properties['name'][0]->id }}]" type="text"
-                                                                   class="form-control" value="{{ $properties['name'][0]->value }}">
+                                                            <input id="edit-name"
+                                                                   name="values[{{ $properties['name'][0]->id }}]"
+                                                                   type="text"
+                                                                   class="form-control"
+                                                                   value="{{ $properties['name'][0]->value }}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="edit-description"
                                                                class="col-3 col-form-label text-right">বর্ণনাঃ</label>
                                                         <div class="col-9">
-                                <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]" type="text"
+                                <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]"
+                                          type="text"
                                           class="form-control">{{ $properties['description'][0]->value }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="edit-duration" class="col-3 col-form-label text-right">মেয়াদঃ</label>
+                                                        <label for="edit-duration"
+                                                               class="col-3 col-form-label text-right">মেয়াদঃ</label>
                                                         <div class="col-9 input-group">
-                                                            <input id="edit-duration" name="values[{{ $properties['duration'][0]->id }}]" type="number"
-                                                                   class="form-control" value="{{ $properties['duration'][0]->value }}">
+                                                            <input id="edit-duration"
+                                                                   name="values[{{ $properties['duration'][0]->id }}]"
+                                                                   type="number"
+                                                                   class="form-control"
+                                                                   value="{{ $properties['duration'][0]->value }}">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text"
                                                                       id="basic-addon2">দিনঃ</span>
@@ -94,7 +102,10 @@
                                                         <label for="edit-fee"
                                                                class="col-3 col-form-label text-right">মূল্যঃ</label>
                                                         <div class="col-9">
-                                                            <input id="edit-fee" name="values[{{ $properties['fee'][0]->id }}]" type="text" class="form-control" value="{{ $properties['fee'][0]->value }}">
+                                                            <input id="edit-fee"
+                                                                   name="values[{{ $properties['fee'][0]->id }}]"
+                                                                   type="text" class="form-control"
+                                                                   value="{{ $properties['fee'][0]->value }}">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer border-top-0">
@@ -111,7 +122,7 @@
 
                                 <!-- Delete Modal -->
                                 <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-dialog modal-dialog-center" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
                                                 <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই
@@ -167,7 +178,7 @@
     </div>
 
     <div class="modal fade" id="create-package-modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-center">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">প্যাকেজ তৈরি করুন</h5>

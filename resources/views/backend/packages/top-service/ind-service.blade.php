@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সার্ভিস প্যাকেজসমূহ')
+@section('title', 'ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -11,7 +11,7 @@
         <div class="row">
             <nav aria-label="breadcrumb" class="col-md-12">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ</li>
+                    <li class="breadcrumb-item active" aria-current="page">ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ</li>
                 </ol>
             </nav>
             <div class="col-md-9">
@@ -59,7 +59,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('backend.package.ind-service.update', $package->id) }}"
+                                                <form action="{{ route('backend.package.ind-top-service.update', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('put') }}
@@ -122,7 +122,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-footer border-top-0">
-                                                <form action="{{ route('backend.package.ind-service.destroy', $package->id) }}"
+                                                <form action="{{ route('backend.package.ind-top-service.destroy', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('delete') }}
@@ -176,7 +176,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('backend.package.ind-service.store') }}" method="post">
+                    <form action="{{ route('backend.package.ind-top-service.store') }}" method="post">
                         {{ csrf_field() }}
                         <div class="form-group row">
                             <label for="name" class="col-3 col-form-label text-right">প্যাকেজের নামঃ</label>
