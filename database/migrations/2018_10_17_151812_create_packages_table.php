@@ -12,6 +12,7 @@ class CreatePackagesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('package_type_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('package_type_id')
                 ->references('id')

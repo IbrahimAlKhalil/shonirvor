@@ -38,40 +38,32 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
 
     Route::prefix('packages')->name('package.')->group(function () {
 
-        Route::resource('ind-service', 'IndServicePackageController', ['parameters' => [
-            'ind-service' => 'package'
-        ]]);
-        Route::resource('org-service', 'OrgServicePackageController', ['parameters' => [
-            'org-service' => 'package'
-        ]]);
+        Route::resource('ind-service', 'IndServicePackageController', [
+            'parameters' => ['ind-service' => 'package']
+        ]);
+        Route::resource('org-service', 'OrgServicePackageController', [
+            'parameters' => ['org-service' => 'package']
+        ]);
         Route::resource('top-service', 'TopServicePackageController');
-        Route::resource('referrer', 'ReferrerPackageController');
+
+        Route::resource('referrer', 'ReferrerPackageController', [
+            'only' => ['index', 'store', 'update', 'destroy'],
+            'parameters' => ['referrer' => 'package']
+        ]);
 
         Route::resource('ad', 'AdPackageController', [
-            'only' => [
-                'index', 'store', 'update', 'destroy'
-            ], 'parameters' => [
-                'ad' => 'package'
-            ]]);
+            'only' => ['index', 'store', 'update', 'destroy'],
+            'parameters' => ['ad' => 'package']
+        ]);
 
     }, '');
 
     Route::resource('ad', 'AdController', [
-        'only' => [
-            'index',
-            'store',
-            'update',
-            'destroy'
-        ]
+        'only' => ['index', 'store', 'update', 'destroy']
     ])->names('ad');
 
     Route::resource('notice', 'NoticeController', [
-        'only' => [
-            'index',
-            'store',
-            'update',
-            'destroy'
-        ]
+        'only' => ['index', 'store', 'update', 'destroy']
     ])->names('notice');
 
     Route::prefix('area')->name('area.')->group(function () {
@@ -113,20 +105,24 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 
 Route::middleware('auth')->group(function () {
     Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
-        'only' => ['index', 'store', 'update', 'edit'], 'parameters' => [
-            'individual-service-registration' => 'ind_id'
-        ]]);
+        'only' => ['index', 'store', 'update', 'edit'],
+        'parameters' => ['individual-service-registration' => 'ind_id']
+    ]);
     Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
-        'only' => [
-            'index', 'store', 'update', 'edit'
-        ], 'parameters' => [
-            'organization-service-registration' => 'org_id'
-        ]]);
+        'only' => ['index', 'store', 'update', 'edit'],
+        'parameters' => ['organization-service-registration' => 'org_id']
+    ]);
 }, '');
 
 Route::namespace('Backend')->prefix('dashboard')->group(function () {
-    Route::resource('individual-service-request', 'IndServiceRequestController', ['only' => ['index', 'show', 'update', 'destroy'], 'parameters' => ['individual-service-request' => 'service-request']]);
-    Route::resource('organization-service-request', 'OrgServiceRequestController', ['only' => ['index', 'show', 'update', 'destroy'], 'parameters' => ['organization-service-request' => 'service-request']]);
+    Route::resource('individual-service-request', 'IndServiceRequestController', [
+        'only' => ['index', 'show', 'update', 'destroy'],
+        'parameters' => ['individual-service-request' => 'service-request']
+    ]);
+    Route::resource('organization-service-request', 'OrgServiceRequestController', [
+        'only' => ['index', 'show', 'update', 'destroy'],
+        'parameters' => ['organization-service-request' => 'service-request']
+    ]);
 
     Route::get('individual-service/disabled', 'IndServiceController@showDisabledAccounts')->name('individual-service.disabled');
     Route::get('organization-service/disabled', 'OrgServiceController@showDisabledAccounts')->name('organization-service.disabled');
@@ -137,27 +133,61 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     Route::post('individual-service/activate', 'IndServiceController@activate')->name('individual-service.activate');
     Route::post('organization-service/activate', 'OrgServiceController@activate')->name('organization-service.activate');
 
-    Route::resource('individual-service', 'IndServiceController', ['only' => ['index', 'show', 'destroy'], 'parameters' => ['individual-service' => 'ind']]);
-    Route::resource('organization-service', 'OrgServiceController', ['only' => ['index', 'show', 'destroy'], 'parameters' => ['organization-service' => 'org']]);
+    Route::resource('individual-service', 'IndServiceController', [
+        'only' => ['index', 'show', 'destroy'],
+        'parameters' => ['individual-service' => 'ind']
+    ]);
+    Route::resource('organization-service', 'OrgServiceController', [
+        'only' => ['index', 'show', 'destroy'],
+        'parameters' => ['organization-service' => 'org']
+    ]);
 
-    Route::resource('individual-category', 'IndCategoryController', ['only' => ['index', 'show', 'destroy', 'store', 'update'], 'parameters' => ['individual-category' => 'category']]);
-    Route::resource('organization-category', 'OrgCategoryController', ['only' => ['index', 'show', 'destroy', 'store', 'update'], 'parameters' => ['organization-category' => 'category']]);
+    Route::resource('individual-category', 'IndCategoryController', [
+        'only' => ['index', 'show', 'destroy', 'store', 'update'],
+        'parameters' => ['individual-category' => 'category']
+    ]);
+    Route::resource('organization-category', 'OrgCategoryController', [
+        'only' => ['index', 'show', 'destroy', 'store', 'update'],
+        'parameters' => ['organization-category' => 'category']
+    ]);
 
-    Route::resource('individual-sub-category', 'IndSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['individual-sub-category' => 'sub_category']]);
-    Route::resource('organization-sub-category', 'OrgSubCategoryController', ['only' => ['destroy', 'store', 'update'], 'parameters' => ['organization-sub-category' => 'sub_category']]);
+    Route::resource('individual-sub-category', 'IndSubCategoryController', [
+        'only' => ['destroy', 'store', 'update'],
+        'parameters' => ['individual-sub-category' => 'sub_category']
+    ]);
+    Route::resource('organization-sub-category', 'OrgSubCategoryController', [
+        'only' => ['destroy', 'store', 'update'],
+        'parameters' => ['organization-sub-category' => 'sub_category']
+    ]);
 
     Route::name('profile.backend.')->prefix('profile')->group(function () {
         Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
-        Route::resource('individual-service', 'IndProfileController', ['only' => ['show', 'destroy', 'update', 'edit', 'updatePending'], 'parameters' => ['individual-service' => 'provider']]);
-        Route::resource('organization-service', 'OrgProfileController', ['only' => ['show', 'destroy', 'update', 'edit'], 'parameters' => ['organization-service' => 'provider']]);
+        Route::resource('individual-service', 'IndProfileController', ['only' => [
+            'show', 'destroy', 'update', 'edit', 'updatePending'],
+            'parameters' => ['individual-service' => 'provider']
+        ]);
+        Route::resource('organization-service', 'OrgProfileController', [
+            'only' => ['show', 'destroy', 'update', 'edit'],
+            'parameters' => ['organization-service' => 'provider']
+        ]);
     }, '');
 
-    Route::resource('individual-service-edit', 'IndServiceEditController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['individual-service-edit' => 'service-edit']]);
-    Route::resource('organization-service-edit', 'OrgServiceEditController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['organization-service-edit' => 'service-edit']]);
+    Route::resource('individual-service-edit', 'IndServiceEditController', [
+        'only' => ['index', 'show', 'store', 'destroy'],
+        'parameters' => ['individual-service-edit' => 'service-edit']
+    ]);
+    Route::resource('organization-service-edit', 'OrgServiceEditController', [
+        'only' => ['index', 'show', 'store', 'destroy'],
+        'parameters' => ['organization-service-edit' => 'service-edit']
+    ]);
 
     Route::name('contents.')->prefix('contents')->group(function () {
-        Route::resource('registration-instruction', 'RegistrationInstructionController', ['only' => ['index', 'update']]);
-        Route::resource('slider', 'SliderController', ['only' => ['index', 'update', 'destroy']]);
+        Route::resource('registration-instruction', 'RegistrationInstructionController', [
+            'only' => ['index', 'update']
+        ]);
+        Route::resource('slider', 'SliderController', [
+            'only' => ['index', 'update', 'destroy']
+        ]);
     }, '');
 
 }, '');

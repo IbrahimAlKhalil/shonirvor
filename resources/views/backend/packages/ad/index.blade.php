@@ -64,20 +64,20 @@
                                                     <div class="form-group row">
                                                         <label for="update-name" class="col-3 col-form-label text-right">প্যাকেজের নাম:</label>
                                                         <div class="col-9">
-                                                            <input type="text" name="values[{{ $properties['name'][0]->id }}]" class="form-control" id="update-name" value="{{ $properties['name'][0]->value }}">
+                                                            <input type="text" name="name" class="form-control" id="update-name" value="{{ $properties['name'][0]->value }}" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="update-description" class="col-3 col-form-label text-right">বর্ণনা:</label>
                                                         <div class="col-9">
-                                                            <textarea name="values[{{ $properties['description'][0]->id }}]" id="update-description" class="form-control">{{ $properties['description'][0]->value }}</textarea>
+                                                            <textarea name="description" id="update-description" class="form-control">{{ $properties['description'][0]->value }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="update-duration" class="col-3 col-form-label text-right">সময়:</label>
                                                         <div class="col-9">
                                                             <div class="input-group">
-                                                                <input type="text" name="values[{{ $properties['duration'][0]->id }}]" class="form-control" id="update-duration" value="{{ $properties['duration'][0]->value }}" placeholder="ইংরেজিতে লিখুন">
+                                                                <input type="number" name="duration" class="form-control" id="update-duration" value="{{ $properties['duration'][0]->value }}" placeholder="ইংরেজিতে লিখুন" required>
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">দিন</span>
                                                                 </div>
@@ -87,7 +87,7 @@
                                                     <div class="form-group row">
                                                         <label for="update-fee" class="col-3 col-form-label text-right">মূল্য:</label>
                                                         <div class="col-9">
-                                                            <input type="text" name="values[{{ $properties['fee'][0]->id }}]" class="form-control" id="update-fee" value="{{ $properties['fee'][0]->value }}" placeholder="ইংরেজিতে লিখুন">
+                                                            <input type="number" name="fee" class="form-control" id="update-fee" value="{{ $properties['fee'][0]->value }}" placeholder="ইংরেজিতে লিখুন" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,7 +125,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">কোনো প্যাকেজ নেই।</td>
+                            <td colspan="5">কোনো প্যাকেজ নেই।</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -142,7 +142,7 @@
                         <button type="button" href="javascript:" class="btn btn-info w-100" data-toggle="modal" data-target="#createModal">প্যাকেজ তৈরি করুন</button>
                         <!-- Create Modal -->
                         <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">প্যাকেজ তৈরি করুন</h5>
@@ -162,14 +162,14 @@
                                             <div class="form-group row">
                                                 <label for="create-description" class="col-3 col-form-label text-right">বর্ণনা:</label>
                                                 <div class="col-9">
-                                                    <textarea name="description" id="create-description" class="form-control" required></textarea>
+                                                    <textarea name="description" id="create-description" class="form-control"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="create-duration" class="col-3 col-form-label text-right">সময়:</label>
                                                 <div class="col-9">
                                                     <div class="input-group">
-                                                        <input type="text" name="duration" class="form-control" id="create-duration" placeholder="ইংরেজিতে লিখুন" required>
+                                                        <input type="number" name="duration" class="form-control" id="create-duration" placeholder="ইংরেজিতে লিখুন" required>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">দিন</span>
                                                         </div>
@@ -179,7 +179,12 @@
                                             <div class="form-group row">
                                                 <label for="create-fee" class="col-3 col-form-label text-right">মূল্য:</label>
                                                 <div class="col-9">
-                                                    <input type="text" name="fee" class="form-control" id="create-fee" placeholder="ইংরেজিতে লিখুন" required>
+                                                    <div class="input-group">
+                                                        <input type="number" name="fee" class="form-control" id="create-fee" placeholder="ইংরেজিতে লিখুন" required>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">টাকা</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
