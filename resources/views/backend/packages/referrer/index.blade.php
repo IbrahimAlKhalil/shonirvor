@@ -12,15 +12,15 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active h4 mb-0">রেফারার প্যাকেজ</li>
+                        <li class="breadcrumb-item active h5 mb-0">রেফারার প্যাকেজ</li>
                     </ol>
                 </nav>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-md-9">
                 @include('components.success')
-                <table class="table table-striped table-bordered table-hover table-sm text-center mt-3 bg-white">
+                <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                     <thead>
                     <tr>
                         <th>#</th>

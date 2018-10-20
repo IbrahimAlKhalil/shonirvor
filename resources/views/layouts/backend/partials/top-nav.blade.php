@@ -26,7 +26,8 @@
                 <div class="dropdown-menu" aria-labelledby="packageDropdown">
                     <a class="dropdown-item @if(request()->is('dashboard/packages/ind-service')){{ 'active' }}@endif" href="{{ route('backend.package.ind-service.index') }}">ব্যাক্তিগত সার্ভিস</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/org-service')){{ 'active' }}@endif" href="{{ route('backend.package.org-service.index') }}">প্রাতিষ্ঠানিক সার্ভিস</a>
-                    <a class="dropdown-item @if(request()->is('dashboard/packages/top-service')){{ 'active' }}@endif" href="{{ route('backend.package.top-service.index') }}">টপ সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/ind-top-service')){{ 'active' }}@endif" href="{{ route('backend.package.ind-top-service.index') }}">ব্যাক্তিগত টপ সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/org-top-service')){{ 'active' }}@endif" href="{{ route('backend.package.org-top-service.index') }}">প্রাতিষ্ঠানিক টপ সার্ভিস</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/referrer')){{ 'active' }}@endif" href="{{ route('backend.package.referrer.index') }}">রেফারার</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/ad')){{ 'active' }}@endif" href="{{ route('backend.package.ad.index') }}">এড</a>
                 </div>

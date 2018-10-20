@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সার্ভিস প্যাকেজসমূহ')
+@section('title', 'ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -12,7 +12,7 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active h5 mb-0">প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ</li>
+                        <li class="breadcrumb-item active h5 mb-0">ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ</li>
                     </ol>
                 </nav>
             </div>
@@ -63,7 +63,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('backend.package.ind-service.update', $package->id) }}"
+                                                <form action="{{ route('backend.package.ind-top-service.update', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('put') }}
@@ -72,25 +72,25 @@
                                                             নামঃ</label>
                                                         <div class="col-9">
                                                             <input id="edit-name" name="values[{{ $properties['name'][0]->id }}]" type="text"
-                                                                   class="form-control" value="{{ $properties['name'][0]->value }}">
+                                                                   class="form-control" value="{{ $properties['name'][0]->value }}" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="edit-description"
                                                                class="col-3 col-form-label text-right">বর্ণনাঃ</label>
                                                         <div class="col-9">
-                                <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]" type="text"
-                                          class="form-control">{{ $properties['description'][0]->value }}</textarea>
+                                                            <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]" type="text"
+                                                                      class="form-control">{{ $properties['description'][0]->value }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="edit-duration" class="col-3 col-form-label text-right">মেয়াদঃ</label>
                                                         <div class="col-9 input-group">
                                                             <input id="edit-duration" name="values[{{ $properties['duration'][0]->id }}]" type="number"
-                                                                   class="form-control" value="{{ $properties['duration'][0]->value }}">
+                                                                   class="form-control" value="{{ $properties['duration'][0]->value }}" placeholder="ইংরেজিতে লিখুন" required>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text"
-                                                                      id="basic-addon2">দিনঃ</span>
+                                                                      id="basic-addon2">দিন</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -98,7 +98,7 @@
                                                         <label for="edit-fee"
                                                                class="col-3 col-form-label text-right">মূল্যঃ</label>
                                                         <div class="col-9">
-                                                            <input id="edit-fee" name="values[{{ $properties['fee'][0]->id }}]" type="text" class="form-control" value="{{ $properties['fee'][0]->value }}">
+                                                            <input id="edit-fee" name="values[{{ $properties['fee'][0]->id }}]" type="text" class="form-control" value="{{ $properties['fee'][0]->value }}" placeholder="ইংরেজিতে লিখুন" required>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer border-top-0">
@@ -126,7 +126,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-footer border-top-0">
-                                                <form action="{{ route('backend.package.ind-service.destroy', $package->id) }}"
+                                                <form action="{{ route('backend.package.ind-top-service.destroy', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('delete') }}
@@ -180,12 +180,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('backend.package.ind-service.store') }}" method="post">
+                    <form action="{{ route('backend.package.ind-top-service.store') }}" method="post">
                         {{ csrf_field() }}
                         <div class="form-group row">
                             <label for="name" class="col-3 col-form-label text-right">প্যাকেজের নামঃ</label>
                             <div class="col-9">
-                                <input id="name" name="name" type="text" class="form-control">
+                                <input id="name" name="name" type="text" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -198,7 +198,7 @@
                         <div class="form-group row">
                             <label for="duration" class="col-3 col-form-label text-right">মেয়াদঃ</label>
                             <div class="col-9 input-group">
-                                <input id="duration" name="duration" type="number" class="form-control">
+                                <input id="duration" name="duration" type="number" class="form-control" placeholder="ইংরেজিতে লিখুন" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">দিন</span>
                                 </div>

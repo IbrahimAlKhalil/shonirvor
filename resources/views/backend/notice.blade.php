@@ -110,7 +110,6 @@
                                 <form method="post" action="{{ route('backend.notice.store') }}" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <div class="form-group">
-                                        <label for="notice" class="label">লিঙ্ক</label>
                                         <textarea name="notice" id="notice" class="form-control" rows="5"></textarea>
                                     </div>
                                     <button class="mt-3 btn btn-secondary btn-success rounded float-right" type="submit">সাবমিট</button>

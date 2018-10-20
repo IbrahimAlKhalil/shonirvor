@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\DB;
 
 class OrgServicePackageController extends Controller
 {
+    private $packageTypeId = 2;
+
     public function index()
     {
 
-        $packages = Package::with('properties')->where('package_type_id', 2)->paginate(10);
+        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
             ['url' => route('backend.package.org-service.index'), 'text' => 'প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ'],
-            ['url' => route('backend.package.top-service.index'), 'text' => 'টপ সার্ভিস প্যাকেজসমূহ'],
+            ['url' => route('backend.package.ind-top-service.index'), 'text' => 'ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ'],
+            ['url' => route('backend.package.org-top-service.index'), 'text' => 'প্রাতিষ্ঠানিক টপ সার্ভিস প্যাকেজসমূহ'],
             ['url' => route('backend.package.referrer.index'), 'text' => 'রেফারার প্যাকেজসমূহ'],
             ['url' => route('backend.package.ad.index'), 'text' => 'এড প্যাকেজসমূহ']
         ];
@@ -38,7 +41,7 @@ class OrgServicePackageController extends Controller
         ];
 
         $package = new Package;
-        $package->package_type_id = 2;
+        $package->package_type_id = $this->packageTypeId;
         $package->save();
 
         $data = [];

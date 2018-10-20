@@ -5,25 +5,16 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Package;
 use App\Models\PackageValue;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
-class AdPackageController extends Controller
+class OrgTopServiceController extends Controller
 {
-    private $packageTypeId = 6;
-    private $packageProperties = [
-        ['id' => 1, 'name' => 'name'],
-        ['id' => 2, 'name' => 'description'],
-        ['id' => 3, 'name' => 'duration'],
-        ['id' => 4, 'name' => 'fee']
-    ];
+    private $packageTypeId = 4;
 
     public function index()
     {
-        $packages = Package::with('properties')
-            ->where('package_type_id', $this->packageTypeId)
-            ->paginate(10);
+        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -34,55 +25,57 @@ class AdPackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'এড প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.ad.index', compact('packages', 'navs'));
+        return view('backend.packages.top-service.org-service', compact('navs', 'packages'));
     }
 
     public function store(Request $request)
     {
-        $packageValues = [];
-
         DB::beginTransaction();
+
+        $packageProperties = [
+            'name' => 1,
+            'description' => 2,
+            'duration' => 3,
+            'fee' => 4
+        ];
 
         $package = new Package;
         $package->package_type_id = $this->packageTypeId;
         $package->save();
 
-        foreach ($this->packageProperties as $property) {
-
-            array_push($packageValues, [
+        $data = [];
+        foreach ($packageProperties as $key => $packagePropertyId) {
+            array_push($data, [
+                'package_property_id' => $packagePropertyId,
                 'package_id' => $package->id,
-                'package_property_id' => $property['id'],
-                'value' => $request->input($property['name']),
-                'created_at' => now(),
-                'updated_at' => now()
+                'value' => $request->post($key)
             ]);
         }
 
-        DB::table('package_values')->insert($packageValues);
+        DB::table('package_values')->insert($data);
+        DB::commit();
+
+        return back()->with('success', 'প্যাকেজ তৈরি করা হয়েছে');
+    }
+
+    public function update(Request $request)
+    {
+        DB::beginTransaction();
+
+        foreach ($request->post('values') as $key => $value) {
+            $valueModel = PackageValue::find($key);
+            $valueModel->value = $value;
+            $valueModel->save();
+        }
 
         DB::commit();
 
-        return back()->with('success', 'প্যাকেজ তৈরি হয়েছে।');
-    }
-
-    public function update(Request $request, Package $package)
-    {
-        foreach ($this->packageProperties as $property) {
-            $package->properties()
-                ->where('package_property_id', $property['id'])
-                ->update([
-                    'value' => $request->input($property['name'])
-                ]);
-        }
-
-        return back()->with('success', 'প্যাকেজ আপডেট হয়েছে।');
-
+        return back()->with('success', 'প্যাকেজ আপডেট হয়েছে!');
     }
 
     public function destroy(Package $package)
     {
         $package->delete();
-
-        return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে।');
+        return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে!');
     }
 }

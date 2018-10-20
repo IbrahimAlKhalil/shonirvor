@@ -44,7 +44,15 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
         Route::resource('org-service', 'OrgServicePackageController', [
             'parameters' => ['org-service' => 'package']
         ]);
-        Route::resource('top-service', 'TopServicePackageController');
+
+        Route::resource('ind-top-service', 'IndTopServiceController', [
+            'only' => ['index', 'store', 'update', 'destroy'],
+            'parameters' => ['ind-top-service' => 'package']
+        ]);
+        Route::resource('org-top-service', 'OrgTopServiceController', [
+            'only' => ['index', 'store', 'update', 'destroy'],
+            'parameters' => ['ind-top-service' => 'package']
+        ]);
 
         Route::resource('referrer', 'ReferrerPackageController', [
             'only' => ['index', 'store', 'update', 'destroy'],
