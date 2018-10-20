@@ -17,7 +17,7 @@ class StoreInd extends FormRequest
         $user = Auth::user();
         return [
             'mobile' => 'required|digits:11',
-            'referrer' => 'digits:11|different:mobile',
+            'referrer' => 'digits:11|different:mobile|nullable',
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
@@ -35,6 +35,7 @@ class StoreInd extends FormRequest
             'category' => 'required_without:no-category|exists:categories,id',
             'category-request' => 'required_with:no-category',
             'sub-categories.*' => 'exists:sub_categories,id',
+            'sub-category-rates.*.work-methods.*.rate' => 'required|numeric',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
@@ -56,7 +57,11 @@ class StoreInd extends FormRequest
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'age.required' => 'বয়স দিতে হবে',
             'age.min' => 'বয়স সর্বনিন্ম ১৮ হতে হবে',
-            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে'
+            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে',
+            'thana-request.required_with' => 'থানার নাম দিতে হবে',
+            'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
+            'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
+            'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে'
         ];
     }
 }

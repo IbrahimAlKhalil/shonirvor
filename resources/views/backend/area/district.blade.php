@@ -94,7 +94,7 @@
                         <div class="form-group row">
                             <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
                             <div class="col-sm-10">
-                                <select name="division_id" id="division" class="form-control">
+                                <select name="division_id" id="division" data-default-value="{{ $division->id }}">
                                     @foreach($allDivision as $oneDivision)
                                         <option value="{{ $oneDivision->id }}" @if($oneDivision->id == $division->id){{ 'selected' }}@endif>{{ $oneDivision->bn_name }}</option>
                                     @endforeach

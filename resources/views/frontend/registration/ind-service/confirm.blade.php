@@ -3,7 +3,7 @@
 @section('title', 'Individual Service Provider Registration')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/index.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -86,6 +86,14 @@
                                 </div>
 
                                 <div class="form-group row mx-5">
+                                    <label for="description" class="col-3 col-form-label">বর্ণনা</label>
+                                    <div class="col-9">
+                                <textarea id="description" name="description"
+                                          class="form-control">{{ old('description') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mx-5">
                                     <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                                     <div class="col-9">
                                         <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
@@ -132,30 +140,18 @@
                                 @endif
 
                                 <div class="form-group row mx-5">
-                                    <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
+                                    <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>
                                     <div class="col-9">
                                         <input id="qualification" name="qualification" type="text" class="form-control here"
                                                value="{{ old('qualification') }}">
                                     </div>
                                 </div>
-                                @if(!$user->nid)
-                                    <div class="form-group row mx-5">
-                                        <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                                    class="text-danger">*</span></label>
-                                        <div class="col-9">
-                                            <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                                   class="form-control" required>
-                                        </div>
-                                    </div>
-                                @endif
-
                                 <div class="form-group row mx-5">
-                                    <label for="description" class="col-3 col-form-label">কাজের বর্ণনা <span
+                                    <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
-                    <textarea rows="6" id="description" name="description"
-                              class="form-control"
-                              required>{{ old('description') }}</textarea>
+                                        <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                               class="form-control" required>
                                     </div>
                                 </div>
                             </div>
@@ -257,7 +253,7 @@
                                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                                 data-option-loader-target="#sub-categories"
                                                 data-option-loader-param="category">
-                                            <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                            <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
 
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -318,6 +314,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row mx-5">
+                                    <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                                class="text-danger">*</span></label>
+                                    <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ old('pricing-info') }}</textarea>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-4" id="step-4">
                                 <div class="form-group row mx-5">
@@ -337,7 +341,7 @@
                                         <div class="flex">
                                             @for($i=0; $i<4; $i++)
                                                 <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                                                    <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
+                                                    <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                                     <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                               name="images[{{ $i }}][description]"></textarea>
                                                     <input id="images" name="images[{{ $i }}][file]" type="file"

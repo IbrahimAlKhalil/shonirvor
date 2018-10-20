@@ -22,12 +22,13 @@ class CreateOrgsTable extends Migration
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->mediumText('description');
             $table->string('logo')->nullable();
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('address');
             $table->string('trade_license')->nullable();
+            $table->mediumText('pricing_info')->nullable();
             $table->boolean('is_pending')->default(1);
             $table->boolean('is_top')->default(0);
             $table->softDeletes();

@@ -19,7 +19,7 @@ class UpdateInd extends FormRequest
 
         return [
             'mobile' => 'required|digits:11',
-            'referrer' => 'digits:11|different:mobile',
+            'referrer' => 'nullable|digits:11|different:mobile',
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',

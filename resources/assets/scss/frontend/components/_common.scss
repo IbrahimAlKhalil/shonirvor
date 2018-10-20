@@ -100,6 +100,13 @@ a:hover {
     }
   }
 
+  label > span {
+    background-color: #2196F3;
+    &:after {
+      display: block;
+    }
+  }
+
   > [type="checkbox"] + span {
     position: absolute;
     top: 0;
@@ -141,7 +148,6 @@ form {
     font-size: .85rem;
   }
 }
-
 
 .selectize-dropdown-content {
   .option {

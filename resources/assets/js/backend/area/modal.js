@@ -1,4 +1,14 @@
+// Selectize JS
+import '../../modules/selectize-option-loader-plugin';
+import '../../../../../node_modules/selectize/dist/css/selectize.default.css';
+
 document.addEventListener('DOMContentLoaded', () => {
+    let selects = document.querySelectorAll('#division, #district, #thana, #union, #village');
+
+    $(selects).selectize({
+        plugins: ['option-loader']
+    });
+
 
     let editModal = document.getElementById('edit-modal');
     let editForm = document.getElementById('edit-form');
@@ -14,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
             editModalLabelElement.innerHTML = `${name} ${editSuffix}`;
             editForm.action = `${editFormAction}/${button.parentElement.getAttribute('data-item-id')}`;
             nameInput.value = name;
+            selects.forEach(select => {
+                select.selectize.setValue(select.getAttribute('data-default-value'), true);
+            });
             $(editModal).modal('show');
         });
     });

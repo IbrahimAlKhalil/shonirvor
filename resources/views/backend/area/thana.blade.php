@@ -98,11 +98,12 @@
                         <div class="form-group row">
                             <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
                             <div class="col-sm-10">
-                                <select id="division" class="form-control"
+                                <select id="division"
                                         data-option-loader-url="{{ route('api.districts') }}"
                                         data-option-loader-target="#district"
                                         data-option-loader-param="division"
-                                        data-option-loader-nodisable="true">
+                                        data-option-loader-nodisable="true"
+                                        data-default-value="{{ $district->division_id }}">
                                     @foreach($allDivision as $oneDivision)
                                         <option @if($oneDivision->id == $district->division_id){{ 'selected' }}@endif value="{{ $oneDivision->id }}">{{ $oneDivision->bn_name }}</option>
                                     @endforeach
@@ -112,9 +113,10 @@
                         <div class="form-group row">
                             <label for="district" class="col-sm-2 col-form-label text-right">জেলা:</label>
                             <div class="col-sm-10">
-                                <select name="district_id" id="district" class="form-control"
+                                <select name="district_id" id="district"
                                         data-placeholder="-- জেলা --"
-                                        data-option-loader-properties="value=id,text=bn_name">
+                                        data-option-loader-properties="value=id,text=bn_name"
+                                        data-default-value="{{ $district->id }}">
                                     @foreach($allDistrict as $oneDistrict)
                                         <option value="{{ $oneDistrict->id }}" @if($oneDistrict->id == $district->id){{ 'selected' }}@endif>{{ $oneDistrict->bn_name }}</option>
                                     @endforeach

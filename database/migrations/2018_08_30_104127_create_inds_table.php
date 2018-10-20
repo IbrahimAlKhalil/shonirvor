@@ -18,7 +18,7 @@ class CreateIndsTable extends Migration
             $table->unsignedInteger('union_id');
             $table->unsignedInteger('village_id');
 
-            $table->text('description');
+            $table->mediumText('description');
             $table->string('email')->nullable();
             $table->string('mobile', 11);
             $table->string('referrer', 11)->nullable();
@@ -27,6 +27,7 @@ class CreateIndsTable extends Migration
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
             $table->string('cv')->nullable();
+            $table->mediumText('pricing_info')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_available')->default(1);
             $table->boolean('is_pending')->default(1);

@@ -3,7 +3,7 @@
 @section('title', 'সেবা প্রদানকারী অনুরোধ সম্পাদনা করুন')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/org-service/edit.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -15,12 +15,12 @@
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
         @include('components.success')
-        @foreach($errors as $error)
+        {{--@foreach($errors as $error)
             <div class="alert alert-danger">
                 {{ $error }}
             </div>
             {{ $errors }}
-        @endforeach
+        @endforeach--}}
 
         <form method="post" enctype="multipart/form-data"
               action="{{ route('organization-service-registration.update', $org->id) }}" id="edit-form">
@@ -56,12 +56,10 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা <span
-                                        class="text-danger">*</span></label>
+                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা</label>
                             <div class="col-9">
                                   <textarea rows="6" id="description" name="description"
-                                            class="form-control"
-                                            required>{{ oldOrData('description', $org->description) }}</textarea>
+                                            class="form-control">{{ oldOrData('description', $org->description) }}</textarea>
                             </div>
                         </div>
 
@@ -243,7 +241,7 @@
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
                                         data-option-loader-nodisable="true">
-                                    <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($org->category->id, $category->id) }}>{{ $category->name }}</option>
                                     @endforeach
@@ -359,6 +357,15 @@
                                 </div>
 
 
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
                             </div>
                         </div>
                     </div>

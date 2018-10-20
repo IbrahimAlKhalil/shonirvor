@@ -38,7 +38,12 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
 
     Route::prefix('packages')->name('package.')->group(function () {
 
-        Route::resource('service', 'ServicePackageController');
+        Route::resource('ind-service', 'IndServicePackageController', ['parameters' => [
+            'ind-service' => 'package'
+        ]]);
+        Route::resource('org-service', 'OrgServicePackageController', ['parameters' => [
+            'org-service' => 'package'
+        ]]);
         Route::resource('top-service', 'TopServicePackageController');
         Route::resource('referrer', 'ReferrerPackageController');
 
@@ -120,8 +125,8 @@ Route::middleware('auth')->group(function () {
 }, '');
 
 Route::namespace('Backend')->prefix('dashboard')->group(function () {
-    Route::resource('individual-service-request', 'IndServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['individual-service-request' => 'service-request']]);
-    Route::resource('organization-service-request', 'OrgServiceRequestController', ['only' => ['index', 'show', 'store', 'destroy'], 'parameters' => ['organization-service-request' => 'service-request']]);
+    Route::resource('individual-service-request', 'IndServiceRequestController', ['only' => ['index', 'show', 'update', 'destroy'], 'parameters' => ['individual-service-request' => 'service-request']]);
+    Route::resource('organization-service-request', 'OrgServiceRequestController', ['only' => ['index', 'show', 'update', 'destroy'], 'parameters' => ['organization-service-request' => 'service-request']]);
 
     Route::get('individual-service/disabled', 'IndServiceController@showDisabledAccounts')->name('individual-service.disabled');
     Route::get('organization-service/disabled', 'OrgServiceController@showDisabledAccounts')->name('organization-service.disabled');

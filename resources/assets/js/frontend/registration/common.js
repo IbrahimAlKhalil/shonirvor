@@ -1,11 +1,71 @@
 import '../../../scss/frontend/registration/common.scss';
 
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(function () {
 
+    let form = document.getElementById('registration-form');
+    let validation = $(form).validate();
+    let requiredSelects = $('#division, #district');
     let prev = $('.sw-btn-prev');
     let next = $('.sw-btn-next');
     prev.addClass('invisible');
+    let steps = {
+        step2: [
+            {
+                select: $('#thana'),
+                check: $('#no-thana')
+            },
+            {
+                select: $('#union'),
+                check: $('#no-union')
+            },
+            {
+                select: $('#village'),
+                check: $('#no-village')
+            }
+        ],
+        step3: [
+            {
+                select: $('#category'),
+                check: $('#no-category')
+            }
+        ]
+    };
 
+    let selectsAndChecks = [
+        ...steps.step2.map(obj => {
+            return obj;
+        }),
+        ...steps.step3.map(obj => {
+            return obj;
+        })];
+
+
+    function validateSelects(step) {
+        return !step.some(obj => {
+            if (!obj.select.val() && !obj.check[0].checked) {
+                obj.select.next().find('.selectize-input').addClass('border-danger');
+                return true;
+            }
+
+            obj.select.next().find('.selectize-input').removeClass('border-danger');
+            return false;
+        });
+    }
+
+    $(selectsAndChecks.map(obj => obj.check)).on('change', function () {
+        if (!this.checked) {
+            validation.checkForm();
+            validation.showErrors();
+        }
+    });
+
+    [...selectsAndChecks.map(obj => obj.select[0]), ...requiredSelects.toArray()].forEach(select => {
+        select.selectize.on('change', value => {
+            if (!!value) {
+                $(select).next().find('.selectize-input').removeClass('border-danger');
+            }
+        });
+    });
 
     $('#smartwizard').on('leaveStep', function (e, anchor, stepNumber, direction) {
 
@@ -13,38 +73,41 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         }
 
-        var hasError = false;
-        var hasEmpty = $(anchor.attr('href')).find('[aria-required="true"]').toArray().some(element => {
-            if (!element.value) {
-                element.setAttribute('aria-invalid', true);
-                return true;
-            }
-
-            return false;
-        });
-
-        hasEmpty = $(anchor.attr('href')).find('select').toArray().some(select => {
-            if (!select.value) {
-                console.log($(select).next().find('.selectize-input'));
-                $(select).next().find('.selectize-input').css('borderColor', '#de4e6d');
-                return true;
-            }
-        });
-
-        if (!!$(anchor.attr('href')).find('[aria-invalid="true"]').length) {
-            hasError = true;
-        }
-
-        if (hasError || hasEmpty) {
-            anchor.parent().addClass('danger');
+        if (!validation.checkForm()) {
+            validation.errorList.forEach(error => {
+                error.element.setAttribute('aria-invalid', 'true')
+            });
+            validation.showErrors();
             return false;
         }
 
-        anchor.parent().removeClass('danger');
-        $(anchor.attr('href')).find('select').each(function () {
-            $(this).next().find('.selectize-input').css('borderColor', '#b8b8b8');
-        });
+        if (stepNumber === 1) {
+            let requiredSelectsNotFilled = requiredSelects.toArray().some(select => {
+                return !select.value;
+            });
 
+            if (requiredSelectsNotFilled) {
+                requiredSelects.each(function () {
+                    $(this).next().find('.selectize-input').addClass('border-danger');
+                });
+                return false;
+            }
+
+            if (!validateSelects(steps.step2)) {
+                return false;
+            }
+        }
+
+        if (stepNumber === 2) {
+            if (!validateSelects(steps.step3)) {
+                return false;
+            }
+        }
+
+
+        requiredSelects.each(function () {
+            $(this).next().find('.selectize-input').removeClass('border-danger');
+        });
         return true;
     })
         .on('showStep', function (event, anchor, stepNumber) {
@@ -52,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stepNumber === 0) {
                 prev.addClass('invisible');
             }
-            if(stepNumber === 3) {
+            if (stepNumber === 3) {
                 next.addClass('invisible')
             }
 

@@ -3,7 +3,7 @@
 @section('title', 'Edit Individual Service Provider Request')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/edit.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
@@ -87,17 +87,15 @@
                             </div>
                         </div>
 
-                        @if($canEditNid)
-                            <div class="form-group row mx-5">
-                                <label for="age" class="col-3 col-form-label">বয়স <span
-                                            class="text-danger">*</span></label>
-                                <div class="col-9">
-                                    <input id="age" name="age" type="number"
-                                           value="{{ oldOrData('age', $ind->user->age) }}" required="required"
-                                           class="form-control">
-                                </div>
+                        <div class="form-group row mx-5">
+                            <label for="age" class="col-3 col-form-label">বয়স <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <input id="age" name="age" type="number"
+                                       value="{{ oldOrData('age', $ind->user->age) }}" required="required"
+                                       class="form-control">
                             </div>
-                        @endif
+                        </div>
 
                         <div class="form-group row mx-5">
                             <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
@@ -106,25 +104,21 @@
                                        value="{{ oldOrData('qualification', $ind->user->qualification) }}">
                             </div>
                         </div>
-                        @if($canEditNid)
-                            <div class="form-group row mx-5">
-                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                            class="text-danger">*</span></label>
-                                <div class="col-9">
-                                    <input id="nid" name="nid" type="number"
-                                           value="{{ oldOrData('nid', $ind->user->nid) }}"
-                                           class="form-control" required>
-                                </div>
-                            </div>
-                        @endif
-
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">কাজের বর্ণনা <span
+                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
+                                <input id="nid" name="nid" type="number"
+                                       value="{{ oldOrData('nid', $ind->user->nid) }}"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="description" class="col-3 col-form-label">কাজের বর্ণনা</label>
+                            <div class="col-9">
                     <textarea rows="6" id="description" name="description"
-                              class="form-control"
-                              required>{{ oldOrData('description', $ind->description) }}</textarea>
+                              class="form-control">{{ oldOrData('description', $ind->description) }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -249,7 +243,7 @@
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
                                         data-option-loader-nodisable="true">
-                                    <option>-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
                                     @endforeach
@@ -433,6 +427,15 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <textarea id="pricing-info" name="pricing-info"
+                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-4" id="step-4">
                         <div class="form-group row mx-5">
@@ -441,9 +444,8 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control-file @if($errors->has('identities')) is-invalid @endif"
+                                       class="form-control-file"
                                        multiple>
-                                @include('components.invalid', ['name' => 'identities'])
                             </div>
                         </div>
 
@@ -470,7 +472,6 @@
                             <div class="col-9">
                                 <input id="cv" name="cv" type="file" accept="image/*"
                                        class="form-control-file">
-                                @include('components.invalid', ['name' => 'cv'])
                             </div>
                         </div>
 
@@ -481,7 +482,6 @@
                                 <input id="experience-certificate" name="experience-certificate" type="file"
                                        accept="image/*"
                                        class="form-control-file">
-                                @include('components.invalid', ['name' => 'experience-certificate'])
                             </div>
                         </div>
 

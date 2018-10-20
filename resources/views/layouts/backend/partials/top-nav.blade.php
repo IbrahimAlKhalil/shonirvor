@@ -24,7 +24,8 @@
                     প্যাকেজ
                 </a>
                 <div class="dropdown-menu" aria-labelledby="packageDropdown">
-                    <a class="dropdown-item @if(request()->is('dashboard/packages/service')){{ 'active' }}@endif" href="{{ route('backend.package.service.index') }}">সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/ind-service')){{ 'active' }}@endif" href="{{ route('backend.package.ind-service.index') }}">ব্যাক্তিগত সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard/packages/org-service')){{ 'active' }}@endif" href="{{ route('backend.package.org-service.index') }}">প্রাতিষ্ঠানিক সার্ভিস</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/top-service')){{ 'active' }}@endif" href="{{ route('backend.package.top-service.index') }}">টপ সার্ভিস</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/referrer')){{ 'active' }}@endif" href="{{ route('backend.package.referrer.index') }}">রেফারার</a>
                     <a class="dropdown-item @if(request()->is('dashboard/packages/ad')){{ 'active' }}@endif" href="{{ route('backend.package.ad.index') }}">এড</a>

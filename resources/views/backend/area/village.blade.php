@@ -105,11 +105,12 @@
                         <div class="form-group row">
                             <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
                             <div class="col-sm-10">
-                                <select id="division" class="form-control"
+                                <select id="division"
                                         data-option-loader-url="{{ route('api.districts') }}"
                                         data-option-loader-target="#district"
                                         data-option-loader-param="division"
-                                        data-option-loader-nodisable="true">
+                                        data-option-loader-nodisable="true"
+                                        data-default-value="{{ $union->division->id }}">
                                     @foreach($allDivision as $oneDivision)
                                         <option value="{{ $oneDivision->id }}" @if($oneDivision->id == $union->division->id){{ 'selected' }}@endif>{{ $oneDivision->bn_name }}</option>
                                     @endforeach
@@ -119,13 +120,14 @@
                         <div class="form-group row">
                             <label for="district" class="col-sm-2 col-form-label text-right">জেলা:</label>
                             <div class="col-sm-10">
-                                <select id="district" class="form-control"
+                                <select id="district"
                                         data-placeholder="-- জেলা --"
                                         data-option-loader-url="{{ route('api.thanas') }}"
                                         data-option-loader-target="#thana"
                                         data-option-loader-param="district"
                                         data-option-loader-nodisable="true"
-                                        data-option-loader-properties="value=id,text=bn_name">
+                                        data-option-loader-properties="value=id,text=bn_name"
+                                        data-default-value="{{ $union->district->id }}">
                                     @foreach($allDistrict as $oneDistrict)
                                         <option value="{{ $oneDistrict->id }}" @if($oneDistrict->id == $union->district->id){{ 'selected' }}@endif>{{ $oneDistrict->bn_name }}</option>
                                     @endforeach
@@ -135,13 +137,14 @@
                         <div class="form-group row">
                             <label for="thana" class="col-sm-2 col-form-label text-right">থানা:</label>
                             <div class="col-sm-10">
-                                <select name="thana_id" id="thana" class="form-control"
+                                <select name="thana_id" id="thana"
                                         data-placeholder="-- থানা --"
                                         data-option-loader-url="{{ route('api.unions') }}"
                                         data-option-loader-target="#union"
                                         data-option-loader-param="thana"
                                         data-option-loader-nodisable="true"
-                                        data-option-loader-properties="value=id,text=bn_name">
+                                        data-option-loader-properties="value=id,text=bn_name"
+                                        data-default-value="{{ $union->thana_id }}">
                                     @foreach($allThana as $oneThana)
                                         <option value="{{ $oneThana->id }}" @if($oneThana->id == $union->thana_id){{ 'selected' }}@endif>{{ $oneThana->bn_name }}</option>
                                     @endforeach
@@ -151,9 +154,10 @@
                         <div class="form-group row">
                             <label for="union" class="col-sm-2 col-form-label text-right">ইউনিয়ন:</label>
                             <div class="col-sm-10">
-                                <select name="union_id" id="union" class="form-control"
+                                <select name="union_id" id="union"
                                         data-placeholder="-- ইউনিয়ন --"
-                                        data-option-loader-properties="value=id,text=bn_name">
+                                        data-option-loader-properties="value=id,text=bn_name"
+                                        data-default-value="{{ $union->id }}">
                                     @foreach($allUnion as $oneUnion)
                                         <option value="{{ $oneUnion->id }}" @if($oneUnion->id == $union->id){{ 'selected' }}@endif>{{ $oneUnion->bn_name }}</option>
                                     @endforeach
