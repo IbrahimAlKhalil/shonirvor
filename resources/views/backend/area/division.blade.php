@@ -62,8 +62,8 @@
                             <div class="card-body">
                                 <form method="post" action="{{ route('backend.area.division.store') }}">
                                     {{ csrf_field() }}
-                                    <label for="division" class="label">বিভাগের নাম</label>
-                                    <input id="division" name="division" class="form-control" type="text">
+                                    <label for="create-division" class="label">বিভাগের নাম:</label>
+                                    <input id="create-division" name="division" class="form-control" type="text">
                                     <button class="mt-3 btn btn-secondary btn-success rounded float-right" type="submit">সাবমিট</button>
                                 </form>
                             </div>
@@ -76,7 +76,7 @@
 
     <!-- Edit Modal -->
     <div class="modal fade" id="edit-modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <p class="modal-title h5" id="edit-modal-label" data-suffix="বিভাগটি এডিট করুন"></p>
@@ -106,7 +106,7 @@
 
     <!-- Delete Modal -->
     <div class="modal fade" id="delete-modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
                     <p class="modal-title h5" id="delete-modal-label" data-prefix="সত্যিই কি আপনি" data-suffix="বিভাগটি মুছে ফেলতে চান?"></p>

@@ -63,8 +63,8 @@
                             <div class="card-body">
                                 <form method="post" action="{{ route('backend.area.district.store', $division->id) }}">
                                     {{ csrf_field() }}
-                                    <label for="district" class="label">জেলার নাম</label>
-                                    <input id="district" name="district" class="form-control" type="text">
+                                    <label for="create-district" class="label">জেলার নাম</label>
+                                    <input id="create-district" name="district" class="form-control" type="text">
                                     <button class="mt-3 btn btn-secondary btn-success rounded float-right"
                                             type="submit">সাবমিট
                                     </button>
@@ -79,7 +79,7 @@
 
     <!-- Edit Modal -->
     <div class="modal fade" id="edit-modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <p class="modal-title h5" id="edit-modal-label" data-suffix="জেলাটি এডিট করুন"></p>
@@ -92,7 +92,7 @@
                     {{ method_field('put') }}
                     <div class="modal-body text-left">
                         <div class="form-group row">
-                            <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
+                            <label class="col-sm-2 col-form-label text-right">বিভাগ:</label>
                             <div class="col-sm-10">
                                 <select name="division_id" id="division" data-default-value="{{ $division->id }}">
                                     @foreach($allDivision as $oneDivision)
@@ -118,8 +118,8 @@
     </div>
 
     <!-- Delete Modal -->
-    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="delete-modal">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
                     <p class="modal-title h5" id="delete-modal-label" data-prefix="সত্যিই কি আপনি"

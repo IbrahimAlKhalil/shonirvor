@@ -70,8 +70,8 @@
                             <div class="card-body">
                                 <form method="post" action="{{ route('backend.area.union', $thana->id) }}">
                                     {{ csrf_field() }}
-                                    <label for="union" class="label">ইউনিয়নের নাম</label>
-                                    <input id="union" name="union" class="form-control" type="text">
+                                    <label for="create-union" class="label">ইউনিয়নের নাম</label>
+                                    <input id="create-union" name="union" class="form-control" type="text">
                                     @include('components.invalid', ['name' => 'sub-category'])
                                     <button class="mt-3 btn btn-secondary btn-success rounded pull-right" type="submit">
                                         সাবমিট
@@ -88,7 +88,7 @@
 
     <!-- Edit Modal -->
     <div class="modal fade" id="edit-modal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <p class="modal-title h5" id="edit-modal-label" data-suffix="ইউনিয়নটি এডিট করুন"></p>
@@ -101,7 +101,7 @@
                     {{ method_field('put') }}
                     <div class="modal-body text-left">
                         <div class="form-group row">
-                            <label for="division" class="col-sm-2 col-form-label text-right">বিভাগ:</label>
+                            <label class="col-sm-2 col-form-label text-right">বিভাগ:</label>
                             <div class="col-sm-10">
                                 <select id="division"
                                         data-option-loader-url="{{ route('api.districts') }}"
@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="district" class="col-sm-2 col-form-label text-right">জেলা:</label>
+                            <label class="col-sm-2 col-form-label text-right">জেলা:</label>
                             <div class="col-sm-10">
                                 <select id="district"
                                         data-placeholder="-- জেলা --"
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="thana" class="col-sm-2 col-form-label text-right">থানা:</label>
+                            <label class="col-sm-2 col-form-label text-right">থানা:</label>
                             <div class="col-sm-10">
                                 <select name="thana_id" id="thana"
                                         data-placeholder="-- থানা --"
@@ -162,8 +162,8 @@
     </div>
 
     <!-- Delete Modal -->
-    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="delete-modal">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
                     <p class="modal-title h5" id="delete-modal-label" data-prefix="সত্যিই কি আপনি"

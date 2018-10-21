@@ -37,7 +37,7 @@
 
                                 <!-- Edit Modal -->
                                 <div class="modal fade" id="editModal{{ $key }}">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <p class="modal-title h5" id="exampleModalLabel">নোটিশ এডিট করুন</p>
@@ -66,8 +66,8 @@
                                 </div>
 
                                 <!-- Delete Modal -->
-                                <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
+                                <div class="modal fade" id="deleteModal{{ $key }}">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
                                                 <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই নোটিশটি মুছে ফেলতে চান?</p>
