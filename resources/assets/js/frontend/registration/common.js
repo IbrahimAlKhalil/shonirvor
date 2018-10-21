@@ -1,6 +1,11 @@
 import '../../../scss/frontend/registration/common.scss';
+import {ImagePicker} from "../../modules/image-picker";
 
 $(document).ready(function () {
+
+
+    window.imagePicker = new ImagePicker(document.getElementsByClassName('file-picker'));
+
 
     let form = document.getElementById('registration-form');
     let validation = $(form).validate();
