@@ -106,22 +106,3 @@ class Control {
 function addClasses(element, classList) {
     classList.forEach(_class => element.classList.add(_class));
 }
-
-
-/*
-*
-* <div class="input-picker d-flex flex-wrap">
-                                    <div class="d-flex flex-wrap">
-                                        <div style="background: url(http://shonirvor.local/storage/seed/user-photos/95.jpg)"
-                                             class="picked-image rounded">
-                                        </div>
-                                        <label for="identities"
-                                               class="input-image btn btn-light d-flex justify-content-center align-items-center">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>
-                                            <input id="identities" name="identities[]" type="file" accept="image/*"
-                                                   class="d-none"
-                                                   multiple>
-                                        </label>
-                                    </div>
-*
-* */

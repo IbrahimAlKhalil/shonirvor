@@ -35,7 +35,6 @@ class StoreInd extends FormRequest
             'category' => 'required_without:no-category|exists:categories,id',
             'category-request' => 'required_with:no-category',
             'sub-categories.*' => 'exists:sub_categories,id',
-            'sub-category-rates.*.work-methods.*.rate' => 'required|numeric',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
