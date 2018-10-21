@@ -54,7 +54,7 @@
                             <label for="description" class="col-3 col-form-label">বর্ণনা</label>
                             <div class="col-9">
                                 <textarea id="description" name="description"
-                                       class="form-control">{{ old('description') }}</textarea>
+                                          class="form-control">{{ old('description') }}</textarea>
                             </div>
                         </div>
 
@@ -295,7 +295,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control-fil"
+                                       class="file-picker"
                                        multiple>
                             </div>
                         </div>
@@ -311,7 +311,7 @@
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="form-control-file mt-3">
+                                                   class="form-control-file file-picker">
                                         </div>
                                     @endfor
                                 </div>
@@ -322,7 +322,7 @@
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
                                 <input id="cv" name="cv" type="file" accept="image/*"
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -332,7 +332,7 @@
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
                                        accept="image/*"
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
