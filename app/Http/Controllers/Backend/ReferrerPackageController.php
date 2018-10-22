@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Package;
+use App\Models\PackageValue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,13 +19,20 @@ class ReferrerPackageController extends Controller
         ['id' => 6, 'name' => 'refer_onetime_interest'],
         ['id' => 7, 'name' => 'refer_renew_interest'],
         ['id' => 8, 'name' => 'refer_fail_onetime_interest'],
-        ['id' => 9, 'name' => 'refer_fail_renew_interest']
+        ['id' => 9, 'name' => 'refer_fail_renew_interest'],
+        ['id' => 10, 'name' => 'is_default']
     ];
 
     public function index()
     {
         $packages = Package::with('properties')
+            ->select('packages.id', 'packages.package_type_id', 'package_values.package_property_id', 'package_values.value as is_default')
+            ->join('package_values', function ($join) {
+                $join->on('packages.id', 'package_values.package_id')
+                    ->where('package_values.package_property_id', 10);
+            })
             ->where('package_type_id', $this->packageTypeId)
+            ->orderBy('is_default', 'desc')
             ->paginate(10);
 
         $navs = [
@@ -49,8 +57,25 @@ class ReferrerPackageController extends Controller
         $package->package_type_id = $this->packageTypeId;
         $package->save();
 
-        foreach ($this->packageProperties as $property) {
+        if ($request->input('is_default'))
+            DB::table('package_values')->select(
+                'package_values.id as id',
+                'packages.id as package_id',
+                'packages.package_type_id',
+                'package_values.package_property_id',
+                'package_values.value'
+                )
+                ->join('packages', 'package_values.package_id', 'packages.id')
+                ->where([
+                    ['package_property_id', 10],
+                    ['package_type_id', 5],
+                    ['value', 1]
+                ])
+                ->update([
+                    'package_values.value' => null
+                ]);
 
+        foreach ($this->packageProperties as $property) {
             array_push($packageValues, [
                 'package_id' => $package->id,
                 'package_property_id' => $property['id'],
@@ -70,6 +95,25 @@ class ReferrerPackageController extends Controller
     public function update(Request $request, Package $package)
     {
         DB::beginTransaction();
+
+        if ($request->input('is_default'))
+            DB::table('package_values')->select(
+                'package_values.id as id',
+                'packages.id as package_id',
+                'packages.package_type_id',
+                'package_values.package_property_id',
+                'package_values.value'
+                )
+                ->join('packages', 'package_values.package_id', 'packages.id')
+                ->where([
+                    ['package_id', '!=', $package->id],
+                    ['package_property_id', 10],
+                    ['package_type_id', 5],
+                    ['value', 1]
+                ])
+                ->update([
+                    'package_values.value' => null
+                ]);
 
         foreach ($this->packageProperties as $property) {
             $package->properties()
