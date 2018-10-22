@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Ind;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\User;
 use App\Models\Village;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
@@ -46,7 +47,6 @@ class IndServiceRequestController extends Controller
 
     public function update(Request $request, Ind $serviceRequest)
     {
-
         // TODO:: Make a request class
 
         DB::beginTransaction();

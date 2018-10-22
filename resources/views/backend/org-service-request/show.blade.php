@@ -81,9 +81,10 @@
                             </tbody>
                         </table>
 
-                        <form id="approve-request" action="{{ route('organization-service-request.store') }}"
+                        <form id="approve-request" action="{{ route('organization-service-request.update', $serviceRequest->id) }}"
                               method="post">
                             {{ csrf_field() }}
+                            {{ method_field('put') }}
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                             @if(!$serviceRequest->category->is_confirmed)
                                 <div class="form-group row">

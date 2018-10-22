@@ -18,6 +18,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
+    /**********************/
+    /***** Relations *****/
+    /**********************/
+
     public function inds()
     {
         return $this->hasMany(Ind::class);
@@ -26,8 +31,7 @@ class User extends Authenticatable
     /**
      * @param $status string
      * @return object|null
-     * */
-
+     */
     public function orgs($status = null)
     {
         $result = null;
@@ -49,5 +53,10 @@ class User extends Authenticatable
     public function identities()
     {
         return $this->hasMany(Identity::class);
+    }
+
+    public function references()
+    {
+        return $this->hasMany(Reference::class);
     }
 }

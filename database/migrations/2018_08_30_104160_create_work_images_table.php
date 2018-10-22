@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateWorkImagesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('work_images', function (Blueprint $table) {
@@ -22,11 +17,6 @@ class CreateWorkImagesTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('work_images');

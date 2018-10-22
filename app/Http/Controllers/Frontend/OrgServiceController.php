@@ -60,10 +60,16 @@ class OrgServiceController extends Controller
 
         // Visitor counter increment.
         if (DB::table('org_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('org_id', $provider->id)->exists()) {
-            DB::table('org_visitor_counts')->whereDate('created_at', date('Y-m-d'))->where('org_id', $provider->id)->increment('how_much', 1, ['updated_at' => date('Y-m-d H:i:s')]);
+            DB::table('org_visitor_counts')
+                ->whereDate('created_at', date('Y-m-d'))
+                ->where('org_id', $provider->id)
+                ->increment('how_much', 1, ['updated_at' => date('Y-m-d H:i:s')]);
         } else {
-            DB::table('org_visitor_counts')->insert(
-                ['org_id' => $provider->id, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
+            DB::table('org_visitor_counts')->insert([
+                    'org_id' => $provider->id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]
             );
         }
 

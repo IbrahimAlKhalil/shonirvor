@@ -97,6 +97,12 @@ class Org extends Model
         return $this->belongsToMany(SubCategory::class, 'org_sub_category_rates')->withPivot('rate');
     }
 
+    public function referredBy()
+    {
+        return $this->belongsTo(Reference::class, 'id', 'service_id')
+            ->where('service_type_id', 2);
+    }
+
 
     /*******************/
     /***** Scopes *****/
