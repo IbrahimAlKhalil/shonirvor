@@ -193,6 +193,21 @@ class OrgServiceRegistrationController extends Controller
         DB::table('org_sub_category_rates')->insert($data);
 
 
+        // org additional price
+        $data = [];
+        foreach ($request->post('additional-pricing') as $price) {
+            if (isset($price['name']) && isset($price['info'])) {
+                array_push($data, [
+                    'org_id' => $org->id,
+                    'name' => $price['name'],
+                    'info' => $price['info']
+                ]);
+            }
+        }
+
+        DB::table('org_additional_prices')->insert($data);
+
+
         // User
         $user->nid = $request->post('nid');
         $user->save();
@@ -382,6 +397,22 @@ class OrgServiceRegistrationController extends Controller
 
         DB::table('org_sub_category_rates')->insert($data);
 
+
+        // org additional price
+        DB::table('org_additional_prices')->where('org_id', $org->id);
+        $data = [];
+        foreach ($request->post('additional-pricing') as $price) {
+            if (isset($price['name']) && isset($price['info'])) {
+                array_push($data, [
+                    'org_id' => $org->id,
+                    'name' => $price['name'],
+                    'info' => $price['info']
+                ]);
+            }
+        }
+
+        DB::table('org_additional_prices')->insert($data);
+
         // User
         $user->nid = $request->post('nid');
         if ($request->hasFile('photo')) {
@@ -418,7 +449,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
+        $org = Org::with(['division', 'district', 'thana', 'union', 'subCategoryRates', 'additionalPrices'])->find($id);
 
         if ($org->user_id != Auth::id() && $org->is_pending == 0) {
             return redirect(route('organization-service-registration.index'));

@@ -50,7 +50,6 @@ class Picker {
             control.preview();
             control.hideButton();
             let cross = document.createElement('span');
-            cross.innerHTML = 'x';
             cross.classList.add('cross');
             cross.addEventListener('click', () => {
                 control.element.remove();

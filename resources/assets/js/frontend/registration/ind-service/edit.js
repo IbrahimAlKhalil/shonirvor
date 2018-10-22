@@ -1,13 +1,5 @@
 import {Repeater} from '../../../modules/repeater';
-import {OptionLoader} from "../../../modules/option-loader";
-import 'smartwizard';
-import '../../../modules/selectize-option-loader-plugin';
-import Selectize from 'selectize';
-
-import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
-import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
-import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
-
+import {querySelectorAll} from "../../../modules/scoped-query-selector";
 
 function requestFields(element, workMethods, serial) {
     workMethods.forEach((workMethod, workMethodCount) => {
@@ -45,28 +37,41 @@ function requestFields(element, workMethods, serial) {
 document.addEventListener('DOMContentLoaded', () => {
     let container = document.getElementById('sub-categories-parent');
     let requestContainer = document.getElementById('sub-category-request');
-    let repeater = new Repeater(container);
-    let repeater2 = new Repeater(requestContainer);
+
+    console.log(querySelectorAll(requestContainer, '> [data-cloned]'));
+
+    // sub category rate
+    let subCategoryRateRepeater = new Repeater(container);
+
+    // sub category request
+    let subCategoryRequestRepeater = new Repeater(requestContainer);
+
+    subCategoryRequestRepeater.clones.forEach(clone => {
+        clone.previousClone = clone.previousElementSibling;
+
+    });
+
 
     fetch(container.getAttribute('data-route')).then(response => response.json()).then(workMethods => {
 
         document.getElementById('add-new').addEventListener('click', () => {
-            repeater2.repeat(function (item) {
+            subCategoryRequestRepeater.repeat(function (item) {
+                item.classList.remove('d-none');
                 item.querySelector('.remove-btn').classList.remove('d-none');
                 item.lastElementChild.innerHTML = '';
-                requestFields(item.lastElementChild, workMethods, repeater2.length);
+                requestFields(item.lastElementChild, workMethods, subCategoryRequestRepeater.length);
 
-                item.firstElementChild.firstElementChild.innerHTML = `<input type="text" class="form-control" name="sub-category-requests[${repeater2.length}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম">`;
+                item.firstElementChild.firstElementChild.innerHTML = `<input type="text" class="form-control" name="sub-category-requests[${subCategoryRequestRepeater.length}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম">`;
             });
         });
 
         let subCategorySelect = document.getElementById('sub-categories');
-        subCategorySelect.selectize.on('change', value => {
-            repeater.removeAll();
+        subCategorySelect.selectize.on('change', () => {
+            subCategoryRateRepeater.removeAll();
 
             $(subCategorySelect).val().forEach((subCategoryId, subCategoryCount) => {
                 if (!subCategoryId) return;
-                repeater.repeat(function (item) {
+                subCategoryRateRepeater.repeat(function (item) {
                     item.classList.remove('d-none');
                     item.firstElementChild.innerHTML = subCategorySelect.querySelector(`[value='${subCategoryId}']`).innerHTML;
                     workMethods.forEach((workMethod, workMethodCount) => {

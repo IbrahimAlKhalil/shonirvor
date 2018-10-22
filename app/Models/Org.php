@@ -97,6 +97,11 @@ class Org extends Model
         return $this->belongsToMany(SubCategory::class, 'org_sub_category_rates')->withPivot('rate');
     }
 
+    function additionalPrices()
+    {
+        return $this->hasMany(OrgAdditionalPrice::class);
+    }
+
 
     /*******************/
     /***** Scopes *****/

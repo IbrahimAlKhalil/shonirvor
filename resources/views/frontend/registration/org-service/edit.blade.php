@@ -5,7 +5,6 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/org-service/edit.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -15,14 +14,15 @@
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
         @include('components.success')
-        {{--@foreach($errors as $error)
+        @foreach($errors as $error)
             <div class="alert alert-danger">
                 {{ $error }}
             </div>
             {{ $errors }}
-        @endforeach--}}
+        @endforeach
 
-        <form method="post" enctype="multipart/form-data"
+        <form method="post" id="registration-form" enctype="multipart/form-data"
+              id="registration-form"
               action="{{ route('organization-service-registration.update', $org->id) }}" id="edit-form">
             {{ method_field('put') }}
             {{ csrf_field() }}
@@ -247,7 +247,7 @@
                                     @endforeach
                                 </select>
 
-                                <label for="no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                <label class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-category" name="no-category"
                                            class="mt-2 no-something" {{ checkBox(!$org->category->is_confirmed) }}>
                                     <span></span>
@@ -329,7 +329,7 @@
                                                     </li>
                                                 @endif
 
-                                                <li class="repeater-clone mt-2 border-0 list-group-item"
+                                                <li class="mt-2 border-0 list-group-item"
                                                     data-cloned="true">
                                                     <div class="row">
                                                         <input type="text"
@@ -361,11 +361,36 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <textarea id="pricing-info" name="pricing-info"
-                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
+                            <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
+                            <div class="col-9" id="otirikto-kaj">
+                                @foreach($org->additionalPrices as $key => $additionalPrice)
+                                    <div class="repeater-clone row border rounded shadow-sm mt-2 position-relative">
+                                        <div class="form-group  col-md-12 row mt-3">
+                                            <label for="addtional-pricing-name-{{ $key }}" class="col-3 col-form-label">কাজের
+                                                নামঃ </label>
+                                            <div class="col-9">
+                                                <input id="addtional-pricing-name-{{ $key }}" type="text"
+                                                       name="additional-pricing[{{ $key }}][name]"
+                                                       class="form-control"
+                                                       value="{{ oldOrData('additional-pricing.[' .$key. '].[name]', $additionalPrice->name) }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group  col-md-12 row mt-2">
+                                            <label for="addtional-pricing-info-{{ $key }}"
+                                                   class="col-3 col-form-label">তথ্যঃ </label>
+                                            <div class="col-9">
+                                            <textarea id="addtional-pricing-info-{{ $key }}" name="additional-pricing[{{ $key }}][info]"
+                                                      class="form-control">{{ oldOrData('additional-pricing.[' .$key. '].[info]', $additionalPrice->info) }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <span class="cross remove-btn"></span>
+                                    </div>
+                                @endforeach
+                                <button type="button" class="btn btn-light float-left shadow-sm add-new mt-2"><i
+                                            class="fa fa-plus"></i> আরও
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -375,7 +400,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="logo" name="logo" type="file" accept="image/*"
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -385,7 +410,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control-file"
+                                       class="file-picker"
                                        multiple>
                             </div>
                         </div>
@@ -401,7 +426,7 @@
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="form-control-file">
+                                                   class="file-picker">
                                         </div>
                                     @endfor
                                 </div>
@@ -413,7 +438,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -432,6 +457,9 @@
 
 
 @section('script')
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\UpdateOrg::class, '#registration-form') !!}
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
     <script>
         $('#smartwizard').smartWizard({
             theme: 'arrows',
@@ -439,7 +467,7 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: false
+            useURLhash: true
         });
 
         $('select').selectize({
@@ -447,6 +475,4 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\UpdateOrg::class, '#edit-form') !!}
 @endsection

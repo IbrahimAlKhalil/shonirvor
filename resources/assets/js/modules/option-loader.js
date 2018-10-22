@@ -7,7 +7,6 @@ export class OptionLoader {
 
         select.forEach(select => {
             let target = document.querySelector(select.getAttribute('data-option-loader-target'));
-            !select.hasAttribute('data-option-loader-nodisable');
 
             select.optionLoader = this;
             select.optionLoaderTarget = target;

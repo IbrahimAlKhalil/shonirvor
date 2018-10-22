@@ -5,7 +5,6 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/org-service/index.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -52,7 +51,7 @@
                 </table>
             </div>
             <div class="tab-pane fade {{ $classesToAdd[1] }} show" id="request-account">
-                <form method="post" enctype="multipart/form-data"
+                <form method="post" id="registration-form" enctype="multipart/form-data"
                       action="{{ route('organization-service-registration.store') }}">
                     {{ csrf_field() }}
                     <div id="smartwizard" class="mx-5">
@@ -256,7 +255,7 @@
                                 </div>
 
                                 <div class="form-group row mx-5">
-                                    <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                                    <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
                                         <select id="sub-categories"
@@ -279,7 +278,7 @@
 
 
                                         <div class="mt-4 checkbox">
-                                            <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                            <label>আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                                             <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                                    class="mt-2 no-something">
                                             <span></span>
@@ -309,11 +308,32 @@
                                 </div>
 
                                 <div class="form-group row mx-5">
-                                    <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
-                                                class="text-danger">*</span></label>
-                                    <div class="col-9">
-                                <textarea id="pricing-info" name="pricing-info"
-                                          class="form-control" required>{{ old('pricing-info') }}</textarea>
+                                    <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
+                                    <div class="col-9" id="otirikto-kaj">
+                                        <div class="repeater-clone row border rounded shadow-sm mt-2 position-relative">
+                                            <div class="form-group  col-md-12 row mt-3">
+                                                <label for="addtional-pricing-name" class="col-3 col-form-label">কাজের
+                                                    নামঃ </label>
+                                                <div class="col-9">
+                                                    <input id="addtional-pricing-name" type="text"
+                                                           name="additional-pricing[0][name]"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group  col-md-12 row mt-2">
+                                                <label for="addtional-pricing-info" class="col-3 col-form-label">তথ্যঃ </label>
+                                                <div class="col-9">
+                                            <textarea id="addtional-pricing-info" name="additional-pricing[0][info]"
+                                                      class="form-control">{{ old('pricing-info') }}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <span class="cross remove-btn"></span>
+                                        </div>
+                                        <button type="button" class="btn btn-light float-left shadow-sm add-new mt-2"><i
+                                                    class="fa fa-plus"></i> আরও
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -323,7 +343,7 @@
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
                                         <input id="logo" name="logo" type="file" accept="image/*"
-                                               class="form-control-file">
+                                               class="file-picker">
                                     </div>
                                 </div>
 
@@ -331,10 +351,11 @@
                                     <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                                         ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                                 class="text-danger">*</span></label>
-                                    <div class="col-9">
+                                    <div class="col-9 d-flex">
                                         <input id="identities" name="identities[]" type="file" accept="image/*"
-                                               class="form-control-file"
-                                               multiple>
+                                               class="file-picker">
+                                        <input id="identities" name="identities[]" type="file" accept="image/*"
+                                               class="file-picker">
                                     </div>
                                 </div>
 
@@ -349,7 +370,7 @@
                                                               name="images[{{ $i }}][description]"></textarea>
                                                     <input id="images" name="images[{{ $i }}][file]" type="file"
                                                            accept="image/*"
-                                                           class="form-control-file">
+                                                           class="file-picker">
                                                 </div>
                                             @endfor
                                         </div>
@@ -361,7 +382,7 @@
                                                 class="text-danger">*</span></label>
                                     <div class="col-9">
                                         <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                               class="form-control-file">
+                                               class="file-picker">
                                     </div>
                                 </div>
 
@@ -380,6 +401,9 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreOrg::class, '#registration-form') !!}
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
     <script>
         $('#smartwizard').smartWizard({
             theme: 'arrows',
@@ -395,6 +419,4 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\StoreOrg::class) !!}
 @endsection

@@ -5,7 +5,6 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/frontend/registration/ind-service/edit.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -18,7 +17,7 @@
 
         @include('components.success')
 
-        <form method="post" enctype="multipart/form-data"
+        <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.update', $ind->id) }}">
             {{ method_field('put') }}
             {{ csrf_field() }}
@@ -131,8 +130,7 @@
                                         <select name="division" id="division"
                                                 data-option-loader-url="{{ route('api.districts') }}"
                                                 data-option-loader-target="#district"
-                                                data-option-loader-param="division"
-                                                data-option-loader-nodisable="true">
+                                                data-option-loader-param="division">
                                             <option value="">-- বিভাগ --</option>
                                             @foreach($divisions as $division)
                                                 <option value="{{ $division->id }}" {{ selectOpt($ind->division_id, $division->id) }}>{{ $division->bn_name }}</option>
@@ -145,8 +143,7 @@
                                                 data-option-loader-url="{{ route('api.thanas') }}"
                                                 data-option-loader-target="#thana"
                                                 data-option-loader-param="district"
-                                                data-option-loader-properties="value=id,text=bn_name"
-                                                data-option-loader-nodisable="true">
+                                                data-option-loader-properties="value=id,text=bn_name">
                                             @foreach($districts as $district)
                                                 <option value="{{ $district->id }}" {{ selectOpt($ind->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                                             @endforeach
@@ -158,8 +155,7 @@
                                                 data-option-loader-url="{{ route('api.unions') }}"
                                                 data-option-loader-target="#union"
                                                 data-option-loader-param="thana"
-                                                data-option-loader-properties="value=id,text=bn_name"
-                                                data-option-loader-nodisable="true">
+                                                data-option-loader-properties="value=id,text=bn_name">
                                             <option value="">-- থানা --</option>
                                             @foreach($thanas as $thana)
                                                 <option value="{{ $thana->id }}" {{ selectOpt($ind->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
@@ -172,8 +168,7 @@
                                                 data-option-loader-url="{{ route('api.villages') }}"
                                                 data-option-loader-target="#village"
                                                 data-option-loader-param="union"
-                                                data-option-loader-properties="value=id,text=bn_name"
-                                                data-option-loader-nodisable="true">
+                                                data-option-loader-properties="value=id,text=bn_name">
                                             <option value="">-- ইউনিয়ন নির্বাচন করুন --</option>
                                             @foreach($unions as $union)
                                                 <option value="{{ $union->id }}" {{ selectOpt($ind->union_id, $union->id) }}>{{ $union->bn_name }}</option>
@@ -241,8 +236,7 @@
                                 <select id="category" name="category"
                                         data-option-loader-url="{{ route('api.sub-categories') }}"
                                         data-option-loader-target="#sub-categories"
-                                        data-option-loader-param="category"
-                                        data-option-loader-nodisable="true">
+                                        data-option-loader-param="category">
                                     <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($ind->category->id, $category->id) }}>{{ $category->name }}</option>
@@ -263,7 +257,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
@@ -342,7 +336,8 @@
                                     <span></span>
                                     <div class="input-div" id="sub-category-request">
                                         @foreach($pendingSubCategories as $subCategoryCount => $subCategory)
-                                            <div class="card mt-2 repeater-clone" data-cloned="true">
+                                            <div class="card mt-2"
+                                            @if(!$loop->first){{ 'data-cloned="true"' }}@endif>
                                                 <div class="card-header pt-2 m-0 row">
                                                     <div class="col-md-9"><input type="text" class="form-control"
                                                                                  name="sub-category-requests[{{ $subCategoryCount }}][name]"
@@ -399,7 +394,6 @@
                                                         @endif
                                                     @endforeach
                                                 </div>
-
                                             </div>
                                         @endforeach
 
@@ -427,15 +421,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group row mx-5">
-                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <textarea id="pricing-info" name="pricing-info"
-                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-4">
                         <div class="form-group row mx-5">
@@ -444,7 +429,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="form-control-file"
+                                       class="file-picker"
                                        multiple>
                             </div>
                         </div>
@@ -460,7 +445,7 @@
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="form-control-file mt-3">
+                                                   class="file-picker mt-3">
                                         </div>
                                     @endfor
                                 </div>
@@ -470,7 +455,7 @@
                         <div class="form-group row mx-5">
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
-                                <input id="cv" name="cv" type="file" accept="image/*"
+                                <input id="cv" name="cv" type="file" accept="application/pdf"
                                        class="form-control-file">
                             </div>
                         </div>
@@ -481,7 +466,7 @@
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
                                        accept="image/*"
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -497,6 +482,9 @@
     </div>
 @endsection
 @section('script')
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\UpdateInd::class, '#registration-form') !!}
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
     <script>
         $('#smartwizard').smartWizard({
             theme: 'arrows',
@@ -504,7 +492,8 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: false
+            useURLhash: true,
+            autoAdjustHeight: false
         });
 
         $('select').selectize({
@@ -512,6 +501,4 @@
         });
 
     </script>
-    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\UpdateInd::class) !!}
 @endsection

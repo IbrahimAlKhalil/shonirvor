@@ -1,12 +1,4 @@
 import {Repeater} from '../../../modules/repeater';
-import {OptionLoader} from "../../../modules/option-loader";
-import 'smartwizard';
-import '../../../modules/selectize-option-loader-plugin';
-
-import '../../../../../../node_modules/selectize/dist/css/selectize.default.css';
-import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
-import '../../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
-
 
 function requestFields(element, workMethods, serial) {
     workMethods.forEach((workMethod, workMethodCount) => {
@@ -33,7 +25,7 @@ function requestFields(element, workMethods, serial) {
                                     </label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][rate]">
+                                    <input type="number" class="form-control" placeholder="রেট" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][rate]">
                                     <input type="hidden" name="sub-category-requests[${serial}][work-methods][${workMethodCount}][id]" value="${workMethod.id}">
                                 </div>
                             </div>`;
@@ -95,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <input type="hidden" name="sub-category-rates[${subCategoryCount}][id]" value="${subCategoryId}">
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="রেট" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][rate]">
+                                    <input type="number" class="form-control" placeholder="রেট" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][rate]">
                                     <input type="hidden" name="sub-category-rates[${subCategoryCount}][work-methods][${workMethodCount}][id]" value="${workMethod.id}">
                                 </div>
                             </div>`;

@@ -21,22 +21,22 @@ class StoreOrg extends FormRequest
         return [
             'name' => 'required|min:3',
             'mobile' => 'required|digits:11',
-            'referrer' => 'nullable|digits:11|different:mobile',
+            'referrer' => 'nullable|digits:11|different:mobile|exists:users,mobile',
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
             'nid' => /*($user->nid ? '' : 'required|') . */
                 'required|integer|unique:users,nid,' . $user->id,
-            'division' => 'required',
+            'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
-            'thana' => 'required_without:no-thana|exists:thanas,id',
-            'union' => 'required_without:no-union|exists:unions,id',
-            'village' => 'required_without:no-village|exists:villages,id',
+            'thana' => 'required_without:no-thana',
+            'union' => 'required_without:no-union',
+            'village' => 'required_without:no-village',
             'thana-request' => 'required_with:no-thana',
             'union-request' => 'required_with:no-union',
             'village-request' => 'required_with:no-village',
-            'address' => 'string',
-            'category' => 'required_without:no-category|exists:categories,id',
+            'address' => 'required|string',
+            'category' => 'required_without:no-category',
             'category-request' => 'required_with:no-category',
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
@@ -47,6 +47,22 @@ class StoreOrg extends FormRequest
         ];
     }
 
+    public function withValidator($validator)
+    {
+        $validator->sometimes('thana', 'exists:thanas,id', function ($data) {
+            return !is_null($data->thana);
+        });
+        $validator->sometimes('union', 'exists:unions,id', function ($data) {
+            return !is_null($data->union);
+        });
+        $validator->sometimes('village', 'exists:villages,id', function ($data) {
+            return !is_null($data->village);
+        });
+        $validator->sometimes('category', 'exists:categories,id', function ($data) {
+            return !is_null($data->category);
+        });
+    }
+
     public function messages()
     {
         return [
@@ -55,10 +71,16 @@ class StoreOrg extends FormRequest
             'mobile.digits' => 'মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
             'referrer.digits' => 'রেফারার মোবাইল নাম্বার ১১টি সংখ্যার হতে হবে',
             'referrer.different' => 'নিজের মোবাইল নাম্বার এবং রেফারারের মোবাইল নাম্বার এক হওয়া যাবেনা',
+            'referrer.exists' => 'এই নাম্বারে কোন একাউন্ট পাওয়া যায়নি',
             'email.email' => 'ইমেইলে ভুল আছে, দয়া করে চেক করুন',
             'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
-            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে'
+            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে',
+            'address.required' => 'ঠিকানা দিতে হবে',
+            'thana-request.required_with' => 'থানার নাম দিতে হবে',
+            'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
+            'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
+            'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে'
         ];
     }
 }

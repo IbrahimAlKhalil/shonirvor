@@ -1,10 +1,17 @@
 import '../../../scss/frontend/registration/common.scss';
+import '../../../../../node_modules/selectize/dist/css/selectize.default.css';
+import '../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
+import '../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
+
 import {ImagePicker} from "../../modules/image-picker";
+import {OptionLoader} from "../../modules/option-loader";
+import 'smartwizard';
+import '../../modules/selectize-option-loader-plugin';
 
 $(document).ready(function () {
 
 
-    window.imagePicker = new ImagePicker(document.getElementsByClassName('file-picker'));
+    new ImagePicker(document.getElementsByClassName('file-picker'));
 
 
     let form = document.getElementById('registration-form');
@@ -57,11 +64,18 @@ $(document).ready(function () {
         });
     }
 
-    $(selectsAndChecks.map(obj => obj.check)).on('change', function () {
-        if (!this.checked) {
-            validation.checkForm();
-            validation.showErrors();
-        }
+    selectsAndChecks.forEach(obj => {
+        obj.check[0].addEventListener('change', function () {
+            if (!obj.check[0].checked) {
+                validation.checkForm();
+                validation.showErrors();
+                return;
+            }
+
+            obj.select.val(null);
+            let selectize = obj.select[0].selectize;
+            selectize.clear(true);
+        });
     });
 
     [...selectsAndChecks.map(obj => obj.select[0]), ...requiredSelects.toArray()].forEach(select => {

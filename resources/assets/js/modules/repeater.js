@@ -1,9 +1,21 @@
+import {querySelectorAll} from "./scoped-query-selector";
+
 export class Repeater {
     constructor(container, options) {
         this.container = container;
-        this.lastCloned = container.querySelector('.repeater-clone') || container.lastElementChild;
-        this.original = this.lastCloned;
+        this.original = container.querySelector('.repeater-clone') || container.lastElementChild;
+        let lastCloned = querySelectorAll(container, '> [data-cloned]');
+        this.lastCloned = lastCloned.length ? lastCloned[lastCloned.length - 1] : this.original;
         this.options = {...options};
+
+        this.clones.forEach(clone => {
+            let removeBtn = clone.querySelector('.remove-btn');
+            removeBtn && removeBtn.addEventListener('click', event => {
+                event.preventDefault();
+                this.remove(clone);
+            });
+        });
+
     }
 
     repeat(process) {
@@ -21,7 +33,7 @@ export class Repeater {
 
             this.container.insertBefore(newItem, this.lastCloned.nextElementSibling);
             this.lastCloned.classList.remove('repeater-clone');
-            newItem.previouseClone = this.lastCloned;
+            newItem.previousClone = this.lastCloned;
             this.lastCloned = newItem;
             this.clones.push(newItem);
             newItem.setAttribute('data-cloned', true);
@@ -37,7 +49,7 @@ export class Repeater {
     remove(element) {
         let instance = this;
         $(element).fadeOut(400, () => {
-            instance.lastCloned = element.previouseClone;
+            instance.lastCloned = element.previousClone;
             $(element).remove();
         });
     }
@@ -50,7 +62,7 @@ export class Repeater {
     }
 
     get clones() {
-        return [...this.container.querySelectorAll('[data-cloned]')];
+        return [...querySelectorAll(this.container, '> [data-cloned]')];
     }
 
     get length() {

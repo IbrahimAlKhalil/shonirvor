@@ -13,9 +13,9 @@
 
         @include('components.success')
 
-        {{--<div class="alert alert-danger">
+        <div class="alert alert-danger">
             {{ $errors }}
-        </div>--}}
+        </div>
 
         <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.store') }}">
@@ -236,7 +236,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
@@ -279,24 +279,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row mx-5">
-                            <label for="pricing-info" class="col-3 col-form-label">মূল্য সম্পর্কে তথ্য <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <textarea id="pricing-info" name="pricing-info"
-                                          class="form-control" required>{{ old('pricing-info') }}</textarea>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-4">
                         <div class="form-group row mx-5">
                             <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                                 ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9">
+                            <div class="col-9 d-flex">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker"
-                                       multiple>
+                                       class="file-picker">
+                                <input id="identities" name="identities[]" type="file" accept="image/*"
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -321,8 +314,8 @@
                         <div class="form-group row mx-5">
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
-                                <input id="cv" name="cv" type="file" accept="image/*"
-                                       class="file-picker">
+                                <input id="cv" name="cv" type="file" accept="application/pdf"
+                                       class="form-control-file">
                             </div>
                         </div>
 
@@ -349,22 +342,23 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class, '#registration-form') !!}
+    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
     <script>
         $('#smartwizard').smartWizard({
             theme: 'arrows',
             lang: {
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
-            }/*,
-            useURLhash: false*/
+            },
+            useURLhash: false,
+            autoAdjustHeight: false
         });
 
         $('select').selectize({
             plugins: ['option-loader']
         });
     </script>
-    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\StoreInd::class, '#registration-form') !!}
-    <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
 @endsection
 
