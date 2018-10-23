@@ -26,6 +26,7 @@ class IndServiceRequestController extends Controller
     public function show(Ind $serviceRequest)
     {
         $serviceRequest->load([
+            'referredBy.user',
             'district',
             'thana',
             'union',

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Org;
 use App\Models\Category;
+use App\Models\Reference;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreOrg;
 use App\Http\Requests\UpdateOrg;
+use App\Models\User;
 use App\Models\Village;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -140,7 +142,6 @@ class OrgServiceRegistrationController extends Controller
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
-        $org->referrer = $request->post('referrer');
         $org->email = $request->post('email');
         $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
@@ -154,6 +155,19 @@ class OrgServiceRegistrationController extends Controller
             $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
+
+        // Create referrer
+        if ($request->filled('referrer')) {
+            $referrer = new Reference;
+            $referrer->user_id = User::select('id')
+                ->where('mobile', $request->input('referrer'))
+                ->first()
+                ->id;
+            $referrer->service_id = $org->id;
+            $referrer->service_type_id = 2;
+            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->save();
+        }
 
         // associate sub-categories$org
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
@@ -418,7 +432,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
+        $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
 
         if ($org->user_id != Auth::id() && $org->is_pending == 0) {
             return redirect(route('organization-service-registration.index'));

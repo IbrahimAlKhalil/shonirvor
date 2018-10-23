@@ -17,9 +17,9 @@ class Ind extends Model
     protected $dates = ['deleted_at'];
 
 
-    /**********************/
+    /*********************/
     /***** Relations *****/
-    /**********************/
+    /*********************/
 
     public function user()
     {

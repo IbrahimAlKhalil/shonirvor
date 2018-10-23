@@ -20,7 +20,6 @@ class CreateOrgsTable extends Migration
 
             $table->string('email')->nullable();
             $table->string('mobile', 11);
-            $table->string('referrer', 11)->nullable();
             $table->string('name');
             $table->mediumText('description');
             $table->string('logo')->nullable();

@@ -77,7 +77,7 @@
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
-                                       value="{{ oldOrData('referrer', $org->referrer) }}"
+                                       value="{{ oldOrData('referrer', $org->referredBy ? $org->referredBy->user->mobile : '') }}"
                                        class="form-control" required>
                             </div>
                         </div>
@@ -365,7 +365,7 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <textarea id="pricing-info" name="pricing-info"
-                                          class="form-control" required>{{ oldOrData('pricing-info', $ind->pricing_info) }}</textarea>
+                                          class="form-control" required>{{ oldOrData('pricing-info', $org->pricing_info) }}</textarea>
                             </div>
                         </div>
                     </div>

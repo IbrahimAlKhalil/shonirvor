@@ -27,6 +27,12 @@
                                 <td>{{ $serviceRequest->mobile }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">রেফারার</th>
+                                <td>
+                                    <a href="javascript:">{{ $serviceRequest->referredBy ? $serviceRequest->referredBy->user->name : '' }}</a>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row">ইমেইল</th>
                                 <td>{{ $serviceRequest->email }}</td>
                             </tr>
@@ -34,22 +40,18 @@
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">জেলা</th>
                                 <td>{{ $serviceRequest->district->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">থানা</th>
                                 <td>{{ $serviceRequest->thana->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">ইউনিয়ন</th>
                                 <td>{{ $serviceRequest->union->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">ঠিকানা</th>
                                 <td>{{ $serviceRequest->address }}</td>

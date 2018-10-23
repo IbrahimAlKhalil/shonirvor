@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
 use App\Models\Category;
+use App\Models\Package;
+use App\Models\Reference;
+use App\Models\User;
 use App\Models\Village;
 use App\Models\WorkMethod;
 use App\Models\ServiceType;
@@ -155,7 +158,6 @@ class IndServiceRegistrationController extends Controller
 
         $ind->description = $request->post('description');
         $ind->mobile = $request->post('mobile');
-        $ind->referrer = $request->post('referrer');
         $ind->email = $request->post('email');
         $ind->category_id = $category->id;
         $ind->website = $request->post('website');
@@ -171,6 +173,19 @@ class IndServiceRegistrationController extends Controller
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
         $ind->save();
+
+        // Create referrer
+        if ($request->filled('referrer')) {
+            $referrer = new Reference;
+            $referrer->user_id = User::select('id')
+                ->where('mobile', $request->input('referrer'))
+                ->first()
+                ->id;
+            $referrer->service_id = $ind->id;
+            $referrer->service_type_id = 1;
+            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->save();
+        }
 
         // associate sub-categories
         !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
@@ -478,7 +493,7 @@ class IndServiceRegistrationController extends Controller
     public function edit($id)
     {
 
-        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
+        $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {

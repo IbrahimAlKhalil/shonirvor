@@ -47,7 +47,9 @@
                             </tr>
                             <tr>
                                 <th scope="row">রেফারার</th>
-                                <td>{{ $serviceRequest->referrer }}</td>
+                                <td>
+                                    <a href="javascript:">{{ $serviceRequest->referredBy ? $serviceRequest->referredBy->user->name : '' }}</a>
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">ইমেইল</th>

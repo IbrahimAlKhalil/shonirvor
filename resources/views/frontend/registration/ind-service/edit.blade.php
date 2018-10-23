@@ -55,7 +55,7 @@
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
-                                       value="{{ oldOrData('referrer', $ind->referrer) }}"
+                                       value="{{ oldOrData('referrer', $ind->referredBy ? $ind->referredBy->user->mobile : '') }}"
                                        class="form-control">
                             </div>
                         </div>
