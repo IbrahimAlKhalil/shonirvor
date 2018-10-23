@@ -402,7 +402,6 @@
                                             <div class="card-header pt-2 m-0 row">
                                                 <div class="col-md-9">
                                                     <input type="text" class="form-control"
-                                                           name=""
                                                            placeholder="আমার সাব-ক্যাটাগরির নাম">
                                                 </div>
                                                 <div class="col-md-3">

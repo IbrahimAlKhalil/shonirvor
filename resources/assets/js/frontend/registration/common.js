@@ -134,7 +134,7 @@ $(document).ready(function () {
             if (stepNumber === 0) {
                 prev.addClass('invisible');
             }
-            if (stepNumber === 3) {
+            if (stepNumber === 4) {
                 next.addClass('invisible')
             }
 
@@ -142,7 +142,7 @@ $(document).ready(function () {
             if (stepNumber !== 0) {
                 prev.removeClass('invisible');
             }
-            if (stepNumber !== 3) {
+            if (stepNumber !== 4) {
                 next.removeClass('invisible');
             }
         });

@@ -126,17 +126,15 @@
                                     </div>
                                 </div>
 
-                                @if(!$user->age)
-                                    <div class="form-group row mx-5">
-                                        <label for="age" class="col-3 col-form-label">বয়স <span
-                                                    class="text-danger">*</span></label>
-                                        <div class="col-9">
-                                            <input id="age" name="age" type="number" value="{{ old('age') }}"
-                                                   required="required"
-                                                   class="form-control">
-                                        </div>
+                                <div class="form-group row mx-5">
+                                    <label for="age" class="col-3 col-form-label">বয়স <span
+                                                class="text-danger">*</span></label>
+                                    <div class="col-9">
+                                        <input id="age" name="age" type="number" value="{{ old('age') }}"
+                                               required="required"
+                                               class="form-control">
                                     </div>
-                                @endif
+                                </div>
 
                                 <div class="form-group row mx-5">
                                     <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>

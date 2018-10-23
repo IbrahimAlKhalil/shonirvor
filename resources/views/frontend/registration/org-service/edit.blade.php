@@ -274,7 +274,6 @@
                                     @endforeach
                                 </select>
 
-
                                 <ul id="repeater-container" class="list-group">
                                     <li class="repeater-clone mt-2 border-0 list-group-item d-none">
                                         <div class="row">
@@ -302,7 +301,6 @@
                                     @endforeach
                                 </ul>
 
-
                                 <div class="mt-4 checkbox">
                                     <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
@@ -310,27 +308,11 @@
                                     <span></span>
                                     <ul id="req-repeater-container" class="list-group input-div">
 
+                                        @php($count = 0)
                                         @foreach($orgSubCategories as $index => $orgSubCategory)
                                             @if(!$orgSubCategory->is_confirmed)
-                                                @if($loop->first)
-                                                    <li class="repeater-clone mt-2 border-0 list-group-item">
-                                                        <div class="row">
-                                                            <input type="text"
-                                                                   class="form-control col-md-5 sub-category-name"
-                                                                   name="sub-category-requests[0][name]"
-                                                                   placeholder="সাব-ক্যাটাগরির নাম">
-                                                            <input type="number"
-                                                                   class="form-control col-md-5 sub-category-rate"
-                                                                   name="sub-category-requests[0][rate]"
-                                                                   placeholder="রেট">
-                                                            <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-none"
-                                                               href="#"></a>
-                                                        </div>
-                                                    </li>
-                                                @endif
-
                                                 <li class="mt-2 border-0 list-group-item"
-                                                    data-cloned="true">
+                                                @if($count != 0){{ 'data-cloned="true"' }}@endif>
                                                     <div class="row">
                                                         <input type="text"
                                                                class="form-control col-md-5 sub-category-name"
@@ -346,8 +328,21 @@
                                                            href="#"></a>
                                                     </div>
                                                 </li>
+                                                @php($count++)
                                             @endif
                                         @endforeach
+                                        <li class="mt-2 border-0 list-group-item repeater-clone d-none">
+                                            <div class="row">
+                                                <input type="text"
+                                                       class="form-control col-md-5 sub-category-name"
+                                                       placeholder="সাব-ক্যাটাগরির নাম">
+                                                <input type="number"
+                                                       class="form-control col-md-5 sub-category-rate"
+                                                       placeholder="রেট">
+                                                <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-flex"
+                                                   href="#"></a>
+                                            </div>
+                                        </li>
                                         <li class="list-group-item border-0">
                                             <button type="button" class="btn btn-light float-left shadow-sm add-new"><i
                                                         class="fa fa-plus"></i> আরও
@@ -380,7 +375,8 @@
                                             <label for="addtional-pricing-info-{{ $key }}"
                                                    class="col-3 col-form-label">তথ্যঃ </label>
                                             <div class="col-9">
-                                            <textarea id="addtional-pricing-info-{{ $key }}" name="additional-pricing[{{ $key }}][info]"
+                                            <textarea id="addtional-pricing-info-{{ $key }}"
+                                                      name="additional-pricing[{{ $key }}][info]"
                                                       class="form-control">{{ oldOrData('additional-pricing.[' .$key. '].[info]', $additionalPrice->info) }}</textarea>
                                             </div>
                                         </div>

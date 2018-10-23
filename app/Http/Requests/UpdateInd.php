@@ -23,11 +23,9 @@ class UpdateInd extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'age' => /*($user->age ? '' : 'required|') . */
-                'required|integer|min:10',
-            'nid' => /*($user->nid ? '' : 'required|') . */
-                'required|integer|unique:users,nid',
-            'division' => 'required|exists:division,id',
+            'age' => 'required|integer|min:18',
+            'nid' => 'required|integer|unique:users,nid',
+            'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
             'union' => 'required_without:no-union',

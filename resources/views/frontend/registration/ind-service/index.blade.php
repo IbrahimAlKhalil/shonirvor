@@ -35,6 +35,9 @@
                     <li><a href="#step-4">চতুর্থ ধাপ<br/>
                             <small>ডকুমেন্ট</small>
                         </a></li>
+                    <li><a href="#step-5">পঞ্চম ধাপ<br/>
+                            <small>ডকুমেন্ট</small>
+                        </a></li>
                 </ul>
 
                 <div>
@@ -92,17 +95,15 @@
                             </div>
                         </div>
 
-                        @if(!$user->age)
-                            <div class="form-group row mx-5">
-                                <label for="age" class="col-3 col-form-label">বয়স <span
-                                            class="text-danger">*</span></label>
-                                <div class="col-9">
-                                    <input id="age" name="age" type="number" value="{{ old('age') }}"
-                                           required="required"
-                                           class="form-control">
-                                </div>
+                        <div class="form-group row mx-5">
+                            <label for="age" class="col-3 col-form-label">বয়স <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <input id="age" name="age" type="number" value="{{ old('age') }}"
+                                       required="required"
+                                       class="form-control">
                             </div>
-                        @endif
+                        </div>
 
                         <div class="form-group row mx-5">
                             <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>
@@ -335,6 +336,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="p-4" id="step-5">
+                        <div class="form-group row mx-5">
+                            <label for="" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
+                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9 d-flex">
+                                <input id="identities" name="identities[]" type="file" accept="image/*"
+                                       class="file-picker">
+                                <input id="identities" name="identities[]" type="file" accept="image/*"
+                                       class="file-picker">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -352,7 +366,7 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: false,
+            useURLhash: true,
             autoAdjustHeight: false
         });
 
