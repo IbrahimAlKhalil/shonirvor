@@ -36,7 +36,7 @@
                             <small>ডকুমেন্ট</small>
                         </a></li>
                     <li><a href="#step-5">পঞ্চম ধাপ<br/>
-                            <small>ডকুমেন্ট</small>
+                            <small>পেমেন্ট</small>
                         </a></li>
                 </ul>
 
@@ -211,7 +211,7 @@
                         </div>
                     </div>
                     <div class="p-4" id="step-3">
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
@@ -236,20 +236,17 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mx-5">
                             <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
+                            <div class="col-9" id="sub-category-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
                                         data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
                                         multiple>
                                 </select>
 
-                                <div class="card mt-2 repeater-clone d-none">
-                                    <div class="card-header pb-0 pt-2"></div>
-                                    <div class="card-body"></div>
-                                </div>
+                                <span class="repeater-insert-before d-none"></span>
 
                                 <div class="mt-4 checkbox">
                                     <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
@@ -257,22 +254,60 @@
                                            class="mt-2 no-something">
                                     <span></span>
                                     <div class="input-div" id="sub-category-request">
-                                        <div class="card mt-2 repeater-clone">
+                                        <div class="card mt-2" data-repeater-clone="true">
                                             <div class="card-header pt-2 m-0 row">
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control"
-                                                           name="sub-category-requests[0][name]"
-                                                           placeholder="আমার সাব-ক্যাটাগরির নাম">
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <a class="fa fa-trash float-right text-danger remove-btn d-none"
-                                                       href="#"></a>
-                                                </div>
+                                                <div class="col-md-9"><input type="text" class="form-control" name="sub-category-requests[0][name]" placeholder="আমার সাব-ক্যাটাগরির নাম" value="adfasdfasdfsad"></div>
                                             </div>
                                             <div class="card-body">
-
+                                                <div class="row mt-2">
+                                                    <div class="col-md-8">
+                                                        <label class="checkbox" for="req-work-method-1-0">ঘন্টা ভিত্তিক
+                                                            <input type="checkbox" id="req-work-method-1-0" name="sub-category-requests[0][work-methods][0][checkbox]">
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][0][rate]" value="">
+                                                        <input type="hidden" name="sub-category-requests[0][work-methods][0][id]" value="1">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-md-8">
+                                                        <label class="checkbox" for="req-work-method-2-1">দৈনিক
+                                                            <input type="checkbox" id="req-work-method-2-1" name="sub-category-requests[0][work-methods][1][checkbox]">
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][1][rate]" value="">
+                                                        <input type="hidden" name="sub-category-requests[0][work-methods][1][id]" value="2">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-md-8">
+                                                        <label class="checkbox" for="req-work-method-3-2">মাসিক
+                                                            <input type="checkbox" id="req-work-method-3-2" name="sub-category-requests[0][work-methods][2][checkbox]" checked="">
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][2][rate]" value="235235">
+                                                        <input type="hidden" name="sub-category-requests[0][work-methods][2][id]" value="3">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-md-8">
+                                                        <label class="checkbox" for="req-work-method-4-3">চুক্তি
+                                                            ভিত্তিক
+                                                            <input type="checkbox" id="req-work-method-4-3" name="sub-category-requests[0][work-methods][3][checkbox]" checked="">
+                                                            <span></span>
+                                                        </label>
+                                                        <input type="hidden" name="sub-category-requests[0][work-methods][3][id]" value="4">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+                                        <span class="repeater-insert-before d-none"></span>
                                         <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
                                                     class="fa fa-plus"></i> আরও
                                         </button>
@@ -338,16 +373,50 @@
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
-                            <label for="" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9 d-flex">
-                                <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker">
-                                <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker">
+                            <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                            <div class="col-9">
+                                <select name="package" id="package">
+                                    @foreach($packages as $package)
+                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="tab-content mt-2" id="package-descriptions">
+                                    @foreach($packages as $package)
+                                        <div class="tab-pane fade" id="package-dscr-{{ $package->id }}">
+                                            {{ $package->properties->groupBy('name')['description'][0]->value }}
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="payment-method" class="col-3 col-form-label"> পেমেন্ট এর মাধ্যম নির্ধারণ
+                                করুন</label>
+                            <div class="col-9">
+                                <select name="payment-method" id="payment-method">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div id="payment-method-accountId">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <span class="text-primary d-none"
+                                              id="payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
+                                                <i class="text-muted">({{ $paymentMethod->account_type }}
+                                                    )</i>@endif</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
+                            <div class="col-9">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Illuminate\Database\Eloquent\Model;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Division;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ind extends Model
 {
@@ -17,9 +17,9 @@ class Ind extends Model
     protected $dates = ['deleted_at'];
 
 
-    /**********************/
+    /*********************/
     /***** Relations *****/
-    /**********************/
+    /*********************/
 
     public function user()
     {
@@ -89,6 +89,12 @@ class Ind extends Model
         }
 
         return $result;
+    }
+
+    public function referredBy()
+    {
+        return $this->belongsTo(Reference::class, 'id', 'service_id')
+            ->where('service_type_id', 1);
     }
 
 

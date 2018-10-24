@@ -25,7 +25,7 @@ class OrgServiceRequestController extends Controller
         return view('backend.org-service-request.show', compact('serviceRequest', 'navs'));
     }
 
-    public function store(Request $request)
+    public function update(Request $request)
     {
         // TODO:: Make a request class
 

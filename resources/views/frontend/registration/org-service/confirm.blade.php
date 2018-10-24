@@ -68,6 +68,9 @@
                             <li><a href="#step-4">চতুর্থ ধাপ<br/>
                                     <small>ডকুমেন্ট</small>
                                 </a></li>
+                            <li><a href="#step-5">পঞ্চম ধাপ<br/>
+                                    <small>পেমেন্ট</small>
+                                </a></li>
                         </ul>
 
                         <div>
@@ -266,24 +269,17 @@
 
 
                                         <ul id="repeater-container" class="list-group">
-                                            <li class="repeater-clone mt-2 border-0 list-group-item d-none">
-                                                <div class="row">
-                                                    <label class="col-md-6"></label>
-                                                    <input type="number" class="form-control col-md-6"
-                                                           placeholder="রেট">
-                                                    <input type="hidden">
-                                                </div>
-                                            </li>
+                                            <li class="repeater-insert-before d-none"></li>
                                         </ul>
 
 
                                         <div class="mt-4 checkbox">
-                                            <label>আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                            <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                                             <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                                    class="mt-2 no-something">
                                             <span></span>
                                             <ul id="req-repeater-container" class="list-group input-div">
-                                                <li class="repeater-clone mt-2 border-0 list-group-item">
+                                                <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                                                     <div class="row">
                                                         <input type="text" class="form-control col-md-5 sub-category-name"
                                                                name="sub-category-requests[0][name]"
@@ -295,6 +291,7 @@
                                                            href="#"></a>
                                                     </div>
                                                 </li>
+                                                <li class="repeater-insert-before d-none"></li>
                                                 <li class="list-group-item border-0">
                                                     <button type="button" class="btn btn-light float-left shadow-sm add-new"><i
                                                                 class="fa fa-plus"></i> আরও
@@ -310,7 +307,8 @@
                                 <div class="form-group row mx-5">
                                     <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
                                     <div class="col-9" id="otirikto-kaj">
-                                        <div class="repeater-clone row border rounded shadow-sm mt-2 position-relative">
+                                        <div class="row border rounded shadow-sm mt-2 position-relative"
+                                             data-repeater-clone="true">
                                             <div class="form-group  col-md-12 row mt-3">
                                                 <label for="addtional-pricing-name" class="col-3 col-form-label">কাজের
                                                     নামঃ </label>
@@ -325,12 +323,11 @@
                                                 <label for="addtional-pricing-info" class="col-3 col-form-label">তথ্যঃ </label>
                                                 <div class="col-9">
                                             <textarea id="addtional-pricing-info" name="additional-pricing[0][info]"
-                                                      class="form-control">{{ old('pricing-info') }}</textarea>
+                                                      class="form-control"></textarea>
                                                 </div>
                                             </div>
-
-                                            <span class="cross remove-btn"></span>
                                         </div>
+                                        <span class="repeater-insert-before d-none"></span>
                                         <button type="button" class="btn btn-light float-left shadow-sm add-new mt-2"><i
                                                     class="fa fa-plus"></i> আরও
                                         </button>
@@ -392,6 +389,53 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="p-4" id="step-5">
+                                <div class="form-group row mx-5">
+                                    <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                                    <div class="col-9">
+                                        <select name="package" id="package">
+                                            @foreach($packages as $package)
+                                                <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="tab-content mt-2" id="package-descriptions">
+                                            @foreach($packages as $package)
+                                                <div class="tab-pane fade" id="package-dscr-{{ $package->id }}">
+                                                    {{ $package->properties->groupBy('name')['description'][0]->value }}
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mx-5">
+                                    <label for="payment-method" class="col-3 col-form-label"> পেমেন্ট এর মাধ্যম নির্ধারণ
+                                        করুন</label>
+                                    <div class="col-9">
+                                        <select name="payment-method" id="payment-method">
+                                            @foreach($paymentMethods as $paymentMethod)
+                                                <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div id="payment-method-accountId">
+                                            @foreach($paymentMethods as $paymentMethod)
+                                                <span class="text-primary d-none"
+                                                      id="payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
+                                                        <i class="text-muted">({{ $paymentMethod->account_type }}
+                                                            )</i>@endif</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mx-5">
+                                    <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
+                                    <div class="col-9">
+                                        <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -411,7 +455,8 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: false
+            useURLhash: false,
+            autoAdjustHeight: false
         });
 
         $('select').selectize({

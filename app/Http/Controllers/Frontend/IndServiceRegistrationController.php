@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
 use App\Models\Category;
+use App\Models\Package;
+use App\Models\PaymentMethod;
+use App\Models\Reference;
+use App\Models\User;
 use App\Models\Village;
 use App\Models\WorkMethod;
 use App\Models\ServiceType;
@@ -25,12 +29,14 @@ class IndServiceRegistrationController extends Controller
     {
         $user = Auth::user();
         $inds = $user->inds()->onlyPending()->get();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
+        $paymentMethods = PaymentMethod::all();
 
         $categories = Category::getAll('ind')->get();
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories', 'user');
+        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods');
         $view = 'frontend.registration.ind-service.confirm';
         $count = $inds->count();
 
@@ -62,21 +68,6 @@ class IndServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         $user = Auth::user();
-        $inds = $user->inds('pending')->get();
-
-        // check what if current user didn't reach at the maximum pending request
-        if ($inds->count() >= 3) {
-
-            $workMethods = WorkMethod::all();
-            $categories = Category::getAll('ind')->get();
-            $divisions = Division::all();
-            $classesToAdd = ['active', 'disabled'];
-            $compact = compact('classesToAdd', 'inds', 'workMethods', 'divisions', 'categories', 'user');
-
-            // reached at the maximum
-            // redirect them to the confirmation page
-            return view('frontend.registration.ind-service.confirm', $compact);
-        }
 
         // handle category  and sub-category request
         // TODO:: Do some custom validation for category and subcategory
@@ -155,7 +146,6 @@ class IndServiceRegistrationController extends Controller
 
         $ind->description = $request->post('description');
         $ind->mobile = $request->post('mobile');
-        $ind->referrer = $request->post('referrer');
         $ind->email = $request->post('email');
         $ind->category_id = $category->id;
         $ind->website = $request->post('website');
@@ -171,6 +161,19 @@ class IndServiceRegistrationController extends Controller
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
         $ind->save();
+
+        // Create referrer
+        if ($request->filled('referrer')) {
+            $referrer = new Reference;
+            $referrer->user_id = User::select('id')
+                ->where('mobile', $request->input('referrer'))
+                ->first()
+                ->id;
+            $referrer->service_id = $ind->id;
+            $referrer->service_type_id = 1;
+            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->save();
+        }
 
         // associate sub-categories
         !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
@@ -478,7 +481,7 @@ class IndServiceRegistrationController extends Controller
     public function edit($id)
     {
 
-        $ind = Ind::with(['division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
+        $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
@@ -504,7 +507,9 @@ class IndServiceRegistrationController extends Controller
         $villages = Village::whereUnionId($ind->union->id)->whereIsPending(0)->get();
         $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
         $workMethods = WorkMethod::all();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
+        $paymentMethods = PaymentMethod::all();
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods'));
     }
 }

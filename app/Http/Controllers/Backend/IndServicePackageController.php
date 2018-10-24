@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class IndServicePackageController extends Controller
 {
+    private $packageTypeId = 1;
+
     public function index()
     {
 
-        $packages = Package::with('properties')->where('package_type_id', 1)->paginate(10);
+        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->get();
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -39,7 +41,7 @@ class IndServicePackageController extends Controller
         ];
 
         $package = new Package;
-        $package->package_type_id = 1;
+        $package->package_type_id = $this->packageTypeId;
         $package->save();
 
         $data = [];

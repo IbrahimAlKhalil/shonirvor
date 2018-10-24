@@ -16,7 +16,7 @@
                         <tr>
                             <th width="5%">#</th>
                             <th width="30%">বিজ্ঞাপনের ছবি</th>
-                            <th width="30%">লিঙ্ক</th>
+                            <th width="30%">বিজ্ঞাপন দাতা</th>
                             <th>পদক্ষেপ</th>
                         </tr>
                     </thead>
@@ -25,10 +25,12 @@
                         @php($serial = $ads->perPage() * ($ads->currentPage() - 1) + $loop->iteration)
                         <tr>
                             <td class="align-middle">{{ en2bnNumber($serial) }}</td>
-                            <td><img src="{{ asset('storage/'.$ad->image) }}" class="w-50"></td>
-                            <td class="align-middle">
-                                <a href="{{ $ad->url }}">বিজ্ঞাপনের লিঙ্ক</a>
+                            <td>
+                                <a href="{{ $ad->url }}" target="_blank">
+                                    <img src="{{ asset('storage/'.$ad->image) }}" class="w-25">
+                                </a>
                             </td>
+                            <td class="align-middle">{{ $ad->advertizer }}</td>
                             <td class="align-middle">
                                 <a href="javascript:" class="mr-2 btn btn-outline-info btn-sm" data-toggle="modal" data-target="#editModal{{ $key }}">
                                     <i class="fa fa-pencil-square-o"></i> এডিট
@@ -39,7 +41,7 @@
 
                                 <!-- Edit Modal -->
                                 <div class="modal fade" id="editModal{{ $key }}">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <p class="modal-title h5" id="exampleModalLabel">বিজ্ঞাপন এডিট করুন</p>
@@ -53,15 +55,21 @@
                                                 <div class="modal-body text-left">
                                                     <p><img src="{{ asset('storage/'.$ad->image) }}" class="img-thumbnail img-responsive"></p>
                                                     <div class="form-group row">
-                                                        <label for="image" class="col-sm-2 col-form-label text-right">ছবি</label>
+                                                        <label for="edit-image" class="col-sm-2 col-form-label text-right">ছবি:</label>
                                                         <div class="col-sm-10">
-                                                            <input type="file" name="image" class="form-control-file">
+                                                            <input type="file" name="image" id="edit-image" class="form-control-file">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row align-items-center">
+                                                        <label for="edit-advertizer" class="col-sm-2 col-form-label text-right">বিজ্ঞাপন দাতা:</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" name="advertizer" id="edit-advertizer" class="form-control" value="{{ $ad->advertizer }}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="url" class="col-sm-2 col-form-label text-right">লিঙ্ক</label>
+                                                        <label for="edit-url" class="col-sm-2 col-form-label text-right">লিঙ্ক:</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" name="url" id="url" class="form-control" value="{{ $ad->url }}">
+                                                            <input type="text" name="url" id="edit-url" class="form-control" value="{{ $ad->url }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -75,8 +83,8 @@
                                 </div>
 
                                 <!-- Delete Modal -->
-                                <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
+                                <div class="modal fade" id="deleteModal{{ $key }}">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
                                                 <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই বিজ্ঞাপনটি মুছে ফেলতে চান?</p>
@@ -119,14 +127,18 @@
                                 <form method="post" action="{{ route('backend.ad.store') }}" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <div class="form-group">
-                                        <label for="image" class="label">ছবি</label>
-                                        <input id="image" name="image" type="file" class="form-control-file" required>
+                                        <label for="create-image" class="label">ছবি:</label>
+                                        <input id="create-image" name="image" type="file" class="form-control-file" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="url" class="label">লিঙ্ক</label>
-                                        <input type="text" name="url" id="url" class="form-control">
+                                        <label for="create-advertizer" class="label">বিজ্ঞাপন দাতা:</label>
+                                        <input type="text" name="advertizer" id="create-advertizer" class="form-control">
                                     </div>
-                                    <button class="mt-3 btn btn-secondary btn-success rounded float-right" type="submit">সাবমিট</button>
+                                    <div class="form-group">
+                                        <label for="create-url" class="label">লিঙ্ক:</label>
+                                        <input type="text" name="url" id="create-url" class="form-control">
+                                    </div>
+                                    <button class="mt-3 btn btn-secondary btn-success rounded mx-auto" type="submit">সাবমিট</button>
                                 </form>
                             </div>
                         </div>

@@ -102,6 +102,12 @@ class Org extends Model
         return $this->hasMany(OrgAdditionalPrice::class);
     }
 
+    public function referredBy()
+    {
+        return $this->belongsTo(Reference::class, 'id', 'service_id')
+            ->where('service_type_id', 2);
+    }
+
 
     /*******************/
     /***** Scopes *****/

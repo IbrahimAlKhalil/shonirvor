@@ -27,6 +27,12 @@
                                 <td>{{ $serviceRequest->mobile }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">রেফারার</th>
+                                <td>
+                                    <a href="javascript:">{{ $serviceRequest->referredBy ? $serviceRequest->referredBy->user->name : '' }}</a>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row">ইমেইল</th>
                                 <td>{{ $serviceRequest->email }}</td>
                             </tr>
@@ -34,22 +40,18 @@
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">জেলা</th>
                                 <td>{{ $serviceRequest->district->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">থানা</th>
                                 <td>{{ $serviceRequest->thana->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">ইউনিয়ন</th>
                                 <td>{{ $serviceRequest->union->bn_name}}</td>
                             </tr>
-
                             <tr>
                                 <th scope="row">ঠিকানা</th>
                                 <td>{{ $serviceRequest->address }}</td>
@@ -81,9 +83,10 @@
                             </tbody>
                         </table>
 
-                        <form id="approve-request" action="{{ route('organization-service-request.store') }}"
+                        <form id="approve-request" action="{{ route('organization-service-request.update', $serviceRequest->id) }}"
                               method="post">
                             {{ csrf_field() }}
+                            {{ method_field('put') }}
                             <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
                             @if(!$serviceRequest->category->is_confirmed)
                                 <div class="form-group row">

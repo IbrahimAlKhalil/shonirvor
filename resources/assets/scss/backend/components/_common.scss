@@ -5,3 +5,66 @@ body {
 a:hover {
   text-decoration: none;
 }
+
+/****** Checkbox Design *****/
+/****************************/
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  user-select: none;
+
+  > [type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked + span {
+      background-color: #2196F3;
+      &:after {
+        display: block;
+      }
+    }
+  }
+
+  label > span {
+    background-color: #2196F3;
+    &:after {
+      display: block;
+    }
+  }
+
+  > [type="checkbox"] + span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    &:after {
+      left: 7px;
+      top: 3px;
+      width: 6px;
+      height: 11px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:hover > [type="checkbox"] + span {
+    background-color: #98c8ef;
+  }
+}

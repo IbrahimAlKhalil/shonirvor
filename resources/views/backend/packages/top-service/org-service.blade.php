@@ -9,11 +9,15 @@
 @section('content')
     <div class="container my-5">
         <div class="row">
-            <nav aria-label="breadcrumb" class="col-md-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">প্রাতিষ্ঠানিক টপ সার্ভিস প্যাকেজসমূহ</li>
-                </ol>
-            </nav>
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active h5 mb-0">প্রাতিষ্ঠানিক টপ সার্ভিস প্যাকেজসমূহ</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row mt-3">
             <div class="col-md-9">
                 @include('components.success')
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
@@ -75,8 +79,8 @@
                                                         <label for="edit-description"
                                                                class="col-3 col-form-label text-right">বর্ণনাঃ</label>
                                                         <div class="col-9">
-                                <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]" type="text"
-                                          class="form-control">{{ $properties['description'][0]->value }}</textarea>
+                                                            <textarea id="edit-description" name="values[{{ $properties['description'][0]->id }}]" type="text"
+                                                                      class="form-control">{{ $properties['description'][0]->value }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -85,8 +89,7 @@
                                                             <input id="edit-duration" name="values[{{ $properties['duration'][0]->id }}]" type="number"
                                                                    class="form-control" value="{{ $properties['duration'][0]->value }}">
                                                             <div class="input-group-append">
-                                                                <span class="input-group-text"
-                                                                      id="basic-addon2">দিনঃ</span>
+                                                                <span class="input-group-text" id="basic-addon2">দিন</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -140,7 +143,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">কোন প্যাকেজ খুঁজে পাওয়া যায়নি ।</td>
+                            <td colspan="6">কোনো প্যাকেজ নেই।</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -156,7 +159,7 @@
                     <div class="col-12">
                         @include('components.side-nav')
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-12 mt-4">
                         <button class="w-100 btn btn-info" data-toggle="modal"
                                 data-target="#create-package-modal">প্যাকেজ তৈরি করুন
                         </button>
@@ -181,7 +184,7 @@
                         <div class="form-group row">
                             <label for="name" class="col-3 col-form-label text-right">প্যাকেজের নামঃ</label>
                             <div class="col-9">
-                                <input id="name" name="name" type="text" class="form-control">
+                                <input id="name" name="name" type="text" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -194,16 +197,21 @@
                         <div class="form-group row">
                             <label for="duration" class="col-3 col-form-label text-right">মেয়াদঃ</label>
                             <div class="col-9 input-group">
-                                <input id="duration" name="duration" type="number" class="form-control">
+                                <input id="duration" name="duration" type="number" class="form-control" placeholder="ইংরেজিতে লিখুন" required>
                                 <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">দিনঃ</span>
+                                    <span class="input-group-text" id="basic-addon2">দিন</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="fee" class="col-3 col-form-label text-right">মূল্যঃ</label>
                             <div class="col-9">
-                                <input id="fee" name="fee" type="text" class="form-control">
+                                <div class="input-group">
+                                    <input id="fee" name="fee" type="number" class="form-control" placeholder="ইংরেজিতে লিখুন" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">টাকা</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer border-top-0">

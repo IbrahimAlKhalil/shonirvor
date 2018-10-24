@@ -4,7 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/ind-service/edit.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/ind-service/index.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -36,6 +36,9 @@
                     <li><a href="#step-4">চতুর্থ ধাপ<br/>
                             <small>ডকুমেন্ট</small>
                         </a></li>
+                    <li><a href="#step-5">পঞ্চম ধাপ<br/>
+                            <small>পেমেন্ট</small>
+                        </a></li>
                 </ul>
 
                 <div>
@@ -54,7 +57,7 @@
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
-                                       value="{{ oldOrData('referrer', $ind->referrer) }}"
+                                       value="{{ oldOrData('referrer', $ind->referredBy ? $ind->referredBy->user->mobile : '') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -259,7 +262,7 @@
                         <div class="form-group row mx-5">
                             <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9" id="sub-categories-parent" data-route="{{ route('api.work-methods') }}">
+                            <div class="col-9" id="sub-category-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
                                         data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
@@ -273,7 +276,7 @@
                                 @include('components.invalid', ['name' => 'sub-categories'])
 
                                 @foreach($indSubCategories as $subCategoryCount => $subCategory)
-                                    <div class="card mt-2" data-cloned="true">
+                                    <div class="card mt-2" data-repeater-clone="true">
                                         <div class="card-header pb-0 pt-2">{{ $subCategory->name }}</div>
                                         <div class="card-body">
                                             @php($methods = $indWorkMethods[$subCategory->id])
@@ -324,10 +327,7 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                <div class="card mt-2 repeater-clone d-none">
-                                    <div class="card-header pb-0 pt-2"></div>
-                                    <div class="card-body"></div>
-                                </div>
+                                <span class="repeater-insert-before d-none"></span>
 
                                 <div class="mt-4 checkbox">
                                     <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
@@ -336,17 +336,18 @@
                                     <span></span>
                                     <div class="input-div" id="sub-category-request">
                                         @foreach($pendingSubCategories as $subCategoryCount => $subCategory)
-                                            <div class="card mt-2"
-                                            @if(!$loop->first){{ 'data-cloned="true"' }}@endif>
+                                            <div class="card mt-2" data-repeater-clone="true">
                                                 <div class="card-header pt-2 m-0 row">
                                                     <div class="col-md-9"><input type="text" class="form-control"
                                                                                  name="sub-category-requests[{{ $subCategoryCount }}][name]"
                                                                                  placeholder="আমার সাব-ক্যাটাগরির নাম"
                                                                                  value="{{ $subCategory->name }}"></div>
-                                                    <div class="col-md-3">
-                                                        <a class="fa fa-trash float-right text-danger remove-btn"
-                                                           href="#"></a>
-                                                    </div>
+                                                    @if(!$loop->first)
+                                                        <div class="col-md-3">
+                                                            <a class="fa fa-trash float-right text-danger remove-btn"
+                                                               href="#"></a>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="card-body">
 
@@ -397,22 +398,8 @@
                                             </div>
                                         @endforeach
 
+                                        <span class="repeater-insert-before d-none"></span>
 
-                                        <div class="card mt-2 repeater-clone d-none">
-                                            <div class="card-header pt-2 m-0 row">
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control"
-                                                           placeholder="আমার সাব-ক্যাটাগরির নাম">
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <a class="fa fa-trash float-right text-danger remove-btn d-none"
-                                                       href="#"></a>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-
-                                            </div>
-                                        </div>
                                         <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
                                                     class="fa fa-plus"></i> আরও
                                         </button>
@@ -474,6 +461,46 @@
                                 <button type="submit" class="btn btn-primary">সাবমিট</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="p-4" id="step-5">
+                        <div class="form-group row mx-5">
+                            <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                            <div class="col-9">
+                                <select name="package" id="package">
+                                    @foreach($packages as $package)
+                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="tab-content mt-2" id="package-descriptions">
+                                    @foreach($packages as $package)
+                                        <div class="tab-pane fade" id="package-dscr-{{ $package->id }}">
+                                            {{ $package->properties->groupBy('name')['description'][0]->value }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="payment-method" class="col-3 col-form-label"> পেমেন্ট এর মাধ্যম নির্ধারণ
+                                করুন</label>
+                            <div class="col-9">
+                                <select name="payment-method" id="payment-method">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }} @if($paymentMethod->account_type)
+                                                ({{ $paymentMethod->account_type }})@endif</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
+                            <div class="col-9">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

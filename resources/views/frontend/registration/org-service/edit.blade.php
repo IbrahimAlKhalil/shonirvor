@@ -4,7 +4,7 @@
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/registration/org-service/edit.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/registration/org-service/index.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -40,6 +40,9 @@
                         </a></li>
                     <li><a href="#step-4">চতুর্থ ধাপ<br/>
                             <small>ডকুমেন্ট</small>
+                        </a></li>
+                    <li><a href="#step-5">পঞ্চম ধাপ<br/>
+                            <small>পেমেন্ট</small>
                         </a></li>
                 </ul>
 
@@ -77,7 +80,7 @@
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
-                                       value="{{ oldOrData('referrer', $org->referrer) }}"
+                                       value="{{ oldOrData('referrer', $org->referredBy ? $org->referredBy->user->mobile : '') }}"
                                        class="form-control" required>
                             </div>
                         </div>
@@ -275,30 +278,25 @@
                                 </select>
 
                                 <ul id="repeater-container" class="list-group">
-                                    <li class="repeater-clone mt-2 border-0 list-group-item d-none">
-                                        <div class="row">
-                                            <label class="col-md-6"></label>
-                                            <input type="number" class="form-control col-md-6"
-                                                   placeholder="রেট">
-                                            <input type="hidden">
-                                        </div>
-                                    </li>
-                                    @foreach($orgSubCategories as $index => $orgSubCategory)
+                                    @php($count = 0)
+                                    @foreach($orgSubCategories as $orgSubCategory)
                                         @if($orgSubCategory->is_confirmed)
-                                            <li class="mt-2 border-0 list-group-item" data-cloned="true">
+                                            <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                                                 <div class="row">
                                                     <label class="col-md-6"
-                                                           for="sub-category-{{ $index }}-{{ $orgSubCategory->id }}">{{ $orgSubCategory->name }}</label>
+                                                           for="sub-category-{{ $count }}-{{ $orgSubCategory->id }}">{{ $orgSubCategory->name }}</label>
                                                     <input type="number" class="form-control col-md-6" placeholder="রেট"
                                                            value="{{ $orgSubCategory->pivot->rate }}"
-                                                           id="sub-category-{{ $index }}-{{ $orgSubCategory->id }}"
-                                                           name="sub-categories[{{ $index }}][rate]">
-                                                    <input type="hidden" name="sub-categories[{{ $index }}][id]"
+                                                           id="sub-category-{{ $count }}-{{ $orgSubCategory->id }}"
+                                                           name="sub-categories[{{ $count }}][rate]">
+                                                    <input type="hidden" name="sub-categories[{{ $count }}][id]"
                                                            value="{{ $orgSubCategory->id }}">
                                                 </div>
                                             </li>
+                                            @php($count++)
                                         @endif
                                     @endforeach
+                                    <li class="repeater-insert-before d-none"></li>
                                 </ul>
 
                                 <div class="mt-4 checkbox">
@@ -309,40 +307,30 @@
                                     <ul id="req-repeater-container" class="list-group input-div">
 
                                         @php($count = 0)
-                                        @foreach($orgSubCategories as $index => $orgSubCategory)
+                                        @foreach($orgSubCategories as $orgSubCategory)
                                             @if(!$orgSubCategory->is_confirmed)
-                                                <li class="mt-2 border-0 list-group-item"
-                                                @if($count != 0){{ 'data-cloned="true"' }}@endif>
+                                                <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                                                     <div class="row">
                                                         <input type="text"
                                                                class="form-control col-md-5 sub-category-name"
-                                                               name="sub-category-requests[{{ $index }}][name]"
+                                                               name="sub-category-requests[{{ $count }}][name]"
                                                                placeholder="সাব-ক্যাটাগরির নাম"
                                                                value="{{ $orgSubCategory->name }}">
                                                         <input type="number"
                                                                class="form-control col-md-5 sub-category-rate"
-                                                               name="sub-category-requests[{{ $index }}][rate]"
+                                                               name="sub-category-requests[{{ $count }}][rate]"
                                                                placeholder="রেট"
                                                                value="{{ $orgSubCategory->pivot->rate }}">
-                                                        <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-flex"
-                                                           href="#"></a>
+                                                        @if($count != 0)
+                                                            <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-flex"
+                                                               href="#"></a>
+                                                        @endif
                                                     </div>
                                                 </li>
                                                 @php($count++)
                                             @endif
                                         @endforeach
-                                        <li class="mt-2 border-0 list-group-item repeater-clone d-none">
-                                            <div class="row">
-                                                <input type="text"
-                                                       class="form-control col-md-5 sub-category-name"
-                                                       placeholder="সাব-ক্যাটাগরির নাম">
-                                                <input type="number"
-                                                       class="form-control col-md-5 sub-category-rate"
-                                                       placeholder="রেট">
-                                                <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-flex"
-                                                   href="#"></a>
-                                            </div>
-                                        </li>
+                                        <li class="repeater-insert-before d-none"></li>
                                         <li class="list-group-item border-0">
                                             <button type="button" class="btn btn-light float-left shadow-sm add-new"><i
                                                         class="fa fa-plus"></i> আরও
@@ -359,7 +347,8 @@
                             <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
                             <div class="col-9" id="otirikto-kaj">
                                 @foreach($org->additionalPrices as $key => $additionalPrice)
-                                    <div class="repeater-clone row border rounded shadow-sm mt-2 position-relative">
+                                    <div class="row border rounded shadow-sm mt-2 position-relative"
+                                         data-repeater-clone="true">
                                         <div class="form-group  col-md-12 row mt-3">
                                             <label for="addtional-pricing-name-{{ $key }}" class="col-3 col-form-label">কাজের
                                                 নামঃ </label>
@@ -380,10 +369,12 @@
                                                       class="form-control">{{ oldOrData('additional-pricing.[' .$key. '].[info]', $additionalPrice->info) }}</textarea>
                                             </div>
                                         </div>
-
-                                        <span class="cross remove-btn"></span>
+                                        @if(!$loop->first)
+                                            <span class="cross remove-btn"></span>
+                                        @endif
                                     </div>
                                 @endforeach
+                                <span class="repeater-insert-before d-none"></span>
                                 <button type="button" class="btn btn-light float-left shadow-sm add-new mt-2"><i
                                             class="fa fa-plus"></i> আরও
                                 </button>
@@ -444,7 +435,53 @@
                             </div>
                         </div>
                     </div>
+                    <div class="p-4" id="step-5">
+                        <div class="form-group row mx-5">
+                            <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                            <div class="col-9">
+                                <select name="package" id="package">
+                                    @foreach($packages as $package)
+                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="tab-content mt-2" id="package-descriptions">
+                                    @foreach($packages as $package)
+                                        <div class="tab-pane fade" id="package-dscr-{{ $package->id }}">
+                                            {{ $package->properties->groupBy('name')['description'][0]->value }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="form-group row mx-5">
+                            <label for="payment-method" class="col-3 col-form-label"> পেমেন্ট এর মাধ্যম নির্ধারণ
+                                করুন</label>
+                            <div class="col-9">
+                                <select name="payment-method" id="payment-method">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div id="payment-method-accountId">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <span class="text-primary d-none"
+                                              id="payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
+                                                <i class="text-muted">({{ $paymentMethod->account_type }}
+                                                    )</i>@endif</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
+                            <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
+                            <div class="col-9">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </form>
@@ -463,7 +500,8 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: true
+            useURLhash: true,
+            autoAdjustHeight: false
         });
 
         $('select').selectize({

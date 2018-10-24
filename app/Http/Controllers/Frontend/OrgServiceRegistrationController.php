@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Org;
 use App\Models\Category;
+use App\Models\Package;
+use App\Models\PaymentMethod;
+use App\Models\Reference;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreOrg;
 use App\Http\Requests\UpdateOrg;
+use App\Models\User;
 use App\Models\Village;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -26,10 +30,12 @@ class OrgServiceRegistrationController extends Controller
         $user = Auth::user();
         $orgs = $user->orgs('pending')->get();
 
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
+        $paymentMethods = PaymentMethod::all();
         $categories = Category::getAll('org')->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user');
+        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods');
         $view = 'frontend.registration.org-service.confirm';
         $count = $orgs->count();
 
@@ -140,7 +146,6 @@ class OrgServiceRegistrationController extends Controller
         $org->name = $request->post('name');
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
-        $org->referrer = $request->post('referrer');
         $org->email = $request->post('email');
         $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
@@ -154,6 +159,19 @@ class OrgServiceRegistrationController extends Controller
             $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
+
+        // Create referrer
+        if ($request->filled('referrer')) {
+            $referrer = new Reference;
+            $referrer->user_id = User::select('id')
+                ->where('mobile', $request->input('referrer'))
+                ->first()
+                ->id;
+            $referrer->service_id = $org->id;
+            $referrer->service_type_id = 2;
+            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->save();
+        }
 
         // associate sub-categories$org
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
@@ -239,6 +257,39 @@ class OrgServiceRegistrationController extends Controller
         return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
+    public function edit($id)
+    {
+        $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
+
+        if ($org->user_id != Auth::id() && $org->is_pending == 0) {
+            return redirect(route('organization-service-registration.index'));
+        }
+
+        $allOrg = $org->user->inds();
+        $pendingOrgs = $org->user->inds();
+
+        $canEditNid = false;
+        if (!$allOrg->count() || $pendingOrgs->onlyPending()->count() == $allOrg->count()) {
+            $canEditNid = true;
+        }
+
+        $categories = Category::onlyOrg()->onlyConfirmed()->get();
+        $subCategories = SubCategory::where('is_confirmed', 1)->whereCategoryId($org->category_id)->get();
+        $orgSubCategories = $org->subCategoryRates;
+        $isNoSubCategory = $orgSubCategories->filter(function ($sub) {
+            return $sub['is_confirmed'] == 0;
+        })->count();
+
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
+        $paymentMethods = PaymentMethod::all();
+        $divisions = Division::all();
+        $districts = District::whereDivisionId($org->division_id)->get();
+        $thanas = $org->district->thanas()->whereIsPending(0)->get();
+        $unions = $org->thana->unions()->whereIsPending(0)->get();
+        $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
+
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'allOrg', 'isNoSubCategory', 'packages', 'paymentMethods'));
+    }
 
     public function update(UpdateOrg $request, $id)
     {
@@ -445,37 +496,5 @@ class OrgServiceRegistrationController extends Controller
         DB::commit();
 
         return back()->with('success', 'সম্পন্ন!');
-    }
-
-    public function edit($id)
-    {
-        $org = Org::with(['division', 'district', 'thana', 'union', 'subCategoryRates', 'additionalPrices'])->find($id);
-
-        if ($org->user_id != Auth::id() && $org->is_pending == 0) {
-            return redirect(route('organization-service-registration.index'));
-        }
-
-        $allOrg = $org->user->inds();
-        $pendingOrgs = $org->user->inds();
-
-        $canEditNid = false;
-        if (!$allOrg->count() || $pendingOrgs->onlyPending()->count() == $allOrg->count()) {
-            $canEditNid = true;
-        }
-
-        $categories = Category::onlyOrg()->onlyConfirmed()->get();
-        $subCategories = SubCategory::where('is_confirmed', 1)->whereCategoryId($org->category_id)->get();
-        $orgSubCategories = $org->subCategoryRates;
-        $isNoSubCategory = $orgSubCategories->filter(function ($sub) {
-            return $sub['is_confirmed'] == 0;
-        })->count();
-
-        $divisions = Division::all();
-        $districts = District::whereDivisionId($org->division_id)->get();
-        $thanas = $org->district->thanas()->whereIsPending(0)->get();
-        $unions = $org->thana->unions()->whereIsPending(0)->get();
-        $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
-
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'allOrg', 'isNoSubCategory'));
     }
 }

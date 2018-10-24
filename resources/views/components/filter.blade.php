@@ -136,10 +136,10 @@
                     <div class="col-3 py-2 px-1">
                         <select name="sub-category" id="subCategory"
                                 @if(! request()->filled('category')){{ 'disabled' }}@endif
-                                data-placeholder="-- সাব ক্যাটাগরি --"
+                                data-placeholder="-- সার্ভিস --"
                                 data-option-loader-nodisable="true"
                                 data-option-loader-properties="value=id,text=name">
-                            <option value="">-- সাব ক্যাটাগরি --</option>
+                            <option value="">-- সার্ভিস --</option>
                             @isset($subCategories)
                                 @foreach($subCategories as $subCategory)
                                     <option value="{{ $subCategory->id }}" @if(request()->get('sub-category') == $subCategory->id){{ 'selected' }}@endif>{{ $subCategory->name }}</option>

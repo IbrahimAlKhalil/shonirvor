@@ -9,11 +9,15 @@
 @section('content')
     <div class="container my-5">
         <div class="row">
-            <nav aria-label="breadcrumb" class="col-md-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ</li>
-                </ol>
-            </nav>
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active h5 mb-0">প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row mt-3">
             <div class="col-md-9">
                 @include('components.success')
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
@@ -59,7 +63,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('backend.package.ind-service.update', $package->id) }}"
+                                                <form action="{{ route('backend.package.org-service.update', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('put') }}
@@ -122,7 +126,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-footer border-top-0">
-                                                <form action="{{ route('backend.package.ind-service.destroy', $package->id) }}"
+                                                <form action="{{ route('backend.package.org-service.destroy', $package->id) }}"
                                                       method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('delete') }}
@@ -140,7 +144,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">কোন প্যাকেজ খুঁজে পাওয়া যায়নি ।</td>
+                            <td colspan="6">কোনো প্যাকেজ নেই।</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -156,7 +160,7 @@
                     <div class="col-12">
                         @include('components.side-nav')
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-12 mt-4">
                         <button class="w-100 btn btn-info" data-toggle="modal"
                                 data-target="#create-package-modal">প্যাকেজ তৈরি করুন
                         </button>
@@ -176,7 +180,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('backend.package.ind-service.store') }}" method="post">
+                    <form action="{{ route('backend.package.org-service.store') }}" method="post">
                         {{ csrf_field() }}
                         <div class="form-group row">
                             <label for="name" class="col-3 col-form-label text-right">প্যাকেজের নামঃ</label>
@@ -196,14 +200,19 @@
                             <div class="col-9 input-group">
                                 <input id="duration" name="duration" type="number" class="form-control">
                                 <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">দিনঃ</span>
+                                    <span class="input-group-text" id="basic-addon2">দিন</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="fee" class="col-3 col-form-label text-right">মূল্যঃ</label>
                             <div class="col-9">
-                                <input id="fee" name="fee" type="text" class="form-control">
+                                <div class="input-group">
+                                    <input id="fee" name="fee" type="number" class="form-control" placeholder="ইংরেজিতে লিখুন" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">টাকা</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer border-top-0">

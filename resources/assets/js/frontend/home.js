@@ -39,15 +39,9 @@ import {UrlParser} from "../modules/url-parser";
 document.addEventListener('DOMContentLoaded', () => {
     let methodSelect = $('#method + .selectize-control').parent();
     let priceSelect = $('#price + .selectize-control').parent();
-    let url = new UrlParser(location.search);
 
-    if ( ! url.filled('method') ) {
-        priceSelect.hide();
-
-        if ( ! url.filled('sub-category') ) {
-            methodSelect.hide();
-        }
-    }
+    priceSelect.hide();
+    methodSelect.hide();
 
     document.getElementById('subCategory').selectize.on('change', value => {
 

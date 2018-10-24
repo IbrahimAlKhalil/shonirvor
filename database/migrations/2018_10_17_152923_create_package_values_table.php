@@ -12,7 +12,7 @@ class CreatePackageValuesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('package_id');
             $table->unsignedInteger('package_property_id');
-            $table->text('value');
+            $table->text('value')->nullable();
             $table->timestamps();
 
             $table->foreign('package_id')

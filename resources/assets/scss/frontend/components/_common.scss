@@ -75,7 +75,7 @@ a:hover {
   }
 }
 
-/**** Checkbox Design ****/
+/****** Checkbox Design *****/
 /****************************/
 .checkbox {
   display: block;
@@ -113,7 +113,7 @@ a:hover {
     left: 0;
     height: 20px;
     width: 20px;
-    background-color: #eee;
+    background-color: #e9ecef;
     border-radius: 5px;
 
     &:after {
@@ -134,7 +134,7 @@ a:hover {
   }
 
   &:hover > [type="checkbox"] + span {
-    background-color: #ccc;
+    background-color: #98c8ef;
   }
 }
 

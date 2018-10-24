@@ -146,4 +146,18 @@ $(document).ready(function () {
                 next.removeClass('invisible');
             }
         });
+
+    $('#package')[0].selectize.on('change', value => {
+        localStorage.setItem('package', value);
+        $('#package-descriptions').find('.tab-pane').removeClass('show active');
+        $(`#package-dscr-${value}`).addClass('active show')
+    });
+
+    $('#payment-method')[0].selectize.on('change', value => {
+        localStorage.setItem('paymentMethod', value);
+        $('#payment-method-accountId').find('span').addClass('d-none');
+        $(`#payment-method-id-${value}`).removeClass('d-none')
+    });
+
+
 });
