@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Org;
 use App\Models\Category;
+use App\Models\Package;
 use App\Models\Reference;
-use App\Models\ServiceType;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreOrg;
 use App\Http\Requests\UpdateOrg;
 use App\Models\User;
 use App\Models\Village;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
 use Illuminate\Support\Facades\Storage;
@@ -22,6 +24,32 @@ use Sandofvega\Bdgeocode\Models\District;
 
 class OrgServiceRegistrationController extends Controller
 {
+    private $referrer;
+    private $defaultReferPackage;
+
+    public function __construct(Request $request)
+    {
+        if (Route::currentRouteName() == 'individual-service-registration.store'
+            || Route::currentRouteName() == 'individual-service-registration.update') {
+
+            $this->referrer = User::where('mobile', $request->input('referrer'))->first();
+
+            $this->defaultReferPackage = Package::with('properties')
+                ->select('packages.id',
+                    'packages.package_type_id',
+                    'package_values.package_property_id',
+                    'package_values.value as is_default')
+                ->join('package_values', function ($join) {
+                    $join->on('packages.id', 'package_values.package_id')
+                        ->where('package_values.package_property_id', 10);
+                })
+                ->where([
+                    ['package_type_id', 5],
+                    ['package_values.value', 1]
+                ])
+                ->first();
+        }
+    }
 
     public function index()
     {
@@ -156,16 +184,15 @@ class OrgServiceRegistrationController extends Controller
         }
         $org->save();
 
-        // Create referrer
+        // Create reference
         if ($request->filled('referrer')) {
             $referrer = new Reference;
-            $referrer->user_id = User::select('id')
-                ->where('mobile', $request->input('referrer'))
-                ->first()
-                ->id;
+            $referrer->user_id = $this->referrer->id;
             $referrer->service_id = $org->id;
             $referrer->service_type_id = 2;
-            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->package_id = $this->referrer->referPackage()->exists()
+                ? $this->referrer->referPackage->package_id
+                : $this->defaultReferPackage->id;
             $referrer->save();
         }
 
@@ -237,7 +264,6 @@ class OrgServiceRegistrationController extends Controller
 
         return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
-
 
     public function update(UpdateOrg $request, $id)
     {

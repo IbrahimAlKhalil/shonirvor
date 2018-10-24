@@ -34,7 +34,12 @@ Route::post('sms/send/{user}', 'SmsController@send')->name('sms.send');
 Route::post('individual-service/top/{ind}', 'Backend\IndServiceController@isTop')->name('ind-service.top');
 Route::post('organization-service/top/{org}', 'Backend\OrgServiceController@isTop')->name('org-service.top');
 
-Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->namespace('Backend')->name('backend.')->group(function () {
+
+    Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
+    Route::resource('users', 'UserController', [
+        'only' => ['index', 'show']
+    ]);
 
     Route::prefix('packages')->name('package.')->group(function () {
 
@@ -66,11 +71,11 @@ Route::namespace('Backend')->name('backend.')->prefix('dashboard')->group(functi
 
     }, '');
 
-    Route::resource('ad', 'AdController', [
-        'only' => ['index', 'store', 'update', 'destroy']
+    Route::resource('ads', 'AdController', [
+        'except' => ['create', 'show', 'edit']
     ])->names('ad');
 
-    Route::resource('notice', 'NoticeController', [
+    Route::resource('notices', 'NoticeController', [
         'only' => ['index', 'store', 'update', 'destroy']
     ])->names('notice');
 
