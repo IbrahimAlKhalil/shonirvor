@@ -2,7 +2,6 @@
 
 use App\Models\Ind;
 use App\Models\Category;
-
 use App\Models\User;
 use App\Models\Village;
 use Illuminate\Database\Seeder;
