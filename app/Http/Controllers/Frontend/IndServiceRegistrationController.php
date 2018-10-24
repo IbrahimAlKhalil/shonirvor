@@ -14,9 +14,11 @@ use App\Models\ServiceType;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreInd;
 use App\Http\Requests\UpdateInd;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
@@ -24,6 +26,32 @@ use Sandofvega\Bdgeocode\Models\District;
 
 class IndServiceRegistrationController extends Controller
 {
+    private $referrer;
+    private $defaultReferPackage;
+
+    public function __construct(Request $request)
+    {
+        if (Route::currentRouteName() == 'individual-service-registration.store'
+            || Route::currentRouteName() == 'individual-service-registration.update') {
+
+            $this->referrer = User::where('mobile', $request->input('referrer'))->first();
+
+            $this->defaultReferPackage = Package::with('properties')
+                ->select('packages.id',
+                    'packages.package_type_id',
+                    'package_values.package_property_id',
+                    'package_values.value as is_default')
+                ->join('package_values', function ($join) {
+                    $join->on('packages.id', 'package_values.package_id')
+                        ->where('package_values.package_property_id', 10);
+                })
+                ->where([
+                    ['package_type_id', 5],
+                    ['package_values.value', 1]
+                ])
+                ->first();
+        }
+    }
 
     public function index()
     {
@@ -60,7 +88,6 @@ class IndServiceRegistrationController extends Controller
 
         return view('frontend.registration.ind-service.index', $compact);
     }
-
 
     public function store(StoreInd $request)
     {
@@ -162,16 +189,15 @@ class IndServiceRegistrationController extends Controller
         }
         $ind->save();
 
-        // Create referrer
+        // Create reference
         if ($request->filled('referrer')) {
             $referrer = new Reference;
-            $referrer->user_id = User::select('id')
-                ->where('mobile', $request->input('referrer'))
-                ->first()
-                ->id;
+            $referrer->user_id = $this->referrer->id;
             $referrer->service_id = $ind->id;
             $referrer->service_type_id = 1;
-            $referrer->package_id = 1; // TODO:: need to dynamic
+            $referrer->package_id = $this->referrer->referPackage()->exists()
+                ? $this->referrer->referPackage->package_id
+                : $this->defaultReferPackage->id;
             $referrer->save();
         }
 
