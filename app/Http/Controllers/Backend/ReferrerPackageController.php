@@ -26,7 +26,10 @@ class ReferrerPackageController extends Controller
     public function index()
     {
         $packages = Package::with('properties')
-            ->select('packages.id', 'packages.package_type_id', 'package_values.package_property_id', 'package_values.value as is_default')
+            ->select('packages.id',
+                'packages.package_type_id',
+                'package_values.package_property_id',
+                'package_values.value as is_default')
             ->join('package_values', function ($join) {
                 $join->on('packages.id', 'package_values.package_id')
                     ->where('package_values.package_property_id', 10);
