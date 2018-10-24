@@ -8,6 +8,8 @@
 @endsection
 
 @section('content')
+    @include('components.success')
+    @include('components.error')
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
@@ -22,8 +24,6 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-9">
-                @include('components.success')
-                @include('components.error')
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                     <thead>
                     <tr>

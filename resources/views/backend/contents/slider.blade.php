@@ -7,11 +7,9 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <div class="row">
-            <div class="col-12 pl-0">
-                @include('components.success')
-            </div>
             <div class="col-md-9">
                 <div class="row mb-4">
                     <form action="{{ route('contents.slider.update',  $id) }}"

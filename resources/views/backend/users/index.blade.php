@@ -7,10 +7,10 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9">
-                @include('components.success')
                 <table class="table table-striped table-bordered table-hover table-sm text-center mt-3 bg-white">
                     <thead>
                     <tr>

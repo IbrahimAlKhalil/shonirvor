@@ -8,10 +8,9 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <h3 class="text-center mb-5">ব্যক্তি সেবা প্রদানকারী নিবন্ধন</h3>
-
-        @include('components.success')
 
         <div class="alert alert-danger">
             {{ $errors }}

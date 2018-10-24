@@ -8,12 +8,8 @@
 @endsection
 
 @section('content')
-    <div style="margin-top: 40px;"></div>
-
-    <div class="container">
-
-        @include('components.success')
-
+    @include('components.success')
+    <div class="container my-5">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link {{ $classesToAdd[0] }}" data-toggle="tab" href="#edit-requests">অনুরোধ সম্পাদনা

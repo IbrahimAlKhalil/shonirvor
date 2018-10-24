@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
@@ -17,7 +18,6 @@
         <div class="row">
             <div class="col-12 mt-4">
                 <h4 class="mb-4">সকল বেক্তিগত সার্ভিস রিকোয়েস্ট</h4>
-                @include('components.success')
             </div>
             <div class="col-md-9">
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">

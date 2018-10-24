@@ -7,13 +7,10 @@
 @endsection
 
 @section('content')
-    <div style="margin-top: 40px;"></div>
-
-    <div class="container">
+    @include('components.success')
+    <div class="container my-5">
 
         <h3>আপনার তথ্য সম্পাদনা করুন</h3>
-
-        @include('components.success')
 
         <form method="post" enctype="multipart/form-data"
               action="{{ route('profile.backend.organization-service.update', $provider->id) }}">
