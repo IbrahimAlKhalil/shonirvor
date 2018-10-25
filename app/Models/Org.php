@@ -108,6 +108,11 @@ class Org extends Model
             ->where('service_type_id', 2);
     }
 
+    public function payments()
+    {
+        return $this->morphMany(Payment::class, 'paymentable');
+    }
+
 
     /*******************/
     /***** Scopes *****/

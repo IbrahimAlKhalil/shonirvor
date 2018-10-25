@@ -18,7 +18,7 @@ class CreateIndsTable extends Migration
             $table->unsignedInteger('union_id');
             $table->unsignedInteger('village_id');
 
-            $table->mediumText('description');
+            $table->mediumText('description')->nullable();
             $table->string('email')->nullable();
             $table->string('mobile', 11);
             $table->string('website')->nullable();

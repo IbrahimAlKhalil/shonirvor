@@ -159,5 +159,7 @@ $(document).ready(function () {
         $(`#payment-method-id-${value}`).removeClass('d-none')
     });
 
+    document.querySelector('#package').selectize.setValue(localStorage.package);
+    document.querySelector('#payment-method').selectize.setValue(localStorage.paymentMethod);
 
 });

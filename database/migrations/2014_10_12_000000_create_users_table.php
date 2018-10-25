@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile')->unique();
             $table->string('email')->unique()->nullable();
             $table->string('nid')->unique()->nullable();
-            $table->integer('age')->nullable();
+            $table->date('dob')->nullable();
             $table->string('qualification')->nullable();
             $table->string('address')->nullable();
             $table->string('photo')->default('default/user-photos/person.jpg');

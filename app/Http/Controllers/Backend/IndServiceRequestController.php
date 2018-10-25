@@ -72,9 +72,9 @@ class IndServiceRequestController extends Controller
 
         $category = $request->filled('category') ? Category::find($request->post('category')) : $serviceRequest->category;
         $subCategories = $serviceRequest->subCategories;
-        $subCategoryIds = array_map(function ($element) {
+        $subCategoryIds = $request->post('sub-categories') ? array_map(function ($element) {
             return $element['id'];
-        }, $request->post('sub-categories'));
+        }, $request->post('sub-categories')) : null;
         $thana = !isset($thana) ? $serviceRequest->thana : $thana;
         $union = !isset($union) ? $serviceRequest->union : $union;
         $village = !isset($village) ? $serviceRequest->village : $village;
@@ -86,7 +86,7 @@ class IndServiceRequestController extends Controller
             $serviceRequest->category_id = $category->id;
         }
 
-        if ($request->has('sub-categories')) {
+        if ($subCategoryIds) {
             // Delete sub-categories
             foreach ($subCategories as $subCategory) {
                 if (!in_array($subCategory->id, $subCategoryIds)) {
@@ -101,6 +101,7 @@ class IndServiceRequestController extends Controller
                 });
 
                 $subCategory->category_id = $category->id;
+                $subCategory->is_confirmed = 1;
                 $subCategory->name = $subCategoryRequest['name'];
                 $subCategory->save();
             }
