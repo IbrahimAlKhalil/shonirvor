@@ -31,7 +31,8 @@ class HomeController extends Controller
             ->take(9)
             ->get();
 
-        $indServices = Ind::onlyTop()
+        $indTopServices = Ind::onlyTop()
+            ->onlyApproved()
             ->select('inds.id', 'mobile', 'inds.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
             ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
@@ -39,7 +40,8 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
-        $orgServices = Org::onlyTop()
+        $orgTopServices = Org::onlyTop()
+            ->onlyApproved()
             ->select('orgs.id', 'name', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
             ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
             ->withFeedbacksAvg()
@@ -47,6 +49,6 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
-        return view('frontend.home', compact('indCategories', 'orgCategories', 'indServices', 'orgServices'));
+        return view('frontend.home', compact('indCategories', 'orgCategories', 'indTopServices', 'orgTopServices'));
     }
 }

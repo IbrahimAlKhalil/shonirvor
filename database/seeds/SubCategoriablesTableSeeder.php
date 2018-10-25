@@ -24,7 +24,7 @@ class SubCategoriablesTableSeeder extends Seeder
     {
         $class::all()->each(function ($service) use ($subCategoriableType) {
             $subCategoryIds = $service->category->subCategories()->pluck('id')->toArray();
-            $subCategoryIds = randomElements($subCategoryIds, mt_rand(1, count($subCategoryIds)));
+            $subCategoryIds = array_random($subCategoryIds, mt_rand(1, count($subCategoryIds)));
             $subCategoriables = [];
 
             foreach ($subCategoryIds as $subCategoryId) {

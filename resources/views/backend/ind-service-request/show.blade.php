@@ -28,14 +28,14 @@
                         </div>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">বর্ণনাঃ</p>
                         <p class="pt-3 text-justify">
                             {{ $serviceRequest->description }}
                         </p>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
@@ -77,7 +77,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
                             <tbody>
@@ -181,7 +181,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
@@ -214,7 +214,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <thead>
@@ -276,7 +276,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
                             <div class="col-12">
@@ -307,7 +307,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">কাজের ছবিঃ</p>
                         <div class="row">
                             <div class="col-12">

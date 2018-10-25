@@ -88,31 +88,6 @@ function randomElement($array)
     return $array[array_rand($array, 1)];
 }
 
-/**
- * Returns 1 random element from given array
- *
- * @param $array array
- * @param $howMany integer
- * @return array
- * */
-
-function randomElements($array, $howMany = 2)
-{
-    $keys = array_rand($array, $howMany);
-    $returnArray = [];
-
-    // make sure that $keys holds an array
-    if (gettype($keys) != 'array') {
-        $keys = [$keys];
-    }
-
-    foreach ($keys as $key) {
-        $returnArray[$key] = $array[$key];
-    }
-
-    return $returnArray;
-}
-
 
 /**
  * Get dynamic contents from database

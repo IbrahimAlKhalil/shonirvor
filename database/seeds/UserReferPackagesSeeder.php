@@ -11,8 +11,7 @@ class UserReferPackagesSeeder extends Seeder
         $userIds = DB::table('users')
             ->inRandomOrder()
             ->take(round($userCount/2))
-            ->pluck('id')
-            ->toArray();
+            ->pluck('id');
 
         $referPackageIds = DB::table('packages')
             ->where('package_type_id', 5)
