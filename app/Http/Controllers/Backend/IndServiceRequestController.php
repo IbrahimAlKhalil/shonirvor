@@ -33,7 +33,15 @@ class IndServiceRequestController extends Controller
             'village',
             'category',
             'workMethods',
-            'subCategories'
+            'subCategories',
+            'payments' => function ($query) {
+                $query->with([
+                    'package' => function ($query) {
+                        $query->with('properties');
+                    },
+                    'paymentMethod'
+                ]);
+            }
         ]);
 
         $workMethods = WorkMethod::all();
@@ -43,7 +51,7 @@ class IndServiceRequestController extends Controller
         $unions = !$serviceRequest->thana->is_pending && $serviceRequest->union->is_pending ? Union::where('thana_id', $serviceRequest->thana_id)->get() : [];
         $villages = !$serviceRequest->union->is_pending && $serviceRequest->village->is_pending ? Village::where('union_id', $serviceRequest->union_id)->get() : [];
         $categories = !$serviceRequest->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
-        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods'));
+        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments'));
     }
 
     public function update(Request $request, Ind $serviceRequest)

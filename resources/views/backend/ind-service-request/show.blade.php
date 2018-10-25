@@ -10,7 +10,8 @@
     @include('components.success')
     <div class="container my-5">
         <div class="row">
-            <form class="col-md-9 bg-white py-3" id="approve-request" action="{{ route('individual-service-request.update', $serviceRequest->id) }}"
+            <form class="col-md-9 bg-white py-3" id="approve-request"
+                  action="{{ route('individual-service-request.update', $serviceRequest->id) }}"
                   method="post">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
@@ -34,6 +35,30 @@
                             {{ $serviceRequest->description }}
                         </p>
                     </div>
+
+                    @if($serviceRequest->payments->first())
+                        @php($payment = $serviceRequest->payments->first())
+                        @php($properties = $payment->package->properties->groupBy('name'))
+                        <div class="col-12 mt-4">
+                            <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
+                            <table class="table table-striped table-bordered table-hover table-sm w-100">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">প্যাকেজের নামঃ</th>
+                                    <td>{{ $properties['name'][0]->value }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">পেমেন্ট এর মাধ্যম</th>
+                                    <td>{{ $payment->paymentMethod->name }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"> Transaction ID:</th>
+                                    <td>{{ $payment->transactionId }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
 
                     <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
@@ -92,7 +117,8 @@
                                     @if($serviceRequest->thana->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <input name="thana-request" id="thana-request" type="text" class="form-control"
+                                                <input name="thana-request" id="thana-request" type="text"
+                                                       class="form-control"
                                                        value="{{ $serviceRequest->thana->bn_name}}">
                                             </div>
                                             <div class="col-md-6">
@@ -120,7 +146,8 @@
                                     @if($serviceRequest->union->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <input id="union-request" name="union-request" type="text" class="form-control"
+                                                <input id="union-request" name="union-request" type="text"
+                                                       class="form-control"
                                                        value="{{ $serviceRequest->union->bn_name }}">
                                             </div>
                                             <div class="col-md-6">
@@ -151,7 +178,8 @@
                                     @if($serviceRequest->village->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <input id="village-request" name="village-request" type="text" class="form-control"
+                                                <input id="village-request" name="village-request" type="text"
+                                                       class="form-control"
                                                        value="{{ $serviceRequest->village->bn_name }}">
                                             </div>
                                             <div class="col-md-6">
@@ -233,8 +261,10 @@
                                     <td> {{ en2bnNumber($index+1) }} </td>
                                     <td>
                                         @if(!$subCategory->is_confirmed)
-                                            <input name="sub-categories[{{ $index }}][name]" type="text" class="form-control" value="{{ $subCategory->name }}">
-                                            <input type="hidden" name="sub-categories[{{ $index }}][id]" value="{{ $subCategory->id }}">
+                                            <input name="sub-categories[{{ $index }}][name]" type="text"
+                                                   class="form-control" value="{{ $subCategory->name }}">
+                                            <input type="hidden" name="sub-categories[{{ $index }}][id]"
+                                                   value="{{ $subCategory->id }}">
                                         @else
                                             {{ $subCategory->name }}
                                         @endif
@@ -317,7 +347,8 @@
                                             <div class="card shadow-sm">
                                                 <a href="javascript:">
                                                     <img class="card-img-top img-fluid"
-                                                         src="{{ asset('storage/' . $image->path) }}" alt="Card image cap">
+                                                         src="{{ asset('storage/' . $image->path) }}"
+                                                         alt="Card image cap">
                                                 </a>
                                                 <div class="card-body">
                                                     <p class="card-text">${{ $image->description }}</p>

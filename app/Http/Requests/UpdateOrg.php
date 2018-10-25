@@ -41,6 +41,8 @@ class UpdateOrg extends FormRequest
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
             'trade-license' => 'required|image',
+            'package' => 'required_with:transactionId',
+            'payment-method' => 'required_with:transactionId'
         ];
     }
 

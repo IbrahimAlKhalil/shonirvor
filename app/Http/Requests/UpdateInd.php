@@ -44,7 +44,9 @@ class UpdateInd extends FormRequest
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
             'experience-certificate' => 'image',
-            'cv' => 'mimes:pdf'
+            'cv' => 'mimes:pdf',
+            'package' => 'required_with:transactionId',
+            'payment-method' => 'required_with:transactionId'
         ];
     }
 

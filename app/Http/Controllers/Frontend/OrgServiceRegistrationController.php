@@ -239,8 +239,9 @@ class OrgServiceRegistrationController extends Controller
         // User
         if ($request->filled('transaction-id')) {
             $payment = new Payment;
-            $payment->transactionId = $request->post('transaction-id');
             $payment->package_id = $request->post('package');
+            $payment->payment_method_id = $request->post('payment-method');
+            $payment->transactionId = $request->post('transaction-id');
             $org->payments()->save($payment);
         }
         $user->nid = $request->post('nid');
@@ -482,13 +483,17 @@ class OrgServiceRegistrationController extends Controller
 
         DB::table('org_additional_prices')->insert($data);
 
-        // User
+        // payment
+        $org->payments()->delete();
         if ($request->filled('transaction-id')) {
             $payment = new Payment;
-            $payment->transactionId = $request->post('transaction-id');
             $payment->package_id = $request->post('package');
+            $payment->payment_method_id = $request->post('payment-method');
+            $payment->transactionId = $request->post('transaction-id');
             $org->payments()->save($payment);
         }
+
+        // User
         $user->nid = $request->post('nid');
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');

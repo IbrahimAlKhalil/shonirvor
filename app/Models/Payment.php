@@ -10,4 +10,14 @@ class Payment extends Model
     {
         return $this->morphTo();
     }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
 }
