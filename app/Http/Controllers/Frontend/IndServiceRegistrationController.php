@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Ind;
 use App\Models\Category;
 use App\Models\Package;
+use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Reference;
 use App\Models\User;
@@ -56,7 +57,12 @@ class IndServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $inds = $user->inds()->onlyPending()->get();
+        $inds = $user->inds()->onlyPending();
+
+        if ($inds->exists()) {
+            return redirect(route('individual-service-registration.edit', $inds->first()->id));
+        }
+
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
@@ -64,29 +70,8 @@ class IndServiceRegistrationController extends Controller
         // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods');
-        $view = 'frontend.registration.ind-service.confirm';
-        $count = $inds->count();
 
-        // check what if current user didn't reach at the maximum pending request
-        if ($count >= 3) {
-            // reached at the maximum
-            // redirect them to the confirmation page
-            return view($view, $compact);
-        }
-
-        // check what if current user has less than 3 pending request
-        if ($count < 3 && $count >= 1) {
-            $compact['classesToAdd'] = ['active', ''];
-            // didn't reach at the maximum
-            // redirect them to the confirmation page
-            return view($view, $compact);
-        }
-
-        // inds, classesToAdd are unnecessary for index
-        unset($compact['inds'], $compact['classesToAdd']);
-
-        return view('frontend.registration.ind-service.index', $compact);
+        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods'));
     }
 
     public function store(StoreInd $request)
@@ -202,8 +187,38 @@ class IndServiceRegistrationController extends Controller
         }
 
         // associate sub-categories
-        !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
-        $ind->subCategories()->saveMany($requestedSubCategories);
+        $data = [];
+
+        if (!$isCategoryRequest) {
+            foreach ($subCategories as $subCategory) {
+                array_push($data, [
+                    'sub_category_id' => $subCategory->id,
+                    'sub_categoriable_id' => $ind->id,
+                    'sub_categoriable_type' => 'ind'
+                ]);
+            }
+        }
+
+        foreach ($requestedSubCategories as $subCategory) {
+            array_push($data, [
+                'sub_category_id' => $subCategory->id,
+                'sub_categoriable_id' => $ind->id,
+                'sub_categoriable_type' => 'ind'
+            ]);
+        }
+
+        DB::table('sub_categoriables')->insert($data);
+
+
+        // payment
+
+        if ($request->filled('transaction-id')) {
+            $payment = new Payment;
+            $payment->transactionId = $request->post('transaction-id');
+            $payment->package_id = $request->post('package');
+            $ind->payments()->save($payment);
+        }
+
 
         // ind_work_method table
         // TODO:: Some custom validation will be needed for workmethods
@@ -251,9 +266,8 @@ class IndServiceRegistrationController extends Controller
             $user->nid = $request->post('nid');
         }
 
-        if (!$user->age && $request->has('age')) {
-            $user->age = $request->post('age');
-        }
+
+        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
 
         $user->qualification = $request->post('qualification');
         $user->save();
@@ -283,7 +297,7 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+        return redirect(route('individual-service-registration.edit', $ind->id))->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
     public function update(UpdateInd $request, $id)
@@ -291,13 +305,6 @@ class IndServiceRegistrationController extends Controller
 
         $user = Auth::user();
         $ind = Ind::find($id);
-        $allInd = $user->inds();
-        $pendinInds = $user->inds();
-
-        $canEditNid = false;
-        if (!$allInd->count() || $pendinInds->onlyPending()->count() == $allInd->count()) {
-            $canEditNid = true;
-        }
 
         // TODO:: Move this validation to a requests class
         if ($ind->user_id != Auth::id()) {
@@ -425,8 +432,38 @@ class IndServiceRegistrationController extends Controller
         }
 
         // associate sub-categories
-        !$isCategoryRequest && $ind->subCategories()->saveMany($subCategories);
-        $ind->subCategories()->saveMany($requestedSubCategories);
+        $data = [];
+
+        if (!$isCategoryRequest) {
+            foreach ($subCategories as $subCategory) {
+                array_push($data, [
+                    'sub_category_id' => $subCategory->id,
+                    'sub_categoriable_id' => $ind->id,
+                    'sub_categoriable_type' => 'ind'
+                ]);
+            }
+        }
+
+        foreach ($requestedSubCategories as $subCategory) {
+            array_push($data, [
+                'sub_category_id' => $subCategory->id,
+                'sub_categoriable_id' => $ind->id,
+                'sub_categoriable_type' => 'ind'
+            ]);
+        }
+
+        DB::table('sub_categoriables')->insert($data);
+
+
+        // payment
+
+        if ($request->filled('transaction-id')) {
+            $payment = new Payment;
+            $payment->transactionId = $request->post('transaction-id');
+            $payment->package_id = $request->post('package');
+            $ind->payments()->save($payment);
+        }
+
 
         // ind_work_method table
 
@@ -470,7 +507,8 @@ class IndServiceRegistrationController extends Controller
 
         // User
         $user->nid = $request->post('nid');
-        $user->age = $request->post('age');
+        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+
         $user->qualification = $request->post('qualification');
         $user->save();
 
@@ -507,10 +545,10 @@ class IndServiceRegistrationController extends Controller
     public function edit($id)
     {
 
-        $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user'])->find($id);
+        $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user', 'payments'])->find($id);
 
         // TODO:: Move this validation to a requests class
-        if ($ind->user_id != Auth::id()) {
+        if ($ind->user_id != Auth::id() || !$ind->is_pending) {
             return redirect(route('individual-service-registration.index'));
         }
 
@@ -536,6 +574,7 @@ class IndServiceRegistrationController extends Controller
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods'));
+
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods'));
     }
 }

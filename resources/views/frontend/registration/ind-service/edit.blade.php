@@ -86,12 +86,34 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="age" class="col-3 col-form-label">বয়স <span
+                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
-                                <input id="age" name="age" type="number"
-                                       value="{{ oldOrData('age', $ind->user->age) }}" required="required"
-                                       class="form-control">
+                                <div class="input-group mb-3">
+                                    @php($dob = \Carbon\Carbon::make($ind->user->dob))
+                                    <select name="day" type="text" class="form-control mr-5 rounded-right">
+                                        <option value="">-- দিন --</option>
+                                        @for($i = 1; $i < 32; $i++)
+                                            <option value="{{ $i }}" {{ selectOpt($i, $dob->day) }}>{{ en2bnNumber($i) }}</option>
+                                        @endfor
+                                    </select>
+                                    <select name="month" type="text"
+                                            class="form-control mr-5 rounded-right rounded-left">
+                                        <option value="">-- মাস --</option>
+                                        @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                        @foreach($months as $index => $month)
+                                            <option value="{{ ++$index }}" {{ selectOpt($index, $dob->month) }}>{{ $month }}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="year" type="text" class="form-control rounded-left">
+                                        <option value="">-- বছর --</option>
+                                        @php($begining = Date('Y') - 50)
+                                        @php($ending = Date('Y') - 18)
+                                        @for($i = $ending; $i > $begining; $i--)
+                                            <option value="{{ $i }}" {{ selectOpt($i, $dob->year) }}>{{ en2bnNumber($i) }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -283,9 +305,9 @@
                                                     <div class="row mt-2">
                                                         <div class="col-md-8">
                                                             <label class="checkbox"
-                                                                   for="work-method-{{ $method->id }}-{{ $subCategoryCount }}">{{ $method->name }}
+                                                                   for="work-method-{{ $method->id }}-{{ $subCategory->id }}">{{ $method->name }}
                                                                 <input type="checkbox"
-                                                                       id="work-method-{{ $method->id }}-{{ $subCategoryCount }}"
+                                                                       id="work-method-{{ $method->id }}-{{ $subCategory->id }}"
                                                                        name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
                                                                 <span></span>
                                                             </label>
@@ -305,10 +327,12 @@
                                                 @else
                                                     <div class="row mt-2">
                                                         <div class="col-md-8">
-                                                            <label for="work-method-4-0" class="checkbox">চুক্তি ভিত্তিক
+                                                            <label for="work-method-4-{{ $subCategory->id }}"
+                                                                   class="checkbox">চুক্তি ভিত্তিক
                                                                 <input type="checkbox"
-                                                                       id="work-method-{{ $method->id }}-{{ $subCategoryCount }}"
+                                                                       id="work-method-{{ $method->id }}-{{ $subCategory->id }}"
                                                                        name="sub-category-rates[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]">
+                                                                <span></span>
                                                             </label>
                                                             <input type="hidden"
                                                                    name="sub-category-rates[{{ $subCategoryCount }}][id]"
@@ -355,9 +379,9 @@
                                                             <div class="row mt-2">
                                                                 <div class="col-md-8">
                                                                     <label class="checkbox"
-                                                                           for="req-work-method-{{ $method->id }}-{{ $methodCount }}">{{ $method->name }}
+                                                                           for="req-work-method-{{ $method->id }}-{{ $subCategory->id }}">{{ $method->name }}
                                                                         <input type="checkbox"
-                                                                               id="req-work-method-{{ $method->id }}-{{ $methodCount }}"
+                                                                               id="req-work-method-{{ $method->id }}-{{ $subCategory->id }}"
                                                                                name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
                                                                         <span></span>
                                                                     </label>
@@ -376,10 +400,10 @@
                                                             <div class="row mt-2">
                                                                 <div class="col-md-8">
                                                                     <label class="checkbox"
-                                                                           for="req-work-method-{{ $method->id }}-{{ $methodCount }}">চুক্তি
+                                                                           for="req-work-method-{{ $method->id }}-{{ $subCategory->id }}">চুক্তি
                                                                         ভিত্তিক
                                                                         <input type="checkbox"
-                                                                               id="req-work-method-{{ $method->id }}-{{ $methodCount }}"
+                                                                               id="req-work-method-{{ $method->id }}-{{ $subCategory->id }}"
                                                                                name="sub-category-requests[{{ $subCategoryCount }}][work-methods][{{ $methodCount }}][checkbox]" {{ checkBox(in_array($method->id, $methodIds)) }}>
                                                                         <span></span>
                                                                     </label>
@@ -451,18 +475,13 @@
                                        class="file-picker">
                             </div>
                         </div>
-
-                        <div class="form-group row mx-5">
-                            <div class="offset-4 col-9">
-                                <button type="submit" class="btn btn-primary">সাবমিট</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
                             <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
                             <div class="col-9">
                                 <select name="package" id="package">
+                                    <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
                                         <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
@@ -482,18 +501,33 @@
                                 করুন</label>
                             <div class="col-9">
                                 <select name="payment-method" id="payment-method">
+                                    <option value="">-- পেমেন্ট এর মাধ্যম নির্ধারণ করুন --</option>
                                     @foreach($paymentMethods as $paymentMethod)
-                                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }} @if($paymentMethod->account_type)
-                                                ({{ $paymentMethod->account_type }})@endif</option>
+                                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
                                     @endforeach
                                 </select>
+                                <div id="payment-method-accountId">
+                                    @foreach($paymentMethods as $paymentMethod)
+                                        <span class="text-primary d-none"
+                                              id="payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
+                                                <i class="text-muted">({{ $paymentMethod->account_type }}
+                                                    )</i>@endif</span>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
-                                <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control"
+                                       value="{{ $ind->payments->first()->transactionId }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5 mt-5 text-center">
+                            <div class="text-center col-12">
+                                <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
                             </div>
                         </div>
 
@@ -518,9 +552,8 @@
             autoAdjustHeight: false
         });
 
-        $('select').selectize({
+        $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method').selectize({
             plugins: ['option-loader']
         });
-
     </script>
 @endsection

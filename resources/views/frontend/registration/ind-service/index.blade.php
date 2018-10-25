@@ -12,10 +12,6 @@
     <div class="container my-5">
         <h3 class="text-center mb-5">ব্যক্তি সেবা প্রদানকারী নিবন্ধন</h3>
 
-        <div class="alert alert-danger">
-            {{ $errors }}
-        </div>
-
         <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.store') }}">
             {{ csrf_field() }}
@@ -95,12 +91,33 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="age" class="col-3 col-form-label">বয়স <span
+                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
-                                <input id="age" name="age" type="number" value="{{ old('age') }}"
-                                       required="required"
-                                       class="form-control">
+                                <div class="input-group mb-3">
+                                    <select name="day" type="text" class="form-control mr-5 rounded-right">
+                                        <option value="">-- দিন --</option>
+                                        @for($i = 1; $i < 32; $i++)
+                                            <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                        @endfor
+                                    </select>
+                                    <select name="month" type="text"
+                                            class="form-control mr-5 rounded-right rounded-left">
+                                        <option value="">-- মাস --</option>
+                                        @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                        @foreach($months as $index => $month)
+                                            <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="year" type="text" class="form-control rounded-left">
+                                        <option value="">-- বছর --</option>
+                                        @php($begining = Date('Y') - 50)
+                                        @php($ending = Date('Y') - 18)
+                                        @for($i = $ending; $i > $begining; $i--)
+                                            <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -255,53 +272,73 @@
                                     <div class="input-div" id="sub-category-request">
                                         <div class="card mt-2" data-repeater-clone="true">
                                             <div class="card-header pt-2 m-0 row">
-                                                <div class="col-md-9"><input type="text" class="form-control" name="sub-category-requests[0][name]" placeholder="আমার সাব-ক্যাটাগরির নাম" value="adfasdfasdfsad"></div>
+                                                <div class="col-md-9"><input type="text" class="form-control"
+                                                                             name="sub-category-requests[0][name]"
+                                                                             placeholder="আমার সাব-ক্যাটাগরির নাম">
+                                                </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row mt-2">
                                                     <div class="col-md-8">
                                                         <label class="checkbox" for="req-work-method-1-0">ঘন্টা ভিত্তিক
-                                                            <input type="checkbox" id="req-work-method-1-0" name="sub-category-requests[0][work-methods][0][checkbox]">
+                                                            <input type="checkbox" id="req-work-method-1-0"
+                                                                   name="sub-category-requests[0][work-methods][0][checkbox]">
                                                             <span></span>
                                                         </label>
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][0][rate]" value="">
-                                                        <input type="hidden" name="sub-category-requests[0][work-methods][0][id]" value="1">
+                                                        <input type="text" class="form-control" placeholder="রেট"
+                                                               name="sub-category-requests[0][work-methods][0][rate]"
+                                                               value="">
+                                                        <input type="hidden"
+                                                               name="sub-category-requests[0][work-methods][0][id]"
+                                                               value="1">
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-md-8">
-                                                        <label class="checkbox" for="req-work-method-2-1">দৈনিক
-                                                            <input type="checkbox" id="req-work-method-2-1" name="sub-category-requests[0][work-methods][1][checkbox]">
+                                                        <label class="checkbox" for="req-work-method-2-0">দৈনিক
+                                                            <input type="checkbox" id="req-work-method-2-0"
+                                                                   name="sub-category-requests[0][work-methods][1][checkbox]">
                                                             <span></span>
                                                         </label>
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][1][rate]" value="">
-                                                        <input type="hidden" name="sub-category-requests[0][work-methods][1][id]" value="2">
+                                                        <input type="text" class="form-control" placeholder="রেট"
+                                                               name="sub-category-requests[0][work-methods][1][rate]"
+                                                               value="">
+                                                        <input type="hidden"
+                                                               name="sub-category-requests[0][work-methods][1][id]"
+                                                               value="2">
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-md-8">
-                                                        <label class="checkbox" for="req-work-method-3-2">মাসিক
-                                                            <input type="checkbox" id="req-work-method-3-2" name="sub-category-requests[0][work-methods][2][checkbox]" checked="">
+                                                        <label class="checkbox" for="req-work-method-3-0">মাসিক
+                                                            <input type="checkbox" id="req-work-method-3-0"
+                                                                   name="sub-category-requests[0][work-methods][2][checkbox]">
                                                             <span></span>
                                                         </label>
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" placeholder="রেট" name="sub-category-requests[0][work-methods][2][rate]" value="235235">
-                                                        <input type="hidden" name="sub-category-requests[0][work-methods][2][id]" value="3">
+                                                        <input type="text" class="form-control" placeholder="রেট"
+                                                               name="sub-category-requests[0][work-methods][2][rate]">
+                                                        <input type="hidden"
+                                                               name="sub-category-requests[0][work-methods][2][id]"
+                                                               value="3">
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-md-8">
-                                                        <label class="checkbox" for="req-work-method-4-3">চুক্তি
+                                                        <label class="checkbox" for="req-work-method-4-0">চুক্তি
                                                             ভিত্তিক
-                                                            <input type="checkbox" id="req-work-method-4-3" name="sub-category-requests[0][work-methods][3][checkbox]" checked="">
+                                                            <input type="checkbox" id="req-work-method-4-0"
+                                                                   name="sub-category-requests[0][work-methods][3][checkbox]">
                                                             <span></span>
                                                         </label>
-                                                        <input type="hidden" name="sub-category-requests[0][work-methods][3][id]" value="4">
+                                                        <input type="hidden"
+                                                               name="sub-category-requests[0][work-methods][3][id]"
+                                                               value="4">
                                                     </div>
                                                 </div>
                                             </div>
@@ -363,18 +400,13 @@
                                        class="file-picker">
                             </div>
                         </div>
-
-                        <div class="form-group row mx-5">
-                            <div class="offset-4 col-9">
-                                <button type="submit" class="btn btn-primary">সাবমিট</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
                             <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
                             <div class="col-9">
                                 <select name="package" id="package">
+                                    <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
                                         <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
@@ -394,6 +426,7 @@
                                 করুন</label>
                             <div class="col-9">
                                 <select name="payment-method" id="payment-method">
+                                    <option value="">-- পেমেন্ট এর মাধ্যম নির্ধারণ করুন --</option>
                                     @foreach($paymentMethods as $paymentMethod)
                                         <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
                                     @endforeach
@@ -413,6 +446,12 @@
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
                                 <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5 mt-5 text-center">
+                            <div class="text-center col-12">
+                                <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
                             </div>
                         </div>
 
@@ -438,7 +477,7 @@
             autoAdjustHeight: false
         });
 
-        $('select').selectize({
+        $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method').selectize({
             plugins: ['option-loader']
         });
     </script>

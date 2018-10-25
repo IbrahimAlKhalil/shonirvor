@@ -13,13 +13,6 @@
 
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
-        @foreach($errors as $error)
-            <div class="alert alert-danger">
-                {{ $error }}
-            </div>
-            {{ $errors }}
-        @endforeach
-
         <form method="post" id="registration-form" enctype="multipart/form-data"
               id="registration-form"
               action="{{ route('organization-service-registration.update', $org->id) }}" id="edit-form">
@@ -394,10 +387,11 @@
                             <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                                 ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9">
+                            <div class="col-9 d-flex flex-wrap">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker"
-                                       multiple>
+                                       class="file-picker">
+                                <input id="identities" name="identities[]" type="file" accept="image/*"
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -427,18 +421,13 @@
                                        class="file-picker">
                             </div>
                         </div>
-
-                        <div class="form-group row mx-5">
-                            <div class="offset-4 col-9">
-                                <button type="submit" class="btn btn-primary">সাবমিট</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
                             <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
                             <div class="col-9">
                                 <select name="package" id="package">
+                                    <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
                                         <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
@@ -458,6 +447,7 @@
                                 করুন</label>
                             <div class="col-9">
                                 <select name="payment-method" id="payment-method">
+                                    <option value="">-- পেমেন্ট এর মাধ্যম নির্ধারণ করুন --</option>
                                     @foreach($paymentMethods as $paymentMethod)
                                         <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
                                     @endforeach
@@ -476,7 +466,13 @@
                         <div class="form-group row mx-5">
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
-                                <input type="text" name="transaction-id" id="transaction-id" class="form-control">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control" value="{{ $org->payments->first()->transactionId }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5 mt-5 text-center">
+                            <div class="text-center col-12">
+                                <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
                             </div>
                         </div>
 

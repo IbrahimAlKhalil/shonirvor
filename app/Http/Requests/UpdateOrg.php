@@ -49,7 +49,7 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('division', 'exists:divisions,id', function ($data) {
             return !is_null($data->division);
         });
-        $validator->sometimes('district', 'exists:district,id', function ($data) {
+        $validator->sometimes('district', 'exists:districts,id', function ($data) {
             return !is_null($data->district);
         });
         $validator->sometimes('thana', 'exists:thanas,id', function ($data) {

@@ -28,6 +28,6 @@ export class Repeater {
     }
 
     get length() {
-        return this.clones.length + 1;
+        return this.clones.length;
     }
 }

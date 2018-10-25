@@ -76,6 +76,11 @@ class Ind extends Model
         return $this->morphMany(Feedback::class, 'feedbackable');
     }
 
+    public function payments()
+    {
+        return $this->morphMany(Payment::class, 'paymentable');
+    }
+
     public function subCategories($status = null)
     {
         $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
@@ -125,7 +130,7 @@ class Ind extends Model
         return $query->leftJoin('feedbacks', function ($join) {
             $join->on('inds.id', 'feedbacks.feedbackable_id')
                 ->where('feedbackable_type', 'ind');
-            })
+        })
             ->addSelect(DB::raw('inds.id, avg(star) as feedbacks_avg'))
             ->groupBy('id');
     }

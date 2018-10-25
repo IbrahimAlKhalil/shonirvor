@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('[data-repeater-clone]').each(function () {
         let card = $(this);
-        card.find('.remove-btn').on('click', function () {
+        card.find('.remove-btn').on('click', function (event) {
+            event.preventDefault();
             $(card).fadeOut('slow', function () {
                 $(card).remove();
             });
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let container = document.getElementById('sub-category-request');
             let repeater = new Repeater(container, function () {
                 let cardBody = '';
-                let serial = this.length - 1;
+                let serial = this.length;
 
                 workMethods.forEach((method, count) => {
                     if (method.id === 4) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\Package;
+use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Reference;
 use App\Models\SubCategory;
@@ -55,37 +56,20 @@ class OrgServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orgs = $user->orgs('pending')->get();
+        $orgs = $user->orgs()->onlyPending();
+        if ($orgs->exists()) {
+            return redirect(route('organization-service-registration.edit', $orgs->first()->id));
+        }
+
 
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
         $categories = Category::getAll('org')->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
-        $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods');
-        $view = 'frontend.registration.org-service.confirm';
-        $count = $orgs->count();
-
-        // check what if current user didn't reach at the maximum pending request
-        if ($count >= 3) {
-            // reached at the maximum
-            // redirect them to the confirmation page
-            return view($view, $compact);
-        }
-
-        // check what if current user has less than 3 pending request
-        if ($count < 3 && $count >= 1) {
-            $compact['classesToAdd'] = ['active', ''];
-            // didn't reach at the maximum
-            // redirect them to the confirmation page
-            return view($view, $compact);
-        }
-
-        // inds, classesToAdd are unnecessary for index
-        unset($compact['orgs'], $compact['classesToAdd']);
 
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index', $compact);
+        return view('frontend.registration.org-service.index', compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods'));
     }
 
     public function store(StoreOrg $request)
@@ -253,6 +237,12 @@ class OrgServiceRegistrationController extends Controller
 
 
         // User
+        if ($request->filled('transaction-id')) {
+            $payment = new Payment;
+            $payment->transactionId = $request->post('transaction-id');
+            $payment->package_id = $request->post('package');
+            $org->payments()->save($payment);
+        }
         $user->nid = $request->post('nid');
         $user->save();
 
@@ -280,23 +270,15 @@ class OrgServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+        return redirect(route('organization-service-registration', $org->id))->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
     public function edit($id)
     {
         $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
 
-        if ($org->user_id != Auth::id() && $org->is_pending == 0) {
+        if ($org->user_id != Auth::id() || !$org->is_pending) {
             return redirect(route('organization-service-registration.index'));
-        }
-
-        $allOrg = $org->user->inds();
-        $pendingOrgs = $org->user->inds();
-
-        $canEditNid = false;
-        if (!$allOrg->count() || $pendingOrgs->onlyPending()->count() == $allOrg->count()) {
-            $canEditNid = true;
         }
 
         $categories = Category::onlyOrg()->onlyConfirmed()->get();
@@ -314,7 +296,7 @@ class OrgServiceRegistrationController extends Controller
         $unions = $org->thana->unions()->whereIsPending(0)->get();
         $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
 
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'allOrg', 'isNoSubCategory', 'packages', 'paymentMethods'));
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods'));
     }
 
     public function update(UpdateOrg $request, $id)
@@ -439,7 +421,16 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // associate sub-categories
-        !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
+        $data = [];
+        if (!$isCategoryRequest) {
+            foreach ($subCategories as $subCategory) {
+                array_push($data, [
+                    'sub_category_id' => $subCategory->id,
+                    'sub_categoriable_id' => $org->id,
+                    'sub_categoriable_type' => 'org'
+                ]);
+            }
+        }
 
         $data = [];
         foreach ($request->post('sub-categories') as $subCategory) {
@@ -458,6 +449,7 @@ class OrgServiceRegistrationController extends Controller
                 if (isset($subCategory['name'])) {
                     $newSubCategory = new SubCategory;
                     $newSubCategory->category_id = $category->id;
+                    $newSubCategory->is_confirmed = 0;
                     $newSubCategory->name = $subCategory['name'];
                     $newSubCategory->save();
 
@@ -476,7 +468,7 @@ class OrgServiceRegistrationController extends Controller
 
 
         // org additional price
-        DB::table('org_additional_prices')->where('org_id', $org->id);
+        DB::table('org_additional_prices')->where('org_id', $org->id)->delete();
         $data = [];
         foreach ($request->post('additional-pricing') as $price) {
             if (isset($price['name']) && isset($price['info'])) {
@@ -491,6 +483,12 @@ class OrgServiceRegistrationController extends Controller
         DB::table('org_additional_prices')->insert($data);
 
         // User
+        if ($request->filled('transaction-id')) {
+            $payment = new Payment;
+            $payment->transactionId = $request->post('transaction-id');
+            $payment->package_id = $request->post('package');
+            $org->payments()->save($payment);
+        }
         $user->nid = $request->post('nid');
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');
