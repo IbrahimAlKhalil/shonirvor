@@ -74,7 +74,7 @@ class IndServiceController extends Controller
             $canFeedback = false;
         }
 
-        return view('frontend.ind-service.show', compact('provider', 'avgFeedbackColor', 'canFeedback'));
+        return view('frontend.ind-service', compact('provider', 'avgFeedbackColor', 'canFeedback'));
     }
 
     public function feedbackStore(StoreIndFeedback $request)

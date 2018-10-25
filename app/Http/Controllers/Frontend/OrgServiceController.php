@@ -78,7 +78,7 @@ class OrgServiceController extends Controller
             $canFeedback = false;
         }
 
-        return view('frontend.org-service.show', compact('provider', 'avgFeedbackColor', 'canFeedback'));
+        return view('frontend.org-service', compact('provider', 'avgFeedbackColor', 'canFeedback'));
     }
 
     public function feedbackStore(StoreOrgFeedback $request)
