@@ -86,7 +86,7 @@
                                 @if($canFeedback)
                                     <div class="row">
                                         <div class="col-12">
-                                            <form action="{{ route('ind-feedback.store') }}" method="post">
+                                            <form action="{{ route('org-feedback.store') }}" method="post">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
                                                 <input id="storeStar" type="number" name="star" required>
@@ -101,7 +101,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-12">
                                         @include('components.success')
-                                        @forelse($provider->feedbacks->shuffle() as $key => $feedback)
+                                        @forelse($provider->feedbacks->sortByDesc('id') as $key => $feedback)
                                             <div class="row my-3">
                                                 <div class="col-2">
                                                     <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">

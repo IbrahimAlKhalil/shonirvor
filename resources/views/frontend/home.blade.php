@@ -72,7 +72,7 @@
                     <div class="col-md-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         <ul class="list-unstyled">
-                            @foreach($indServices as $key => $service)
+                            @foreach($indTopServices as $key => $service)
                                 <li class="media mt-3 p-2 service-card-shadow">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}">
                                     <div class="media-body">
@@ -97,7 +97,7 @@
                     <div class="col-md-6 text-right">
                         <p class="h5 pr-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <ul class="list-unstyled">
-                            @foreach($orgServices as $service)
+                            @foreach($orgTopServices as $service)
                                 <li class="media mt-3 p-2 service-card-shadow">
                                     <div class="media-body">
                                         <p class="mt-0 h5">

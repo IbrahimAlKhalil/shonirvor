@@ -270,7 +270,7 @@ class OrgServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+        return redirect(route('organization-service-registration', $org->id))->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
     public function edit($id)

@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Org;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreOrgFeedback;
 
 class OrgServiceController extends Controller
 {
-    public function index()
-    {
-        $providers = Org::paginate(15);
-        return view('frontend.org-service.index', compact('providers'));
-    }
-
     public function show(Org $provider)
     {
+        if ($provider->is_pending) abort(404, 'This service request is in pending.');
+
         // Load relations
         $provider->load([
             'division',
@@ -81,5 +79,18 @@ class OrgServiceController extends Controller
         }
 
         return view('frontend.org-service.show', compact('provider', 'avgFeedbackColor', 'canFeedback'));
+    }
+
+    public function feedbackStore(StoreOrgFeedback $request)
+    {
+        $feedback = new Feedback();
+        $feedback->user_id = Auth::id();
+        $feedback->feedbackable_id = $request->post('feedbackable_id');
+        $feedback->feedbackable_type = 'org';
+        $feedback->star = $request->post('star');
+        $feedback->say = $request->post('say');
+        $feedback->save();
+
+        return back()->with('success', 'Thank you for giving feedback.');
     }
 }

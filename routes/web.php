@@ -11,103 +11,125 @@ Route::prefix('command')->group(function () {
 
 }, '');
 
-Route::get('/', 'Frontend\HomeController')->name('home');
-Route::get('dashboard', 'Backend\DashboardController')->name('dashboard');
-
-Route::get('filter', 'Frontend\FilterController')->name('frontend.filter');
-Route::resource('profile', 'Frontend\ProfileController', ['only' => ['index', 'edit', 'update']]);
-
-Route::get('individual-service-provider', 'Frontend\IndServiceController@index')->name('frontend.ind-service.index');
-Route::get('individual-service-provider/{provider}', 'Frontend\IndServiceController@show')->name('frontend.ind-service.show');
-
-Route::get('organization-service-provider', 'Frontend\OrgServiceController@index')->name('frontend.org-service.index');
-Route::get('organization-service-provider/{provider}', 'Frontend\OrgServiceController@show')->name('frontend.org-service.show');
-
-Route::post('individual-feedback', 'Frontend\FeedbackController@indStore')->name('ind-feedback.store');
-Route::post('organization-feedback', 'Frontend\FeedbackController@orgStore')->name('org-feedback.store');
-
-Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
-Route::post('dashboard/notification/send/{user}', 'NotificationController@send')->name('notification.send');
-
 Route::post('sms/send/{user}', 'SmsController@send')->name('sms.send');
 
-Route::post('individual-service/top/{ind}', 'Backend\IndServiceController@isTop')->name('ind-service.top');
-Route::post('organization-service/top/{org}', 'Backend\OrgServiceController@isTop')->name('org-service.top');
+Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
+Route::post('notification/send/{user}', 'NotificationController@send')->name('notification.send');
 
-Route::prefix('dashboard')->namespace('Backend')->name('backend.')->group(function () {
+Route::namespace('Frontend')->group(function () {
 
-    Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
-    Route::resource('users', 'UserController', [
-        'only' => ['index', 'show']
-    ]);
+    Route::get('/', 'HomeController')->name('home');
 
-    Route::prefix('packages')->name('package.')->group(function () {
+    Route::resource('profile', 'ProfileController', ['only' => ['index', 'edit', 'update']]);
 
-        Route::resource('ind-service', 'IndServicePackageController', [
-            'parameters' => ['ind-service' => 'package']
-        ]);
-        Route::resource('org-service', 'OrgServicePackageController', [
-            'parameters' => ['org-service' => 'package']
-        ]);
+    Route::post('individual-feedback', 'IndServiceController@feedbackStore')->name('ind-feedback.store');
+    Route::post('organization-feedback', 'OrgServiceController@feedbackStore')->name('org-feedback.store');
 
-        Route::resource('ind-top-service', 'IndTopServiceController', [
-            'only' => ['index', 'store', 'update', 'destroy'],
-            'parameters' => ['ind-top-service' => 'package']
-        ]);
-        Route::resource('org-top-service', 'OrgTopServiceController', [
-            'only' => ['index', 'store', 'update', 'destroy'],
-            'parameters' => ['ind-top-service' => 'package']
-        ]);
+    Route::name('frontend.')->group(function () {
 
-        Route::resource('referrer', 'ReferrerPackageController', [
-            'only' => ['index', 'store', 'update', 'destroy'],
-            'parameters' => ['referrer' => 'package']
-        ]);
+        Route::get('filter', 'FilterController')->name('filter');
 
-        Route::resource('ad', 'AdPackageController', [
-            'only' => ['index', 'store', 'update', 'destroy'],
-            'parameters' => ['ad' => 'package']
-        ]);
+        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
+        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
+
+        Route::prefix('my-services')->group(function () {
+
+//            Route::get('/', '');
+
+        }, '');
 
     }, '');
 
-    Route::resource('ads', 'AdController', [
-        'except' => ['create', 'show', 'edit']
-    ])->names('ad');
+}, '');
 
-    Route::resource('notices', 'NoticeController', [
-        'only' => ['index', 'store', 'update', 'destroy']
-    ])->names('notice');
+Route::namespace('Backend')->group(function () {
 
-    Route::prefix('area')->name('area.')->group(function () {
+    Route::get('dashboard', 'DashboardController')->name('dashboard');
 
-        // Show
-        Route::get('division', 'AreaController@division')->name('division');
-        Route::get('district/{division}', 'AreaController@district')->name('district');
-        Route::get('thana/{district}', 'AreaController@thana')->name('thana');
-        Route::get('union/{thana}', 'AreaController@union')->name('union');
-        Route::get('village/{union}', 'AreaController@village')->name('village');
+    Route::post('individual-service/top/{ind}', 'IndServiceController@isTop')->name('ind-service.top');
+    Route::post('organization-service/top/{org}', 'OrgServiceController@isTop')->name('org-service.top');
 
-        // Store
-        Route::post('division', 'AreaController@storeDivision')->name('division.store');
-        Route::post('district/{divisionId}', 'AreaController@storeDistrict')->name('district.store');
-        Route::post('thana/{districtId}', 'AreaController@storeThana')->name('thana.store');
-        Route::post('union/{thanaId}', 'AreaController@storeUnion')->name('union.store');
-        Route::post('village/{villageId}', 'AreaController@storeVillage')->name('village.store');
+    Route::name('backend.')->group(function () {
 
-        // Update
-        Route::put('division/{division}', 'AreaController@updateDivision')->name('division.update');
-        Route::put('district/{district}', 'AreaController@updateDistrict')->name('district.update');
-        Route::put('thana/{thana}', 'AreaController@updateThana')->name('thana.update');
-        Route::put('union/{union}', 'AreaController@updateUnion')->name('union.update');
-        Route::put('village/{village}', 'AreaController@updateVillage')->name('village.update');
+        Route::prefix('dashboard')->group(function () {
 
-        // Destroy
-        Route::delete('division/{division}', 'AreaController@destroyDivision')->name('division.destroy');
-        Route::delete('district/{district}', 'AreaController@destroyDistrict')->name('district.destroy');
-        Route::delete('thana/{thana}', 'AreaController@destroyThana')->name('thana.destroy');
-        Route::delete('union/{union}', 'AreaController@destroyUnion')->name('union.destroy');
-        Route::delete('village/{village}', 'AreaController@destroyVillage')->name('village.destroy');
+            Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
+
+            Route::resource('users', 'UserController', [
+                'only' => ['index', 'show']
+            ]);
+
+            Route::prefix('packages')->name('package.')->group(function () {
+
+                Route::resource('ind-service', 'IndServicePackageController', [
+                    'parameters' => ['ind-service' => 'package']
+                ]);
+                Route::resource('org-service', 'OrgServicePackageController', [
+                    'parameters' => ['org-service' => 'package']
+                ]);
+
+                Route::resource('ind-top-service', 'IndTopServiceController', [
+                    'only' => ['index', 'store', 'update', 'destroy'],
+                    'parameters' => ['ind-top-service' => 'package']
+                ]);
+                Route::resource('org-top-service', 'OrgTopServiceController', [
+                    'only' => ['index', 'store', 'update', 'destroy'],
+                    'parameters' => ['ind-top-service' => 'package']
+                ]);
+
+                Route::resource('referrer', 'ReferrerPackageController', [
+                    'only' => ['index', 'store', 'update', 'destroy'],
+                    'parameters' => ['referrer' => 'package']
+                ]);
+
+                Route::resource('ad', 'AdPackageController', [
+                    'only' => ['index', 'store', 'update', 'destroy'],
+                    'parameters' => ['ad' => 'package']
+                ]);
+
+            }, '');
+
+            Route::resource('ads', 'AdController', [
+                'except' => ['create', 'show', 'edit']
+            ])->names('ad');
+
+            Route::resource('notices', 'NoticeController', [
+                'only' => ['index', 'store', 'update', 'destroy']
+            ])->names('notice');
+
+            Route::prefix('area')->name('area.')->group(function () {
+
+                // Show
+                Route::get('division', 'AreaController@division')->name('division');
+                Route::get('district/{division}', 'AreaController@district')->name('district');
+                Route::get('thana/{district}', 'AreaController@thana')->name('thana');
+                Route::get('union/{thana}', 'AreaController@union')->name('union');
+                Route::get('village/{union}', 'AreaController@village')->name('village');
+
+                // Store
+                Route::post('division', 'AreaController@storeDivision')->name('division.store');
+                Route::post('district/{divisionId}', 'AreaController@storeDistrict')->name('district.store');
+                Route::post('thana/{districtId}', 'AreaController@storeThana')->name('thana.store');
+                Route::post('union/{thanaId}', 'AreaController@storeUnion')->name('union.store');
+                Route::post('village/{villageId}', 'AreaController@storeVillage')->name('village.store');
+
+                // Update
+                Route::put('division/{division}', 'AreaController@updateDivision')->name('division.update');
+                Route::put('district/{district}', 'AreaController@updateDistrict')->name('district.update');
+                Route::put('thana/{thana}', 'AreaController@updateThana')->name('thana.update');
+                Route::put('union/{union}', 'AreaController@updateUnion')->name('union.update');
+                Route::put('village/{village}', 'AreaController@updateVillage')->name('village.update');
+
+                // Destroy
+                Route::delete('division/{division}', 'AreaController@destroyDivision')->name('division.destroy');
+                Route::delete('district/{district}', 'AreaController@destroyDistrict')->name('district.destroy');
+                Route::delete('thana/{thana}', 'AreaController@destroyThana')->name('thana.destroy');
+                Route::delete('union/{union}', 'AreaController@destroyUnion')->name('union.destroy');
+                Route::delete('village/{village}', 'AreaController@destroyVillage')->name('village.destroy');
+
+            }, '');
+
+        }, '');
 
     }, '');
 

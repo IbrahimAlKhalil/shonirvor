@@ -20,6 +20,6 @@ $factory->define(Reference::class, function () {
         'user_id' => rand(1, $lastUserId),
         'service_id' => rand(1, $lastProviderId),
         'service_type_id' => rand(1, 2),
-        'package_id' => $referrerPackageIds[array_rand($referrerPackageIds)]
+        'package_id' => array_random($referrerPackageIds)
     ];
 });

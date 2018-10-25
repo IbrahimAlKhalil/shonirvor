@@ -297,7 +297,7 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+        return redirect(route('individual-service-registration.edit', $ind->id))->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
     public function update(UpdateInd $request, $id)

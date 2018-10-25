@@ -3,16 +3,14 @@
 @section('title', $serviceRequest->user->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/backend/ind-service-request/show.bundle.js') }}"></script>
 @endsection
 
 @section('content')
-    <div class="container py-5">
-        @include('components.success')
-
+    @include('components.success')
+    <div class="container my-5">
         <div class="row">
-            <form class="col-md-9 bg-white" id="approve-request" action="{{ route('individual-service-request.update', $serviceRequest->id) }}"
+            <form class="col-md-9 bg-white py-3" id="approve-request" action="{{ route('individual-service-request.update', $serviceRequest->id) }}"
                   method="post">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
@@ -30,14 +28,14 @@
                         </div>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">বর্ণনাঃ</p>
                         <p class="pt-3 text-justify">
                             {{ $serviceRequest->description }}
                         </p>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
@@ -53,7 +51,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">ইমেইল</th>
-                                <td>{{ $serviceRequest->user->email }}</td>
+                                <td>{{ $serviceRequest->email }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">ওয়েবসাইট</th>
@@ -79,7 +77,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
                             <tbody>
@@ -183,7 +181,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
@@ -216,7 +214,7 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <thead>
@@ -278,52 +276,59 @@
                         </table>
                     </div>
 
-                    <div class="col-12 mt-5">
-                        <p class="h4 border-bottom">ডকুমেন্ট</p>
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            @if($serviceRequest->experience_certificate)
-                                <div class="col-md-3">
-                                    <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                    <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
-                                       target="_blank">
-                                        <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
-                                </div>
-                            @endif
-                            @if($serviceRequest->cv)
-                                <div class="col-md-3">
-                                    <span class="text-muted">বায়োডাটা</span>
-                                    <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $serviceRequest->cv) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="col-12">
+                                @if($serviceRequest->experience_certificate)
+                                    <div class="col-md-3">
+                                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                                        <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                                 class="img-responsive img-thumbnail">
+                                        </a>
+                                    </div>
+                                @endif
+                                @if($serviceRequest->cv)
+                                    <div class="col-md-3">
+                                        <span class="text-muted">বায়োডাটা</span>
+                                        <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">
+                                            <img src="{{ asset('storage/' . $serviceRequest->cv) }}"
+                                                 class="img-responsive img-thumbnail">
+                                        </a>
+                                    </div>
+                                @endif
+                                @if( ! $serviceRequest->experience_certificate
+                                    && ! $serviceRequest->cv)
+                                    <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-12 mt-5">
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">কাজের ছবিঃ</p>
-
                         <div class="row">
-                            @forelse($serviceRequest->workImages->chunk(2) as $chunk)
-                                <div class="card-deck py-2">
-                                    @foreach($chunk as $image)
-                                        <div class="card shadow-sm">
-                                            <a href="javascript:">
-                                                <img class="card-img-top img-fluid"
-                                                     src="{{ asset('storage/' . $image->path) }}" alt="Card image cap">
-                                            </a>
-                                            <div class="card-body">
-                                                <p class="card-text">${{ $image->description }}</p>
+                            <div class="col-12">
+                                @forelse($serviceRequest->workImages->chunk(2) as $chunk)
+                                    <div class="card-deck py-2">
+                                        @foreach($chunk as $image)
+                                            <div class="card shadow-sm">
+                                                <a href="javascript:">
+                                                    <img class="card-img-top img-fluid"
+                                                         src="{{ asset('storage/' . $image->path) }}" alt="Card image cap">
+                                                </a>
+                                                <div class="card-body">
+                                                    <p class="card-text">${{ $image->description }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @empty
-                                <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
-                            @endforelse
+                                        @endforeach
+                                    </div>
+                                @empty
+                                    <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
+                                @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>

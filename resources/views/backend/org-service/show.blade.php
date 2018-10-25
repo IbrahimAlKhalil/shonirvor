@@ -7,8 +7,8 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container py-5">
-        @include('components.success')
         <div class="row">
             <div class="col-md-9">
                 <div class="row">

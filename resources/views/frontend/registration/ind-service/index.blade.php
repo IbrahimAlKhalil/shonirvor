@@ -8,10 +8,9 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <h3 class="text-center mb-5">ব্যক্তি সেবা প্রদানকারী নিবন্ধন</h3>
-
-        @include('components.success')
 
         <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.store') }}">
@@ -99,7 +98,7 @@
                                     <select name="day" type="text" class="form-control mr-5 rounded-right">
                                         <option value="">-- দিন --</option>
                                         @for($i = 1; $i < 32; $i++)
-                                            <option value="{{ $i }}" {{ selectOpt($old->day, $i) }}>{{ en2bnNumber($i) }}</option>
+                                            <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
                                         @endfor
                                     </select>
                                     <select name="month" type="text"
@@ -107,7 +106,7 @@
                                         <option value="">-- মাস --</option>
                                         @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
                                         @foreach($months as $index => $month)
-                                            <option value="{{ ++$index }}" {{ selectOpt($old->month, $index) }}>{{ $month }}</option>
+                                            <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
                                         @endforeach
                                     </select>
                                     <select name="year" type="text" class="form-control rounded-left">
@@ -115,7 +114,7 @@
                                         @php($begining = Date('Y') - 50)
                                         @php($ending = Date('Y') - 18)
                                         @for($i = $ending; $i > $begining; $i--)
-                                            <option value="{{ $i }}" {{ selectOpt($old->year, $i) }}>{{ en2bnNumber($i) }}</option>
+                                            <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
                                         @endfor
                                     </select>
                                 </div>

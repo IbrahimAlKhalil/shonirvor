@@ -8,11 +8,10 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
 
         <h3 class="text-center mb-5">আপনার তথ্য সম্পাদনা করুন</h3>
-
-        @include('components.success')
 
         <form id="registration-form" method="post" enctype="multipart/form-data"
               action="{{ route('individual-service-registration.update', $ind->id) }}">

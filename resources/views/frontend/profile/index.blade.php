@@ -7,11 +7,11 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container">
         <div class="row my-5 justify-content-md-center">
             <div class="col-md-8">
                 <h3 class="mb-3">{{ $profile->name }}</h3>
-                @include('components.success')
             </div>
             <div class="w-100"></div>
             <div class="row justify-content-md-center">

@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PackagesTableSeeder::class);
         $this->call(IndsTableSeeder::class);
         $this->call(OrgsTableSeeder::class);
+        $this->call(UserReferPackagesSeeder::class);
         $this->call(ReferencesTableSeeder::class);
         $this->call(SubCategoriablesTableSeeder::class);
         $this->call(IndWorkMethodTableSeeder::class);

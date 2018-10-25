@@ -7,10 +7,10 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
-                @include('components.success')
             </div>
             <div class="col-md-9">
                 <form method="post"

@@ -8,12 +8,10 @@
 @endsection
 
 @section('content')
-
+    @include('components.success')
     <div class="container my-5">
 
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
-
-        @include('components.success')
 
         <form method="post" id="registration-form" enctype="multipart/form-data"
               action="{{ route('organization-service-registration.store') }}">

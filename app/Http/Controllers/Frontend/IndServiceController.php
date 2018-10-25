@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreIndFeedback;
 
 class IndServiceController extends Controller
 {
-    public function index()
-    {
-        $providers = Ind::onlyApproved()->paginate(15);
-        return view('frontend.ind-service.index', compact('providers'));
-    }
-
     public function show(Ind $provider)
     {
+        if ($provider->is_pending) abort(404, 'This service request is in pending.');
+
         // Load relations
         $provider->load([
             'user',
@@ -77,5 +75,18 @@ class IndServiceController extends Controller
         }
 
         return view('frontend.ind-service.show', compact('provider', 'avgFeedbackColor', 'canFeedback'));
+    }
+
+    public function feedbackStore(StoreIndFeedback $request)
+    {
+        $feedback = new Feedback();
+        $feedback->user_id = Auth::id();
+        $feedback->feedbackable_id = $request->post('feedbackable_id');
+        $feedback->feedbackable_type = 'ind';
+        $feedback->star = $request->post('star');
+        $feedback->say = $request->post('say');
+        $feedback->save();
+
+        return back()->with('success', 'Thank you for giving feedback.');
     }
 }
