@@ -214,8 +214,9 @@ class IndServiceRegistrationController extends Controller
 
         if ($request->filled('transaction-id')) {
             $payment = new Payment;
-            $payment->transactionId = $request->post('transaction-id');
             $payment->package_id = $request->post('package');
+            $payment->payment_method_id = $request->post('payment-method');
+            $payment->transactionId = $request->post('transaction-id');
             $ind->payments()->save($payment);
         }
 
@@ -456,11 +457,12 @@ class IndServiceRegistrationController extends Controller
 
 
         // payment
-
+        $ind->payments()->delete();
         if ($request->filled('transaction-id')) {
             $payment = new Payment;
-            $payment->transactionId = $request->post('transaction-id');
             $payment->package_id = $request->post('package');
+            $payment->payment_method_id = $request->post('payment-method');
+            $payment->transactionId = $request->post('transaction-id');
             $ind->payments()->save($payment);
         }
 

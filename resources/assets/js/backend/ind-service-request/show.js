@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: ['option-loader']
     });
 
+    $('#package').selectize();
+
     document.querySelectorAll('.delete-sub-category').forEach(button => {
         button.addEventListener('click', () => {
             if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {

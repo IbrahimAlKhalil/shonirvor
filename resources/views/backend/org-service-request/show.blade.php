@@ -1,29 +1,78 @@
 @extends('layouts.backend.master')
 
-@section('title', $serviceRequest->user->name)
+@section('title', $serviceRequest->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/backend/ind-service-request/show.bundle.js') }}"></script>
 @endsection
 
 @section('content')
     @include('components.success')
-    <div class="container py-5">
+    <div class="container my-5">
         <div class="row">
-            <div class="col-md-9">
+            <form class="col-md-9 bg-white py-3" id="approve-request"
+                  action="{{ route('organization-service-request.update', $serviceRequest->id) }}"
+                  method="post">
+                {{ method_field('put') }}
+                {{ csrf_field() }}
                 <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{ asset('storage/' . $serviceRequest->user->photo) }}">
-                            <img src="{{ asset('storage/' . $serviceRequest->user->photo) }}" class="img-thumbnail"
-                                 alt="{{ $serviceRequest->user->name }}">
-                        </a>
+                    <div class="row col-12">
+                        <div class="col-md-3">
+                            <img src="{{ asset('storage/' . $serviceRequest->logo) }}"
+                                 alt="{{ $serviceRequest->name }}" class="img-thumbnail w-100">
+                        </div>
+
+                        <div class="col-md-7 d-flex flex-column flex-wrap justify-content-end">
+                            <h1>{{ $serviceRequest->name }}</h1>
+                            <p class="h5">{{ $serviceRequest->category->name }}</p>
+                            <p class="h5">{{ $serviceRequest->village->bn_name.', '.$serviceRequest->union->bn_name.', '.$serviceRequest->thana->bn_name.', '.$serviceRequest->district->bn_name.', '.$serviceRequest->division->bn_name }}</p>
+                        </div>
                     </div>
-                    <div class="col-md-8">
-                        <h4 class="mb-3">{{ $serviceRequest->user->name }}</h4>
-                        <table class="table table-striped table-bordered table-hover table-sm">
+
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">বর্ণনাঃ</p>
+                        <p class="pt-3 text-justify">
+                            {{ $serviceRequest->description }}
+                        </p>
+                    </div>
+
+                    @if($serviceRequest->payments->first())
+                        @php($payment = $serviceRequest->payments->first())
+                        <div class="col-12 mt-4">
+                            <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
+                            <table class="table table-striped table-bordered table-hover table-sm w-100">
+                                <tbody>
+                                <tr>
+                                    <th scope="row"><label for="package">প্যাকেজের নামঃ</label></th>
+                                    <td>
+                                        <input type="hidden" value="{{ $payment->id }}" name="payment">
+                                        <select name="package" id="package">
+                                            @foreach($packages as $package)
+                                                @php($properties = $package->properties->groupBy('name'))
+                                                <option value="{{ $package->id }}" {{ selectOpt($package->id, $payment->package->id) }}>{{ $properties['name'][0]->value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">পেমেন্ট এর মাধ্যম</th>
+                                    <td>{{ $payment->paymentMethod->name }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"> Transaction ID:</th>
+                                    <td>{{ $payment->transactionId }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
                             <tr>
-                                <th scope="row">মোবাইল</th>
+                                <th scope="row">মোবাইল নম্বর</th>
                                 <td>{{ $serviceRequest->mobile }}</td>
                             </tr>
                             <tr>
@@ -37,180 +86,291 @@
                                 <td>{{ $serviceRequest->email }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">ওয়েবসাইট</th>
+                                <td>{{ $serviceRequest->website }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ফেসবুক</th>
+                                <td>{{ $serviceRequest->facebook }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $serviceRequest->user->nid }}</td>
                             </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">ঠিকানাঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
+                            <tbody>
                             <tr>
                                 <th scope="row">জেলা</th>
                                 <td>{{ $serviceRequest->district->bn_name}}</td>
                             </tr>
+
                             <tr>
-                                <th scope="row">থানা</th>
-                                <td>{{ $serviceRequest->thana->bn_name}}</td>
+                                <th scope="row"><label for="thana-request">থানা</label></th>
+                                <td>
+                                    @if($serviceRequest->thana->is_pending)
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input name="thana-request" id="thana-request" type="text"
+                                                       class="form-control"
+                                                       value="{{ $serviceRequest->thana->bn_name}}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select name="thana" id="thana"
+                                                        data-placeholder="-- থানা --"
+                                                        data-option-loader-url="{{ route('api.unions') }}"
+                                                        data-option-loader-target="#union"
+                                                        data-option-loader-param="thana">
+                                                    <option value="">-- থানা --</option>
+                                                    @foreach($thanas as $thana)
+                                                        <option value="{{ $thana->id }}">{{ $thana->bn_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @else
+                                        {{ $serviceRequest->thana->bn_name}}
+                                    @endif
+                                </td>
                             </tr>
+
                             <tr>
-                                <th scope="row">ইউনিয়ন</th>
-                                <td>{{ $serviceRequest->union->bn_name}}</td>
+                                <th scope="row"><label for="union-request">ইউনিয়ন</label></th>
+                                <td>
+                                    @if($serviceRequest->union->is_pending)
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input id="union-request" name="union-request" type="text"
+                                                       class="form-control"
+                                                       value="{{ $serviceRequest->union->bn_name }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select name="union" id="union"
+                                                        data-placeholder="-- ইউনিয়ন --"
+                                                        data-option-loader-url="{{ route('api.villages') }}"
+                                                        data-option-loader-target="#village"
+                                                        data-option-loader-param="union"
+                                                        data-option-loader-properties="value=id,text=bn_name">
+                                                    <option value="">-- ইউনিয়ন --</option>
+                                                    @if($unions)
+                                                        @foreach($unions as $union)
+                                                            <option value="{{ $union->id }}">{{ $union->bn_name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @else
+                                        {{ $serviceRequest->union->bn_name }}
+                                    @endif
+                                </td>
                             </tr>
+
+                            <tr>
+                                <th scope="row"><label for="village-request">এলাকা</label></th>
+                                <td>
+                                    @if($serviceRequest->village->is_pending)
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input id="village-request" name="village-request" type="text"
+                                                       class="form-control"
+                                                       value="{{ $serviceRequest->village->bn_name }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select name="village" id="village"
+                                                        data-placeholder="-- এলাকা --"
+                                                        data-option-loader-properties="value=id,text=bn_name">
+                                                    <option value="">-- এলাকা --</option>
+                                                    @if($villages)
+                                                        @foreach($villages as $village)
+                                                            <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @else
+                                        {{ $serviceRequest->village->bn_name }}
+                                    @endif
+                                </td>
+                            </tr>
+
                             <tr>
                                 <th scope="row">ঠিকানা</th>
                                 <td>{{ $serviceRequest->address }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">অক্ষাংশ</th>
-                                <td>{{ $serviceRequest->latitude }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">দ্রাঘিমাংশ</th>
-                                <td>{{ $serviceRequest->longitude }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ক্যাটাগরি</th>
-                                <td>{{ $serviceRequest->category->name }} @if(!$serviceRequest->category->is_confirmed)
-                                        <span class="pull-right badge badge-primary">অনুরোধকৃত</span> @endif</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">সাব-ক্যাটাগরি</th>
-                                <td>
-                                    @forelse($serviceRequest->subCategories('confirmed')->get() as $subCategory)
-                                        {{ $subCategory->name }},
-                                    @empty
-                                        <span class="text-muted small">No Confirmed Sub-Categories</span>
-                                    @endforelse
-                                </td>
-                            </tr>
-                            <tr>
                             </tbody>
                         </table>
+                    </div>
 
-                        <form id="approve-request" action="{{ route('organization-service-request.update', $serviceRequest->id) }}"
-                              method="post">
-                            {{ csrf_field() }}
-                            {{ method_field('put') }}
-                            <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
-                            @if(!$serviceRequest->category->is_confirmed)
-                                <div class="form-group row">
-                                    <label for="category" class="col-4 col-form-label">ক্যাটাগরি
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-8">
-                                        <input id="category" name="category" type="text"
-                                               value="{{ oldOrData('category', $serviceRequest->category->name) }}"
-                                               class="form-control{{ $errors->has('category') ? ' is-invalid' : '' }}"
-                                               required>
-                                        @include('components.invalid', ['name' => 'category'])
-                                    </div>
-                                </div>
-                            @endif
-                            @php($subCategories = $serviceRequest->subCategories('requested')->get())
-                            @if($subCategories->count() >= 1)
-                                <label>Requested Sub-Categories</label>
-                                @foreach($subCategories as $key => $subCategory)
-                                    <div class="form-group row">
-                                        <label for="sub-categories" class="col-4 col-form-label">সাব
-                                            ক্যাটাগরি {{ en2bnNumber($loop->iteration) }} <span
-                                                    class="text-danger">*</span></label>
-                                        <div class="col-8">
-                                            <input id="sub-categories"
-                                                   name="sub-categories[{{ $loop->iteration-1 }}][name]" type="text"
-                                                   value="{{ oldOrData('sub-categories.' . $key, $subCategory->name) }}"
-                                                   class="form-control{{ $errors->has('sub-categories') ? ' is-invalid' : '' }}"
-                                                   required>
-                                            <input type="hidden" value="{{ $subCategory->id }}"
-                                                   name="sub-categories[{{ $loop->iteration-1 }}][id]">
-                                            @include('components.invalid', ['name' => 'sub-categories'])
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <tbody>
+                            <tr>
+                                <th scope="row"><label for="category-request">ক্যাটাগরি</label></th>
+                                <td>
+                                    @if(!$serviceRequest->category->is_confirmed)
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input id="category-request" name="category-request" type="text"
+                                                       class="form-control"
+                                                       value="{{ $serviceRequest->category->name }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select id="category" name="category">
+                                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+
+                                                    @foreach($categories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
+                                    @else
+                                        {{ $serviceRequest->category->name }}
+                                    @endif
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">নাম</th>
+                                <th scope="col">মূল্য</th>
+                                <th scope="col">পদক্ষেপ</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            @forelse($serviceRequest->subCategoryRates as $index => $subCategory)
+                                <tr>
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td class="@if($subCategory->is_confirmed){{ 'text-left' }}@endif">
+                                        @if(!$subCategory->is_confirmed)
+                                            <input name="sub-categories[{{ $index }}][name]" type="text"
+                                                   class="form-control" value="{{ $subCategory->name }}">
+                                            <input type="hidden" name="sub-categories[{{ $index }}][id]"
+                                                   value="{{ $subCategory->id }}">
+                                        @else
+                                            {{ $subCategory->name }}
+                                            <input type="hidden" value="{{ $subCategory->id }}"
+                                                   name="confirmed-sub-categories[]">
+                                        @endif
+                                    </td>
+                                    <td>{{ $subCategory->pivot->rate }}</td>
+                                    <td>
+                                        <span class="btn btn-outline-danger btn-sm delete-sub-category">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td><span class="text-muted small">কোন সাব-ক্যাটাগরি নেই</span></td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">ডকুমেন্টঃ</p>
+                        <div class="row">
+                            <div class="col-12">
+                                @if($serviceRequest->trade_license)
+                                    <div class="col-md-3">
+                                        <span class="text-muted">ট্রেড লাইসেন্স</span>
+                                        <a href="{{ asset('storage/' . $serviceRequest->trade_license) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/' . $serviceRequest->trade_license) }}"
+                                                 class="img-responsive img-thumbnail">
+                                        </a>
+                                    </div>
+                                @endif
+                                @foreach($serviceRequest->user->identities as $identity)
+                                    <div class="col-md-3">
+                                        <a href="{{ asset('storage/' . $identity->path) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/' . $identity->path) }}"
+                                                 class="img-responsive img-thumbnail">
+                                        </a>
                                     </div>
                                 @endforeach
-                            @endif
+                                @if( ! $serviceRequest->user->identities->first()
+                                    && ! $serviceRequest->trade_license
+                                    && ! $serviceRequest->user->identities->first())
+                                    <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
-                            @if($serviceRequest->thana->is_pending)
-                                <div class="form-group row">
-                                    <label for="thana" class="col-4 col-form-label">থানা
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-8">
-                                        <input id="thana" name="thana" type="text"
-                                               value="{{ oldOrData('thana', $serviceRequest->thana->bn_name) }}"
-                                               class="form-control{{ $errors->has('thana') ? ' is-invalid' : '' }}"
-                                               required>
-                                        @include('components.invalid', ['name' => 'thana'])
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if($serviceRequest->union->is_pending)
-                                <div class="form-group row">
-                                    <label for="union" class="col-4 col-form-label">ইউনিয়ন
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-8">
-                                        <input id="union" name="union" type="text"
-                                               value="{{ oldOrData('union', $serviceRequest->union->bn_name) }}"
-                                               class="form-control{{ $errors->has('union') ? ' is-invalid' : '' }}"
-                                               required>
-                                        @include('components.invalid', ['name' => 'union'])
-                                    </div>
-                                </div>
-                            @endif
-                        </form>
-
+                    <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
                         <div class="row">
-
-                            <div class="btn-group mx-auto" role="group">
-                                <span class="btn btn-secondary btn-success"
-                                      onclick="document.getElementById('approve-request').submit();">গ্রহন করুন</span>
-                                <span class="btn btn-secondary btn-danger rounded-right"
-                                      onclick="document.getElementById('reject-request').submit();">প্রত্যাখ্যান করুন</span>
-                                <form id="reject-request"
-                                      action="{{ route('organization-service-request.destroy', $serviceRequest->id) }}"
-                                      method="post">
-                                    {{ csrf_field() }}
-                                    {{ method_field('delete') }}
-                                    <input type="hidden" value="{{ $serviceRequest->id }}" name="id">
-                                </form>
+                            <div class="col-12">
+                                @forelse($serviceRequest->workImages->chunk(2) as $chunk)
+                                    <div class="card-deck py-2">
+                                        @foreach($chunk as $image)
+                                            <div class="card shadow-sm">
+                                                <a href="javascript:">
+                                                    <img class="card-img-top img-fluid"
+                                                         src="{{ asset('storage/' . $image->path) }}"
+                                                         alt="Card image cap">
+                                                </a>
+                                                <div class="card-body">
+                                                    <p class="card-text">${{ $image->description }}</p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @empty
+                                    <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
+                                @endforelse
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <h3 class="my-4 col-12">নথিপত্র</h3>
-                    <div class="col-md-3">
-                        <span class="text-muted">ট্রেড লাইসেন্স</span>
-                        <a href="{{ asset('storage/' . $serviceRequest->trade_license) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $serviceRequest->trade_license) }}" class="img-responsive img-thumbnail">
-                        </a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <h3 class="my-4 col-12">কাজের ছবি</h3>
-                    @forelse($serviceRequest->workImages as $image)
-                        <div class="col-md-3">
-                            <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $image->path) }}" class="img-responsive img-thumbnail">
-                            </a>
-                        </div>
-                    @empty
-                        <p class="text-muted col-12">No Image uploaded!</p>
-                    @endforelse
-                </div>
-            </div>
+            </form>
+            <form id="reject-request"
+                  action="{{ route('organization-service-request.destroy', $serviceRequest->id) }}"
+                  method="post">
+                {{ csrf_field() }}
+                {{ method_field('delete') }}
+            </form>
             <div class="col-md-3">
-                <div class="row mt-5">
-                    <div class="col-12">
-                        @include('components.side-nav', compact('navs'))
+                <div class="position-sticky right-menu">
+                    <div class="row">
+                        <div class="col-12">
+                            @include('components.side-nav', compact('navs'))
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.notification', ['userId' => $serviceRequest->user->id])
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            @include('components.notification', ['userId' => $serviceRequest->user->id])
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.sms', ['userId' => $serviceRequest->user->id])
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            @include('components.sms', ['userId' => $serviceRequest->user->id])
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 btn-group">
+                            <button class="btn btn-success col" form="approve-request">গ্রহণ করুন</button>
+                            <button class="btn btn-danger col" form="reject-request">মুছে ফেলুন</button>
+                        </div>
                     </div>
                 </div>
             </div>

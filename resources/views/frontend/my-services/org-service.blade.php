@@ -37,42 +37,34 @@
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
-                            <tr>
-                                <th scope="row">মোবাইল নম্বর</th>
-                                <td>{{ $service->mobile }}</td>
-                            </tr>
-                            @if($service->referredBy)
                                 <tr>
-                                    <th scope="row">রেফারার</th>
-                                    <td>
-                                        <a href="javascript:">{{ $service->referredBy->user->name }}</a>
-                                    </td>
+                                    <th scope="row">মোবাইল নম্বর</th>
+                                    <td>{{ $service->mobile }}</td>
                                 </tr>
-                            @endif
-                            <tr>
-                                <th scope="row">ইমেইল</th>
-                                <td>{{ $service->email }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ওয়েবসাইট</th>
-                                <td>{{ $service->website }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ফেসবুক</th>
-                                <td>{{ $service->facebook }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">জন্ম তারিখ</th>
-                                <td>{{ implode('-', array_reverse(explode('-', $service->user->dob))) }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
-                                <td>{{ $service->user->qualification }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                <td>{{ $service->user->nid }}</td>
-                            </tr>
+                                @if($service->referredBy)
+                                    <tr>
+                                        <th scope="row">রেফারার</th>
+                                        <td>
+                                            <a href="javascript:">{{ $service->referredBy->user->name }}</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <th scope="row">ইমেইল</th>
+                                    <td>{{ $service->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ওয়েবসাইট</th>
+                                    <td>{{ $service->website }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ফেসবুক</th>
+                                    <td>{{ $service->facebook }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                    <td>{{ $service->user->nid }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -117,10 +109,38 @@
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
+                                <tr>
+                                    <th scope="row">ক্যাটাগরি</th>
+                                    <td>{{ $service->category->name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p class="h4 border-bottom">সার্ভিস সমূহঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
+                            <thead>
                             <tr>
-                                <th scope="row">ক্যাটাগরি</th>
-                                <td>{{ $service->category->name }}</td>
+                                <th scope="col">#</th>
+                                <th scope="col">নাম</th>
+                                <th scope="col">মূল্য</th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($service->subCategoryRates as $index => $subCategory)
+                                <tr>
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td>{{ $subCategory->name }}</td>
+                                    <td>{{ en2bnNumber($subCategory->pivot->rate) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td><span class="text-muted small">কোন সার্ভিস নেই</span></td>
+                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -130,27 +150,28 @@
                     <div class="col-12">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            @if($service->experience_certificate)
+                            @if($service->trade_license)
                                 <div class="col-md-3">
-                                    <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                    <a href="{{ asset('storage/' . $service->experience_certificate) }}"
+                                    <span class="text-muted">ট্রেড লাইসেন্স</span>
+                                    <a href="{{ asset('storage/' . $service->trade_license) }}"
                                        target="_blank">
-                                        <img src="{{ asset('storage/' . $service->experience_certificate) }}"
+                                        <img src="{{ asset('storage/' . $service->trade_license) }}"
                                              class="img-responsive img-thumbnail">
                                     </a>
                                 </div>
                             @endif
-                            @if($service->cv)
+                            @foreach($service->user->identities as $identity)
                                 <div class="col-md-3">
-                                    <span class="text-muted">বায়োডাটা</span>
-                                    <a href="{{ asset('storage/' . $service->cv) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $service->cv) }}"
+                                    <a href="{{ asset('storage/' . $identity->path) }}"
+                                       target="_blank">
+                                        <img src="{{ asset('storage/' . $identity->path) }}"
                                              class="img-responsive img-thumbnail">
                                     </a>
                                 </div>
-                            @endif
-                            @if( ! $service->experience_certificate
-                                && ! $service->cv)
+                            @endforeach
+                            @if( ! $service->user->identities->first()
+                                && ! $service->trade_license
+                                && ! $service->user->identities->first())
                                 <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
                             @endif
                         </div>

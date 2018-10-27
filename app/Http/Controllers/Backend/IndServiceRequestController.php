@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Ind;
 use App\Models\Category;
+use App\Models\Package;
 use App\Models\SubCategory;
-use App\Models\User;
 use App\Models\Village;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
@@ -33,8 +33,21 @@ class IndServiceRequestController extends Controller
             'village',
             'category',
             'workMethods',
-            'subCategories'
+            'subCategories',
+            'user' => function ($query) {
+                $query->with('identities');
+            },
+            'payments' => function ($query) {
+                $query->with([
+                    'package' => function ($query) {
+                        $query->with('properties');
+                    },
+                    'paymentMethod'
+                ]);
+            }
         ]);
+
+        $packages = $serviceRequest->payments->first() ? Package::with('properties')->where('package_type_id', 1)->get() : null;
 
         $workMethods = WorkMethod::all();
         $indWorkMethods = $serviceRequest->workMethods->groupBy('pivot.sub_category_id');
@@ -43,12 +56,12 @@ class IndServiceRequestController extends Controller
         $unions = !$serviceRequest->thana->is_pending && $serviceRequest->union->is_pending ? Union::where('thana_id', $serviceRequest->thana_id)->get() : [];
         $villages = !$serviceRequest->union->is_pending && $serviceRequest->village->is_pending ? Village::where('union_id', $serviceRequest->union_id)->get() : [];
         $categories = !$serviceRequest->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
-        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods'));
+        return view('backend.ind-service-request.show', compact('serviceRequest', 'navs', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments', 'packages'));
     }
 
     public function update(Request $request, Ind $serviceRequest)
     {
-        // TODO:: Make a request class
+        // TODO:: Validation needed
 
         DB::beginTransaction();
 
@@ -79,11 +92,26 @@ class IndServiceRequestController extends Controller
         $union = !isset($union) ? $serviceRequest->union : $union;
         $village = !isset($village) ? $serviceRequest->village : $village;
 
+
+        // payments
+
+        DB::table('payments')->where('id', $request->post('payment'))->update([
+            'package_id' => $request->post('package')
+        ]);
+
         // Update category
         if ($category->is_confirmed == 0) {
             $category->update(['name' => $request->post('category-request'), 'is_confirmed' => 1]);
         } else {
             $serviceRequest->category_id = $category->id;
+        }
+
+
+        // sub category
+
+        if ($request->filled('confirmed-sub-categories')) {
+            DB::table('sub_categoriables')->where('sub_categoriable_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
+            DB::table('ind_work_methods')->where('ind_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
         }
 
         if ($subCategoryIds) {
