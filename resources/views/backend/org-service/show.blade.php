@@ -138,7 +138,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        @include('components.visitor-conuter', compact('visitor'))
+                        @include('components.visitor-conuter', ['visitor' => indVisitorCount($org->id)])
                     </div>
                 </div>
                 <div class="row mt-4">

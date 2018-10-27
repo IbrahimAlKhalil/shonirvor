@@ -22,15 +22,15 @@ class IndMyServiceController extends Controller
             'union',
             'village',
             'category',
-            'workMethods',
-            'subCategories'
+            'subCategories',
+            'workMethods'
         ]);
 
         $navs = $this->navs();
         $workMethods = WorkMethod::all();
         $indWorkMethods = $service->workMethods->groupBy('pivot.sub_category_id');
 
-        return view('frontend.my-services.ind-service', compact('service', 'navs', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods'));
+        return view('frontend.my-services.ind-service', compact('service', 'navs', 'workMethods', 'indWorkMethods'));
     }
 
     private function navs()

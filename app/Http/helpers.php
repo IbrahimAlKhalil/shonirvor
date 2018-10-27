@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ContentType;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Check if form old data exist
@@ -8,7 +9,7 @@ use App\Models\ContentType;
  * @param $name string
  * @param $data string
  * @return string
- * */
+ */
 function oldOrData($name, $data)
 {
     $old = old($name);
@@ -37,8 +38,7 @@ function en2bnNumber($number)
  * @param $data1 mixed
  * @param $data2 mixed
  * @return string
- * */
-
+ */
 function selectOpt($data1, $data2)
 {
     if ($data1 == $data2) {
@@ -51,8 +51,7 @@ function selectOpt($data1, $data2)
 /**
  * @param $data integer|boolean
  * @return string
- * */
-
+ */
 function checkBox($data)
 {
     if (boolval($data)) {
@@ -66,7 +65,6 @@ function checkBox($data)
  * @param $data integer|boolean
  * @return string
  */
-
 function isActive($data)
 {
     if (boolval($data)) {
@@ -74,18 +72,6 @@ function isActive($data)
     }
 
     return '';
-}
-
-/**
- * Returns array of random elements from given array
- *
- * @param $array array
- * @return mixed
- * */
-
-function randomElement($array)
-{
-    return $array[array_rand($array, 1)];
 }
 
 
@@ -111,4 +97,30 @@ function getContents($name)
 function getContent($name)
 {
     return ContentType::where('name', $name)->with('contents')->first()->contents()->first();
+}
+
+/**
+ * @param $indId integer
+ * @return array
+ */
+function indVisitorCount($indId)
+{
+    $visitor['today'] = DB::table('ind_visitor_counts')->where('ind_id', $indId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
+    $visitor['thisMonth'] = DB::table('ind_visitor_counts')->where('ind_id', $indId)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
+    $visitor['thisYear'] = DB::table('ind_visitor_counts')->where('ind_id', $indId)->whereYear('created_at', date('Y'))->sum('how_much');
+
+    return $visitor;
+}
+
+/**
+ * @param $orgId integer
+ * @return array
+ */
+function orgVisitorCount($orgId)
+{
+    $visitor['today'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
+    $visitor['thisMonth'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
+    $visitor['thisYear'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereYear('created_at', date('Y'))->sum('how_much');
+
+    return $visitor;
 }

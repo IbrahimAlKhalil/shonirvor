@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
-// TODO:: Maybe some of these requests classes are empty or incomplete, so fill these with whatever you can.
+// TODO:: Request Validation
 
 class indServiceController extends Controller
 {
@@ -22,11 +22,8 @@ class indServiceController extends Controller
     public function show(Ind $ind)
     {
         $navs = $this->navs();
-        $visitor['today'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
-        $visitor['thisMonth'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
-        $visitor['thisYear'] = DB::table('ind_visitor_counts')->where('ind_id', $ind->id)->whereYear('created_at', date('Y'))->sum('how_much');
 
-        return view('backend.ind-service.show', compact('ind', 'navs', 'visitor'));
+        return view('backend.ind-service.show', compact('ind', 'navs'));
     }
 
     public function destroy(Request $request, Ind $ind)

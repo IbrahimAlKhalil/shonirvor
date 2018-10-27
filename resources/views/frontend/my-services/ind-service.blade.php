@@ -62,8 +62,8 @@
                                 <td>{{ $service->facebook }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">বয়স</th>
-                                <td>{{ $service->user->age }}</td>
+                                <th scope="row">জন্ম তারিখ</th>
+                                <td>{{ implode('-', array_reverse(explode('-', $service->user->dob))) }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
@@ -217,12 +217,12 @@
                                     <div class="card-deck py-2">
                                         @foreach($chunk as $image)
                                             <div class="card shadow-sm">
-                                                <a href="javascript:">
+                                                <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
                                                     <img class="card-img-top img-fluid"
-                                                         src="{{ asset('storage/' . $image->path) }}" alt="Card image cap">
+                                                         src="{{ asset('storage/' . $image->path) }}">
                                                 </a>
                                                 <div class="card-body">
-                                                    <p class="card-text">${{ $image->description }}</p>
+                                                    <p class="card-text">{{ $image->description }}</p>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -239,6 +239,21 @@
                 <div class="row">
                     <div class="col-12">
                         @include('components.side-nav')
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.visitor-conuter', ['visitor' => indVisitorCount($service->id)])
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="button" href="javascript:" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</button>
                     </div>
                 </div>
             </div>
