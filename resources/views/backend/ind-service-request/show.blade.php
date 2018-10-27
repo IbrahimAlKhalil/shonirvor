@@ -38,14 +38,21 @@
 
                     @if($serviceRequest->payments->first())
                         @php($payment = $serviceRequest->payments->first())
-                        @php($properties = $payment->package->properties->groupBy('name'))
                         <div class="col-12 mt-4">
                             <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
                             <table class="table table-striped table-bordered table-hover table-sm w-100">
                                 <tbody>
                                 <tr>
-                                    <th scope="row">প্যাকেজের নামঃ</th>
-                                    <td>{{ $properties['name'][0]->value }}</td>
+                                    <th scope="row"><label for="package">প্যাকেজের নামঃ</label></th>
+                                    <td>
+                                        <input type="hidden" value="{{ $payment->id }}" name="payment">
+                                        <select name="package" id="package">
+                                            @foreach($packages as $package)
+                                                @php($properties = $package->properties->groupBy('name'))
+                                                <option value="{{ $package->id }}" {{ selectOpt($package->id, $payment->package->id) }}>{{ $properties['name'][0]->value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">পেমেন্ট এর মাধ্যম</th>
@@ -267,6 +274,8 @@
                                                    value="{{ $subCategory->id }}">
                                         @else
                                             {{ $subCategory->name }}
+                                            <input type="hidden" value="{{ $subCategory->id }}"
+                                                   name="confirmed-sub-categories[]">
                                         @endif
                                     </td>
                                     @php($methods = $indWorkMethods[$subCategory->id])
@@ -309,7 +318,13 @@
                     <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 row">
+                                @if($serviceRequest->cv)
+                                    <div class="col-md-3">
+                                        <span class="text-muted">বায়োডাটা</span>
+                                        <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">PDF</a>
+                                    </div>
+                                @endif
                                 @if($serviceRequest->experience_certificate)
                                     <div class="col-md-3">
                                         <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
@@ -320,17 +335,17 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if($serviceRequest->cv)
-                                    <div class="col-md-3">
-                                        <span class="text-muted">বায়োডাটা</span>
-                                        <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">
-                                            <img src="{{ asset('storage/' . $serviceRequest->cv) }}"
-                                                 class="img-responsive img-thumbnail">
-                                        </a>
-                                    </div>
-                                @endif
+                                @foreach($serviceRequest->user->identities as $identity)
+                                        <div class="col-md-3">
+                                            <a href="{{ asset('storage/' . $identity->path) }}"
+                                               target="_blank">
+                                                <img src="{{ asset('storage/' . $identity->path) }}"
+                                                     class="img-responsive img-thumbnail">
+                                            </a>
+                                        </div>
+                                @endforeach
                                 @if( ! $serviceRequest->experience_certificate
-                                    && ! $serviceRequest->cv)
+                                    && ! $serviceRequest->cv && !$serviceRequest->user->identities->first())
                                     <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
                                 @endif
                             </div>
