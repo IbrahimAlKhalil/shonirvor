@@ -9,7 +9,10 @@ export class ImagePicker {
                 classList: ['image-picker-image']
             },
             button: {
-                classList: ['image-picker-button'],
+                classList: [
+                    'image-picker-button',
+                    'shadow-sm'
+                ],
                 icon: '<i class="fa fa-plus" aria-hidden="true"></i>'
             }
         };

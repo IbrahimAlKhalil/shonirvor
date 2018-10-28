@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
-// TODO:: Maybe some of these requests classes are empty or incomplete, so fill these with whatever you can.
+// TODO:: Request Validation
 
 class orgServiceController extends Controller
 {
@@ -21,11 +21,8 @@ class orgServiceController extends Controller
     public function show(Org $org)
     {
         $navs = $this->navs();
-        $visitor['today'] = DB::table('org_visitor_counts')->where('org_id', $org->id)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
-        $visitor['thisMonth'] = DB::table('org_visitor_counts')->where('org_id', $org->id)->whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('how_much');
-        $visitor['thisYear'] = DB::table('org_visitor_counts')->where('org_id', $org->id)->whereYear('created_at', date('Y'))->sum('how_much');
 
-        return view('backend.org-service.show', compact('org', 'navs', 'visitor'));
+        return view('backend.org-service.show', compact('org', 'navs'));
     }
 
     public function destroy(Request $request, Org $org)

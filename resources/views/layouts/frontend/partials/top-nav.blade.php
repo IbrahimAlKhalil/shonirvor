@@ -22,6 +22,11 @@
                 <li class="nav-item @if(request()->is('profile')){{ 'active' }}@endif">
                     <a class="nav-link" href="{{ route('profile.index') }}">প্রোফাইল</a>
                 </li>
+                @if($myServiceLink)
+                    <li class="nav-item @if(request()->is('my-services')){{ 'active' }}@endif">
+                        <a class="nav-link" href="{{ $myServiceLink }}">সার্ভিস সমূহ</a>
+                    </li>
+                @endif
                 <li class="nav-item @if(request()->is('*service*registration*')){{ 'active' }}@endif">
                     <a class="nav-link" href="{{ route('service-registration-instruction') }}">সার্ভিস রেজিস্ট্রেশান</a>
                 </li>

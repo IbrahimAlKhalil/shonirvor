@@ -318,37 +318,35 @@
                     <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            <div class="col-12 row">
-                                @if($serviceRequest->cv)
-                                    <div class="col-md-3">
-                                        <span class="text-muted">বায়োডাটা</span>
-                                        <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">PDF</a>
-                                    </div>
-                                @endif
-                                @if($serviceRequest->experience_certificate)
-                                    <div class="col-md-3">
-                                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                        <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
-                                           target="_blank">
-                                            <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
-                                                 class="img-responsive img-thumbnail">
-                                        </a>
-                                    </div>
-                                @endif
-                                @foreach($serviceRequest->user->identities as $identity)
-                                        <div class="col-md-3">
-                                            <a href="{{ asset('storage/' . $identity->path) }}"
-                                               target="_blank">
-                                                <img src="{{ asset('storage/' . $identity->path) }}"
-                                                     class="img-responsive img-thumbnail">
-                                            </a>
-                                        </div>
-                                @endforeach
-                                @if( ! $serviceRequest->experience_certificate
-                                    && ! $serviceRequest->cv && !$serviceRequest->user->identities->first())
-                                    <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
-                                @endif
-                            </div>
+                            @if($serviceRequest->cv)
+                                <div class="col-md-3">
+                                    <span class="text-muted">বায়োডাটা</span>
+                                    <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">PDF</a>
+                                </div>
+                            @endif
+                            @if($serviceRequest->experience_certificate)
+                                <div class="col-md-3">
+                                    <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                                    <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                       target="_blank">
+                                        <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                             class="img-responsive img-thumbnail">
+                                    </a>
+                                </div>
+                            @endif
+                            @foreach($serviceRequest->user->identities as $identity)
+                                <div class="col-md-3">
+                                    <a href="{{ asset('storage/' . $identity->path) }}"
+                                       target="_blank">
+                                        <img src="{{ asset('storage/' . $identity->path) }}"
+                                             class="img-responsive img-thumbnail">
+                                    </a>
+                                </div>
+                            @endforeach
+                            @if( ! $serviceRequest->experience_certificate
+                                && ! $serviceRequest->cv && !$serviceRequest->user->identities->first())
+                                <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
+                            @endif
                         </div>
                     </div>
 

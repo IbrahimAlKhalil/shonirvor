@@ -27,7 +27,7 @@
 }
 
 form {
-  input[aria-invalid="true"], textarea[aria-invalid="true"] {
+  input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] {
     border-color: #dc3545;
   }
 

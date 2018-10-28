@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\ViewComposers\FrontendTopNavComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Http\ViewComposers\AdComponentComposer;
@@ -16,6 +17,10 @@ class ComposerServiceProvider extends ServiceProvider
     {
         View::composer(
             'layouts.backend.partials.top-nav', BackendTopNavComposer::class
+        );
+
+        View::composer(
+            'layouts.frontend.partials.top-nav', FrontendTopNavComposer::class
         );
 
         View::composer(

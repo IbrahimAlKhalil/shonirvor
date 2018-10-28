@@ -32,9 +32,19 @@ Route::namespace('Frontend')->group(function () {
         Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
         Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
 
-        Route::prefix('my-services')->group(function () {
+        Route::prefix('my-services')->name('my-service.')->group(function () {
 
-//            Route::get('/', '');
+            Route::resource('individual-service', 'IndMyServiceController', [
+                'only' => ['show'],
+                'parameters' => ['individual-service' => 'service'],
+                'names' => 'ind'
+            ]);
+
+            Route::resource('organization-service', 'OrgMyServiceController', [
+                'only' => ['show'],
+                'parameters' => ['organization-service' => 'service'],
+                'names' => 'org'
+            ]);
 
         }, '');
 

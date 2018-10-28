@@ -91,32 +91,38 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ <span
+                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ<span
                                         class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <div class="input-group mb-3">
-                                    <select name="day" type="text" class="form-control mr-5 rounded-right">
-                                        <option value="">-- দিন --</option>
-                                        @for($i = 1; $i < 32; $i++)
-                                            <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
-                                        @endfor
-                                    </select>
-                                    <select name="month" type="text"
-                                            class="form-control mr-5 rounded-right rounded-left">
-                                        <option value="">-- মাস --</option>
-                                        @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
-                                        @foreach($months as $index => $month)
-                                            <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
-                                        @endforeach
-                                    </select>
-                                    <select name="year" type="text" class="form-control rounded-left">
-                                        <option value="">-- বছর --</option>
-                                        @php($begining = Date('Y') - 50)
-                                        @php($ending = Date('Y') - 18)
-                                        @for($i = $ending; $i > $begining; $i--)
-                                            <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
-                                        @endfor
-                                    </select>
+                            <div class="col-9 pr-0">
+                                <div class="input-group row">
+                                    <div class="col-md-4 pr-0">
+                                        <select name="day" type="text" class="form-control">
+                                            <option value="">-- দিন --</option>
+                                            @for($i = 1; $i < 32; $i++)
+                                                <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pr-0">
+                                        <select name="month" type="text"
+                                                class="form-control">
+                                            <option value="">-- মাস --</option>
+                                            @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                            @foreach($months as $index => $month)
+                                                <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pr-0">
+                                        <select name="year" type="text" class="form-control">
+                                            <option value="">-- বছর --</option>
+                                            @php($begining = Date('Y') - 50)
+                                            @php($ending = Date('Y') - 18)
+                                            @for($i = $ending; $i > $begining; $i--)
+                                                <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -370,7 +376,7 @@
                             <div class="col-9">
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
-                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
+                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
                                             <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
@@ -392,8 +398,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতা প্রত্যয়ন
-                                পত্র</label>
+                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতা প্রত্যয়ন পত্র</label>
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
                                        accept="image/*"
