@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\Package;
+use App\Models\Village;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Sandofvega\Bdgeocode\Models\Thana;
@@ -122,6 +124,9 @@ class OrgServiceRequestController extends Controller
                     return $item->id == $subCategoryRequest['id'];
                 });
 
+                $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
+
+                $serviceRequest->package_expiration = Carbon::today()->addDays($duration)->format('Y-m-d');
                 $subCategory->category_id = $category->id;
                 $subCategory->is_confirmed = 1;
                 $subCategory->name = $subCategoryRequest['name'];

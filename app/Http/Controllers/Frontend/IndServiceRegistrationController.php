@@ -76,6 +76,9 @@ class IndServiceRegistrationController extends Controller
 
     public function store(StoreInd $request)
     {
+        // TODO:: Check what if the user already have an account with the requested category
+        // TODO:: User should choose one of the packages made for individual service, validate it.
+        // TODO:: Review validation
 
         DB::beginTransaction();
 

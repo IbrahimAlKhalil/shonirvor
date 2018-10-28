@@ -15,7 +15,7 @@ class IndServicePackageController extends Controller
     public function index()
     {
 
-        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->get();
+        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],

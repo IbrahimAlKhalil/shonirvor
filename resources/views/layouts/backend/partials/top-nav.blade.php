@@ -13,6 +13,9 @@
             <li class="nav-item @if(request()->is('dashboard')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
             </li>
+            <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>
+            </li>
             <li class="nav-item @if(request()->is('dashboard/individual-service*') || request()->is('dashboard/organization-service*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('individual-service.index') }}">সার্ভিস সমূহ</a>
             </li>

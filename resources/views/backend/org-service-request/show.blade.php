@@ -248,8 +248,8 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">নাম</th>
-                                <th scope="col">মূল্য</th>
-                                <th scope="col">পদক্ষেপ</th>
+                                <th scope="col" class="text-center">মূল্য</th>
+                                <th scope="col" class="text-center">পদক্ষেপ</th>
                             </tr>
                             </thead>
                             <tbody class="text-center">
@@ -285,9 +285,35 @@
                     </div>
 
                     <div class="col-12 mt-4">
+                        <p class="h4 border-bottom">অতিরিক্ত কাজের তথ্যঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">কাজের নাম</th>
+                                <th scope="col">তথ্য</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($serviceRequest->additionalPrices as $index => $additionalPrice)
+                                <tr>
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td>{{ $additionalPrice->name }}</td>
+                                    <td>{{ $additionalPrice->info }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td><span class="text-muted small">অতিরিক্ত কাজ নেই</span></td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 row">
                                 @if($serviceRequest->trade_license)
                                     <div class="col-md-3">
                                         <span class="text-muted">ট্রেড লাইসেন্স</span>

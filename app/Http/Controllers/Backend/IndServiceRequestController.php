@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\SubCategory;
 use App\Models\Village;
 use App\Models\WorkMethod;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -111,7 +112,7 @@ class IndServiceRequestController extends Controller
 
         if ($request->filled('confirmed-sub-categories')) {
             DB::table('sub_categoriables')->where('sub_categoriable_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
-            DB::table('ind_work_methods')->where('ind_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
+            DB::table('ind_work_method')->where('ind_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
         }
 
         if ($subCategoryIds) {
@@ -162,6 +163,9 @@ class IndServiceRequestController extends Controller
             $serviceRequest->village_id = $village->id;
         }
 
+        $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
+
+        $serviceRequest->package_expiration = Carbon::today()->addDays($duration)->format('Y-m-d');
         $serviceRequest->is_pending = 0;
         $serviceRequest->save();
 

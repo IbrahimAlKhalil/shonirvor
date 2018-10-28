@@ -25,7 +25,6 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">নাম</th>
-                        <th scope="col">বর্ণনা</th>
                         <th scope="col">মেয়াদ</th>
                         <th scope="col">মূল্য</th>
                         <th scope="col">পদক্ষেপ</th>
@@ -38,7 +37,6 @@
                         <tr>
                             <th scope="row">{{ en2bnNumber($serial) }}</th>
                             <td>{{ $properties['name'][0]->value }}</td>
-                            <td>{{ $properties['description'][0]->value }}</td>
                             <td>{{ $properties['duration'][0]->value }}</td>
                             <td>{{ $properties['fee'][0]->value }}</td>
                             <td class="align-middle">

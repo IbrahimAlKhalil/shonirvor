@@ -15,6 +15,9 @@
                     <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
                 </li>
             @endauth
+            <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>
+            </li>
             @auth
                 <li class="nav-item @if(request()->is('profile')){{ 'active' }}@endif">
                     <a class="nav-link" href="{{ route('profile.index') }}">প্রোফাইল</a>
