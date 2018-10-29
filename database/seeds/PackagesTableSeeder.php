@@ -66,7 +66,7 @@ class PackagesTableSeeder extends Seeder
                 [
                     'package_id' => $package->id,
                     'package_property_id' => 1,
-                    'value' => $faker->citySuffix
+                    'value' => $faker->city
                 ],
                 [
                     'package_id' => $package->id,
@@ -97,7 +97,7 @@ class PackagesTableSeeder extends Seeder
                 [
                     'package_id' => $packageId,
                     'package_property_id' => 1,
-                    'value' => $faker->citySuffix
+                    'value' => $faker->city
                 ],
                 [
                     'package_id' => $packageId,

@@ -440,8 +440,7 @@
                                     @foreach($paymentMethods as $paymentMethod)
                                         <span class="text-primary d-none"
                                               id="payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
-                                                <i class="text-muted">({{ $paymentMethod->account_type }}
-                                                    )</i>@endif</span>
+                                                <i class="text-muted">({{ $paymentMethod->account_type }})</i>@endif</span>
                                     @endforeach
                                 </div>
                             </div>

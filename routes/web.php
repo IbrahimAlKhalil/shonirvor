@@ -32,6 +32,15 @@ Route::namespace('Frontend')->group(function () {
         Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
         Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
 
+        Route::prefix('applications')->name('applications.')->group(function () {
+
+            Route::resource('ind-top-service', 'IndTopServiceApplicationController', [
+                'only' => ['index', 'store', 'update'],
+                'parameters' => ['ind-top-service' => 'service']
+            ]);
+
+        }, '');
+
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
             Route::resource('individual-service', 'IndMyServiceController', [
