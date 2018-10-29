@@ -5,7 +5,7 @@
 // Bootstrap CSS
 import './../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 
-// Selectize JS
+// Selectize CSS
 import './../../../../node_modules/selectize/dist/css/selectize.default.css';
 
 // Common frontend css for all page
@@ -35,6 +35,7 @@ import './../../../../bower_components/bootstrap-star-rating/themes/krajee-fa/th
 import './../../../../bower_components/bootstrap-star-rating/js/star-rating';
 
 import {UrlParser} from "../modules/url-parser";
+
 
 document.addEventListener('DOMContentLoaded', () => {
     let methodSelect = $('#method + .selectize-control').parent();
