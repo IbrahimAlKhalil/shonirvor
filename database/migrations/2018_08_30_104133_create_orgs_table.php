@@ -28,8 +28,7 @@ class CreateOrgsTable extends Migration
             $table->string('address');
             $table->string('trade_license')->nullable();
             $table->mediumText('pricing_info')->nullable();
-            $table->date('package_expiration')->default('0000-00-00');
-            $table->boolean('is_pending')->default(1);
+            $table->date('expire')->nullable();
             $table->boolean('is_top')->default(0);
             $table->softDeletes();
             $table->timestamps();

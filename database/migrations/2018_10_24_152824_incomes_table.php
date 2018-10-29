@@ -13,12 +13,13 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('incomes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('package_id');
             $table->unsignedInteger('payment_method_id');
             $table->morphs('paymentable');
             $table->string('transactionId');
+            $table->boolean('approved');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('incomes');
     }
 }
