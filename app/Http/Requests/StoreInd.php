@@ -14,7 +14,6 @@ class StoreInd extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
         return [
             'mobile' => 'required|digits:11',
             'referrer' => 'digits:11|different:mobile|exists:users,mobile|nullable',

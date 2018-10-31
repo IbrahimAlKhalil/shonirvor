@@ -41,14 +41,6 @@
                                     <th scope="row">মোবাইল নম্বর</th>
                                     <td>{{ $service->mobile }}</td>
                                 </tr>
-                                @if($service->referredBy)
-                                    <tr>
-                                        <th scope="row">রেফারার</th>
-                                        <td>
-                                            <a href="javascript:">{{ $service->referredBy->user->name }}</a>
-                                        </td>
-                                    </tr>
-                                @endif
                                 <tr>
                                     <th scope="row">ইমেইল</th>
                                     <td>{{ $service->email }}</td>

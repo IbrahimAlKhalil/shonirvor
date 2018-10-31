@@ -29,8 +29,8 @@ class CreateIndsTable extends Migration
             $table->mediumText('pricing_info')->nullable();
             $table->string('status')->nullable();
             $table->date('expire')->nullable();
+            $table->boolean('top_expire')->nullable();
             $table->boolean('is_available')->default(1);
-            $table->boolean('is_top')->default(0);
             $table->softDeletes();
             $table->timestamps();
 

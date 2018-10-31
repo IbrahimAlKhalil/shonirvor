@@ -109,21 +109,21 @@ class Ind extends Model
 
     public function scopeOnlyApproved($query)
     {
-        return $query->where('is_pending', 0);
+        return $query->whereNotNull('expire');
     }
 
     public function scopeOnlyPending($query)
     {
-        return $query->where('is_pending', 1);
+        return $query->whereNull('expire');
     }
 
     public function scopeOnlyTop($query)
     {
-        return $query->where('is_top', 1);
+        return $query->whereNotNull('top_expire');
     }
 
     /**
-     * Add this method after select() method
+     * Must add this method after select() method
      */
     public function scopeWithFeedbacksAvg($query)
     {

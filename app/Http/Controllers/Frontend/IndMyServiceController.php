@@ -16,7 +16,6 @@ class IndMyServiceController extends Controller
     public function show(Ind $service)
     {
         $service->load([
-            'referredBy.user',
             'district',
             'thana',
             'union',

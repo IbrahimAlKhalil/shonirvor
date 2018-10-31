@@ -12,7 +12,6 @@ class OrgMyServiceController extends Controller
     public function show(Org $service)
     {
         $service->load([
-            'referredBy.user',
             'district',
             'thana',
             'union',

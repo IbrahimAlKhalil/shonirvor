@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
  * @param $data string
  * @return string
  */
-function oldOrData($name, $data)
+function oldOrData($name, $data = '')
 {
     $old = old($name);
     if ($old) {
@@ -99,10 +99,6 @@ function getContent($name)
     return ContentType::where('name', $name)->with('contents')->first()->contents()->first();
 }
 
-/**
- * @param $indId integer
- * @return array
- */
 function indVisitorCount($indId)
 {
     $visitor['today'] = DB::table('ind_visitor_counts')->where('ind_id', $indId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
@@ -112,10 +108,6 @@ function indVisitorCount($indId)
     return $visitor;
 }
 
-/**
- * @param $orgId integer
- * @return array
- */
 function orgVisitorCount($orgId)
 {
     $visitor['today'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
@@ -123,4 +115,18 @@ function orgVisitorCount($orgId)
     $visitor['thisYear'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereYear('created_at', date('Y'))->sum('how_much');
 
     return $visitor;
+}
+
+function readableDays(int $days)
+{
+    $years = floor($days / 365);
+    $months = floor(($days - ($years * 365))/30);
+    $remainingDays = ($days - ($years * 365) - ($months * 30));
+
+    $result = '';
+    if ($years) $result .= en2bnNumber($years) . ' বছর ';
+    if ($months) $result .= en2bnNumber($months) . ' মাস ';
+    if ($remainingDays) $result .= en2bnNumber($remainingDays) . ' দিন';
+
+    return $result;
 }

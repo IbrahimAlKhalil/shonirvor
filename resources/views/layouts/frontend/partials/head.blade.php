@@ -9,9 +9,10 @@
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
     <script src="{{ asset('assets/plugins/jquery/dist/jquery.min.js') }}"></script>
-    {{--<script src="https://code.jquery.com/jquery-3.3.1.min.js"--}}
-            {{--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="--}}
-            {{--crossorigin="anonymous"></script>--}}
+    {{--<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>--}}
+    <!-- TODO: Uncomment the CDN link of jquery before going to production -->
     @yield('webpack')
 </head>
 <body>
