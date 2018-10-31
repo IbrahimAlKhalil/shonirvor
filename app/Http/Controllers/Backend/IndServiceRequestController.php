@@ -96,8 +96,9 @@ class IndServiceRequestController extends Controller
 
         // payments
 
-        DB::table('payments')->where('id', $request->post('payment'))->update([
-            'package_id' => $request->post('package')
+        DB::table('incomes')->where('id', $request->post('payment'))->update([
+            'package_id' => $request->post('package'),
+            'approved' => 1
         ]);
 
         // Update category
@@ -165,8 +166,7 @@ class IndServiceRequestController extends Controller
 
         $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
 
-        $serviceRequest->package_expiration = Carbon::today()->addDays($duration)->format('Y-m-d');
-        $serviceRequest->is_pending = 0;
+        $serviceRequest->expire = Carbon::today()->addDays($duration)->format('Y-m-d');
         $serviceRequest->save();
 
         if ($request->has('category-request') && $request->filled('category')) {

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Income extends Model
 {
-    public function paymentable()
+    public function incomeable()
     {
         return $this->morphTo();
     }

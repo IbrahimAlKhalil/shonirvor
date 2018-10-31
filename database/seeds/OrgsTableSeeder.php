@@ -26,12 +26,12 @@ class OrgsTableSeeder extends Seeder
 
             factory(Org::class, mt_rand(1, 3))->create([
                 'user_id' => $user->id,
-                'category_id' => randomElement($categoryIds),
-                'division_id' => randomElement($divisionIds),
-                'district_id' => randomElement($districtIds),
-                'thana_id' => randomElement($thanaIds),
-                'union_id' => randomElement($unionIds),
-                'village_id' => randomElement($villageIds)
+                'category_id' => array_random($categoryIds),
+                'division_id' => array_random($divisionIds),
+                'district_id' => array_random($districtIds),
+                'thana_id' => array_random($thanaIds),
+                'union_id' => array_random($unionIds),
+                'village_id' => array_random($villageIds)
             ]);
         });
     }

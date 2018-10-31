@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Income;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\Package;
-use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Reference;
 use App\Models\SubCategory;
@@ -77,18 +77,6 @@ class OrgServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         $user = Auth::user();
-        $orgs = $user->orgs('pending')->get();
-
-        // check what if current user didn't reach at the maximum pending request
-        if ($orgs->count() >= 3) {
-            // reached at the maximum
-            // redirect them to the confirmation page
-            $categories = Category::getAll('org')->get();
-            $divisions = Division::all();
-            $classesToAdd = ['active', 'disabled'];
-            $compact = compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user');
-            return view('frontend.registration.org-service.confirm', $compact);
-        }
 
         // handle category  and sub-category request
         // TODO:: Do some custom validation for category and subcategory
@@ -238,9 +226,10 @@ class OrgServiceRegistrationController extends Controller
 
         // User
         if ($request->filled('transaction-id')) {
-            $payment = new Payment;
+            $payment = new Income;
             $payment->package_id = $request->post('package');
             $payment->payment_method_id = $request->post('payment-method');
+            $payment->from = $request->post('from');
             $payment->transactionId = $request->post('transaction-id');
             $org->payments()->save($payment);
         }
@@ -278,7 +267,7 @@ class OrgServiceRegistrationController extends Controller
     {
         $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
 
-        if ($org->user_id != Auth::id() || !$org->is_pending) {
+        if ($org->user_id != Auth::id() || !is_null($org->expire)) {
             return redirect(route('organization-service-registration.index'));
         }
 
@@ -486,9 +475,10 @@ class OrgServiceRegistrationController extends Controller
         // payment
         $org->payments()->delete();
         if ($request->filled('transaction-id')) {
-            $payment = new Payment;
+            $payment = new Income;
             $payment->package_id = $request->post('package');
             $payment->payment_method_id = $request->post('payment-method');
+            $payment->from = $request->post('from');
             $payment->transactionId = $request->post('transaction-id');
             $org->payments()->save($payment);
         }

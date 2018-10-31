@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use \Illuminate\Database\Query\Builder as Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,14 @@ use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+
+/**
+ * App\Models\Ind
+ *
+ * @method static Builder exceptExpired()
+ *@method static Builder onlyExpired()
+ *
+ * */
 
 class Org extends Model
 {
@@ -110,7 +119,7 @@ class Org extends Model
 
     public function payments()
     {
-        return $this->morphMany(Payment::class, 'paymentable');
+        return $this->morphMany(Income::class, 'incomeable');
     }
 
 
@@ -120,17 +129,26 @@ class Org extends Model
 
     public function scopeOnlyApproved($query)
     {
-        return $query->where('is_pending', 0);
+        return $query->whereNotNull('expire');
     }
 
     public function scopeOnlyPending($query)
     {
-        return $query->where('is_pending', 1);
+        return $query->whereNull('expire');
     }
 
     public function scopeOnlyTop($query)
     {
         return $query->where('is_top', 1);
+    }
+
+    public function scopeOnlyExpired($query) {
+        $query->where('expire', '<', Date('Y-m-d'));
+    }
+
+    public function scopeExceptExpired($query)
+    {
+        $query->where('expire', '>=', Date('Y-m-d'))->orWhere('expire', null);
     }
 
     /**

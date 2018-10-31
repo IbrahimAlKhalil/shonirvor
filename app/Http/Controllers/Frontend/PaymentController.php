@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
+use App\Models\Org;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -23,14 +25,28 @@ class PaymentController extends Controller
 
         $indServices = Ind::where('user_id', Auth::id())->with([
             'payments' => function ($query) {
-                $query->where('package_id', 1)->orderBy('created_at', 'DSC')->with([
-                    'package' => function ($query) {
-                        $query->with('properties');
-                    }
-                ]);
+                $query->join('packages', function ($join) {
+                    $join->on('packages.id', 'incomes.package_id')->whereIn('packages.package_type_id', [1, 3]);
+                });
             }
         ])->get();
 
-        return view('frontend.payment.index', compact('navs', 'indServices'));
+        $orgServices = Org::where('user_id', Auth::id())->with([
+            'payments' => function ($query) {
+                $query->join('packages', function ($join) {
+                    $join->on('packages.id', 'incomes.package_id')->whereIn('packages.package_type_id', [2, 4]);
+                });
+            }
+        ])->get();
+
+        $services = collect($orgServices)->merge(collect($indServices))->sortBy('expire');
+        $topServices = $services->where('is_top', true);
+
+        $renewRequested = $services->where('expire', '<', Carbon::today())->filter(function ($item) {
+            $ids = [5, 6];
+            return !in_array($item->payments[0]->package_type_id, $ids) && $item->payments[0]->approved == 0;
+        });
+
+        return view('frontend.payment.index', compact('navs', 'services', 'renewRequested', 'topServices'));
     }
 }

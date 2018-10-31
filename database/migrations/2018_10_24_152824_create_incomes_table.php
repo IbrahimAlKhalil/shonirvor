@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaymentsTable extends Migration
+class CreateIncomesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,14 @@ class CreatePaymentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('package_id');
             $table->unsignedInteger('payment_method_id');
-            $table->morphs('paymentable');
+            $table->morphs('incomeable');
+            $table->string('from');
             $table->string('transactionId');
             $table->boolean('approved');
             $table->timestamps();
+
+            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onUpdate('cascade');
         });
     }
 

@@ -18,7 +18,6 @@ $factory->define(Org::class, function (Faker $faker) {
         'address' => $faker->address,
         'trade_license' => 'seed/org/trade-license.png',
         'pricing_info' => $faker->paragraph(rand(4, 15)),
-        'is_pending' => rand(0, 1),
         'is_top' => rand(0, 1)
     ];
 });
