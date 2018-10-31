@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateExpenseTypesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('expense_types', function (Blueprint $table) {
@@ -19,11 +14,6 @@ class CreateExpenseTypesTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('expense_types');

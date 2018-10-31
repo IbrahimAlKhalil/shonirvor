@@ -7,12 +7,12 @@
 @endsection
 
 @section('content')
-    <div class="container my-5">
+    <div class="container my-5 bg-white p-4 rounded">
         <div class="row">
             <div class="col-12">
                 <h2>সার্ভিস প্রভাইডার এর নিয়মাবলী</h2>
             </div>
-            <div class="col-12 px-4 mt-4">
+            <div class="col-12 mt-4">
                 {{--{!! getContent('registration-instruction')->data !!}--}}
 
 
@@ -30,8 +30,8 @@
                     <li>পংক্তির গোড়ায় বা মাঝখানে ফাঁক:</li>
                     <ul>
                         <li>গদ্য-রচনায় সব অনুচ্ছেদ বাঁদিকের মার্জিন থেকে শুরু করা হয়েছে।</li>
-                        <li>পদ্যের সব পংক্তি বাঁদিকের মার্জিন থেকে শুরু করা হয়েছে, মূলে মার্জিন থেকে কিছুটা ফাঁক রেখে (indent করে) ছাপা হলেও।</li>
-                        <li>পদ্য-পংক্তিতে পর্বযতি বা মধ্যচ্ছেদ বোঝাতে হ্যাশ-চিহ্ন (#) ব্যবহৃত হয়েছে। পর্বযতির স্থান স্পষ্ট না হলে আমাদের বিচারমত ভাগ করা হয়েছে।</li>
+                        <li>পদ্যের সব পংক্তি বাঁদিকের মার্জিন থেকে শুরু করা হয়েছে, মূলে মার্জিন থেকে কিছুটা ফাঁক রেখে ছাপা হলেও।</li>
+                        <li>পদ্য-পংক্তিতে পর্বযতি বা মধ্যচ্ছেদ বোঝাতে হ্যাশ-চিহ্ন ব্যবহৃত হয়েছে। পর্বযতির স্থান স্পষ্ট না হলে আমাদের বিচারমত ভাগ করা হয়েছে।</li>
                     </ul>
                     <li>নাটকের মঞ্চনির্দেশ, বক্তার নাম প্রভৃতি:</li>
                     <ul>
@@ -47,15 +47,15 @@
 
 
             </div>
-            <div class="col-12 my-3">
+            <div class="col-12 mt-3">
                 <div class="row justify-content-around">
                     <div class="col-6 text-right">
                         <a href="{{ route('individual-service-registration.index') }}"
-                           class="btn btn-secondary btn-success" role="button">Individual</a>
+                           class="btn btn-secondary btn-success" role="button">বেক্তিগত সার্ভিস রেজিস্ট্রেশান</a>
                     </div>
                     <div class="col-6">
                         <a href="{{ route('organization-service-registration.index') }}"
-                           class="btn btn-secondary btn-success" role="button">Organization</a>
+                           class="btn btn-secondary btn-success" role="button">প্রাতিষ্ঠানিক সার্ভিস রেজিস্ট্রেশান</a>
                     </div>
                 </div>
             </div>

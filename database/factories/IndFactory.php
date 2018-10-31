@@ -17,6 +17,5 @@ $factory->define(Ind::class, function (Faker $faker) {
         'experience_certificate' => 'seed/ind/exp-cert.png',
         'cv' => 'seed/ind/exp-cert.png',
         'pricing_info' => $faker->paragraph(rand(4, 15)),
-        'is_top' =>  rand(0, 1)
     ];
 });

@@ -28,9 +28,9 @@ class CreateIndsTable extends Migration
             $table->string('cv')->nullable();
             $table->mediumText('pricing_info')->nullable();
             $table->string('status')->nullable();
-            $table->date('expire')->nullable();
+            $table->dateTime('expire')->nullable();
+            $table->dateTime('top_expire')->nullable();
             $table->boolean('is_available')->default(1);
-            $table->boolean('is_top')->default(0);
             $table->softDeletes();
             $table->timestamps();
 

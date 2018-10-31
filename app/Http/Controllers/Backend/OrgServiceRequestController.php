@@ -161,7 +161,7 @@ class OrgServiceRequestController extends Controller
 
         $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
 
-        $serviceRequest->expire = Carbon::today()->addDays($duration)->format('Y-m-d');
+        $serviceRequest->expire = Carbon::now()->addDays($duration)->format('Y-m-d H:i:s');
         $serviceRequest->save();
 
         if ($request->has('category-request') && $request->filled('category')) {

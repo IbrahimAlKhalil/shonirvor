@@ -129,21 +129,21 @@ class Ind extends Model
 
     public function scopeOnlyTop($query)
     {
-        return $query->where('is_top', 1);
+        return $query->whereNotNull('top_expire');
     }
 
     public function scopeOnlyExpired($query)
     {
-        $query->where('expire', '<', Date('Y-m-d'));
+        $query->where('expire', '<', Date('Y-m-d H:i:s'));
     }
 
     public function scopeExceptExpired($query)
     {
-        $query->where('expire', '>=', Date('Y-m-d'))->orWhere('expire', null);
+        $query->where('expire', '>=', Date('Y-m-d H:i:s'))->orWhere('expire', null);
     }
 
     /**
-     * Add this method after select() method
+     * Must add this method after select() method
      */
     public function scopeWithFeedbacksAvg($query)
     {

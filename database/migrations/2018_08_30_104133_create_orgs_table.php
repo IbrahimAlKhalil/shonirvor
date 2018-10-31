@@ -28,8 +28,8 @@ class CreateOrgsTable extends Migration
             $table->string('address');
             $table->string('trade_license')->nullable();
             $table->mediumText('pricing_info')->nullable();
-            $table->date('expire')->nullable();
-            $table->boolean('is_top')->default(0);
+            $table->dateTime('expire')->nullable();
+            $table->dateTime('top_expire')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

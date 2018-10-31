@@ -40,9 +40,9 @@ class PaymentController extends Controller
         ])->get();
 
         $services = collect($orgServices)->merge(collect($indServices))->sortBy('expire');
-        $topServices = $services->where('is_top', true);
+        $topServices = $services->where('top_expire', '<', Carbon::now());
 
-        $renewRequested = $services->where('expire', '<', Carbon::today())->filter(function ($item) {
+        $renewRequested = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
             $ids = [5, 6];
             return !in_array($item->payments[0]->package_type_id, $ids) && $item->payments[0]->approved == 0;
         });

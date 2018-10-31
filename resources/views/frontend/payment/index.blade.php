@@ -70,7 +70,7 @@
                                     @php($start = $payment->updated_at)
                                     @php($expire = \Carbon\Carbon::parse($service->expire))
                                     @php($remaining = $expire->diffInDays($start))
-                                    @php($expired = $expire->lessThan(\Carbon\Carbon::today()))
+                                    @php($expired = $expire->lessThan(\Carbon\Carbon::now()))
                                 @endif
                                 @php($status = $pending?['আবেদনকৃত', 'badge-primary']:($expired?['মেয়াদ শেষ', 'badge-danger']:['একটিভ', 'badge-success']))
                                 <tr>
@@ -125,7 +125,7 @@
                                     @php($start = $payment->updated_at)
                                     @php($expire = \Carbon\Carbon::parse($service->expire))
                                     @php($remaining = $expire->diffInDays($start))
-                                    @php($expired = $expire->lessThan(\Carbon\Carbon::today()))
+                                    @php($expired = $expire->lessThan(\Carbon\Carbon::now()))
                                 @endif
 
                                 @php($status = $pending?['আবেদনকৃত', 'badge-primary']:($expired?['মেয়াদ শেষ', 'badge-danger']:['একটিভ', 'badge-success']))

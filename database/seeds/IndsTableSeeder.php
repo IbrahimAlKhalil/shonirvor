@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Ind;
-use App\Models\Category;
 use App\Models\User;
 use App\Models\Village;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
