@@ -35,8 +35,15 @@ class ReferrerPackageController extends Controller
                     ->where('package_values.package_property_id', 10);
             })
             ->where('package_type_id', $this->packageTypeId)
+            ->select('packages.id',
+                'packages.package_type_id',
+                'package_values.package_property_id',
+                'package_values.value as is_default')
             ->orderBy('is_default', 'desc')
             ->paginate(10);
+
+//        dd(Package::where('package_type_id', $this->packageTypeId)->get());
+//        dd($packages);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],

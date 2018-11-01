@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class IndTopServiceApplicationController extends Controller
 {
@@ -18,6 +19,9 @@ class IndTopServiceApplicationController extends Controller
 
     public function __construct()
     {
+        $this->middleware('can:ind-top-service-application.create,application', ['only' => ['store']]);
+        $this->middleware('can:ind-top-service-application.update,application', ['only' => ['edit', 'update']]);
+
         $this->packages = Package::with('properties')
             ->where('package_type_id', $this->packageTypeId)
             ->get();
@@ -53,20 +57,6 @@ class IndTopServiceApplicationController extends Controller
 
     public function store(StoreIndTopServiceApplication $request)
     {
-        $services = Ind::with('category')
-            ->where('user_id', Auth::id())
-            ->get();
-
-        $oldApplication = Income::where([
-                ['incomes.incomeable_type', 'ind'],
-                ['incomes.approved', 0]
-            ])
-            ->whereIn('incomes.incomeable_id', $services->pluck('id')->toArray())
-            ->whereIn('incomes.package_id', $this->packages->pluck('id')->toArray())
-            ->first();
-
-        if ($oldApplication) abort(403);
-
         $application = new Income;
         $application->package_id = $request->input('package');
         $application->payment_method_id = $request->input('payment-method');
@@ -81,23 +71,11 @@ class IndTopServiceApplicationController extends Controller
 
     public function edit(Income $application)
     {
+        $application->load('incomeable.category');
+
         $services = Ind::with('category')
             ->where('user_id', Auth::id())
             ->get();
-
-        $oldApplication = Income::where([
-                ['incomes.incomeable_type', 'ind'],
-                ['incomes.approved', 0]
-            ])
-            ->whereIn('incomes.incomeable_id', $services->pluck('id')->toArray())
-            ->whereIn('incomes.package_id', $this->packages->pluck('id')->toArray())
-            ->first();
-
-        if ( ! $oldApplication || $oldApplication->id != $application->id) {
-            abort(403);
-        }
-
-        $application->load('incomeable.category');
 
         $packages = $this->packages;
         $paymentMethods = $this->paymentMethods;
