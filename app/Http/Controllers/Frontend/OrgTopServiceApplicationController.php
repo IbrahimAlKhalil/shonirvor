@@ -17,6 +17,7 @@ class OrgTopServiceApplicationController extends Controller
 
     public function __construct()
     {
+        $this->middleware('provider');
         $this->middleware('can:org-top-service-application.create,application', ['only' => ['store']]);
         $this->middleware('can:org-top-service-application.update,application', ['only' => ['edit', 'update']]);
 

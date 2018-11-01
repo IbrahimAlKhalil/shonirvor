@@ -19,6 +19,7 @@ class IndTopServiceApplicationController extends Controller
 
     public function __construct()
     {
+        $this->middleware('provider');
         $this->middleware('can:ind-top-service-application.create,application', ['only' => ['store']]);
         $this->middleware('can:ind-top-service-application.update,application', ['only' => ['edit', 'update']]);
 
