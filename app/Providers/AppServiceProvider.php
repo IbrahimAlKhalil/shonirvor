@@ -14,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
 
         Relation::morphMap([
             'ind' => 'App\Models\Ind',
-            'org' => 'App\Models\Org'
+            'org' => 'App\Models\Org',
+            'ad' => 'App\Models\Ad',
         ]);
     }
 

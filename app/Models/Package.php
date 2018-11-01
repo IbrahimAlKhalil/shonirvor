@@ -23,4 +23,9 @@ class Package extends Model
     {
         return $query->where('package_type_id', 1);
     }
+
+    public function scopeOnlyAd($query)
+    {
+        $query->where('package_type_id', 6);
+    }
 }

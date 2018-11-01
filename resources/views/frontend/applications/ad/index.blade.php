@@ -1,9 +1,9 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'টপ সার্ভিসের আবেদন')
+@section('title', 'বিজ্ঞাপনের জন্য আবেদন')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/applications/top-service/ind.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/applications/ad/create.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -16,10 +16,6 @@
                 </div>
                 <table class="col-md-8 table table-bordered mt-3">
                     <tbody>
-                    <tr>
-                        <th>সার্ভিস</th>
-                        <td>{{ $oldApplication->incomeable->category->name }}</td>
-                    </tr>
                     <tr>
                         <th>প্যাকেজ</th>
                         <td>{{ $oldApplication->package->properties[0]->value }}</td>
@@ -40,36 +36,17 @@
                 </table>
                 <div class="w-100"></div>
                 <div class="col-2 text-center">
-                    <a href="{{ route('frontend.applications.ind-top-service.edit', $oldApplication->id) }}">
+                    <a href="{{ route('frontend.applications.ad.edit', $oldApplication->id) }}">
                         <button role="button" class="btn btn-info btn-block">এডিট</button>
                     </a>
                 </div>
             </div>
         @else
-            <form action="{{ route('frontend.applications.ind-top-service.store') }}"
-                  class="row p-3 justify-content-center" method="post">
+            <form action="{{ route('frontend.applications.ad.store') }}" class="row p-3 justify-content-center"
+                  method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="col-12">
                     <p class="h4">বেক্তিগত টপ সার্ভিস এপ্লিকেশনঃ</p>
-                </div>
-                <div class="col-8">
-                    <div class="form-group row">
-                        <label for="create-service-select" class="col-md-4 col-form-label text-md-right">সার্ভিস <span
-                                    class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <select name="service" id="create-service-select"
-                                    class="form-control{{ $errors->has('service') ? ' is-invalid' : '' }}">
-                                <option value="">--সার্ভিস সিলেক্ট করুন--</option>
-                                @foreach($services as $service)
-                                    <option value="{{ $service->id }}"
-                                    @if(old('service') == $service->id || ( ! old('service') && request()->get('category') == $service->category->id )){{ 'selected' }}@endif>
-                                        {{ $service->category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @include('components.invalid', ['name' => 'service'])
-                        </div>
-                    </div>
                 </div>
                 <div class="col-8 mt-3">
                     <div class="form-group row">
@@ -101,7 +78,7 @@
                                 <option value="">--পেমেন্ট মেথড সিলেক্ট করুন--</option>
                                 @foreach($paymentMethods as $paymentMethod)
                                     <option value="{{ $paymentMethod->id }}"
-                                            {{ selectOpt(old('payment-method'), $paymentMethod->id) }}>
+                                            {{ selectOpt($paymentMethod->id, old('payment-method')) }}>
                                         {{ $paymentMethod->name }}
                                     </option>
                                 @endforeach
@@ -140,8 +117,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 mt-3">
-                    <button type="submit" class="btn btn-primary btn-block w-25 mx-auto">সাবমিট</button>
+                <div class="col-8 mt-2">
+                    <div class="form-group row">
+                        <label for="image" class="col-md-4 col-form-label text-md-right">ছবি <span class="text-danger">*</span></label>
+                        <div class="col-md-8">
+                            <input type="file" id="image" name="image"
+                                   class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}"
+                                   value="{{ old('image') }}">
+                            @include('components.invalid', ['name' => 'image'])
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-8 mt-2">
+                    <div class="form-group row">
+                        <label for="url" class="col-md-4 col-form-label text-md-right">লিঙ্ক <span class="text-danger">*</span></label>
+                        <div class="col-md-8">
+                            <input type="url" id="url" name="url"
+                                   class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}"
+                                   value="{{ old('url') }}">
+                            @include('components.invalid', ['name' => 'url'])
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-8 mt-3">
+                    <div class="row">
+                        <span class="col-md-4"></span>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn btn-primary btn-block w-25 mx-auto">সাবমিট</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         @endif

@@ -11,6 +11,7 @@ module.exports = {
         'frontend/ind-service/show': './resources/assets/js/frontend/ind-service/show.js',
         'frontend/org-service/show': './resources/assets/js/frontend/org-service/show.js',
         'frontend/applications/top-service/ind': './resources/assets/js/frontend/applications/top-service/ind.js',
+        'frontend/applications/ad/create': './resources/assets/js/frontend/applications/ad/create.js',
         'frontend/common': './resources/assets/js/frontend/common.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',

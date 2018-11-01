@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserReferPackage::class);
     }
+
+    public function ads()
+    {
+        return $this->hasMany(Ad::class);
+    }
 }

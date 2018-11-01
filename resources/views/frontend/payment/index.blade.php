@@ -171,9 +171,10 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
+
+                        <a href="{{ route('frontend.applications.ad.create') }}" class="btn btn-primary">বিজ্ঞাপনের জন্য আবেদন করুন</a>
                     </div>
                 </div>
             </div>

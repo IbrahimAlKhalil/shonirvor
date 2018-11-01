@@ -7,6 +7,7 @@ import './../../../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 
 // Common frontend css for all page
 import '../../../../scss/frontend/components/_common.scss';
+import '../../../../scss/frontend/applications/ad/create.scss';
 
 
 /**************/
@@ -16,12 +17,15 @@ import '../../../../scss/frontend/components/_common.scss';
 // Bootstrap JS
 import 'bootstrap';
 
+import {ImagePicker} from "../../../modules/image-picker";
 
 document.addEventListener('DOMContentLoaded', () => {
-    var methodSelect = $("#create-method-select");
+    let methodSelect = $("#create-method-select");
 
     methodSelect.on('change', function () {
         $("[id^='create-payment-number-']").addClass('d-none');
-        $("#create-payment-number-"+methodSelect.val()).removeClass('d-none');
+        $("#create-payment-number-" + methodSelect.val()).removeClass('d-none');
     });
+
+    new ImagePicker(document.getElementsByClassName('file-picker'));
 });

@@ -10,6 +10,7 @@ class AdsTableSeeder extends Seeder
     {
         for ($i=1; $i<6; $i++) {
             $ad = new Ad();
+            $ad->user_id = 1;
             $ad->image = 'seed/biggapon/'.$i.'.jpg';
             $ad->advertizer = $faker->company;
             $ad->url = 'https://www.google.com/';

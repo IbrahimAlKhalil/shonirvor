@@ -214,7 +214,7 @@ class IndServiceRegistrationController extends Controller
 
 
         // payment
-
+        // TODO:: Validation
         if ($request->filled('transaction-id')) {
             $payment = new Income;
             $payment->package_id = $request->post('package');

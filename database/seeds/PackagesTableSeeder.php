@@ -91,7 +91,7 @@ class PackagesTableSeeder extends Seeder
         // If no referrer package created
         if ( ! DB::table('packages')->where('package_type_id', 5)->exists()) {
 
-            $packageId = DB::table('package_values')->insertGetId(['package_type_id' => 5]);
+            $packageId = DB::table('packages')->insertGetId(['package_type_id' => 5]);
 
             DB::table('package_values')->insert([
                 [
