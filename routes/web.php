@@ -35,8 +35,13 @@ Route::namespace('Frontend')->group(function () {
         Route::prefix('applications')->name('applications.')->group(function () {
 
             Route::resource('ind-top-service', 'IndTopServiceApplicationController', [
-                'only' => ['index', 'store', 'edit', 'update'],
+                'except' => ['create', 'show', 'destroy'],
                 'parameters' => ['ind-top-service' => 'application']
+            ]);
+
+            Route::resource('org-top-service', 'OrgTopServiceApplicationController', [
+                'except' => ['create', 'show', 'destroy'],
+                'parameters' => ['org-top-service' => 'application']
             ]);
 
         }, '');

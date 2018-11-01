@@ -18,10 +18,10 @@ import 'bootstrap';
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    var methodSelect = $("#create-method-select");
+    var methodSelect = $("#method-select");
 
-    methodSelect.on('change', function (e) {
-        $("[id^='create-payment-number-']").addClass('d-none');
-        $("#create-payment-number-"+methodSelect.val()).removeClass('d-none');
+    methodSelect.on('change', function () {
+        $("[id^='payment-number-']").addClass('d-none');
+        $("#payment-number-"+methodSelect.val()).removeClass('d-none');
     });
 });

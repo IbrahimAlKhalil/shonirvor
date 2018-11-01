@@ -14,6 +14,7 @@ class ProductionSeeder extends Seeder
         $this->call(WorkMethodsTableSeeder::class);
         $this->call(ServiceTypesTableSeeder::class);
         $this->call(PackageTypesTableSeeder::class);
+        $this->call(ExpenseTypesSeeder::class);
         $this->call(PackagePropertiesTableSeeder::class);
         $this->call(ContentsTableSeeder::class);
 

@@ -2,30 +2,30 @@
 
 namespace App\Policies;
 
-use App\Models\Ind;
+use App\Models\Org;
+use App\Models\Package;
 use App\Models\User;
 use App\Models\Income;
-use App\Models\Package;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
-class IndTopServiceApplicationPolicy
+class OrgTopServiceApplicationPolicy
 {
     use HandlesAuthorization;
 
-    private $packageTypeId = 3;
+    private $packageTypeId = 4;
     private $services, $packages, $oldApplication;
 
     public function __construct()
     {
-        $this->services = Ind::where('user_id', Auth::id())->get();
+        $this->services = Org::where('user_id', Auth::id())->get();
 
         $this->packages = Package::with('properties')
             ->where('package_type_id', $this->packageTypeId)
             ->get();
 
         $this->oldApplication = Income::where([
-                ['incomes.incomeable_type', 'ind'],
+                ['incomes.incomeable_type', 'org'],
                 ['incomes.approved', 0]
             ])
             ->whereIn('incomes.incomeable_id', $this->services->pluck('id')->toArray())
