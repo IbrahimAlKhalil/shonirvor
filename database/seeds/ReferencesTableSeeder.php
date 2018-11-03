@@ -7,6 +7,6 @@ class ReferencesTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(Reference::class, 20)->create();
+        factory(Reference::class, 40)->create();
     }
 }

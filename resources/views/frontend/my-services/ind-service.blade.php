@@ -238,13 +238,15 @@
                         @include('components.visitor-conuter', ['visitor' => indVisitorCount($service->id)])
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <a href="{{ route('frontend.applications.ind-top-service.index').'?category='.$service->category_id }}">
-                            <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
-                        </a>
+                @if($service->deleted_at == null)
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <a href="{{ route('frontend.applications.ind-top-service.index').'?category='.$service->category_id }}">
+                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="row mt-4">
                     <div class="col-12">
                         <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</button>

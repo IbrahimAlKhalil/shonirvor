@@ -49,7 +49,7 @@
             <form action="{{ route('frontend.applications.org-top-service.store') }}" class="row p-3 justify-content-center" method="post">
                 {{ csrf_field() }}
                 <div class="col-12">
-                    <p class="h4">বেক্তিগত টপ সার্ভিস এপ্লিকেশনঃ</p>
+                    <p class="h4">প্রাতিষ্ঠানিক টপ সার্ভিস এপ্লিকেশনঃ</p>
                 </div>
                 <div class="col-8">
                     <div class="form-group row">

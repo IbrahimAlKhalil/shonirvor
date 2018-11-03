@@ -13,17 +13,10 @@ use Sandofvega\Bdgeocode\Models\Union;
 
 class IndMyServiceController extends Controller
 {
-    public function show(Ind $service)
+    public function show()
     {
-        $service->load([
-            'district',
-            'thana',
-            'union',
-            'village',
-            'category',
-            'subCategories',
-            'workMethods'
-        ]);
+        $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
+            ->withTrashed()->find(request()->service);
 
         $navs = $this->navs();
         $workMethods = WorkMethod::all();

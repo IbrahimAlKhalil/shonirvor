@@ -219,6 +219,7 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         'parameters' => ['organization-sub-category' => 'sub_category']
     ]);
 
+    // TODO:: This routes must be marged with "Frontend my-services"
     Route::name('profile.backend.')->prefix('profile')->group(function () {
         Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
         Route::resource('individual-service', 'IndProfileController', ['only' => [

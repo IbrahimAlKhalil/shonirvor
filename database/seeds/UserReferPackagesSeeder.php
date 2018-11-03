@@ -7,10 +7,9 @@ class UserReferPackagesSeeder extends Seeder
 {
     public function run()
     {
-        $userCount = DB::table('users')->count();
         $userIds = DB::table('users')
             ->inRandomOrder()
-            ->take(round($userCount/2))
+            ->take(50)
             ->pluck('id');
 
         $referPackageIds = DB::table('packages')

@@ -17,7 +17,7 @@ class OrgSubCategoryRatesTableSeeder extends Seeder
                 array_push($data, [
                     'org_id' => $org->id,
                     'sub_category_id' => $subCategory->id,
-                    'rate' => array_random([50, 10, 60, 80, 90, 40, 300, 560, 200, 560, 990, 5000])
+                    'rate' => array_random(range(50, 5000, 10))
                 ]);
             }
         }

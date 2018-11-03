@@ -11,7 +11,9 @@ class CategoriesTableSeeder extends Seeder
     {
         factory(Category::class, 30)->create()->each(function ($category) {
             $category->subCategories()
-                ->saveMany(factory(SubCategory::class, 15)->make());
+                ->saveMany(
+                    factory(SubCategory::class, 15)->make()
+                );
         });
     }
 }

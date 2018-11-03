@@ -12,7 +12,7 @@ class AdsTableSeeder extends Seeder
             $ad = new Ad();
             $ad->image = 'seed/biggapon/'.$i.'.jpg';
             $ad->advertizer = $faker->company;
-            $ad->url = 'https://www.google.com/';
+            $ad->url = 'https://'.$faker->domainName;
             $ad->save();
         }
     }

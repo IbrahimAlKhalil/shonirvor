@@ -376,11 +376,11 @@ class FilterController extends Controller
                 ])
                 ->withFeedbacksAvg()
                 ->where([
-                    ['inds.is_pending', 0],
                     ['thanas.is_pending', 0],
                     ['unions.is_pending', 0],
                     ['categories.is_confirmed', 1]
                 ])
+                ->whereNotNull('inds.expire')
                 ->get();
         }
 
@@ -408,11 +408,11 @@ class FilterController extends Controller
                 ])
                 ->withFeedbacksAvg()
                 ->where([
-                    ['orgs.is_pending', 0],
                     ['thanas.is_pending', 0],
                     ['unions.is_pending', 0],
                     ['categories.is_confirmed', 1]
                 ])
+                ->whereNotNull('orgs.expire')
                 ->get();
         }
 
