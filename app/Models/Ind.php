@@ -134,12 +134,12 @@ class Ind extends Model
 
     public function scopeOnlyExpired($query)
     {
-        $query->where('expire', '<', Date('Y-m-d H:i:s'));
+        $query->where('expire', '<', now());
     }
 
     public function scopeExceptExpired($query)
     {
-        $query->where('expire', '>=', Date('Y-m-d H:i:s'))->orWhere('expire', null);
+        $query->where('expire', '>=', now())->orWhere('expire', null);
     }
 
     /**

@@ -31,18 +31,22 @@ class AdApplicationController extends Controller
         $ad = Ad::onlyPending()->where('user_id', Auth::id())->first();
         $packages = $this->packages;
         $paymentMethods = $this->paymentMethods;
-        $oldApplication = Income::with([
-            'paymentMethod:id,name',
-            'package.properties' => function ($query) {
-                $query->where('package_property_id', 1);
-            }])
-            ->where([
-                ['incomes.incomeable_type', 'ad'],
-                ['incomes.approved', 0]
-            ])
-            ->where('incomes.incomeable_id', $ad->id)
-            ->whereIn('incomes.package_id', $packages->pluck('id')->toArray())
-            ->first();
+        $oldApplication = null;
+
+        if ($ad) {
+            $oldApplication = Income::with([
+                'paymentMethod:id,name',
+                'package.properties' => function ($query) {
+                    $query->where('package_property_id', 1);
+                }])
+                ->where([
+                    ['incomes.incomeable_type', 'ad'],
+                    ['incomes.approved', 0]
+                ])
+                ->where('incomes.incomeable_id', $ad->id)
+                ->whereIn('incomes.package_id', $packages->pluck('id')->toArray())
+                ->first();
+        }
 
         return view('frontend.applications.ad.index', compact('packages', 'paymentMethods', 'oldApplication'));
     }

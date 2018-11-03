@@ -3,9 +3,10 @@
 @section('title', 'Payments')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
 @endsection
 
+<div class="main-container">
 @section('content')
     @include('components.success')
     <div class="container mt-5 bg-white rounded">
@@ -197,12 +198,6 @@
                                             {{ $ad->url }}
                                         </td>
                                         <td>
-                                            <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $expire?en2bnNumber($expire->format('d/m/Y')):'n/a' }}
-                                        </td>
-                                        <td>
                                             <a href="{{ route('frontend.applications.ad.edit', $ad->id) }}"
                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="fa fa-pencil"></i> এডিট
@@ -231,10 +226,11 @@
                             @php($count = 1)
                             @forelse($ads as $index => $ad)
                                 @php($pending = is_null($ad->expire))
+                                @php($payment = $ad->payments->first())
                                 @php($start = $expire = $expired = null)
 
                                 @if(!$pending)
-                                    @php($expire = \Carbon\Carbon::parse($service->expire))
+                                    @php($expire = \Carbon\Carbon::parse($ad->expire))
                                     @php($expired = $expire->lessThan(now()))
                                 @endif
 
@@ -257,7 +253,7 @@
                                     <td>
                                         @if(!$pending)
                                             <a href="javascript:"
-                                               class="btn btn-outline-success btn-sm  @if($expired && $payment->approved == 0){{ 'disabled' }}@endif">
+                                               class="btn btn-outline-success btn-sm  @if($expired && $payment && $payment->approved == 0){{ 'disabled' }}@endif">
                                                 <i class="fa fa-repeat"></i> নবীকরণ
                                             </a>
                                         @elseif(!$expired)

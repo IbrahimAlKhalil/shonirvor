@@ -254,6 +254,14 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         ]);
     }, '');
 
+    Route::name('request.')->prefix('requests')->group(function () {
+        Route::resource('ad', 'AdRequestController', [
+            'only' => ['show', 'update', 'destroy'],
+            'parameters' => ['ad-renew-request' => 'ad']
+        ]);
+    }, '');
+
+
 }, '');
 
 Route::get('payments', 'Frontend\PaymentController@index')->name('payments');

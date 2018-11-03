@@ -46,9 +46,9 @@ class PaymentController extends Controller
             return !in_array($item->payments[0]->package_type_id, $ids) && $item->payments[0]->approved == 0;
         });
 
-        $ads = Ad::where('user_id', Auth::id())->with('payments')->get();
+        $ads = Ad::where('user_id', Auth::id())->with('payments')->get()->sortByDesc('payments.updated_at');
 
-        $renewRequestedAds = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
+        $renewRequestedAds = $ads->where('expire', '<', Carbon::now())->filter(function ($item) {
             return $item->payments[0]->approved == 0;
         });
 
