@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Ad;
 use App\Models\Ind;
 use App\Models\Org;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -42,11 +41,17 @@ class PaymentController extends Controller
         $services = collect($orgServices)->merge(collect($indServices))->sortBy('expire');
         $topServices = $services->where('top_expire', '<', Carbon::now());
 
-        $renewRequested = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
+        $renewRequestedServices = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
             $ids = [5, 6];
             return !in_array($item->payments[0]->package_type_id, $ids) && $item->payments[0]->approved == 0;
         });
 
-        return view('frontend.payment.index', compact('navs', 'services', 'renewRequested', 'topServices'));
+        $ads = Ad::where('user_id', Auth::id())->with('payments')->get();
+
+        $renewRequestedAds = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
+            return $item->payments[0]->approved == 0;
+        });
+
+        return view('frontend.payment.index', compact('navs', 'services', 'renewRequestedServices', 'topServices', 'ads', 'renewRequestedAds'));
     }
 }
