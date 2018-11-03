@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
  * @param $data string
  * @return string
  */
-function oldOrData($name, $data = '')
+function oldOrData($name, $data)
 {
     $old = old($name);
     if ($old) {

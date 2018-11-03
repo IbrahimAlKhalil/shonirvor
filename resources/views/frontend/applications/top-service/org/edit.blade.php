@@ -9,7 +9,7 @@
 @section('content')
     @include('components.success')
     <div class="container my-5 bg-white rounded">
-        <form action="{{ route('frontend.applications.ind-top-service.update', $application->id) }}" class="row p-3 justify-content-center" method="post">
+        <form action="{{ route('frontend.applications.org-top-service.update', $application->id) }}" class="row p-3 justify-content-center" method="post">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
                 <div class="col-12">
@@ -24,8 +24,8 @@
                                 @foreach($services as $service)
                                     <option value="{{ $service->id }}"
                                     @if(old('service') == $service->id
-                                    || $application->incomeable->category->id == $service->category->id){{ 'selected' }}@endif>
-                                        {{ $service->category->name }}
+                                    || $application->incomeable->id == $service->id){{ 'selected' }}@endif>
+                                        {{ $service->name }}
                                     </option>
                                 @endforeach
                             </select>

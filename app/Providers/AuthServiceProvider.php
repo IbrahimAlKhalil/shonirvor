@@ -4,28 +4,20 @@ namespace App\Providers;
 
 use App\Policies\AdApplicationPolicy;
 use Illuminate\Support\Facades\Gate;
+use App\Policies\IndTopServiceApplicationPolicy;
+use App\Policies\OrgTopServiceApplicationPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-    ];
+    protected $policies = [];
 
-    /**
-     * Register any authentication / authorization services.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->registerPolicies();
         Gate::resource('ad-application', AdApplicationPolicy::class);
-        //
+
+        Gate::resource('ind-top-service-application', IndTopServiceApplicationPolicy::class);
+        Gate::resource('org-top-service-application', OrgTopServiceApplicationPolicy::class);
     }
 }
