@@ -133,6 +133,11 @@ class Org extends Model
         return $query->whereNotNull('top_expire');
     }
 
+    public function scopeExpired($query)
+    {
+        return $query->whereNotNull('top_expire');
+    }
+
     /**
      * Add this method after select() method
      */

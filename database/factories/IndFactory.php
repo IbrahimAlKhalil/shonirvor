@@ -2,12 +2,18 @@
 
 use App\Models\Ind;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\DB;
 
 $factory->define(Ind::class, function (Faker $faker) {
 
+    $categoryIds = DB::table('categories')
+        ->where('service_type_id', 1)
+        ->pluck('id')
+        ->toArray();
+
     return [
-        'user_id' => rand(1, 100),
-        'category_id' => rand(1, 30),
+        'user_id' => rand(1, 200),
+        'category_id' => array_random($categoryIds),
         'division_id' => rand(1, 8),
         'district_id' => rand(1, 64),
         'thana_id' => rand(1, 491),

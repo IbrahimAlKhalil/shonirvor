@@ -29,8 +29,8 @@ class CreateOrgsTable extends Migration
             $table->string('trade_license')->nullable();
             $table->date('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')
                 ->references('id')

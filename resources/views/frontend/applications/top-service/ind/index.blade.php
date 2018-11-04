@@ -40,13 +40,13 @@
                 </table>
                 <div class="w-100"></div>
                 <div class="col-2 text-center">
-                    <a href="{{ route('frontend.applications.ind-top-service.edit', $oldApplication->id) }}">
+                    <a href="{{ route('frontend.applications.individual-top-service.edit', $oldApplication->id) }}">
                         <button role="button" class="btn btn-info btn-block">এডিট</button>
                     </a>
                 </div>
             </div>
         @else
-            <form action="{{ route('frontend.applications.ind-top-service.store') }}" class="row p-3 justify-content-center" method="post">
+            <form action="{{ route('frontend.applications.individual-top-service.store') }}" class="row p-3 justify-content-center" method="post">
                 {{ csrf_field() }}
                 <div class="col-12">
                     <p class="h4">বেক্তিগত টপ সার্ভিস এপ্লিকেশনঃ</p>

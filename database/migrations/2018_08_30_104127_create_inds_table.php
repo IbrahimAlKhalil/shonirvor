@@ -30,8 +30,8 @@ class CreateIndsTable extends Migration
             $table->date('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
             $table->boolean('is_available')->default(1);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')
                 ->references('id')

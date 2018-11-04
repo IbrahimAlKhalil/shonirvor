@@ -241,7 +241,7 @@
                 @if($service->deleted_at == null)
                     <div class="row mt-4">
                         <div class="col-12">
-                            <a href="{{ route('frontend.applications.ind-top-service.index').'?category='.$service->category_id }}">
+                            <a href="{{ route('frontend.applications.individual-top-service.index').'?category='.$service->category_id }}">
                                 <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
                             </a>
                         </div>

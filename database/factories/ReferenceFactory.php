@@ -11,8 +11,8 @@ $factory->define(Reference::class, function () {
         ->toArray();
 
     return [
-        'user_id' => rand(1, 100),
-        'service_id' => rand(1, 100),
+        'user_id' => rand(1, 200),
+        'service_id' => rand(1, 200),
         'service_type_id' => rand(1, 2),
         'package_id' => array_random($referrerPackageIds)
     ];

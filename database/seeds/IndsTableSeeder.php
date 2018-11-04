@@ -7,6 +7,6 @@ class IndsTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(Ind::class, 100)->create();
+        factory(Ind::class, 200)->create();
     }
 }

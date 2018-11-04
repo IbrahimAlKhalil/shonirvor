@@ -94,6 +94,6 @@ class IndTopServiceApplicationController extends Controller
         $application->transactionId = $request->input('transaction-id');
         $application->save();
 
-        return redirect(route('frontend.applications.ind-top-service.index'))->with('success', 'আপনার টপ সার্ভিস আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
+        return redirect(route('frontend.applications.individual-top-service.index'))->with('success', 'আপনার টপ সার্ভিস আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
     }
 }

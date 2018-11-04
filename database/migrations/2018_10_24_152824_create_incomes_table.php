@@ -17,6 +17,7 @@ class CreateIncomesTable extends Migration
             $table->string('transactionId');
             $table->boolean('approved');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

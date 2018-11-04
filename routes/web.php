@@ -34,14 +34,14 @@ Route::namespace('Frontend')->group(function () {
 
         Route::prefix('applications')->name('applications.')->group(function () {
 
-            Route::resource('ind-top-service', 'IndTopServiceApplicationController', [
+            Route::resource('individual-top-service', 'IndTopServiceApplicationController', [
                 'except' => ['create', 'show', 'destroy'],
-                'parameters' => ['ind-top-service' => 'application']
+                'parameters' => ['individual-top-service' => 'application']
             ]);
 
-            Route::resource('org-top-service', 'OrgTopServiceApplicationController', [
+            Route::resource('organization-top-service', 'OrgTopServiceApplicationController', [
                 'except' => ['create', 'show', 'destroy'],
-                'parameters' => ['org-top-service' => 'application']
+                'parameters' => ['organization-top-service' => 'application']
             ]);
 
         }, '');
@@ -77,8 +77,15 @@ Route::namespace('Backend')->group(function () {
 
         Route::prefix('dashboard')->group(function () {
 
-            Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
+            Route::prefix('requests')->name('request.')->group(function () {
+                Route::resource('individual-top-service', 'IndTopServiceRequestController', [
+                    'only' => ['show', 'update'],
+                    'parameters' => ['individual-top-service' => 'application'],
+                    'names' => 'ind-top'
+                ]);
+            }, '');
 
+            Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
             Route::resource('users', 'UserController', [
                 'only' => ['index', 'show']
             ]);

@@ -7,6 +7,6 @@ class OrgsTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(Org::class, 100)->create();
+        factory(Org::class, 200)->create();
     }
 }
