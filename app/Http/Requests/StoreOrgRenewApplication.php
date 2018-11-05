@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class StoreAdApplication extends FormRequest
+class StoreOrgRenewApplication extends FormRequest
 {
     public function authorize()
     {
@@ -16,36 +16,31 @@ class StoreAdApplication extends FormRequest
     public function rules()
     {
 
+        $serviceIds = DB::table('orgs')
+            ->where('user_id', auth()->id())
+            ->pluck('id')->toArray();
+
         $packageIds = DB::table('packages')
-            ->where('package_type_id', 6)
+            ->where('package_type_id', 2)
             ->pluck('id')->toArray();
 
         $paymentMethodIds = DB::table('payment_methods')
             ->pluck('id')->toArray();
 
         return [
+            'service' => 'required|' . Rule::in($serviceIds),
             'package' => 'required|' . Rule::in($packageIds),
             'payment-method' => 'required|' . Rule::in($paymentMethodIds),
             'from' => 'required|numeric|digits_between:4,11',
-            'transaction-id' => 'required',
-            'url' => 'nullable|url'
+            'transaction-id' => 'required'
         ];
-    }
-
-    public function withValidator($validator)
-    {
-        $validator->sometimes('image', 'nullable|image', function () {
-            return request()->method == 'PUT';
-        });
-
-        $validator->sometimes('image', 'required|image', function () {
-            return request()->method == 'POST';
-        });
     }
 
     public function messages()
     {
         return [
+            'service.required' => 'সার্ভিস সিলেক্ট করুন',
+            'service.in' => 'ভুল সার্ভিস সিলেক্ট করেছেন',
 
             'package.required' => 'প্যাকেজ সিলেক্ট করুন',
             'package.in' => 'ভুল প্যাকেজ সিলেক্ট করেছেন',
@@ -57,11 +52,7 @@ class StoreAdApplication extends FormRequest
             'from.numeric' => 'শুধু ইংরেজি নাম্বার দিন',
             'from.digits_between' => 'কমপক্ষে শেষ ৪ ডিজিট এবং সর্বোচ্চ ১১ ডিজিট দেওয়া যাবে',
 
-            'transaction-id.required' => 'টাকা পেমেন্ট করে Transaction ID দিন',
-
-            'image.required' => 'বিজ্ঞাপনের জন্য ছবি দিতে হবে',
-
-            'url.url' => 'লিঙ্কটি সঠিক নয়'
+            'transaction-id.required' => 'টাকা পেমেন্ট করে Transaction ID দিন'
         ];
     }
 }

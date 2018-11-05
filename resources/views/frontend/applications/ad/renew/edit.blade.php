@@ -9,12 +9,18 @@
 @section('content')
     @include('components.success')
     <div class="container my-5 bg-white rounded">
-        <form action="{{ route('frontend.applications.ad.update', $application->id) }}"
+        <form action="{{ route('frontend.applications.ad-renew.update', $ad->id) }}"
               class="row p-3 justify-content-center" method="post" enctype="multipart/form-data">
             {{ method_field('put') }}
             {{ csrf_field() }}
             <div class="col-12">
-                <p class="h4">প্রক্রিয়াধীন এপ্লিকেশন এডিটঃ</p>
+                <p class="h4">
+                    @if(!$application->approved)
+                        প্রক্রিয়াধীন রিনিউ এপ্লিকেশন এডিটঃ
+                    @else
+                        বিজ্ঞাপন রিনিউ এর জন্য আবেদনঃ
+                    @endif
+                </p>
             </div>
             <div class="col-8 mt-3">
                 <div class="form-group row">

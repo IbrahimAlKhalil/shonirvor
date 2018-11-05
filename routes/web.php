@@ -39,14 +39,30 @@ Route::namespace('Frontend')->group(function () {
                 'parameters' => ['ind-top-service' => 'application']
             ]);
 
+            Route::resource('org-top-service', 'OrgTopServiceApplicationController', [
+                'except' => ['create', 'show', 'destroy'],
+                'parameters' => ['org-top-service' => 'application']
+            ]);
+
+            Route::resource('ind-service', 'IndRenewApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['ind-service' => 'application']
+            ]);
+
+            Route::resource('org-service', 'OrgRenewApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['org-service' => 'application']
+            ]);
+
+
             Route::resource('ad', 'AdApplicationController', [
                 'only' => ['index', 'store', 'edit', 'update'],
                 'parameters' => ['ad' => 'application']
             ]);
 
-            Route::resource('org-top-service', 'OrgTopServiceApplicationController', [
-                'except' => ['create', 'show', 'destroy'],
-                'parameters' => ['org-top-service' => 'application']
+            Route::resource('ad-renew', 'AdRenewApplicationController', [
+                'only' => ['show', 'edit', 'store', 'update'],
+                'parameters' => ['ad-renew' => 'ad']
             ]);
 
         }, '');
@@ -257,8 +273,14 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     Route::name('request.')->prefix('requests')->group(function () {
         Route::resource('ad', 'AdRequestController', [
             'only' => ['show', 'update', 'destroy'],
-            'parameters' => ['ad-renew-request' => 'ad']
+            'parameters' => ['ad' => 'application']
         ]);
+
+        Route::resource('service-renew', 'ServiceRenewRequestController', [
+            'only' => ['index', 'show', 'update', 'destroy'],
+            'parameters' => ['service-renew' => 'application']
+        ]);
+
     }, '');
 
 

@@ -252,12 +252,12 @@
                                     </td>
                                     <td>
                                         @if(!$pending)
-                                            <a href="javascript:"
+                                            <a href=""
                                                class="btn btn-outline-success btn-sm  @if($expired && $payment && $payment->approved == 0){{ 'disabled' }}@endif">
                                                 <i class="fa fa-repeat"></i> নবীকরণ
                                             </a>
-                                        @elseif(!$expired)
-                                            <a href=""
+                                        @elseif($pending)
+                                            <a href="{{ route('frontend.applications.ad.index') }}"
                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="fa fa-pencil"></i> এডিট
                                             </a>
@@ -283,4 +283,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

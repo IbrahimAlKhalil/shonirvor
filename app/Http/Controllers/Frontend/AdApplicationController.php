@@ -20,7 +20,7 @@ class AdApplicationController extends Controller
     public function __construct()
     {
         $this->middleware('can:ad-application.create,application', ['only' => ['store']]);
-        $this->middleware('can:ad-application.update,application', ['only' => ['edit', 'update']]);
+        $this->middleware('can:ad-application.update,application', ['only' => ['update', 'edit']]);
 
         $this->packages = Package::onlyAd()->get();
         $this->paymentMethods = PaymentMethod::all();
@@ -74,10 +74,8 @@ class AdApplicationController extends Controller
         return back()->with('success', 'বিজ্ঞাপনের জন্য আপনার আবেদনটি গ্রহণ করা হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
     }
 
-
     public function edit(Income $application)
     {
-
         $ad = $application->incomeable;
 
         $packages = $this->packages;
@@ -85,7 +83,7 @@ class AdApplicationController extends Controller
         return view('frontend.applications.ad.edit', compact('application', 'packages', 'services', 'paymentMethods', 'ad'));
     }
 
-    public function update(Request $request, Income $application)
+    public function update(StoreAdApplication $request, Income $application)
     {
         DB::beginTransaction();
         $ad = $application->incomeable;
@@ -104,6 +102,6 @@ class AdApplicationController extends Controller
 
         DB::commit();
 
-        return redirect(route('frontend.applications.ad.index'))->with('success', 'আপনার টপ সার্ভিস আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
+        return redirect(route('frontend.applications.ad.index'))->with('success', 'আপনার বিজ্ঞাপনের আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
     }
 }

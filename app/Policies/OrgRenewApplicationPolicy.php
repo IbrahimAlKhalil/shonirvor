@@ -2,34 +2,33 @@
 
 namespace App\Policies;
 
-use App\Models\Ad;
+use App\Models\Income;
+use App\Models\Org;
 use App\Models\Package;
 use App\Models\User;
-use App\Models\Income;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Auth;
 
-class AdApplicationPolicy
+class OrgRenewApplicationPolicy
 {
     use HandlesAuthorization;
 
-    private $packageTypeId = 6;
-    private $packages, $oldApplication;
+    private $packageTypeId = 2;
+    private $services, $packages, $oldApplication;
 
     public function __construct()
     {
-
-        $ads = Ad::where('user_id', Auth::id())->get();
+        $this->services = Org::where('user_id', Auth::id())->get();
 
         $this->packages = Package::with('properties')
             ->where('package_type_id', $this->packageTypeId)
             ->get();
 
         $this->oldApplication = Income::where([
-            ['incomes.incomeable_type', 'ad'],
+            ['incomes.incomeable_type', 'org'],
             ['incomes.approved', 0]
         ])
-            ->whereIn('incomes.incomeable_id', $ads->pluck('id')->toArray())
+            ->whereIn('incomes.incomeable_id', $this->services->pluck('id')->toArray())
             ->whereIn('incomes.package_id', $this->packages->pluck('id')->toArray())
             ->first();
     }

@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'বিজ্ঞাপন এর আবেদন')
+@section('title', 'সার্ভিস রিনিউ আবেদন')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/common.bundle.js') }}"></script>
@@ -43,19 +43,9 @@
                                 <th scope="row">Transaction ID:</th>
                                 <td>{{ $application->transactionId }}</td>
                             </tr>
-
-                            @if($ad->url)
-                                <tr>
-                                    <th scope="row">লিঙ্কঃ</th>
-                                    <td>{{ $ad->url }}</td>
-                                </tr>
-                            @endif
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 mb-3 p-0">
-                <img src="{{ asset('storage/' . $ad->image) }}" class="img-fluid rounded">
             </div>
 
             <div class="col-md-12">
@@ -69,12 +59,12 @@
         </div>
     </div>
 
-    <form action="{{ route('request.ad.update', $application->id) }}" id="approve-form" method="post">
+    <form action="{{ route('request.service-renew.update', $application->id) }}" id="approve-form" method="post">
         {{ method_field('put') }}
         {{ csrf_field() }}
     </form>
 
-    <form action="{{ route('request.ad.destroy', $application->id) }}" id="reject-form" method="post">
+    <form action="{{ route('request.service-renew.destroy', $application->id) }}" id="reject-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>
