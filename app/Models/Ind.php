@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use \Illuminate\Database\Query\Builder as Builder;
 use Illuminate\Support\Facades\DB;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use \Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Division;
@@ -18,13 +18,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder exceptExpired()
  * @method static Builder onlyExpired()
  *
- * */
-
+ */
 class Ind extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['expire', 'top_expire', 'deleted_at'];
 
 
     /*********************/

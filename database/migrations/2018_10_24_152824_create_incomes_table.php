@@ -17,6 +17,7 @@ class CreateIncomesTable extends Migration
             $table->string('transactionId');
             $table->boolean('approved');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onUpdate('cascade');

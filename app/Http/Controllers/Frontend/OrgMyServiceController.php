@@ -9,16 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class OrgMyServiceController extends Controller
 {
-    public function show(Org $service)
+    public function show()
     {
-        $service->load([
-            'district',
-            'thana',
-            'union',
-            'village',
-            'category',
-            'subCategories'
-        ]);
+        $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories')
+            ->withTrashed()->find(request()->service);
 
         $navs = $this->navs();
 

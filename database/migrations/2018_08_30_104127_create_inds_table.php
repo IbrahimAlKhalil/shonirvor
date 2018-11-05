@@ -26,13 +26,12 @@ class CreateIndsTable extends Migration
             $table->string('address')->nullable();
             $table->string('experience_certificate')->nullable();
             $table->string('cv')->nullable();
-            $table->mediumText('pricing_info')->nullable();
             $table->string('status')->nullable();
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
             $table->boolean('is_available')->default(1);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')
                 ->references('id')

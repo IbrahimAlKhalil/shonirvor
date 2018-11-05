@@ -376,11 +376,12 @@ class FilterController extends Controller
                 ])
                 ->withFeedbacksAvg()
                 ->where([
-                    ['inds.is_pending', 0],
                     ['thanas.is_pending', 0],
                     ['unions.is_pending', 0],
                     ['categories.is_confirmed', 1]
                 ])
+                ->whereNotNull('inds.expire')
+                ->whereDate('expire', '>', now())
                 ->get();
         }
 
@@ -408,11 +409,12 @@ class FilterController extends Controller
                 ])
                 ->withFeedbacksAvg()
                 ->where([
-                    ['orgs.is_pending', 0],
                     ['thanas.is_pending', 0],
                     ['unions.is_pending', 0],
                     ['categories.is_confirmed', 1]
                 ])
+                ->whereNotNull('orgs.expire')
+                ->whereDate('expire', '>', now())
                 ->get();
         }
 
@@ -427,7 +429,7 @@ class FilterController extends Controller
 
                 $services = indJoinNfetch($indProviders);
 
-            } elseif ($orgProviders) {
+            } else {
 
                 $services = orgJoinNfetch($orgProviders);
 

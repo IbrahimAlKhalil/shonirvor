@@ -22,9 +22,6 @@ class CreateBdgeocodeTables extends Migration
             $table->unsignedInteger('division_id');
             $table->string('name')->unique()->nullable();
             $table->string('bn_name')->unique();
-            $table->double('lat')->nullable();
-            $table->double('lon')->nullable();
-            $table->string('website')->nullable();
 
             $table->foreign('division_id')->references('id')->on('divisions')->onUpdate('cascade');
         });
@@ -63,10 +60,10 @@ class CreateBdgeocodeTables extends Migration
 
     public function down()
     {
+        Schema::dropIfExists('villages');
         Schema::dropIfExists('unions');
         Schema::dropIfExists('thanas');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('divisions');
-        Schema::dropIfExists('villages');
     }
 }

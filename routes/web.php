@@ -34,9 +34,14 @@ Route::namespace('Frontend')->group(function () {
 
         Route::prefix('applications')->name('applications.')->group(function () {
 
-            Route::resource('ind-top-service', 'IndTopServiceApplicationController', [
+            Route::resource('individual-top-service', 'IndTopServiceApplicationController', [
                 'except' => ['create', 'show', 'destroy'],
-                'parameters' => ['ind-top-service' => 'application']
+                'parameters' => ['individual-top-service' => 'application']
+            ]);
+
+            Route::resource('organization-top-service', 'OrgTopServiceApplicationController', [
+                'except' => ['create', 'show', 'destroy'],
+                'parameters' => ['organization-top-service' => 'application']
             ]);
 
             Route::resource('org-top-service', 'OrgTopServiceApplicationController', [
@@ -98,8 +103,23 @@ Route::namespace('Backend')->group(function () {
 
         Route::prefix('dashboard')->group(function () {
 
-            Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
+            Route::prefix('requests')->name('request.')->group(function () {
 
+                Route::resource('individual-top-service', 'IndTopServiceRequestController', [
+                    'only' => ['show', 'update', 'destroy'],
+                    'parameters' => ['individual-top-service' => 'application'],
+                    'names' => 'ind-top'
+                ]);
+
+                Route::resource('organization-top-service', 'OrgTopServiceRequestController', [
+                    'only' => ['show', 'update', 'destroy'],
+                    'parameters' => ['organization-top-service' => 'application'],
+                    'names' => 'org-top'
+                ]);
+
+            }, '');
+
+            Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
             Route::resource('users', 'UserController', [
                 'only' => ['index', 'show']
             ]);
@@ -240,6 +260,7 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         'parameters' => ['organization-sub-category' => 'sub_category']
     ]);
 
+    // TODO:: This routes must be marged with "Frontend my-services"
     Route::name('profile.backend.')->prefix('profile')->group(function () {
         Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
         Route::resource('individual-service', 'IndProfileController', ['only' => [

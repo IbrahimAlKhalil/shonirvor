@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\Package;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,16 @@ class ProductionSeeder extends Seeder
         $this->call(ExpenseTypesSeeder::class);
         $this->call(PackagePropertiesTableSeeder::class);
         $this->call(ContentsTableSeeder::class);
+        $this->call(PaymentMethodsTableSeeder::class);
+
+        /**** Create Admin ****/
+        $user = new User;
+        $user->name = 'Arif Uzzaman';
+        $user->mobile = '0';
+        $user->photo = 'default/user-photos/person.jpg';
+        $user->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC'; // 123456
+        $user->save();
+        $user->attachRole(1);
 
         /**** Create free registration packages ****/
         $indPackage = new Package;

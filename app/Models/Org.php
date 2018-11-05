@@ -2,28 +2,27 @@
 
 namespace App\Models;
 
-use \Illuminate\Database\Query\Builder as Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use Illuminate\Database\Eloquent\Model;
+use \Illuminate\Database\Query\Builder;
+use Sandofvega\Bdgeocode\Models\District;
+use Sandofvega\Bdgeocode\Models\Division;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Ind
  *
  * @method static Builder exceptExpired()
- *@method static Builder onlyExpired()
+ * @method static Builder onlyExpired()
  *
- * */
-
+ */
 class Org extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['expire', 'top_expire', 'deleted_at'];
 
 
     /*********************/
@@ -143,12 +142,12 @@ class Org extends Model
     }
 
     public function scopeOnlyExpired($query) {
-        $query->where('expire', '<', Date('Y-m-d H:i:s'));
+        $query->where('expire', '<', now());
     }
 
     public function scopeExceptExpired($query)
     {
-        $query->where('expire', '>=', Date('Y-m-d H:i:s'))->orWhere('expire', null);
+        $query->where('expire', '>=', now())->orWhere('expire', null);
     }
 
     /**

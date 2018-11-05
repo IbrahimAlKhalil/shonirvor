@@ -7,6 +7,6 @@ class VillagesTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(Village::class, 50)->create();
+        factory(Village::class, 1000)->create();
     }
 }

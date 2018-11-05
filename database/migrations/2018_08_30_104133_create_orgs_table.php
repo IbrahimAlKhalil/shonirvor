@@ -27,11 +27,10 @@ class CreateOrgsTable extends Migration
             $table->string('facebook')->nullable();
             $table->string('address');
             $table->string('trade_license')->nullable();
-            $table->mediumText('pricing_info')->nullable();
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')
                 ->references('id')
