@@ -44,6 +44,11 @@ Route::namespace('Frontend')->group(function () {
                 'parameters' => ['organization-top-service' => 'application']
             ]);
 
+            Route::resource('ad', 'AdApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['ad' => 'application']
+            ]);
+
         }, '');
 
         Route::prefix('my-services')->name('my-service.')->group(function () {
@@ -79,7 +84,7 @@ Route::namespace('Backend')->group(function () {
 
             Route::prefix('requests')->name('request.')->group(function () {
                 Route::resource('individual-top-service', 'IndTopServiceRequestController', [
-                    'only' => ['show', 'update'],
+                    'only' => ['show', 'update', 'destroy'],
                     'parameters' => ['individual-top-service' => 'application'],
                     'names' => 'ind-top'
                 ]);
@@ -256,6 +261,14 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
             'only' => ['index', 'update', 'destroy']
         ]);
     }, '');
+
+    Route::name('request.')->prefix('requests')->group(function () {
+        Route::resource('ad', 'AdRequestController', [
+            'only' => ['show', 'update', 'destroy'],
+            'parameters' => ['ad-renew-request' => 'ad']
+        ]);
+    }, '');
+
 
 }, '');
 

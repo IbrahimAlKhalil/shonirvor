@@ -49,7 +49,7 @@ class IndProfileController extends Controller
         $navs = $this->navs();
         $countFeedbacks = $provider->feedbacks()->count();
 
-        $view = $provider->trashed() ? 'backend.ind-service-profile.show-disabled' : ($provider->is_pending == 1 ? 'backend.ind-service-profile.show-pending' : 'backend.ind-service-profile.show');
+        $view = $provider->trashed() ? 'backend.ind-service-profile.show-disabled' : (is_null($provider->expire) ? 'backend.ind-service-profile.show-pending' : 'backend.ind-service-profile.show');
 
         return view($view, compact('provider', 'navs', 'countFeedbacks'));
     }

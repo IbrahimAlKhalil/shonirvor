@@ -464,9 +464,19 @@
                         </div>
 
                         <div class="form-group row mx-5">
+                            <label for="from" class="col-3 col-form-label">যে নাম্বার থেকে পাঠানো হয়েছে</label>
+                            <div class="col-9">
+                                <input type="text" name="from" id="from" class="form-control"
+                                       placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
+                                       value="{{ oldOrData('from', $org->payments->first()->from) }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
-                                <input type="text" name="transaction-id" id="transaction-id" class="form-control" value="{{ $org->payments->first()->transactionId }}">
+                                <input type="text" name="transaction-id" id="transaction-id" class="form-control"
+                                       value="{{ $org->payments->first()->transactionId }}">
                             </div>
                         </div>
 

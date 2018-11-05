@@ -5,16 +5,25 @@ namespace App\Models;
 use Illuminate\Support\Facades\DB;
 use Sandofvega\Bdgeocode\Models\Thana;
 use Sandofvega\Bdgeocode\Models\Union;
+use \Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Sandofvega\Bdgeocode\Models\District;
 use Sandofvega\Bdgeocode\Models\Division;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+/**
+ * App\Models\Ind
+ *
+ * @method static Builder exceptExpired()
+ * @method static Builder onlyExpired()
+ *
+ */
 class Ind extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['expire', 'top_expire', 'deleted_at'];
 
 
     /*********************/
@@ -78,7 +87,7 @@ class Ind extends Model
 
     public function payments()
     {
-        return $this->morphMany(Payment::class, 'paymentable');
+        return $this->morphMany(Income::class, 'incomeable');
     }
 
     public function subCategories($status = null)
@@ -120,6 +129,16 @@ class Ind extends Model
     public function scopeOnlyTop($query)
     {
         return $query->whereNotNull('top_expire');
+    }
+
+    public function scopeOnlyExpired($query)
+    {
+        $query->where('expire', '<', now());
+    }
+
+    public function scopeExceptExpired($query)
+    {
+        $query->where('expire', '>=', now())->orWhere('expire', null);
     }
 
     /**

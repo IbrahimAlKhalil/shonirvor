@@ -10,8 +10,9 @@ class AdsTableSeeder extends Seeder
     {
         for ($i=1; $i<6; $i++) {
             $ad = new Ad();
+            $ad->user_id = rand(1, 200);
             $ad->image = 'seed/biggapon/'.$i.'.jpg';
-            $ad->advertizer = $faker->company;
+            $ad->expire = rand(0, 1) ? $faker->dateTimeBetween('-3 years', '3 years') : null;
             $ad->url = 'https://'.$faker->domainName;
             $ad->save();
         }

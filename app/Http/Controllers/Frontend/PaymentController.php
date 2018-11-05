@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Ad;
 use App\Models\Ind;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Org;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -23,14 +24,34 @@ class PaymentController extends Controller
 
         $indServices = Ind::where('user_id', Auth::id())->with([
             'payments' => function ($query) {
-                $query->where('package_id', 1)->orderBy('created_at', 'DSC')->with([
-                    'package' => function ($query) {
-                        $query->with('properties');
-                    }
-                ]);
+                $query->join('packages', function ($join) {
+                    $join->on('packages.id', 'incomes.package_id')->whereIn('packages.package_type_id', [1, 3]);
+                });
             }
         ])->get();
 
-        return view('frontend.payment.index', compact('navs', 'indServices'));
+        $orgServices = Org::where('user_id', Auth::id())->with([
+            'payments' => function ($query) {
+                $query->join('packages', function ($join) {
+                    $join->on('packages.id', 'incomes.package_id')->whereIn('packages.package_type_id', [2, 4]);
+                });
+            }
+        ])->get();
+
+        $services = collect($orgServices)->merge(collect($indServices))->sortBy('expire');
+        $topServices = $services->where('top_expire', '<', Carbon::now());
+
+        $renewRequestedServices = $services->where('expire', '<', Carbon::now())->filter(function ($item) {
+            $ids = [5, 6];
+            return !in_array($item->payments[0]->package_type_id, $ids) && $item->payments[0]->approved == 0;
+        });
+
+        $ads = Ad::where('user_id', Auth::id())->with('payments')->get()->sortByDesc('payments.updated_at');
+
+        $renewRequestedAds = $ads->where('expire', '<', Carbon::now())->filter(function ($item) {
+            return $item->payments[0]->approved == 0;
+        });
+
+        return view('frontend.payment.index', compact('navs', 'services', 'renewRequestedServices', 'topServices', 'ads', 'renewRequestedAds'));
     }
 }

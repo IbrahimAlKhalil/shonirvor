@@ -15,6 +15,8 @@ class CreateExpensesTable extends Migration
             $table->string('from');
             $table->string('transactionId');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
         });
     }
 

@@ -11,6 +11,7 @@ module.exports = {
         'frontend/ind-service/show': './resources/assets/js/frontend/ind-service/show.js',
         'frontend/org-service/show': './resources/assets/js/frontend/org-service/show.js',
         'frontend/applications/top-service/ind': './resources/assets/js/frontend/applications/top-service/ind.js',
+        'frontend/applications/ad/create': './resources/assets/js/frontend/applications/ad/create.js',
         'frontend/common': './resources/assets/js/frontend/common.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
@@ -19,6 +20,7 @@ module.exports = {
         'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
         'backend/area/modal': './resources/assets/js/backend/area/modal.js',
         'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',
+        'backend/common': './resources/assets/js/backend/common.js',
 
         'errors/404': './resources/assets/js/errors/404.js'
     },

@@ -13,7 +13,6 @@ class Package extends Model
 
     public function properties()
     {
-
         return $this->hasMany(PackageValue::class)
             ->join('package_properties', 'package_values.package_property_id', 'package_properties.id')
             ->select('package_values.id', 'package_values.package_id', 'package_values.value', 'package_properties.name');
@@ -22,5 +21,10 @@ class Package extends Model
     public function scopeOnlyInd($query)
     {
         return $query->where('package_type_id', 1);
+    }
+
+    public function scopeOnlyAd($query)
+    {
+        $query->where('package_type_id', 6);
     }
 }

@@ -91,8 +91,9 @@ class OrgServiceRequestController extends Controller
 
         // payments
 
-        DB::table('payments')->where('id', $request->post('payment'))->update([
-            'package_id' => $request->post('package')
+        DB::table('incomes')->where('id', $request->post('payment'))->update([
+            'package_id' => $request->post('package'),
+            'approved' => 1
         ]);
 
         // Update category
@@ -124,9 +125,6 @@ class OrgServiceRequestController extends Controller
                     return $item->id == $subCategoryRequest['id'];
                 });
 
-                $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
-
-                $serviceRequest->package_expiration = Carbon::today()->addDays($duration)->format('Y-m-d');
                 $subCategory->category_id = $category->id;
                 $subCategory->is_confirmed = 1;
                 $subCategory->name = $subCategoryRequest['name'];
@@ -161,7 +159,9 @@ class OrgServiceRequestController extends Controller
             $serviceRequest->village_id = $village->id;
         }
 
-        $serviceRequest->is_pending = 0;
+        $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
+
+        $serviceRequest->expire = Carbon::now()->addDays($duration)->format('Y-m-d H:i:s');
         $serviceRequest->save();
 
         if ($request->has('category-request') && $request->filled('category')) {

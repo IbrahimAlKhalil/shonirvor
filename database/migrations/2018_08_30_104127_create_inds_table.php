@@ -27,7 +27,7 @@ class CreateIndsTable extends Migration
             $table->string('experience_certificate')->nullable();
             $table->string('cv')->nullable();
             $table->string('status')->nullable();
-            $table->date('expire')->nullable();
+            $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
             $table->boolean('is_available')->default(1);
             $table->timestamps();

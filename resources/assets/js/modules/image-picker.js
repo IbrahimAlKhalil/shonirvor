@@ -1,3 +1,5 @@
+import '../../scss/frontend/components/_image-picker.scss';
+
 export class ImagePicker {
     constructor(inputElements) {
         this.pickers = [];
@@ -53,13 +55,12 @@ class Picker {
             control.preview();
             control.hideButton();
             let cross = document.createElement('span');
-            cross.classList.add('cross');
+            cross.classList.add('cross', 'fa-times', 'fa');
             cross.addEventListener('click', () => {
-                control.element.remove();
+                this.removeControl(control);
                 if (!this.controlOptions.input.multiple) {
                     this.addControl();
                 }
-                control = null;
             });
             control.imageDiv.appendChild(cross);
 
@@ -69,7 +70,10 @@ class Picker {
         });
     }
 
-
+    removeControl(control) {
+        control.element.parentElement.removeChild(control.element);
+        control = null;
+    }
 }
 
 class Control {
@@ -88,11 +92,24 @@ class Control {
         addClasses(this.element, options.classList);
         this.button.appendChild(this.input);
         this.element.appendChild(this.button);
+
+        if (this.input.hasAttribute('data-image')) {
+            this.preview();
+            this.hideButton();
+            let cross = document.createElement('span');
+            cross.classList.add('cross', 'fa', 'fa-times');
+            cross.addEventListener('click', () => {
+                this.imageDiv.parentElement.removeChild(this.imageDiv);
+                this.button.style.display = 'flex';
+                cross = null;
+            });
+            this.imageDiv.appendChild(cross);
+        }
     }
 
     preview() {
         this.imageDiv = document.createElement('div');
-        let url = URL.createObjectURL(this.input.files[0]);
+        let url = this.input.files[0] ? URL.createObjectURL(this.input.files[0]) : this.input.getAttribute('data-image');
         this.imageDiv.style.backgroundImage = `url(${url})`;
         addClasses(this.imageDiv, this.options.image.classList);
         this.element.insertBefore(this.imageDiv, this.button);

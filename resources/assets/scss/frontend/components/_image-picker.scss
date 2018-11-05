@@ -42,4 +42,21 @@
     background-size: cover;
     position: relative;
   }
+
+  .cross {
+    width: 20px;
+    height: 20px;
+    background: #ff8383;
+    color: #fff;
+    text-align: center;
+    position: absolute;
+    top: -8px;
+    border-radius: 50%;
+    font-size: 1em !important;
+    right: -8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

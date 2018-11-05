@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Income;
 use App\Models\Ind;
 use App\Models\Category;
 use App\Models\Package;
-use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Reference;
 use App\Models\User;
@@ -214,11 +214,12 @@ class IndServiceRegistrationController extends Controller
 
 
         // payment
-
+        // TODO:: Validation
         if ($request->filled('transaction-id')) {
-            $payment = new Payment;
+            $payment = new Income;
             $payment->package_id = $request->post('package');
             $payment->payment_method_id = $request->post('payment-method');
+            $payment->from = $request->post('from');
             $payment->transactionId = $request->post('transaction-id');
             $ind->payments()->save($payment);
         }
@@ -462,9 +463,10 @@ class IndServiceRegistrationController extends Controller
         // payment
         $ind->payments()->delete();
         if ($request->filled('transaction-id')) {
-            $payment = new Payment;
+            $payment = new Income;
             $payment->package_id = $request->post('package');
             $payment->payment_method_id = $request->post('payment-method');
+            $payment->from = $request->post('from');
             $payment->transactionId = $request->post('transaction-id');
             $ind->payments()->save($payment);
         }
@@ -553,16 +555,9 @@ class IndServiceRegistrationController extends Controller
         $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user', 'payments'])->find($id);
 
         // TODO:: Move this validation to a requests class
-        if ($ind->user_id != Auth::id() || !$ind->is_pending) {
+
+        if ($ind->user_id != Auth::id() || !is_null($ind->expire)) {
             return redirect(route('individual-service-registration.index'));
-        }
-
-        $allInd = $ind->user->inds();
-        $pendinInds = $ind->user->inds();
-
-        $canEditNid = false;
-        if (!$allInd->count() || $pendinInds->onlyPending()->count() == $allInd->count()) {
-            $canEditNid = true;
         }
 
         $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
