@@ -83,11 +83,19 @@ Route::namespace('Backend')->group(function () {
         Route::prefix('dashboard')->group(function () {
 
             Route::prefix('requests')->name('request.')->group(function () {
+
                 Route::resource('individual-top-service', 'IndTopServiceRequestController', [
                     'only' => ['show', 'update', 'destroy'],
                     'parameters' => ['individual-top-service' => 'application'],
                     'names' => 'ind-top'
                 ]);
+
+                Route::resource('organization-top-service', 'OrgTopServiceRequestController', [
+                    'only' => ['show', 'update', 'destroy'],
+                    'parameters' => ['organization-top-service' => 'application'],
+                    'names' => 'org-top'
+                ]);
+
             }, '');
 
             Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
