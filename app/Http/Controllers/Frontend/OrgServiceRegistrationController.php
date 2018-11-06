@@ -146,7 +146,6 @@ class OrgServiceRegistrationController extends Controller
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
         $org->email = $request->post('email');
-        $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
@@ -371,7 +370,6 @@ class OrgServiceRegistrationController extends Controller
         $org->description = $request->post('description');
         $org->mobile = $request->post('mobile');
         $org->email = $request->post('email');
-        $org->pricing_info = $request->post('pricing-info');
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');

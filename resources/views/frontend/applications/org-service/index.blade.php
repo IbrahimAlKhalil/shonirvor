@@ -54,13 +54,15 @@
                 </div>
                 <div class="col-8">
                     <div class="form-group row">
-                        <label for="service-select" class="col-md-4 col-form-label text-md-right">সার্ভিস <span class="text-danger">*</span></label>
+                        <label for="service-select" class="col-md-4 col-form-label text-md-right">সার্ভিস <span
+                                    class="text-danger">*</span></label>
                         <div class="col-md-8">
-                            <select name="service" id="service-select" class="form-control{{ $errors->has('service') ? ' is-invalid' : '' }}">
+                            <select name="service" id="service-select"
+                                    class="form-control{{ $errors->has('service') ? ' is-invalid' : '' }}">
                                 <option value="">--সার্ভিস সিলেক্ট করুন--</option>
                                 @foreach($services as $service)
                                     <option value="{{ $service->id }}"
-                                    @if(old('service') == $service->id || ( ! old('service') && request()->get('category') == $service->category->id )){{ 'selected' }}@endif>
+                                    @if(old('service') == $service->id || request()->get('service') == $service->id ){{ 'selected' }}@endif>
                                         {{ $service->category->name }}
                                     </option>
                                 @endforeach
@@ -71,9 +73,11 @@
                 </div>
                 <div class="col-8 mt-3">
                     <div class="form-group row">
-                        <label for="package-select" class="col-md-4 col-form-label text-md-right">প্যাকেজ <span class="text-danger">*</span></label>
+                        <label for="package-select" class="col-md-4 col-form-label text-md-right">প্যাকেজ <span
+                                    class="text-danger">*</span></label>
                         <div class="col-md-8">
-                            <select name="package" id="package-select" class="form-control{{ $errors->has('package') ? ' is-invalid' : '' }}">
+                            <select name="package" id="package-select"
+                                    class="form-control{{ $errors->has('package') ? ' is-invalid' : '' }}">
                                 <option value="">--প্যাকেজ সিলেক্ট করুন--</option>
                                 @foreach($packages as $package)
                                     @php($properties = $package->properties->groupBy('name'))
@@ -89,9 +93,11 @@
                 </div>
                 <div class="col-8 mt-3">
                     <div class="form-group row">
-                        <label for="method-select" class="col-md-4 col-form-label text-md-right">পেমেন্ট মেথড <span class="text-danger">*</span></label>
+                        <label for="method-select" class="col-md-4 col-form-label text-md-right">পেমেন্ট মেথড <span
+                                    class="text-danger">*</span></label>
                         <div class="col-md-8">
-                            <select name="payment-method" id="method-select" class="form-control{{ $errors->has('payment-method') ? ' is-invalid' : '' }}">
+                            <select name="payment-method" id="method-select"
+                                    class="form-control{{ $errors->has('payment-method') ? ' is-invalid' : '' }}">
                                 <option value="">--পেমেন্ট মেথড সিলেক্ট করুন--</option>
                                 @foreach($paymentMethods as $paymentMethod)
                                     <option value="{{ $paymentMethod->id }}"
@@ -102,14 +108,17 @@
                             </select>
                             @include('components.invalid', ['name' => 'payment-method'])
                             @foreach($paymentMethods as $paymentMethod)
-                                <div class="text-primary @if(old('payment-method') != $paymentMethod->id){{ 'd-none' }}@endif" id="payment-number-{{ $paymentMethod->id }}">{{ en2bnNumber($paymentMethod->accountId) }} <i class="text-muted">({{ $paymentMethod->account_type }})</i></div>
+                                <div class="text-primary @if(old('payment-method') != $paymentMethod->id){{ 'd-none' }}@endif"
+                                     id="payment-number-{{ $paymentMethod->id }}">{{ en2bnNumber($paymentMethod->accountId) }}
+                                    <i class="text-muted">({{ $paymentMethod->account_type }})</i></div>
                             @endforeach
                         </div>
                     </div>
                 </div>
                 <div class="col-8 mt-2">
                     <div class="form-group row">
-                        <label for="from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে টাকা পাঠানো হয়েছে <span class="text-danger">*</span></label>
+                        <label for="from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে টাকা
+                            পাঠানো হয়েছে <span class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="text" name="from" id="from-input"
                                    class="form-control{{ $errors->has('from') ? ' is-invalid' : '' }}"
@@ -121,7 +130,8 @@
                 </div>
                 <div class="col-8 mt-2">
                     <div class="form-group row">
-                        <label for="transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction ID <span class="text-danger">*</span></label>
+                        <label for="transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction ID
+                            <span class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="text" id="transaction-id-input" name="transaction-id"
                                    class="form-control{{ $errors->has('transaction-id') ? ' is-invalid' : '' }}"

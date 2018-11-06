@@ -27,10 +27,12 @@ class OrgRenewApplicationPolicy
         $this->oldApplication = Income::where([
             ['incomes.incomeable_type', 'org'],
             ['incomes.approved', 0]
-        ])
-            ->whereIn('incomes.incomeable_id', $this->services->pluck('id')->toArray())
-            ->whereIn('incomes.package_id', $this->packages->pluck('id')->toArray())
-            ->first();
+        ])->whereIn('incomes.incomeable_id', $this->services->pluck('id')->toArray())->first();
+    }
+
+    public function view()
+    {
+        return !$this->oldApplication;
     }
 
     public function create()

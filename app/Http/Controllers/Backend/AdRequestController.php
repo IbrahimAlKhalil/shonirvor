@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Ad;
 use App\Models\Income;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,9 +43,15 @@ class AdRequestController extends Controller
         DB::beginTransaction();
 
         $ad = $application->incomeable;
+        $oldExpire = $ad->expire;
         $duration = $application->package->properties->groupBy('name')['duration'][0]->value;
 
-        $ad->expire = now()->addDays($duration)->format('Y-m-d H:i:s');
+        if ($oldExpire) {
+            $ad->expire = $oldExpire->addDays($duration);
+        } else {
+            $ad->expire = now()->addDays($duration);
+        }
+
         $ad->save();
 
         $application->approved = 1;

@@ -33,6 +33,11 @@ class IndRenewApplicationPolicy
             ->first();
     }
 
+    public function view()
+    {
+        return true;
+    }
+
     public function create()
     {
         return !$this->oldApplication;

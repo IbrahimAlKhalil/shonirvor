@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Income;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +31,6 @@ class ServiceRenewRequestController extends Controller
 
     public function update(Income $application)
     {
-        // TODO: Check whether ad model and the payment model is related or not
 
         DB::beginTransaction();
 
@@ -44,7 +42,7 @@ class ServiceRenewRequestController extends Controller
 
         $duration = $application->package->properties->groupBy('name')['duration'][0]->value;
 
-        $service->expire = now()->addDays($duration)->format('Y-m-d H:i:s');
+        $service->expire = $service->expire->addDays($duration);
         $service->save();
 
         $application->approved = 1;

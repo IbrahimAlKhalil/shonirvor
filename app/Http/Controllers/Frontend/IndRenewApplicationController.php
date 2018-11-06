@@ -20,6 +20,7 @@ class IndRenewApplicationController extends Controller
     {
         $this->middleware('provider');
         $this->middleware('can:ind-renew-application.create,application', ['only' => 'store']);
+        $this->middleware('can:ind-renew-application.view,application', ['only' => 'index']);
         $this->middleware('can:ind-renew-application.update,application', ['only' => ['edit', 'update']]);
 
         $this->packages = Package::with('properties')
@@ -102,6 +103,6 @@ class IndRenewApplicationController extends Controller
 
         DB::commit();
 
-        return redirect(route('frontend.applications.ind-service.index'))->with('success', 'আপনার সার্ভিস রিনিউ আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
+        return redirect(route('frontend.applications.individual-service.index'))->with('success', 'আপনার সার্ভিস রিনিউ আবেদনটি এডিট হয়েছে। অতি শিগ্রই এডমিন আপনার আবেদনটি রিভিউ করে এপ্রুভ করবে।');
     }
 }

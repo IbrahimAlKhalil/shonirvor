@@ -9,7 +9,7 @@
 @section('content')
     @include('components.success')
     <div class="container my-5 bg-white rounded">
-        <form action="{{ route('frontend.applications.ind-service.update', $application->id) }}" class="row p-3 justify-content-center" method="post">
+        <form action="{{ route('frontend.applications.individual-service.update', $application->id) }}" class="row p-3 justify-content-center" method="post">
             {{ method_field('put') }}
             {{ csrf_field() }}
             <div class="col-12">

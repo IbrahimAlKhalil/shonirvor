@@ -15,11 +15,7 @@
             {{ csrf_field() }}
             <div class="col-12">
                 <p class="h4">
-                    @if(!$application->approved)
-                        প্রক্রিয়াধীন রিনিউ এপ্লিকেশন এডিটঃ
-                    @else
-                        বিজ্ঞাপন রিনিউ এর জন্য আবেদনঃ
-                    @endif
+                    প্রক্রিয়াধীন রিনিউ এপ্লিকেশন এডিটঃ
                 </p>
             </div>
             <div class="col-8 mt-3">
@@ -102,7 +98,7 @@
                     <div class="col-md-8">
                         <input type="file" id="image" name="image"
                                class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                               data-image="{{ asset('storage/' . $ad->image) }}">
+                               data-image="{{ asset('storage/' . $ad->renewAsset->image) }}">
                         @include('components.invalid', ['name' => 'image'])
                     </div>
                 </div>
@@ -115,7 +111,7 @@
                     <div class="col-md-8">
                         <input type="url" id="url" name="url"
                                class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}"
-                               value="{{ oldOrData('url', $ad->url) }}">
+                               value="{{ oldOrData('url', $ad->renewAsset->url) }}">
                         @include('components.invalid', ['name' => 'url'])
                     </div>
                 </div>

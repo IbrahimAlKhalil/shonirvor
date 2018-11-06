@@ -49,27 +49,6 @@ Route::namespace('Frontend')->group(function () {
                 'parameters' => ['org-top-service' => 'application']
             ]);
 
-            Route::resource('ind-service', 'IndRenewApplicationController', [
-                'only' => ['index', 'store', 'edit', 'update'],
-                'parameters' => ['ind-service' => 'application']
-            ]);
-
-            Route::resource('org-service', 'OrgRenewApplicationController', [
-                'only' => ['index', 'store', 'edit', 'update'],
-                'parameters' => ['org-service' => 'application']
-            ]);
-
-
-            Route::resource('ad', 'AdApplicationController', [
-                'only' => ['index', 'store', 'edit', 'update'],
-                'parameters' => ['ad' => 'application']
-            ]);
-
-            Route::resource('ad-renew', 'AdRenewApplicationController', [
-                'only' => ['show', 'edit', 'store', 'update'],
-                'parameters' => ['ad-renew' => 'ad']
-            ]);
-
         }, '');
 
         Route::prefix('my-services')->name('my-service.')->group(function () {
@@ -213,6 +192,33 @@ Route::middleware('auth')->group(function () {
         'parameters' => ['organization-service-registration' => 'org_id']
     ]);
 }, '');
+
+
+Route::namespace('Frontend')->name('frontend.')->group(function () {
+    Route::name('applications.')->prefix('applications')->group(function () {
+        Route::resource('individual-service', 'IndRenewApplicationController', [
+            'only' => ['index', 'store', 'edit', 'update'],
+            'parameters' => ['individual-service' => 'application']
+        ]);
+
+        Route::resource('organization-service', 'OrgRenewApplicationController', [
+            'only' => ['index', 'store', 'edit', 'update'],
+            'parameters' => ['organization-service' => 'application']
+        ]);
+
+
+        Route::resource('ad', 'AdApplicationController', [
+            'only' => ['index', 'store', 'edit', 'update'],
+            'parameters' => ['ad' => 'application']
+        ]);
+
+        Route::resource('ad-renew', 'AdRenewApplicationController', [
+            'only' => ['show', 'edit', 'store', 'update'],
+            'parameters' => ['ad-renew' => 'ad']
+        ]);
+    }, '');
+}, '');
+
 
 Route::namespace('Backend')->prefix('dashboard')->group(function () {
     Route::resource('individual-service-request', 'IndServiceRequestController', [

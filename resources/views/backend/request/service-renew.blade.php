@@ -1,35 +1,27 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সার্ভিস রিনিউ আবেদন')
+@section('title', 'বিজ্ঞাপন')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/backend/common.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/backend/request/common.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
 @endsection
 
 @section('content')
-    <div class="container d-flex justify-content-center">
-        <div class="bg-white mt-4 p-4 rounded row w-50">
-            <div class="col-md-12 mb-3">
-                <div class="rounded row shadow-sm">
-                    <div class="col-md-12 p-2">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="rounded-circle shadow"
-                                     style="background-image: url({{ asset('storage/' . $user->photo) }}); width: 100px; height: 100px;"></div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="w-100 h-100 d-flex align-items-center">
-                                    <a href="#">{{ $user->name }}</a>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 bg-white rounded shadow-sm">
+                <div class="row p-5 align-items-center">
+                    <div class="col-md-3">
+                        <img src="{{ asset('storage/' . $application->incomeable->user->photo) }}" class="rounded-circle img-fluid">
                     </div>
-                    <div class="col-md-12 p-0 list-group mt-4">
-                        <table class="table-sm table-striped table-hover">
+                    <div class="col-md-9 h3 pl-4">
+                        <a href="javascript:">{{ $application->incomeable->user->name }}</a>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <table class="table table-striped table-hover table-borderless">
                             <tr>
                                 <th scope="row">প্যাকেজঃ</th>
-                                <td>{{ $properties['name'][0]->value  }}</td>
+                                <td>{{ $application->package->properties->where('name', 'name')->first()->value }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">পেমেন্ট মেথডঃ</th>
@@ -45,14 +37,52 @@
                             </tr>
                         </table>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-12">
-                <div class="p-2 rounded row shadow-sm d-flex justify-content-center">
-                    <div class="btn-group">
-                        <button class="btn btn-success" form="approve-form">গ্রহণ করুন</button>
-                        <button class="btn btn-danger" form="reject-form">বাতিল করুন</button>
+                    <div class="col-12 text-center mt-3">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#acceptModal">
+                                গ্রহণ করুন
+                            </button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                                ডিলিট করুন
+                            </button>
+                        </div>
+
+                        <!-- Accept Modal -->
+                        <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title">রিকোয়েস্টটি গ্রহণ করতে চান?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer border-top-0">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
+                                        <button type="submit" class="btn btn-success" form="approve-form">সাবমিট</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title" id="exampleModalLabel">সত্যিই কি আপনি রিকোয়েস্টটি মুছে ফেলতে চান?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer border-top-0">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
+                                        <button type="submit" class="btn btn-danger" form="delete-form">ডিলিট</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,8 +93,7 @@
         {{ method_field('put') }}
         {{ csrf_field() }}
     </form>
-
-    <form action="{{ route('request.service-renew.destroy', $application->id) }}" id="reject-form" method="post">
+    <form action="{{ route('request.service-renew.destroy', $application->id) }}" id="delete-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>

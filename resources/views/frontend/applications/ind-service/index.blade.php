@@ -40,13 +40,13 @@
                 </table>
                 <div class="w-100"></div>
                 <div class="col-2 text-center">
-                    <a href="{{ route('frontend.applications.ind-service.edit', $oldApplication->id) }}">
+                    <a href="{{ route('frontend.applications.individual-service.edit', $oldApplication->id) }}">
                         <button role="button" class="btn btn-info btn-block">এডিট</button>
                     </a>
                 </div>
             </div>
         @else
-            <form action="{{ route('frontend.applications.ind-service.store') }}"
+            <form action="{{ route('frontend.applications.individual-service.store') }}"
                   class="row p-3 justify-content-center" method="post">
                 {{ csrf_field() }}
                 <div class="col-12">
@@ -60,7 +60,7 @@
                                 <option value="">--সার্ভিস সিলেক্ট করুন--</option>
                                 @foreach($services as $service)
                                     <option value="{{ $service->id }}"
-                                    @if(old('service') == $service->id || ( ! old('service') && request()->get('category') == $service->category->id )){{ 'selected' }}@endif>
+                                    @if(old('service') == $service->id || request()->get('service') == $service->id ){{ 'selected' }}@endif>
                                         {{ $service->category->name }}
                                     </option>
                                 @endforeach
