@@ -79,6 +79,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-8 mt-2">
                 <div class="form-group row">
                     <label for="create-transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction
@@ -88,31 +89,6 @@
                                class="form-control{{ $errors->has('transaction-id') ? ' is-invalid' : '' }}"
                                value="{{ oldOrData('transaction-id', $application->transactionId) }}">
                         @include('components.invalid', ['name' => 'transaction-id'])
-                    </div>
-                </div>
-            </div>
-            <div class="col-8 mt-2">
-                <div class="form-group row">
-                    <label for="image" class="col-md-4 col-form-label text-md-right">ছবি <span
-                                class="text-danger">*</span></label>
-                    <div class="col-md-8">
-                        <input type="file" id="image" name="image"
-                               class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                               data-image="{{ asset('storage/' . $ad->renewAsset->image) }}">
-                        @include('components.invalid', ['name' => 'image'])
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-8 mt-2">
-                <div class="form-group row">
-                    <label for="url" class="col-md-4 col-form-label text-md-right">লিঙ্ক <span
-                                class="text-danger">*</span></label>
-                    <div class="col-md-8">
-                        <input type="url" id="url" name="url"
-                               class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}"
-                               value="{{ oldOrData('url', $ad->renewAsset->url) }}">
-                        @include('components.invalid', ['name' => 'url'])
                     </div>
                 </div>
             </div>

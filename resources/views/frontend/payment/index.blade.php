@@ -201,13 +201,14 @@
                                             <th scope="row">{{ en2bnNumber($count++) }}</th>
                                             <td>
                                                 <img class="img-thumbnail" style="width: 100px"
-                                                     src="{{ asset('storage/' . $ad->renewAsset->image) }}">
+                                                     src="{{ asset('storage/' . $ad->image) }}">
                                             </td>
                                             <td>
-                                                {{ $ad->renewAsset->url }}
+                                                {{ $ad->url }}
                                             </td>
                                             <td>
                                                 <a href="{{ route('frontend.applications.ad-renew.show', $ad->id) }}"
+                                                   target="_blank"
                                                    class="btn btn-outline-primary btn-sm">
                                                     <i class="fa fa-pencil"></i> এডিট
                                                 </a>
@@ -262,12 +263,19 @@
                                         </td>
                                         <td>
                                             @if(!$pending)
+                                                <a href="{{ route('frontend.ad.edit', $ad->id) }}"
+                                                   target="_blank"
+                                                   class="btn btn-outline-primary btn-sm">
+                                                    <i class="fa fa-pencil"></i> এডিট
+                                                </a>
                                                 <a href="{{ route('frontend.applications.ad-renew.show', $ad->id) }}"
+                                                   target="_blank"
                                                    class="btn btn-outline-success btn-sm  @if($payment->approved == 0){{ 'disabled' }}@endif">
                                                     <i class="fa fa-repeat"></i> নবীকরণ
                                                 </a>
                                             @elseif($pending)
                                                 <a href="{{ route('frontend.applications.ad.index') }}"
+                                                   target="_blank"
                                                    class="btn btn-outline-primary btn-sm">
                                                     <i class="fa fa-pencil"></i> এডিট
                                                 </a>
@@ -284,8 +292,7 @@
                             <div class="row">
                                 <div class="col-md-12 text-center mt-3">
                                     <a href="{{ route('frontend.applications.ad.index') }}"
-                                       class="btn btn-primary">বিজ্ঞাপনের জন্য
-                                        আবেদন করুন</a>
+                                       class="btn btn-primary">বিজ্ঞাপনের জন্য আবেদন করুন</a>
                                 </div>
                             </div>
                         </div>

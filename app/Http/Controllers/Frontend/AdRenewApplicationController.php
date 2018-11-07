@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Http\Requests\StoreAdRenewApplication;
 use App\Models\Ad;
 use App\Models\Income;
 use App\Models\Package;
-use App\Models\AdRenewAsset;
 use App\Models\PaymentMethod;
 use App\Http\Middleware\AdRenew;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreAdApplication;
 
 class AdRenewApplicationController extends Controller
 {
@@ -49,8 +47,7 @@ class AdRenewApplicationController extends Controller
         $ad->load([
             'payments' => function ($query) {
                 $query->orderByDesc('updated_at');
-            },
-            'renewAsset'
+            }
         ]);
         $application = $ad->payments->first();
 
@@ -59,18 +56,11 @@ class AdRenewApplicationController extends Controller
         return view('frontend.applications.ad.renew.edit', compact('application', 'packages', 'paymentMethods', 'ad'));
     }
 
-    public function update(Ad $ad, StoreAdApplication $request)
+    public function update(Ad $ad, StoreAdRenewApplication $request)
     {
         $application = $ad->payments()->orderByDesc('updated_at')->first();
 
         DB::beginTransaction();
-        $adRenewAsset = new AdRenewAsset;
-        $adRenewAsset->ad_id = $ad->id;
-        if ($request->hasFile('image')) {
-            $adRenewAsset->image = $request->file('image')->store('user-photos/' . Auth::id());
-        }
-        $adRenewAsset->url = $request->post('url');
-        $adRenewAsset->save();
 
         $message = 'আপনার বিজ্ঞাপন রিনিউ আবেদনটি এডিট করা হয়ছে';
         if ($application->approved) {

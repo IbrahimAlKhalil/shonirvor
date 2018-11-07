@@ -13,6 +13,7 @@ module.exports = {
         'frontend/applications/top-service/ind': './resources/assets/js/frontend/applications/top-service/ind.js',
         'frontend/applications/ad/create': './resources/assets/js/frontend/applications/ad/create.js',
         'frontend/common': './resources/assets/js/frontend/common.js',
+        'frontend/ad/edit': './resources/assets/js/frontend/ad/edit.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',
@@ -21,7 +22,6 @@ module.exports = {
         'backend/area/modal': './resources/assets/js/backend/area/modal.js',
         'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',
         'backend/common': './resources/assets/js/backend/common.js',
-        'backend/request/common': './resources/assets/js/backend/request/common.js',
 
         'errors/404': './resources/assets/js/errors/404.js'
     },

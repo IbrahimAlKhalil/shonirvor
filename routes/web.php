@@ -217,6 +217,13 @@ Route::namespace('Frontend')->name('frontend.')->group(function () {
             'parameters' => ['ad-renew' => 'ad']
         ]);
     }, '');
+
+    Route::resource('ad', 'AdController', [
+        'only' => [
+            'edit', 'update'
+        ]
+    ]);
+
 }, '');
 
 
@@ -306,6 +313,10 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         Route::resource('service-renew', 'ServiceRenewRequestController', [
             'only' => ['index', 'show', 'update', 'destroy'],
             'parameters' => ['service-renew' => 'application']
+        ]);
+
+        Route::resource('ad-edit', 'AdEditRequestController', [
+            'only' => ['show', 'update', 'destroy']
         ]);
 
     }, '');

@@ -46,8 +46,7 @@ class PaymentController extends Controller
         });
 
         $ads = Ad::where('user_id', Auth::id())->with([
-            'payments',
-            'renewAsset'
+            'payments'
         ])->get()->sortByDesc('payments.updated_at');
 
         $renewRequestedAds = $ads->where('expire', '!=', null)->filter(function ($item) {

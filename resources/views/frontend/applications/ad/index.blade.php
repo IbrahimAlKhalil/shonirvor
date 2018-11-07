@@ -123,8 +123,7 @@
                                     class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="file" id="image" name="image"
-                                   class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                                   value="{{ old('image') }}">
+                                   class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}">
                             @include('components.invalid', ['name' => 'image'])
                         </div>
                     </div>

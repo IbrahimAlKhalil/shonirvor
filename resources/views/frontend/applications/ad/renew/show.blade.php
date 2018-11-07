@@ -107,17 +107,17 @@
                 <div class="col-8 mt-2">
                     <div class="form-group row">
                         <label for="create-from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে
-                            টাকা
-                            পাঠানো হয়েছে <span class="text-danger">*</span></label>
+                            টাকা পাঠানো হয়েছে <span class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="text" name="from" id="create-from-input"
                                    class="form-control{{ $errors->has('from') ? ' is-invalid' : '' }}"
                                    placeholder="কমপক্ষে শেষ ৪ ডিজিট"
-                                   value="{{ oldOrData('from', $application->from) }}">
+                                   value="{{ old('from') }}">
                             @include('components.invalid', ['name' => 'from'])
                         </div>
                     </div>
                 </div>
+
                 <div class="col-8 mt-2">
                     <div class="form-group row">
                         <label for="create-transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction
@@ -125,33 +125,8 @@
                         <div class="col-md-8">
                             <input type="text" id="create-transaction-id-input" name="transaction-id"
                                    class="form-control{{ $errors->has('transaction-id') ? ' is-invalid' : '' }}"
-                                   value="{{ oldOrData('transaction-id', $application->transactionId) }}">
+                                   value="{{ old('transaction-id') }}">
                             @include('components.invalid', ['name' => 'transaction-id'])
-                        </div>
-                    </div>
-                </div>
-                <div class="col-8 mt-2">
-                    <div class="form-group row">
-                        <label for="image" class="col-md-4 col-form-label text-md-right">ছবি <span
-                                    class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <input type="file" id="image" name="image"
-                                   class="file-picker{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                                   data-image="{{ asset('storage/' . $ad->image) }}">
-                            @include('components.invalid', ['name' => 'image'])
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-8 mt-2">
-                    <div class="form-group row">
-                        <label for="url" class="col-md-4 col-form-label text-md-right">লিঙ্ক <span
-                                    class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <input type="url" id="url" name="url"
-                                   class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}"
-                                   value="{{ oldOrData('url', $ad->url) }}">
-                            @include('components.invalid', ['name' => 'url'])
                         </div>
                     </div>
                 </div>

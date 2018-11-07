@@ -8,20 +8,11 @@ import 'bootstrap'; // Bootstrap JS
 import Sortable from 'sortablejs';
 import {Repeater} from "../../modules/repeater";
 
-
-/*function handleSorting(event) {
-    event.item.querySelector('.image-order').value = event.newIndex + 1;
-    event.srcElement
-        .children[event.oldIndex]
-        .querySelector('.image-order')
-        .value = event.oldIndex + 1;
-}*/
-
 function handleChangeBtnClick(element) {
     $(element).next().click();
 }
 
-function shoImage(element) {
+function showImage(element) {
     element.parentElement
         .parentElement
         .previousElementSibling
@@ -52,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
     document.querySelectorAll('.image-field').forEach(element => element.addEventListener('change', () => {
-        shoImage(element);
+        showImage(element);
     }));
 
 
@@ -72,13 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         item.querySelector('.image-field').addEventListener('change', event => {
-            shoImage(event.target);
+            showImage(event.target);
         });
     }
 
 
-    let repeater = new Repeater(container, {
-        process: process
+    let repeater = new Repeater(container, function(){
+
     });
 
     document.getElementById('add-new').addEventListener('click', () => {

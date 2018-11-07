@@ -20,9 +20,9 @@ class Ad extends Model
         return $this->morphMany(Income::class, 'incomeable');
     }
 
-    public function renewAsset()
+    public function edit()
     {
-        return $this->hasOne(AdRenewAsset::class);
+        return $this->hasOne(AdEdit::class);
     }
 
     public function scopeOnlyApproved($query)
