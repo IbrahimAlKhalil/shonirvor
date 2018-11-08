@@ -15,7 +15,7 @@ $factory->define(Income::class, function (Faker $faker) {
     $incomeableType = explode('-', $packageType->name, 2)[0];
 
     if ($incomeableType == 'ad') {
-        $incomeableId = rand(1, 6);
+        $incomeableId = rand(1, 5);
     } else {
         $incomeableId = rand(1, 200);
     }
