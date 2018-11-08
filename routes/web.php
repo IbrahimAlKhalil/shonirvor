@@ -49,6 +49,27 @@ Route::namespace('Frontend')->group(function () {
                 'parameters' => ['org-top-service' => 'application']
             ]);
 
+            Route::resource('individual-service', 'IndRenewApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['individual-service' => 'application']
+            ]);
+
+            Route::resource('organization-service', 'OrgRenewApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['organization-service' => 'application']
+            ]);
+
+
+            Route::resource('ad', 'AdApplicationController', [
+                'only' => ['index', 'store', 'edit', 'update'],
+                'parameters' => ['ad' => 'application']
+            ]);
+
+            Route::resource('ad-renew', 'AdRenewApplicationController', [
+                'only' => ['show', 'edit', 'store', 'update'],
+                'parameters' => ['ad-renew' => 'ad']
+            ]);
+
         }, '');
 
         Route::prefix('my-services')->name('my-service.')->group(function () {
@@ -96,6 +117,20 @@ Route::namespace('Backend')->group(function () {
                     'names' => 'org-top'
                 ]);
 
+                Route::resource('ad', 'AdRequestController', [
+                    'only' => ['index', 'show', 'update', 'destroy'],
+                    'parameters' => ['ad' => 'application']
+                ]);
+
+                Route::resource('service-renew', 'ServiceRenewRequestController', [
+                    'only' => ['index', 'show', 'update', 'destroy'],
+                    'parameters' => ['service-renew' => 'application']
+                ]);
+
+                Route::resource('ad-edit', 'AdEditRequestController', [
+                    'only' => ['index', 'show', 'update', 'destroy']
+                ]);
+
             }, '');
 
             Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
@@ -133,6 +168,7 @@ Route::namespace('Backend')->group(function () {
 
             }, '');
 
+            // TODO: This route should be removed
             Route::resource('ads', 'AdController', [
                 'except' => ['create', 'show', 'edit']
             ])->names('ad');
@@ -195,28 +231,6 @@ Route::middleware('auth')->group(function () {
 
 
 Route::namespace('Frontend')->name('frontend.')->group(function () {
-    Route::name('applications.')->prefix('applications')->group(function () {
-        Route::resource('individual-service', 'IndRenewApplicationController', [
-            'only' => ['index', 'store', 'edit', 'update'],
-            'parameters' => ['individual-service' => 'application']
-        ]);
-
-        Route::resource('organization-service', 'OrgRenewApplicationController', [
-            'only' => ['index', 'store', 'edit', 'update'],
-            'parameters' => ['organization-service' => 'application']
-        ]);
-
-
-        Route::resource('ad', 'AdApplicationController', [
-            'only' => ['index', 'store', 'edit', 'update'],
-            'parameters' => ['ad' => 'application']
-        ]);
-
-        Route::resource('ad-renew', 'AdRenewApplicationController', [
-            'only' => ['show', 'edit', 'store', 'update'],
-            'parameters' => ['ad-renew' => 'ad']
-        ]);
-    }, '');
 
     Route::resource('ad', 'AdController', [
         'only' => [
@@ -303,24 +317,6 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
             'only' => ['index', 'update', 'destroy']
         ]);
     }, '');
-
-    Route::name('request.')->prefix('requests')->group(function () {
-        Route::resource('ad', 'AdRequestController', [
-            'only' => ['show', 'update', 'destroy'],
-            'parameters' => ['ad' => 'application']
-        ]);
-
-        Route::resource('service-renew', 'ServiceRenewRequestController', [
-            'only' => ['index', 'show', 'update', 'destroy'],
-            'parameters' => ['service-renew' => 'application']
-        ]);
-
-        Route::resource('ad-edit', 'AdEditRequestController', [
-            'only' => ['show', 'update', 'destroy']
-        ]);
-
-    }, '');
-
 
 }, '');
 

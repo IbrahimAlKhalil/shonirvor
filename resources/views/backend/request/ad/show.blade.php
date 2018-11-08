@@ -108,12 +108,12 @@
         </div>
     </div>
 
-    <form action="{{ route('request.ad.update', $application->id) }}" id="approve-form" method="post">
+    <form action="{{ route('backend.request.ad.update', $application->id) }}" id="approve-form" method="post">
         {{ method_field('put') }}
         {{ csrf_field() }}
     </form>
 
-    <form action="{{ route('request.ad.destroy', $application->id) }}" id="reject-form" method="post">
+    <form action="{{ route('backend.request.ad.destroy', $application->id) }}" id="reject-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>

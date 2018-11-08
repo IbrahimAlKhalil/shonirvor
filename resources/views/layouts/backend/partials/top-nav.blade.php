@@ -41,9 +41,6 @@
             <li class="nav-item @if(request()->is('dashboard/contents/*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('contents.slider.index') }}">কন্টেন্ট ম্যানেজমেন্ট</a>
             </li>
-            <li class="nav-item @if(request()->is('dashboard/ad*')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('backend.ad.index') }}">বিজ্ঞাপন</a>
-            </li>
             <li class="nav-item @if(request()->is('dashboard/notice*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.notice.index') }}">নোটিশ</a>
             </li>

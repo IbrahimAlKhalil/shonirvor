@@ -21,6 +21,7 @@ module.exports = {
         'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
         'backend/area/modal': './resources/assets/js/backend/area/modal.js',
         'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',
+        'backend/request/ad-edit/index': './resources/assets/js/backend/request/index.js',
         'backend/common': './resources/assets/js/backend/common.js',
 
         'errors/404': './resources/assets/js/errors/404.js'

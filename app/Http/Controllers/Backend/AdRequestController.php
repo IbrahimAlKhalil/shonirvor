@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Ad;
 use App\Models\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,29 @@ use Illuminate\Support\Facades\DB;
 
 class AdRequestController extends Controller
 {
+
+    public function index()
+    {
+        $navs = [
+            ['url' => route('backend.request.ad.index'), 'text' => 'বিজ্ঞাপন আবেদন সমূহ'],
+            ['url' => route('backend.request.ad-edit.index'), 'text' => 'বিজ্ঞাপন এডিট আবেদন সমূহ'],
+        ];
+
+        $ads = Ad::with([
+            'user',
+            'payments' => function ($query) {
+                $query->with([
+                    'paymentMethod',
+                    'package.properties' => function ($query) {
+                        $query->where('name', 'name');
+                    }
+                ]);
+            }
+        ])->where('expire', null)->paginate(15);
+
+        return view('backend.request.ad.index', compact('ads', 'navs'));
+    }
+
     public function show(Income $application)
     {
         $application->load([
@@ -21,7 +45,6 @@ class AdRequestController extends Controller
 
         $ad = $application->incomeable;
 
-
         if ($application->approved) {
             abort(404);
         }
@@ -29,7 +52,7 @@ class AdRequestController extends Controller
         $user = Auth::user();
         $properties = $application->package->properties->groupBy('name');
 
-        return view('backend.request.ad', compact('ad', 'user', 'properties', 'application'));
+        return view('backend.request.ad.show', compact('ad', 'user', 'properties', 'application'));
     }
 
     public function update(Income $application)
@@ -60,7 +83,7 @@ class AdRequestController extends Controller
         DB::commit();
 
         // TODO: Redirect to appropriate page
-        return response('Done!');
+        return redirect(route('backend.request.ad.index'))->with('success', 'বিজ্ঞাপন এডিট আবেদনটি গ্রহণ করা হয়েছে');
     }
 
     public function destroy(Income $application)
@@ -73,6 +96,6 @@ class AdRequestController extends Controller
         DB::commit();
 
         // TODO: Redirect to appropriate page
-        return response('Done!');
+        return redirect(route('backend.request.ad.index'))->with('success', 'বিজ্ঞাপন এডিট আবেদনটি ডিলিট করা হয়েছে');
     }
 }
