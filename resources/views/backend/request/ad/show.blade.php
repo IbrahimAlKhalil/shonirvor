@@ -7,6 +7,15 @@
 @endsection
 
 @section('content')
+    <style>
+        .user-photo {
+            width: 100px;
+            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+    </style>
     <div class="container d-flex justify-content-center">
         <div class="bg-white mt-4 p-4 rounded row w-50">
             <div class="col-md-12 mb-3">
@@ -14,12 +23,19 @@
                     <div class="col-md-12 p-2">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="rounded-circle shadow"
-                                     style="background-image: url({{ asset('storage/' . $user->photo) }}); width: 100px; height: 100px;"></div>
+                                <div class="rounded-circle shadow user-photo"
+                                     style="background-image: url({{ asset('storage/' . $user->photo) }});"></div>
                             </div>
                             <div class="col-md-9">
-                                <div class="w-100 h-100 d-flex align-items-center">
-                                    <a href="#">{{ $user->name }}</a>
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-between">
+                                    <a href="{{ route('backend.users.show', $user->id) }}">{{ $user->name }}</a>
+                                    <span class="badge badge-info">
+                                        @if(!$ad->expire)
+                                            বিজ্ঞাপন রিনিউ আবেদন
+                                        @else
+                                            বিজ্ঞাপনের জন্য আবেদন
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>

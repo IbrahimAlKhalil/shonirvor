@@ -47,29 +47,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
 
-    function process(item) {
-        let linkInput = item.querySelector('.action-link');
+    let repeater = new Repeater(container, function () {
         let order = container.children.length;
+        let li = `<li class="list-group-item mb-2 shadow-sm" data-repeater-clone="true">
+                      <div class="row">
+                          <div class="col-md-9">
+                              <div class="row">
+                                  <div class="col-md-3">
+                                      <img src="${noImage}" class="rounded img-fluid slider-image">
+                                  </div>
 
-        item.querySelector('.slider-image').src = noImage;
+                                  <div class="col-md-6">
+                                      <input name="images[image-${order}][link]" type="url" class="form-control w-100 mb-2 action-link" placeholder="লিঙ্ক" value="">
+                                      <input type="hidden" name="images[image-${order}][prev-image]" value="default/home-slider/2.jpg">
+                                      <input type="hidden" name="images[image-${order}][id]" value="10">
+                                      <div>
+                                          <button class="btn btn-primary change-image" type="button">ছবি
+                                              পরিবর্তন
+                                              করুন
+                                          </button>
+                                          <input name="sliders[image-${order}]" type="file" class="form-control-file w-100 image-field" accept="image/*">
 
-        linkInput.name = `images[image-${order}][link]`;
-        linkInput.value = '';
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
 
-        item.querySelector('.image-field').name = `sliders[image-${order}]`;
+                          <div class="col-md-3">
+                              <a class="fa fa-trash float-right text-danger delete-image remove-btn" href="#" data-content-id="10"></a>
+                          </div>
+                      </div>
+                  </li>`;
+        let fragment = document.createElement('ul');
+        fragment.innerHTML = li;
+        let node = fragment.firstElementChild.cloneNode(true);
 
-        item.querySelector('.change-image').addEventListener('click', event => {
+        node.querySelector('.change-image').addEventListener('click', event => {
             handleChangeBtnClick(event.target);
         });
 
-        item.querySelector('.image-field').addEventListener('change', event => {
+        node.querySelector('.image-field').addEventListener('change', event => {
             showImage(event.target);
         });
-    }
 
-
-    let repeater = new Repeater(container, function(){
-
+        return node;
     });
 
     document.getElementById('add-new').addEventListener('click', () => {

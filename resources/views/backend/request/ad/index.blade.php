@@ -30,24 +30,30 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @php($iteration = $ads->perPage() * $ads->currentPage() - $ads->perPage())
-                    @forelse($ads  as $ad)
-                        <tr data-edit-id="{{ $ad->id }}">
+                    @php($iteration = $applications->perPage() * $applications->currentPage() - $applications->perPage())
+                    @forelse($applications  as $application)
+                        <tr>
                             <td>{{ en2bnNumber(++$iteration) }}</td>
                             <td>
-                                <a href="{{ route('backend.request.ad.show', $ad->payments()->first()->id) }}" target="_blank">{{ $ad->user->name }}</a>
+                                <a href="{{ route('backend.request.ad.show', $application->id) }}"
+                                   target="_blank">{{ $application->incomeable->user->name }}</a>
                             </td>
-                            <td>{{ $ad->payments->first()->package->properties->first()->value }}</td>
+                            <td>{{ $application->package->properties->first()->value }}</td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="6">
-                                কোন রিকুয়েস্ট নেই
+                                কোন আবেদন নেই
                             </td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="mx-auto">
+                        {{ $applications->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="row">

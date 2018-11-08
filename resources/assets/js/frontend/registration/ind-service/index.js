@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>`;
                 });
 
-                let virtualDom = document.createElement('div');
-                virtualDom.innerHTML = `
+                let fragment = document.createElement('div');
+                fragment.innerHTML = `
                 <div class="card mt-2">
                     <div class="card-header pt-2 m-0 row">
                         <div class="col-md-9">
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-                let card = virtualDom.firstElementChild.cloneNode(true);
+                let card = fragment.firstElementChild.cloneNode(true);
                 $(card).find('.remove-btn').on('click', function (event) {
                     event.preventDefault();
                     $(card).fadeOut('slow', function () {
@@ -126,15 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
 
-                let virtualDom = document.createElement('div');
-                virtualDom.innerHTML =
+                let fragment = document.createElement('div');
+                fragment.innerHTML =
                     `<div class="card mt-2">
                     <div class="card-header pb-0 pt-2">${subCategorySelect.querySelector(`[value='${id}']`).innerHTML}</div>
                     <div class="card-body">
                           ${cardBody}
                     </div>
                 </div>`;
-                return virtualDom.firstElementChild.cloneNode(true);
+                return fragment.firstElementChild.cloneNode(true);
             });
 
             let subCategorySelect = document.getElementById('sub-categories');

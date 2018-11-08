@@ -58,6 +58,11 @@
                     @endforelse
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="mx-auto">
+                        {{ $adEdits->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="row">
