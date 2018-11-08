@@ -35,12 +35,16 @@ class TopServiceRequestController extends Controller
                 })
                 ->join('users','inds.user_id', 'users.id')
                 ->select('users.name');
+
+            $serviceRequestRoute = 'backend.request.ind-service-request.index';
         } else {
             $query->join('orgs', function ($join) {
                 $join->on('incomes.incomeable_id', 'orgs.id')
                     ->whereNull('orgs.deleted_at');
                 })
                 ->select('orgs.name');
+
+            $serviceRequestRoute = 'backend.request.org-service-request.index';
         }
 
         $applications = $query->addSelect(
@@ -51,9 +55,9 @@ class TopServiceRequestController extends Controller
             )->paginate(20);
 
         $navs = [
-            ['url' => route('dashboard'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('backend.request.top-service.index'), 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট'],
+            ['url' => route($serviceRequestRoute), 'text' => 'সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('backend.request.top-service.index').'?type='.$packageTypeId, 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
         return view('backend.request.top-service.index', compact('applications', 'navs'));

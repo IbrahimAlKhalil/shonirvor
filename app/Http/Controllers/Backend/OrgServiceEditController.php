@@ -148,7 +148,6 @@ class OrgServiceEditController extends Controller
     {
         return [
             ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
-            ['url' => route('organization-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
             ['url' => route('organization-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];

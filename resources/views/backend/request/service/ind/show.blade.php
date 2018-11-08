@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', $serviceRequest->user->name)
+@section('title', $application->user->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/ind-service-request/show.bundle.js') }}"></script>
@@ -11,33 +11,33 @@
     <div class="container my-5">
         <div class="row">
             <form class="col-md-9 bg-white py-3" id="approve-request"
-                  action="{{ route('individual-service-request.update', $serviceRequest->id) }}"
+                  action="{{ route('backend.request.ind-service-request.update', $application->id) }}"
                   method="post">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="row col-12">
                         <div class="col-md-3">
-                            <img src="{{ asset('storage/' . $serviceRequest->user->photo) }}"
-                                 alt="{{ $serviceRequest->user->name }}" class="img-thumbnail w-100">
+                            <img src="{{ asset('storage/' . $application->user->photo) }}"
+                                 alt="{{ $application->user->name }}" class="img-thumbnail w-100">
                         </div>
 
                         <div class="col-md-7 d-flex flex-column flex-wrap justify-content-end">
-                            <h1>{{ $serviceRequest->user->name }}</h1>
-                            <p class="h5">{{ $serviceRequest->category->name }}</p>
-                            <p class="h5">{{ $serviceRequest->village->bn_name.', '.$serviceRequest->union->bn_name.', '.$serviceRequest->thana->bn_name.', '.$serviceRequest->district->bn_name.', '.$serviceRequest->division->bn_name }}</p>
+                            <h1>{{ $application->user->name }}</h1>
+                            <p class="h5">{{ $application->category->name }}</p>
+                            <p class="h5">{{ $application->village->bn_name.', '.$application->union->bn_name.', '.$application->thana->bn_name.', '.$application->district->bn_name.', '.$application->division->bn_name }}</p>
                         </div>
                     </div>
 
                     <div class="col-12 mt-4">
                         <p class="h4 border-bottom">বর্ণনাঃ</p>
                         <p class="pt-3 text-justify">
-                            {{ $serviceRequest->description }}
+                            {{ $application->description }}
                         </p>
                     </div>
 
-                    @if($serviceRequest->payments->first())
-                        @php($payment = $serviceRequest->payments->first())
+                    @if($application->payments->first())
+                        @php($payment = $application->payments->first())
                         <div class="col-12 mt-4">
                             <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
                             <table class="table table-striped table-bordered table-hover table-sm w-100">
@@ -73,37 +73,37 @@
                             <tbody>
                             <tr>
                                 <th scope="row">মোবাইল নম্বর</th>
-                                <td>{{ $serviceRequest->mobile }}</td>
+                                <td>{{ $application->mobile }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">রেফারার</th>
                                 <td>
-                                    <a href="javascript:">{{ $serviceRequest->referredBy ? $serviceRequest->referredBy->user->name : '' }}</a>
+                                    <a href="javascript:">{{ $application->referredBy ? $application->referredBy->user->name : '' }}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">ইমেইল</th>
-                                <td>{{ $serviceRequest->email }}</td>
+                                <td>{{ $application->email }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">ওয়েবসাইট</th>
-                                <td>{{ $serviceRequest->website }}</td>
+                                <td>{{ $application->website }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">ফেসবুক</th>
-                                <td>{{ $serviceRequest->facebook }}</td>
+                                <td>{{ $application->facebook }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">বয়স</th>
-                                <td>{{ $serviceRequest->user->age }}</td>
+                                <td>{{ $application->user->age }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
-                                <td>{{ $serviceRequest->user->qualification }}</td>
+                                <td>{{ $application->user->qualification }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                <td>{{ $serviceRequest->user->nid }}</td>
+                                <td>{{ $application->user->nid }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -115,18 +115,18 @@
                             <tbody>
                             <tr>
                                 <th scope="row">জেলা</th>
-                                <td>{{ $serviceRequest->district->bn_name}}</td>
+                                <td>{{ $application->district->bn_name}}</td>
                             </tr>
 
                             <tr>
                                 <th scope="row"><label for="thana-request">থানা</label></th>
                                 <td>
-                                    @if($serviceRequest->thana->is_pending)
+                                    @if($application->thana->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <input name="thana-request" id="thana-request" type="text"
                                                        class="form-control"
-                                                       value="{{ $serviceRequest->thana->bn_name}}">
+                                                       value="{{ $application->thana->bn_name}}">
                                             </div>
                                             <div class="col-md-6">
                                                 <select name="thana" id="thana"
@@ -142,7 +142,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        {{ $serviceRequest->thana->bn_name}}
+                                        {{ $application->thana->bn_name}}
                                     @endif
                                 </td>
                             </tr>
@@ -150,12 +150,12 @@
                             <tr>
                                 <th scope="row"><label for="union-request">ইউনিয়ন</label></th>
                                 <td>
-                                    @if($serviceRequest->union->is_pending)
+                                    @if($application->union->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <input id="union-request" name="union-request" type="text"
                                                        class="form-control"
-                                                       value="{{ $serviceRequest->union->bn_name }}">
+                                                       value="{{ $application->union->bn_name }}">
                                             </div>
                                             <div class="col-md-6">
                                                 <select name="union" id="union"
@@ -174,7 +174,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        {{ $serviceRequest->union->bn_name }}
+                                        {{ $application->union->bn_name }}
                                     @endif
                                 </td>
                             </tr>
@@ -182,12 +182,12 @@
                             <tr>
                                 <th scope="row"><label for="village-request">এলাকা</label></th>
                                 <td>
-                                    @if($serviceRequest->village->is_pending)
+                                    @if($application->village->is_pending)
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <input id="village-request" name="village-request" type="text"
                                                        class="form-control"
-                                                       value="{{ $serviceRequest->village->bn_name }}">
+                                                       value="{{ $application->village->bn_name }}">
                                             </div>
                                             <div class="col-md-6">
                                                 <select name="village" id="village"
@@ -203,14 +203,14 @@
                                             </div>
                                         </div>
                                     @else
-                                        {{ $serviceRequest->village->bn_name }}
+                                        {{ $application->village->bn_name }}
                                     @endif
                                 </td>
                             </tr>
 
                             <tr>
                                 <th scope="row">ঠিকানা</th>
-                                <td>{{ $serviceRequest->address }}</td>
+                                <td>{{ $application->address }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -223,12 +223,12 @@
                             <tr>
                                 <th scope="row"><label for="category-request">ক্যাটাগরি</label></th>
                                 <td>
-                                    @if(!$serviceRequest->category->is_confirmed)
+                                    @if(!$application->category->is_confirmed)
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <input id="category-request" name="category-request" type="text"
                                                        class="form-control"
-                                                       value="{{ $serviceRequest->category->name }}">
+                                                       value="{{ $application->category->name }}">
                                             </div>
                                             <div class="col-md-6">
                                                 <select id="category" name="category">
@@ -241,7 +241,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        {{ $serviceRequest->category->name }}
+                                        {{ $application->category->name }}
                                     @endif
                                 </td>
                             </tr>
@@ -263,7 +263,7 @@
                             </tr>
                             </thead>
                             <tbody class="text-center">
-                            @forelse($serviceRequest->subCategories as $index => $subCategory)
+                            @forelse($application->subCategories as $index => $subCategory)
                                 <tr>
                                     <td> {{ en2bnNumber($index+1) }} </td>
                                     <td>
@@ -318,23 +318,23 @@
                     <div class="col-12 mt-4">
                         <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                         <div class="row">
-                            @if($serviceRequest->cv)
+                            @if($application->cv)
                                 <div class="col-md-3">
                                     <span class="text-muted">বায়োডাটা</span>
-                                    <a href="{{ asset('storage/' . $serviceRequest->cv) }}" target="_blank">PDF</a>
+                                    <a href="{{ asset('storage/' . $application->cv) }}" target="_blank">PDF</a>
                                 </div>
                             @endif
-                            @if($serviceRequest->experience_certificate)
+                            @if($application->experience_certificate)
                                 <div class="col-md-3">
                                     <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                    <a href="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                    <a href="{{ asset('storage/' . $application->experience_certificate) }}"
                                        target="_blank">
-                                        <img src="{{ asset('storage/' . $serviceRequest->experience_certificate) }}"
+                                        <img src="{{ asset('storage/' . $application->experience_certificate) }}"
                                              class="img-responsive img-thumbnail">
                                     </a>
                                 </div>
                             @endif
-                            @foreach($serviceRequest->user->identities as $identity)
+                            @foreach($application->user->identities as $identity)
                                 <div class="col-md-3">
                                     <a href="{{ asset('storage/' . $identity->path) }}"
                                        target="_blank">
@@ -343,8 +343,8 @@
                                     </a>
                                 </div>
                             @endforeach
-                            @if( ! $serviceRequest->experience_certificate
-                                && ! $serviceRequest->cv && !$serviceRequest->user->identities->first())
+                            @if( ! $application->experience_certificate
+                                && ! $application->cv && !$application->user->identities->first())
                                 <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
                             @endif
                         </div>
@@ -354,7 +354,7 @@
                         <p class="h4 border-bottom">কাজের ছবিঃ</p>
                         <div class="row">
                             <div class="col-12">
-                                @forelse($serviceRequest->workImages->chunk(2) as $chunk)
+                                @forelse($application->workImages->chunk(2) as $chunk)
                                     <div class="card-deck py-2">
                                         @foreach($chunk as $image)
                                             <div class="card shadow-sm">
@@ -378,7 +378,7 @@
                 </div>
             </form>
             <form id="reject-request"
-                  action="{{ route('individual-service-request.destroy', $serviceRequest->id) }}"
+                  action="{{ route('backend.request.ind-service-request.destroy', $application->id) }}"
                   method="post">
                 {{ csrf_field() }}
                 {{ method_field('delete') }}
@@ -387,17 +387,12 @@
                 <div class="position-sticky right-menu">
                     <div class="row">
                         <div class="col-12">
-                            @include('components.side-nav', compact('navs'))
+                            @include('components.notification', ['userId' => $application->user->id])
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-12">
-                            @include('components.notification', ['userId' => $serviceRequest->user->id])
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            @include('components.sms', ['userId' => $serviceRequest->user->id])
+                            @include('components.sms', ['userId' => $application->user->id])
                         </div>
                     </div>
                     <div class="row mt-4">

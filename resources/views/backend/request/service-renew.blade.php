@@ -89,11 +89,11 @@
         </div>
     </div>
 
-    <form action="{{ route('request.service-renew.update', $application->id) }}" id="approve-form" method="post">
+    <form action="{{ route('backend.request.service-renew.update', $application->id) }}" id="approve-form" method="post">
         {{ method_field('put') }}
         {{ csrf_field() }}
     </form>
-    <form action="{{ route('request.service-renew.destroy', $application->id) }}" id="delete-form" method="post">
+    <form action="{{ route('backend.request.service-renew.destroy', $application->id) }}" id="delete-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>
