@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'এড প্যাকেজসমূহ')
+@section('title', 'বিজ্ঞাপন প্যাকেজসমূহ')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -13,7 +13,7 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active h5 mb-0">ছবির এড প্যাকেজ</li>
+                        <li class="breadcrumb-item active h5 mb-0">ছবির বিজ্ঞাপন প্যাকেজ</li>
                     </ol>
                 </nav>
             </div>

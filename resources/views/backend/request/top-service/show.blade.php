@@ -13,16 +13,32 @@
                 <div class="row p-5 align-items-center">
                     <div class="col-12">
                         @if($application->incomeable->top_expire == null)
-                            <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিকোয়েস্ট</span>
+                            @if($application->package->package_type_id == 3)
+                                <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিকোয়েস্ট</span>
+                            @else
+                                <span class="badge badge-info float-right">প্রাতিষ্ঠানিক টপ সার্ভিস রিকোয়েস্ট</span>
+                            @endif
                         @else
-                            <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
+                            @if($application->package->package_type_id == 3)
+                                <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
+                            @else
+                                <span class="badge badge-info float-right">প্রাতিষ্ঠানিক টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
+                            @endif
                         @endif
                     </div>
                     <div class="col-md-3">
-                        <img src="{{ asset('storage/' . $application->incomeable->user->photo) }}" class="rounded-circle img-fluid">
+                        @if($application->package->package_type_id == 3)
+                            <img src="{{ asset('storage/' . $application->incomeable->user->photo) }}" class="rounded-circle img-fluid">
+                        @else
+                            <img src="{{ asset('storage/' . $application->incomeable->logo) }}" class="rounded-circle img-fluid">
+                        @endif
                     </div>
                     <div class="col-md-9 h3 pl-4">
-                        <a href="javascript:">{{ $application->incomeable->user->name }}</a>
+                        @if($application->package->package_type_id == 3)
+                            <a href="javascript:">{{ $application->incomeable->user->name }}</a>
+                        @else
+                            <a href="javascript:">{{ $application->incomeable->name }}</a>
+                        @endif
                     </div>
                     <div class="col-12 mt-4">
                         <table class="table table-striped table-hover table-borderless">
@@ -96,11 +112,11 @@
         </div>
     </div>
 
-    <form action="{{ route('backend.request.ind-top.update', $application->id) }}" id="approve-form" method="post">
+    <form action="{{ route('backend.request.top-service.update', $application->id) }}" id="approve-form" method="post">
         {{ method_field('put') }}
         {{ csrf_field() }}
     </form>
-    <form action="{{ route('backend.request.ind-top.destroy', $application->id) }}" id="delete-form" method="post">
+    <form action="{{ route('backend.request.top-service.destroy', $application->id) }}" id="delete-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>

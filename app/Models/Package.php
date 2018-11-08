@@ -18,6 +18,11 @@ class Package extends Model
             ->select('package_values.id', 'package_values.package_id', 'package_values.value', 'package_properties.name');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(PackageType::class, 'package_type_id');
+    }
+
     public function scopeOnlyInd($query)
     {
         return $query->where('package_type_id', 1);
