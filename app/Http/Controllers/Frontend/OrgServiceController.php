@@ -13,7 +13,7 @@ class OrgServiceController extends Controller
 {
     public function show(Org $provider)
     {
-        if (!is_null($provider->expire)) abort(404, 'This service request is in pending.');
+        if (is_null($provider->expire)) abort(404, 'This service request is in pending.');
 
         // Load relations
         $provider->load([

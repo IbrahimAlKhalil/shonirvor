@@ -13,7 +13,7 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item h4 mb-0">
+                        <li class="breadcrumb-item h5 mb-0">
                             <a href="{{ route('individual-category.index') }}">ক্যাটাগরি</a>
                         </li>
                         <li class="breadcrumb-item active h4 mb-0">সাব-ক্যাটাগরি</li>

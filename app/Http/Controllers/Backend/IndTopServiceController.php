@@ -22,7 +22,7 @@ class IndTopServiceController extends Controller
             ['url' => route('backend.package.ind-top-service.index'), 'text' => 'ব্যাক্তিগত টপ সার্ভিস প্যাকেজসমূহ'],
             ['url' => route('backend.package.org-top-service.index'), 'text' => 'প্রাতিষ্ঠানিক টপ সার্ভিস প্যাকেজসমূহ'],
             ['url' => route('backend.package.referrer.index'), 'text' => 'রেফারার প্যাকেজসমূহ'],
-            ['url' => route('backend.package.ad.index'), 'text' => 'এড প্যাকেজসমূহ']
+            ['url' => route('backend.package.ad.index'), 'text' => 'বিজ্ঞাপন প্যাকেজসমূহ']
         ];
 
         return view('backend.packages.top-service.ind-service', compact('navs', 'packages'));

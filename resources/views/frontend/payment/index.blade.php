@@ -17,7 +17,7 @@
                         <a href="#service" class="nav-link active" data-toggle="tab">সার্ভিস</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#ad" class="nav-link" data-toggle="tab">এড</a>
+                        <a href="#ad" class="nav-link" data-toggle="tab">বিজ্ঞাপন</a>
                     </li>
                 </ul>
                 <div class="tab-content mt-5">
@@ -210,7 +210,7 @@
                         @endif
 
 
-                        <h4 class="mt-5 text-center">সকল এড</h4>
+                        <h4 class="mt-5 text-center">সকল বিজ্ঞাপন</h4>
                         <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                             <thead>
                             <tr>
@@ -266,7 +266,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">কোন এড নেই</td>
+                                    <td colspan="6">কোন বিজ্ঞাপন নেই</td>
                                 </tr>
                             @endforelse
                             </tbody>

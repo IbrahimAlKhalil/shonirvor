@@ -14,7 +14,7 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item h4 mb-0 action">ক্যাটাগরি</li>
+                        <li class="breadcrumb-item h5 mb-0 action">ক্যাটাগরি</li>
                     </ol>
                 </nav>
             </div>
