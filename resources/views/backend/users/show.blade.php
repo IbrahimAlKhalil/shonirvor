@@ -34,9 +34,9 @@
                                             <select name="refer-id" class="form-control">
                                                 @foreach($referPackages as $package)
                                                     @php($properties = $package->properties->groupBy('name'))
-                                                    <option
-                                                            value="{{ $package->id }}" @if($package->id == $userReferPackageId){{ 'selected' }}@endif>
-                                                        {{ $properties['name'][0]->value }} @if($package->id == $defaultReferPackageId){{ '(ডিফল্ট প্যাকেজ)' }}@endif
+                                                    <option value="{{ $package->id }}"
+                                                        @if($package->id == $userReferPackageId){{ 'selected' }}@endif>
+                                                        {{ $properties['name'][0]->value }}
                                                     </option>
                                                 @endforeach
                                             </select>

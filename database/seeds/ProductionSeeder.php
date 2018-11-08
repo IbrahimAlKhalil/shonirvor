@@ -68,8 +68,7 @@ class ProductionSeeder extends Seeder
             ['package_id' => $package->id, 'package_property_id' => 6, 'value' => 10],
             ['package_id' => $package->id, 'package_property_id' => 7, 'value' => null],
             ['package_id' => $package->id, 'package_property_id' => 8, 'value' => null],
-            ['package_id' => $package->id, 'package_property_id' => 9, 'value' => null],
-            ['package_id' => $package->id, 'package_property_id' => 10, 'value' => 1]
+            ['package_id' => $package->id, 'package_property_id' => 9, 'value' => null]
         ]);
     }
 }

@@ -16,8 +16,7 @@ class PackagePropertiesTableSeeder extends Seeder
             ['name' => 'refer_onetime_interest'],
             ['name' => 'refer_renew_interest'],
             ['name' => 'refer_fail_onetime_interest'],
-            ['name' => 'refer_fail_renew_interest'],
-            ['name' => 'is_default']
+            ['name' => 'refer_fail_renew_interest']
         ]);
     }
 }

@@ -59,11 +59,6 @@ class PackagesTableSeeder extends Seeder
                         'package_id' => $package->id,
                         'package_property_id' => 9,
                         'value' => rand(5, 50)
-                    ],
-                    [
-                        'package_id' => $package->id,
-                        'package_property_id' => 10,
-                        'value' => 0
                     ]
                 ]);
             }
