@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let repeater = new Repeater(container, function () {
-        let order = container.children.length;
+        let order = this.count;
         let li = `<li class="list-group-item mb-2 shadow-sm" data-repeater-clone="true">
                       <div class="row">
                           <div class="col-md-9">

@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('otirikto-kaj');
 
         let repeater = new Repeater(container, function () {
-            let length = this.length;
+            let length = this.count;
             let fragment = document.createElement('div');
             fragment.innerHTML = `
             <div class="row border rounded shadow-sm mt-2 position-relative">
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('req-repeater-container');
 
         let repeater = new Repeater(container, function () {
-            let length = this.length;
+            let length = this.count;
 
             let fragment = document.createElement('ul');
             fragment.innerHTML = `
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('repeater-container');
 
         let repeater = new Repeater(container, function (value) {
-            let length = this.length;
+            let length = this.count;
             let fragment = document.createElement('ul');
             fragment.innerHTML = `
             <li class="repeater-clone mt-2 border-0 list-group-item">

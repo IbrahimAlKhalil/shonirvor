@@ -30,10 +30,13 @@ class AdEditRequestController extends Controller
     public function update(AdEdit $adEdit)
     {
         DB::beginTransaction();
-        DB::table('ads')->where('id', $adEdit->ad_id)->update([
-            'image' => $adEdit->image,
-            'url' => $adEdit->url
-        ]);
+
+        $data = [];
+
+        if ($adEdit->image) $data['image'] = $adEdit->image;
+        if ($adEdit->url) $data['url'] = $adEdit->url;
+
+        DB::table('ads')->where('id', $adEdit->ad_id)->update($data);
 
         $adEdit->delete();
         DB::commit();
@@ -42,7 +45,8 @@ class AdEditRequestController extends Controller
         return redirect()->back()->with('success', 'বিজ্ঞাপন এডিট আবেদনটি গ্রহণ করা হয়েছে');
     }
 
-    public function destroy(AdEdit $adEdit) {
+    public function destroy(AdEdit $adEdit)
+    {
         // TODO: Delete Image
         $adEdit->delete();
         return redirect()->back()->with('success', 'বিজ্ঞাপন এডিট আবেদনটি ডিলিট করা হয়েছে');

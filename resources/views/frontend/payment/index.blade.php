@@ -9,7 +9,7 @@
     @include('components.success')
     <div class="container mt-5 bg-white rounded">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-5">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a href="#service" class="nav-link active" data-toggle="tab">সার্ভিস</a>
@@ -60,61 +60,6 @@
                                 </tbody>
                             </table>
                         @endif
-
-
-                        @if($topServices->count())
-                            <h4 class="mt-5 text-center">টপ সার্ভিস</h4>
-                            <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">ক্যাটাগরি/নাম</th>
-                                    <th scope="col">অবস্থা</th>
-                                    <th scope="col">মেয়াদ উত্তীর্ণের তারিখ</th>
-                                    <th scope="col">পদক্ষেপ</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @php($count = 1)
-                                @forelse($topServices as $index => $service)
-                                    @php($serviceType = (new ReflectionClass($service))->getShortName())
-                                    @php($prefix = $serviceType == 'Ind'?'individual':'organization')
-                                    @php($payment = $service->payments->sortBy('approved')->first())
-                                    @php($expire = $expired = null)
-                                    @php($expire = \Carbon\Carbon::parse($service->top_expire))
-                                    @php($expired = $expire->lessThan(now()))
-
-                                    @php($status = $expired?['মেয়াদ শেষ', 'badge-danger']:['একটিভ', 'badge-success'])
-                                    <tr>
-                                        <th scope="row">{{ en2bnNumber($count++) }}</th>
-                                        <td>
-                                            <a href="{{ route('frontend.my-service.ind.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
-                                        </td>
-                                        <td>
-                                            <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $expire?en2bnNumber($expire->format('d/m/Y')):'n/a' }}
-                                        </td>
-                                        <td>
-                                            <a href="{{ route("frontend.applications.$prefix-top-service.index") }}?service={{ $service->id }}"
-                                               target="_blank"
-                                               class="btn btn-outline-success btn-sm  @if($payment->approved == 0){{ 'disabled' }}@endif">
-                                                <i class="fa fa-repeat"></i> নবীকরণ
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5">
-                                            কোন সার্ভিস নেই
-                                        </td>
-                                    </tr>
-                                @endforelse
-                                </tbody>
-                            </table>
-                        @endif
-
 
                         <h4 class="mt-5 text-center">সকল সার্ভিস</h4>
                         <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
@@ -177,6 +122,59 @@
                             @endforelse
                             </tbody>
                         </table>
+
+                        @if($topServices->count())
+                            <h4 class="mt-5 text-center">টপ সার্ভিস</h4>
+                            <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">ক্যাটাগরি/নাম</th>
+                                    <th scope="col">অবস্থা</th>
+                                    <th scope="col">মেয়াদ উত্তীর্ণের তারিখ</th>
+                                    <th scope="col">পদক্ষেপ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @php($count = 1)
+                                @forelse($topServices as $index => $service)
+                                    @php($serviceType = (new ReflectionClass($service))->getShortName())
+                                    @php($prefix = $serviceType == 'Ind'?'individual':'organization')
+                                    @php($payment = $service->payments->sortBy('approved')->first())
+                                    @php($expire = $expired = null)
+                                    @php($expire = \Carbon\Carbon::parse($service->top_expire))
+                                    @php($expired = $expire->lessThan(now()))
+
+                                    @php($status = $expired?['মেয়াদ শেষ', 'badge-danger']:['একটিভ', 'badge-success'])
+                                    <tr>
+                                        <th scope="row">{{ en2bnNumber($count++) }}</th>
+                                        <td>
+                                            <a href="{{ route('frontend.my-service.ind.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
+                                        </td>
+                                        <td>
+                                            {{ $expire?en2bnNumber($expire->format('d/m/Y')):'n/a' }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ route("frontend.applications.$prefix-top-service.index") }}?service={{ $service->id }}"
+                                               target="_blank"
+                                               class="btn btn-outline-success btn-sm  @if($payment->approved == 0){{ 'disabled' }}@endif">
+                                                <i class="fa fa-repeat"></i> নবীকরণ
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">
+                                            কোন সার্ভিস নেই
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
 
                     <div class="tab-pane fade" id="ad">

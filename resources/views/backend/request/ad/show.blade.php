@@ -129,7 +129,7 @@
         {{ csrf_field() }}
     </form>
 
-    <form action="{{ route('backend.request.ad.destroy', $application->id) }}" id="reject-form" method="post">
+    <form action="{{ route('backend.request.ad.destroy', $application->id) }}" id="delete-form" method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>

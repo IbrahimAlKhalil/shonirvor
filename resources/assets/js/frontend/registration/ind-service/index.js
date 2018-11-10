@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let container = document.getElementById('sub-category-request');
             let repeater = new Repeater(container, function () {
                 let cardBody = '';
-                let serial = this.length;
+                let serial = this.count;
 
                 workMethods.forEach((method, count) => {
                     if (method.id === 4) {
