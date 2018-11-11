@@ -8,10 +8,10 @@ use App\Models\Village;
 use App\Models\WorkMethod;
 use Illuminate\View\View;
 use App\Models\SubCategory;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
+use App\Models\Thana;
+use App\Models\Union;
+use App\Models\District;
+use App\Models\Division;
 
 class FilterComponentComposer
 {

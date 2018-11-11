@@ -1,6 +1,6 @@
 <?php
 
-namespace Sandofvega\Bdgeocode\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasManyDeep;

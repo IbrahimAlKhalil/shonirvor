@@ -12,10 +12,10 @@ use App\Http\Requests\UpdateInd;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Sandofvega\Bdgeocode\Models\Division;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
-use Sandofvega\Bdgeocode\Models\District;
+use App\Models\Division;
+use App\Models\Thana;
+use App\Models\Union;
+use App\Models\District;
 
 class IndProfileController extends Controller
 {

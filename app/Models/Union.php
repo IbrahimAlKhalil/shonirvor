@@ -1,8 +1,7 @@
 <?php
 
-namespace Sandofvega\Bdgeocode\Models;
+namespace App\Models;
 
-use App\Models\Village;
 use Illuminate\Database\Eloquent\Model;
 use Znck\Eloquent\Traits\BelongsToThrough;
 

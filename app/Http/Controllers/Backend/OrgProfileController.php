@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Sandofvega\Bdgeocode\Models\Division;
-use Sandofvega\Bdgeocode\Models\Union;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\District;
+use App\Models\Division;
+use App\Models\Union;
+use App\Models\Thana;
+use App\Models\District;
 
 class OrgProfileController extends Controller
 {

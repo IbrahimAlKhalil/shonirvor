@@ -994,16 +994,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.34.0",
+            "version": "1.34.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33"
+                "reference": "19201b87f7dba2a7cbf1cccdf0e1da13c04ee9c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
-                "reference": "1dbd3cb01c5645f3e7deda7aa46ef780d95fcc33",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/19201b87f7dba2a7cbf1cccdf0e1da13c04ee9c9",
+                "reference": "19201b87f7dba2a7cbf1cccdf0e1da13c04ee9c9",
                 "shasum": ""
             },
             "require": {
@@ -1045,7 +1045,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-09-20T19:36:25+00:00"
+            "time": "2018-11-08T13:33:47+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1569,16 +1569,16 @@
         },
         {
             "name": "sandofvega/bdgeocode",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sandofvega/laravel-bangladesh-geocode.git",
-                "reference": "ab405b743abb630a95ddabb29df5ff0e34d8b22e"
+                "reference": "52973365a4b97ce4df0180b7286640dbb50e4dad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sandofvega/laravel-bangladesh-geocode/zipball/ab405b743abb630a95ddabb29df5ff0e34d8b22e",
-                "reference": "ab405b743abb630a95ddabb29df5ff0e34d8b22e",
+                "url": "https://api.github.com/repos/sandofvega/laravel-bangladesh-geocode/zipball/52973365a4b97ce4df0180b7286640dbb50e4dad",
+                "reference": "52973365a4b97ce4df0180b7286640dbb50e4dad",
                 "shasum": ""
             },
             "require": {
@@ -1616,7 +1616,7 @@
                 "geocode",
                 "laravel"
             ],
-            "time": "2018-11-02T21:40:13+00:00"
+            "time": "2018-11-11T07:27:09+00:00"
         },
         {
             "name": "staudenmeir/eloquent-has-many-deep",

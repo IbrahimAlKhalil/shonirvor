@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
+use App\Models\Thana;
+use App\Models\Union;
 use \Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Sandofvega\Bdgeocode\Models\District;
-use Sandofvega\Bdgeocode\Models\Division;
+use App\Models\District;
+use App\Models\Division;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 

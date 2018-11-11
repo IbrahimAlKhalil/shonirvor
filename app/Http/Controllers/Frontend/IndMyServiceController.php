@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Village;
 use App\Models\WorkMethod;
 use Illuminate\Support\Facades\Auth;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
+use App\Models\Thana;
+use App\Models\Union;
 
 class IndMyServiceController extends Controller
 {
