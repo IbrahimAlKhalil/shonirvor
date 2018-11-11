@@ -66,9 +66,9 @@
                                 </td>
                                 <td>
                                     @if(array_key_exists('thana-request', $data))
-                                        @php($thana = \Sandofvega\Bdgeocode\Models\Thana::find($data['thana-request']))
+                                        @php($thana = \App\Models\Thana::find($data['thana-request']))
                                     @else
-                                        @php($thana = \Sandofvega\Bdgeocode\Models\Thana::find($data['thana']))
+                                        @php($thana = \App\Models\Thana::find($data['thana']))
                                     @endif
                                     {{ $thana->bn_name}}
                                     @if($thana->is_pending)
@@ -83,9 +83,9 @@
                                             class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
                                 <td>
                                     @if(array_key_exists('union-request', $data))
-                                        @php($union = \Sandofvega\Bdgeocode\Models\Union::find($data['union-request']))
+                                        @php($union = \App\Models\Union::find($data['union-request']))
                                     @else
-                                        @php($union = \Sandofvega\Bdgeocode\Models\Union::find($data['union']))
+                                        @php($union = \App\Models\Union::find($data['union']))
                                     @endif
                                     {{ $union->bn_name}}
                                     @if($union->is_pending)

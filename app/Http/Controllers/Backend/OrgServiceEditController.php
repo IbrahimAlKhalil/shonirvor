@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Sandofvega\Bdgeocode\Models\Thana;
-use Sandofvega\Bdgeocode\Models\Union;
+use App\Models\Thana;
+use App\Models\Union;
 
 class OrgServiceEditController extends Controller
 {

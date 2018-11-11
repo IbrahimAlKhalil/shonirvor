@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
-use App\Http\Controllers\Controller;
 use App\Models\Village;
 use App\Models\WorkMethod;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Sandofvega\Bdgeocode\Models\Division;
 
 class IndMyServiceController extends Controller
 {

@@ -19,7 +19,7 @@
                         <button type="button" href="javascript:" class="btn w-100 @if($user->referPackage()->exists()){{ 'btn-success' }}@else{{ 'btn-info' }}@endif" data-toggle="modal" data-target="#referPackageModal">রেফার প্যাকেজ</button>
                         <!-- Modal -->
                         <div class="modal fade" id="referPackageModal" role="dialog">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">রেফার প্যাকেজ</h5>
@@ -47,6 +47,87 @@
                                         </div>
                                     </form>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header text-center">রেফারেন্স</div>
+                            <div class="card-body">
+                                @if($user->references->isNotEmpty())
+                                    <p>পাওনাঃ<span class="float-right">{{ en2bnNumber(521) }} টাকা</span></p>
+                                    <button type="button" href="javascript:" class="btn btn-info w-100" data-toggle="modal" data-target="#referrencePaymentModal">পেমেন্ট করুন</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="referrencePaymentModal" role="dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">রেফারেন্স পেমেন্ট</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="#" method="post">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('put') }}
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="method-select">পেমেন্ট মেথড
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <select name="method" id="method-select" class="form-control">
+                                                                <option value="">-- মেথড সিলেক্ট করুন --</option>
+                                                                @foreach($paymentMethods as $method)
+                                                                    <option value="{{ $method->id }}">{{ $method->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="send-from">যে নাম্বার থেকে টাকা পাঠানো হয়েছে
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="number" name="from" id="send-from" class="form-control" placeholder="কমপক্ষে শেষ ৪ ডিজিট" autocomplete="off">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="transaction-id-input">Transaction ID
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="text" id="transaction-id-input" name="transaction-id" class="form-control" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer  border-top-0">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল</button>
+                                                        <button type="submit" class="btn btn-primary">সাবমিট</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    @foreach($user->references as $reference)
+                                        @if($reference->service_type_id == 1)
+                                            <p class="text-center">
+                                                @if($reference->service->deleted_at == null)
+                                                    <a href="{{ route('individual-service.show', $reference->service->id) }}" target="_blank">{{ $reference->service->user->name }}</a>
+                                                @else
+                                                    <a href="{{ route('individual-service.show-disabled', $reference->service->id) }}" target="_blank">{{ $reference->service->user->name }}</a>
+                                                @endif
+                                            </p>
+                                        @else
+                                            <p class="text-center">
+                                                @if($reference->service->deleted_at == null)
+                                                    <a href="{{ route('organization-service.show', $reference->service->id) }}" target="_blank">{{ $reference->service->name }}</a>
+                                                @else
+                                                    <a href="{{ route('organization-service.show-disabled', $reference->service->id) }}" target="_blank">{{ $reference->service->name }}</a>
+                                                @endif
+                                            </p>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <p class="text-center">এই ইউজার এখনো কাউকে রেফার করে নি।</p>
+                                @endif
                             </div>
                         </div>
                     </div>
