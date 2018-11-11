@@ -174,9 +174,9 @@ Route::namespace('Backend')->group(function () {
             }, '');
 
             // TODO: Should removed..
-            Route::resource('ads', 'AdController', [
-                'except' => ['create', 'show', 'edit']
-            ])->names('ad');
+//            Route::resource('ads', 'AdController', [
+//                'except' => ['create', 'show', 'edit']
+//            ])->names('ad');
 
             Route::resource('notices', 'NoticeController', [
                 'only' => ['index', 'store', 'update', 'destroy']

@@ -1,8 +1,8 @@
+import '../../../../scss/frontend/my-services/edit.scss';
 import '../../../modules/selectize-option-loader-plugin';
 import {Repeater} from "../../../modules/repeater";
 import {FormChangeChecker} from "../../../modules/form-change-checker";
 import {ImagePicker} from "../../../modules/image-picker";
-
 
 document.addEventListener('DOMContentLoaded', function () {
     $('#division, #district, #thana, #union, #village').selectize({
@@ -21,11 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    let repeater = new Repeater(document.getElementById('sub-categories'), function () {
-        let length = this.length;
+    let container = document.getElementById('sub-categories');
+    let repeater = new Repeater(container, function () {
+        let length = container.children.length;
         let tr = `
                       <tr data-repeater-clone="true">
-                                <td> ১</td>
+                                <td> ${length + 2}</td>
                                 <td><input type="text" class="form-control"></td>
                                 <td>
                                     <div class="input-group">
@@ -69,10 +70,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let fragment = document.createElement('tbody');
         fragment.innerHTML = tr;
-        return fragment.firstElementChild.cloneNode(true);
+        let node = fragment.firstElementChild.cloneNode(true);
+        $(node).find('.delete-sub-category').on('click', function () {
+            $(this).closest('tr').hide(500, function () {
+                $(this).remove();
+            });
+        });
+        return node;
     });
 
     document.getElementById('add-new').addEventListener('click', function () {
         repeater.repeat();
     });
+
+    new ImagePicker(document.getElementsByClassName('file-picker'));
 });

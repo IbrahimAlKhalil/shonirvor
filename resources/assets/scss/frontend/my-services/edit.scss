@@ -1,0 +1,17 @@
+.kajer-chobi {
+  .image-picker-control {
+    width: 100%;
+    height: 400px;
+  }
+
+  .image-picker-button, .image-picker-image {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .cross {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 1.2em;
+  }
+}

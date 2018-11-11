@@ -59,7 +59,11 @@ class IndMyServiceController extends Controller
     public function edit($id)
     {
         $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
-            ->withTrashed()->find($id);
+            ->onlyApproved()->find($id);
+
+        if (!$service) {
+            abort(404, 'Service is pending or service not found');
+        }
 
         $navs = $this->navs();
         $workMethods = WorkMethod::all();

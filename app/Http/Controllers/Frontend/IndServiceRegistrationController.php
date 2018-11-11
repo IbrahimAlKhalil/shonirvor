@@ -247,6 +247,7 @@ class IndServiceRegistrationController extends Controller
         }
         // requested subcategory rates
         if ($isSubCategoryRequest) {
+            $count = 0;
             foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
                 if (array_key_exists('name', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
@@ -254,12 +255,13 @@ class IndServiceRegistrationController extends Controller
                             array_push($workMethods, [
                                 'work_method_id' => $workMethod['id'],
                                 'ind_id' => $ind->id,
-                                'sub_category_id' => $requestedSubCategories[$index]->id,
+                                'sub_category_id' => $requestedSubCategories[$count]->id,
                                 'rate' => array_key_exists('rate', $workMethod) ? $workMethod['rate'] : null
                             ]);
                         }
                     }
                 }
+                $count++;
             }
         }
 
@@ -277,7 +279,7 @@ class IndServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images') && $request->hasFile('images')) {
+        if ($request->has('images')) {
             $images = [];
             // TODO:: Validation
             foreach ($request->post('images') as $image) {

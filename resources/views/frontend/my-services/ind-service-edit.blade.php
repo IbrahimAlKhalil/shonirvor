@@ -114,7 +114,7 @@
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
                             <tr>
-                                <th scope="row">জেলা</th>
+                                <th scope="row"><label for="division">বিভাগ</label></th>
                                 <td>
                                     <select name="division" id="division"
                                             data-option-loader-url="{{ route('api.districts') }}"
@@ -129,7 +129,7 @@
                             </tr>
 
                             <tr>
-                                <th scope="row">জেলা</th>
+                                <th scope="row"><label for="district">জেলা</label></th>
                                 <td>
                                     <select name="district" id="district"
                                             data-placeholder="-- জেলা --"
@@ -145,7 +145,7 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><label for="thana-request">থানা</label></th>
+                                <th scope="row"><label for="thana">থানা</label></th>
                                 <td>
                                     <select name="thana" id="thana"
                                             data-placeholder="-- থানা --"
@@ -162,7 +162,7 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><label for="union-request">ইউনিয়ন</label></th>
+                                <th scope="row"><label for="union">ইউনিয়ন</label></th>
                                 <td>
                                     <select name="union" id="union"
                                             data-placeholder="-- ইউনিয়ন --"
@@ -179,7 +179,7 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><label for="village-request">এলাকা</label></th>
+                                <th scope="row"><label for="village">এলাকা</label></th>
                                 <td>
                                     <select name="village" id="village"
                                             data-placeholder="-- এলাকা --"
@@ -193,9 +193,15 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><label for="address">ঠিকানা</label></th>
-                                <td><input id="address" class="form-control" type="text"
-                                           value="{{ $service->address }}"></td>
+                                <th scope="row">
+                                    <label for="address">ঠিকানা</label>
+                                </th>
+                                <td>
+                                    <input id="address" class="form-control"
+                                           type="text"
+                                           name="address"
+                                           value="{{ $service->address }}">
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -235,7 +241,11 @@
                             @forelse($service->subCategories as $index => $subCategory)
                                 <tr data-repeater-clone="true">
                                     <td> {{ $index+1 }} </td>
-                                    <td>{{ $subCategory->name }}</td>
+                                    <td>
+                                        <input type="hidden" name="sub-categories[{{ $index }}][id]"
+                                               value="{{ $subCategory->id }}">
+                                        {{ $subCategory->name }}
+                                    </td>
                                     @php($methods = $indWorkMethods[$subCategory->id])
                                     @php($methodIds = $methods->pluck('id')->toArray())
                                     @foreach($workMethods as $method)
@@ -247,6 +257,7 @@
                                                         <span class="input-group-text">৳</span>
                                                     </div>
                                                     <input type="text"
+                                                           name="sub-categories[{{ $index }}][work-methods][{{ $method->id }}][price]"
                                                            class="form-control"
                                                            value="@if($currentMethod->first()){{ en2bnNumber($currentMethod->first()->pivot->rate) }}@endif">
                                                 </div>
@@ -255,7 +266,7 @@
                                                 <div class="d-flex justify-content-center align-content-center">
                                                     <label for="no-thana" class="mt-3 checkbox">
                                                         <input type="checkbox" id="no-thana" class="mt-2"
-                                                               name="no-thana" {{ checkBox(in_array(4, $methodIds)) }}>
+                                                               name="sub-categories[{{ $index }}][work-methods][{{ $method->id }}][negotiable]" {{ checkBox(in_array(4, $methodIds)) }}>
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -281,52 +292,93 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p class="h4 border-bottom">ডকুমেন্টঃ</p>
-                        <div class="row">
-                            @if($service->experience_certificate)
-                                <div class="col-md-3">
-                                    <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                    <a href="{{ asset('storage/' . $service->experience_certificate) }}"
-                                       target="_blank">
-                                        <img src="{{ asset('storage/' . $service->experience_certificate) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
+                <div class="col-12 mt-5">
+                    <p class="h4 border-bottom">ডকুমেন্টঃ</p>
+                    <div class="row">
+                        @if($service->cv)
+                            <div class="col-md-3">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <span class="text-muted">বায়োডাটা</span>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <input type="file" id="cv"
+                                               name="image"
+                                               form="update-form"
+                                               class="file-picker">
+                                    </div>
                                 </div>
-                            @endif
-                            @if($service->cv)
-                                <div class="col-md-3">
-                                    <span class="text-muted">বায়োডাটা</span>
-                                    <a href="{{ asset('storage/' . $service->cv) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $service->cv) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
+
+
+                            </div>
+                        @endif
+                        @if($service->experience_certificate)
+                            <div class="col-md-3">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <input type="file" id="image"
+                                               name="experience_certificate"
+                                               form="update-form"
+                                               class="file-picker"
+                                               data-image="{{ asset('storage/' . $service->experience_certificate) }}">
+                                    </div>
                                 </div>
-                            @endif
-                            @if( ! $service->experience_certificate
-                                && ! $service->cv)
-                                <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
-                            @endif
+                            </div>
+                        @endif
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                        <span class="text-muted">
+                                            জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ
+                                        </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach($service->user->identities as $identity)
+                                            <div class="col">
+                                                <input type="file" id="image"
+                                                       name="identities"
+                                                       form="update-form"
+                                                       class="file-picker"
+                                                       data-image="{{ asset('storage/' . $identity->path) }}"
+                                                       multiple>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        @if( ! $service->experience_certificate
+                            && ! $service->cv && !$service->user->identities->first())
+                            <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
+                        @endif
                     </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-12">
+                <div class="row mt-5">
+                    <div class="col-12 kajer-chobi">
                         <p class="h4 border-bottom">কাজের ছবিঃ</p>
                         <div class="row">
                             <div class="col-12">
                                 @forelse($service->workImages->chunk(2) as $chunk)
                                     <div class="card-deck py-2">
-                                        @foreach($chunk as $image)
+                                        @foreach($chunk as $index => $image)
                                             <div class="card shadow-sm">
-                                                <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
-                                                    <img class="card-img-top img-fluid"
-                                                         src="{{ asset('storage/' . $image->path) }}">
-                                                </a>
+                                                <input type="file" id="image"
+                                                       name="work-images[{{ $index }}][file]"
+                                                       form="update-form"
+                                                       class="file-picker"
+                                                       data-image="{{ asset('storage/' . $image->path) }}">
                                                 <div class="card-body">
-                                                    <p class="card-text">{{ $image->description }}</p>
+                                                    <label for="des">বর্ণনাঃ</label>
+                                                    <textarea type="text"
+                                                              name="work-images[{{ $index }}][description]"
+                                                              id="des"
+                                                              class="form-control">{{ $image->description }}</textarea>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -334,6 +386,30 @@
                                 @empty
                                     <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
                                 @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4 text-center">
+                        <button class="btn btn-success w-25" data-toggle="modal" data-target="#confirmModal">সাবমিট
+                        </button>
+
+                        <!-- Accept Modal -->
+                        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title">আপনি কি শিওর?</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer border-top-0">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
+                                        <button type="submit" class="btn btn-success" form="submit-form">সাবমিট
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

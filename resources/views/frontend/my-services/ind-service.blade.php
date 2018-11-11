@@ -75,30 +75,30 @@
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
                             <tbody>
-                                <tr>
-                                    <th scope="row">জেলা</th>
-                                    <td>{{ $service->district->bn_name}}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $service->district->bn_name}}</td>
+                            </tr>
 
-                                <tr>
-                                    <th scope="row">থানা</th>
-                                    <td>{{ $service->thana->bn_name}}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $service->thana->bn_name}}</td>
+                            </tr>
 
-                                <tr>
-                                    <th scope="row">ইউনিয়ন</th>
-                                    <td>{{ $service->union->bn_name }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $service->union->bn_name }}</td>
+                            </tr>
 
-                                <tr>
-                                    <th scope="row">এলাকা</th>
-                                    <td>{{ $service->village->bn_name }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">এলাকা</th>
+                                <td>{{ $service->village->bn_name }}</td>
+                            </tr>
 
-                                <tr>
-                                    <th scope="row">ঠিকানা</th>
-                                    <td>{{ $service->address }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">ঠিকানা</th>
+                                <td>{{ $service->address }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -109,10 +109,10 @@
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
-                                <tr>
-                                    <th scope="row">ক্যাটাগরি</th>
-                                    <td>{{ $service->category->name }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">ক্যাটাগরি</th>
+                                <td>{{ $service->category->name }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -123,13 +123,13 @@
                         <p class="h4 border-bottom">সার্ভিস সমূহঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>নাম</th>
-                                    @foreach($workMethods as $workMethod)
-                                        <th>{{ $workMethod->name }}</th>
-                                    @endforeach
-                                </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>নাম</th>
+                                @foreach($workMethods as $workMethod)
+                                    <th>{{ $workMethod->name }}</th>
+                                @endforeach
+                            </tr>
                             </thead>
                             <tbody>
                             @forelse($service->subCategories as $index => $subCategory)
@@ -242,14 +242,16 @@
                     <div class="row mt-4">
                         <div class="col-12">
                             <a href="{{ route('frontend.applications.individual-top-service.index').'?category='.$service->category_id }}">
-                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন
+                                </button>
                             </a>
                         </div>
                     </div>
                 @endif
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</button>
+                        <a type="button" target="_blank" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
+                           class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</a>
                     </div>
                 </div>
             </div>
