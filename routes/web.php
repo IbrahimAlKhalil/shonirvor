@@ -75,13 +75,13 @@ Route::namespace('Frontend')->group(function () {
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
             Route::resource('individual-service', 'IndMyServiceController', [
-                'only' => ['show'],
+                'only' => ['show', 'edit'],
                 'parameters' => ['individual-service' => 'service'],
                 'names' => 'ind'
             ]);
 
             Route::resource('organization-service', 'OrgMyServiceController', [
-                'only' => ['show'],
+                'only' => ['show', 'edit'],
                 'parameters' => ['organization-service' => 'service'],
                 'names' => 'org'
             ]);
