@@ -14,6 +14,7 @@ module.exports = {
         'frontend/applications/ad/create': './resources/assets/js/frontend/applications/ad/create.js',
         'frontend/common': './resources/assets/js/frontend/common.js',
         'frontend/ad/edit': './resources/assets/js/frontend/ad/edit.js',
+        'frontend/my-services/ind-service/edit': './resources/assets/js/frontend/my-services/ind-service/edit.js',
 
         'backend/dashboard': './resources/assets/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',

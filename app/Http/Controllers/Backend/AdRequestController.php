@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Ad;
 use App\Models\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,19 +17,16 @@ class AdRequestController extends Controller
             ['url' => route('backend.request.ad-edit.index'), 'text' => 'বিজ্ঞাপন এডিট আবেদন সমূহ'],
         ];
 
-        $ads = Ad::with([
-            'user',
-            'payments' => function ($query) {
-                $query->with([
-                    'paymentMethod',
-                    'package.properties' => function ($query) {
-                        $query->where('name', 'name');
-                    }
-                ]);
+        $applications = Income::with([
+            'incomeable' => function ($query) {
+                $query->with('user');
+            },
+            'package.properties' => function ($query) {
+                $query->where('name', 'name');
             }
-        ])->where('expire', null)->paginate(15);
+        ])->where('incomeable_type', 'ad')->where('approved', 0)->paginate(15);
 
-        return view('backend.request.ad.index', compact('ads', 'navs'));
+        return view('backend.request.ad.index', compact('applications', 'navs'));
     }
 
     public function show(Income $application)

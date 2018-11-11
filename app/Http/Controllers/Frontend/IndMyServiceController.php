@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Category;
 use App\Models\Ind;
-use App\Http\Controllers\Controller;
 use App\Models\Village;
 use App\Models\WorkMethod;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Thana;
-use App\Models\Union;
 
 class IndMyServiceController extends Controller
 {
@@ -56,5 +53,23 @@ class IndMyServiceController extends Controller
         }
 
         return $navs;
+    }
+
+    public function edit($id)
+    {
+        $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
+            ->withTrashed()->find($id);
+
+        $navs = $this->navs();
+        $workMethods = WorkMethod::all();
+        $indWorkMethods = $service->workMethods->groupBy('pivot.sub_category_id');
+
+        $divisions = Division::all();
+        $districts = $service->division->districts;
+        $thanas = $service->district->thanas;
+        $unions = $service->thana->unions;
+        $villages = Village::where('union_id', $service->union_id)->get();
+
+        return view('frontend.my-services.ind-service-edit', compact('service', 'navs', 'workMethods', 'indWorkMethods', 'divisions', 'districts', 'thanas', 'villages', 'unions'));
     }
 }

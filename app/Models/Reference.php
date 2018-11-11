@@ -15,6 +15,28 @@ class Reference extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    public function service()
+    {
+        if ($this->service_type_id == 1) {
+
+            return $this->belongsTo(Ind::class)->withTrashed();
+
+        } elseif ($this->service_type_id == 2) {
+
+            return $this->belongsTo(Org::class)->withTrashed();
+
+        } else {
+
+            abort(422, 'service_type_id is not exist.');
+
+        }
+    }
+
 
     /******************/
     /***** Scopes *****/

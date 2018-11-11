@@ -1,18 +1,19 @@
 import {querySelectorAll} from "./scoped-query-selector";
 
 export class Repeater {
-    constructor(container, markup) {
+    constructor(container, markupCallback) {
         this.container = container;
-        this.markup = markup;
+        this.markupCallback = markupCallback;
+        this.count = querySelectorAll(container, '> [data-repeater-clone]').length + 1;
     }
 
     repeat(params) {
-        let instance = this;
         return new Promise(resolve => {
-            let clone = instance.markup.apply(instance, params);
-            let insertBefore = instance.container.querySelector('.repeater-insert-before');
+            let clone = this.markupCallback.apply(this, params);
+            let insertBefore = this.container.querySelector('.repeater-insert-before');
             clone.setAttribute('data-repeater-clone', 'true');
-            instance.container.insertBefore(clone, insertBefore);
+            this.container.insertBefore(clone, insertBefore);
+            this.count++;
             resolve(clone);
         });
     }

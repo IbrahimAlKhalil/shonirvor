@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('otirikto-kaj');
 
         let repeater = new Repeater(container, function () {
-            let length = this.length;
-            let virtualDom = document.createElement('div');
-            virtualDom.innerHTML = `
+            let length = this.count;
+            let fragment = document.createElement('div');
+            fragment.innerHTML = `
             <div class="row border rounded shadow-sm mt-2 position-relative">
                 <div class="form-group  col-md-12 row mt-3">
                     <label for="additional-pricing-name-${length}" class="col-3 col-form-label">কাজের
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             `;
 
-            let div = virtualDom.firstElementChild.cloneNode(true);
+            let div = fragment.firstElementChild.cloneNode(true);
             $(div).find('.remove-btn').on('click', function (event) {
                 event.preventDefault();
                 $(div).fadeOut('slow', function () {
@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('req-repeater-container');
 
         let repeater = new Repeater(container, function () {
-            let length = this.length;
+            let length = this.count;
 
-            let virtualDom = document.createElement('ul');
-            virtualDom.innerHTML = `
+            let fragment = document.createElement('ul');
+            fragment.innerHTML = `
             <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                 <div class="row">
                     <input type="text" class="form-control col-md-5"
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </li>
             `;
 
-            let li = virtualDom.firstElementChild.cloneNode(true);
+            let li = fragment.firstElementChild.cloneNode(true);
             $(li).find('.remove-btn').on('click', function (event) {
                 event.preventDefault();
                 $(li).fadeOut('slow', function () {
@@ -108,9 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('repeater-container');
 
         let repeater = new Repeater(container, function (value) {
-            let length = this.length;
-            let virtualDom = document.createElement('ul');
-            virtualDom.innerHTML = `
+            let length = this.count;
+            let fragment = document.createElement('ul');
+            fragment.innerHTML = `
             <li class="repeater-clone mt-2 border-0 list-group-item">
                 <div class="row">
                     <label class="col-md-6" for="sub-category-${length - 1}-${value}">${$(select).find(`[value="${value}"]`).text()}</label>
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </li>
         `;
 
-            return virtualDom.firstElementChild.cloneNode(true);
+            return fragment.firstElementChild.cloneNode(true);
         });
 
         let select = document.getElementById('sub-categories');

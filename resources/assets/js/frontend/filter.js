@@ -5,9 +5,6 @@
 // Bootstrap CSS
 import './../../../../node_modules/bootstrap/dist/css/bootstrap.css';
 
-// Selectize JS
-import './../../../../node_modules/selectize/dist/css/selectize.default.css';
-
 // Common frontend css for all page
 import '../../scss/frontend/components/_common.scss';
 
@@ -24,10 +21,6 @@ import '../../scss/frontend/filter.scss';
 import 'bootstrap';
 
 // Ajax Area & Category loader
-import '../modules/option-loader';
-
-// Selectize JS
-import 'selectize';
 import '../modules/selectize-option-loader-plugin'
 
 // BS Star Rating

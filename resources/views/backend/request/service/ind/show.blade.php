@@ -19,12 +19,14 @@
                     <div class="row">
                         <div class="row col-12">
                             <div class="col-md-3">
-                                <img src="{{ asset('storage/' . $application->user->photo) }}" class="img-thumbnail w-100">
+                                <img src="{{ asset('storage/' . $application->user->photo) }}"
+                                     class="img-thumbnail w-100">
                             </div>
 
                             <div class="col-md-7 d-flex flex-column flex-wrap justify-content-end">
                                 <h1>
-                                    <a href="{{ route('backend.users.show', $application->user->id) }}" target="_blank">{{ $application->user->name }}</a>
+                                    <a href="{{ route('backend.users.show', $application->user->id) }}"
+                                       target="_blank">{{ $application->user->name }}</a>
                                 </h1>
                                 <p class="h5">{{ $application->category->name }}</p>
                                 <p class="h5">{{ $application->village->bn_name.', '.$application->union->bn_name.', '.$application->thana->bn_name.', '.$application->district->bn_name.', '.$application->division->bn_name }}</p>
@@ -81,7 +83,8 @@
                                     <tr>
                                         <th scope="row">রেফারার</th>
                                         <td>
-                                            <a href="{{ route('backend.users.show', $application->referredBy->user->id) }}" target="_blank">
+                                            <a href="{{ route('backend.users.show', $application->referredBy->user->id) }}"
+                                               target="_blank">
                                                 {{ $application->referredBy->user->name }}
                                             </a>
                                         </td>
@@ -390,8 +393,10 @@
                 </form>
                 <div class="row">
                     <div class="col-12 mt-4 btn-group">
-                        <button class="btn btn-success col" data-toggle="modal" data-target="#acceptModal">গ্রহণ করুন</button>
-                        <button class="btn btn-danger col" data-toggle="modal" data-target="#deleteModal">মুছে ফেলুন</button>
+                        <button class="btn btn-success col" data-toggle="modal" data-target="#acceptModal">গ্রহণ করুন
+                        </button>
+                        <button class="btn btn-danger col" data-toggle="modal" data-target="#deleteModal">মুছে ফেলুন
+                        </button>
 
                         <!-- Accept Modal -->
                         <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog">
@@ -405,7 +410,8 @@
                                     </div>
                                     <div class="modal-footer border-top-0">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
-                                        <button type="submit" class="btn btn-success" form="approve-request">সাবমিট</button>
+                                        <button type="submit" class="btn btn-success" form="approve-request">সাবমিট
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +429,8 @@
                                     </div>
                                     <div class="modal-footer border-top-0">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
-                                        <button type="submit" class="btn btn-danger" form="reject-request">ডিলিট</button>
+                                        <button type="submit" class="btn btn-danger" form="reject-request">ডিলিট
+                                        </button>
                                     </div>
                                 </div>
                             </div>

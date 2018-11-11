@@ -1,3 +1,5 @@
+import 'selectize/dist/css/selectize.default.css';
+import {OptionLoader} from "./option-loader";
 import Selectize from "selectize";
 
 Selectize.define('option-loader', function () {

@@ -208,13 +208,15 @@
                         @include('components.visitor-conuter', ['visitor' => orgVisitorCount($service->id)])
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <a href="{{ route('frontend.applications.organization-top-service.index').'?service='.$service->id }}">
-                            <button type="button" href="javascript:" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
-                        </a>
+                @if($service->deleted_at == null)
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <a href="{{ route('frontend.applications.organization-top-service.index').'?service='.$service->id }}">
+                                <button type="button" href="javascript:" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="row mt-4">
                     <div class="col-12">
                         <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</button>

@@ -18,8 +18,8 @@ class AdController extends Controller
         $edit = $ad->edit;
 
         if ($edit) {
-            $image = $edit->image;
-            $url = $edit->url;
+            if ($edit->image) $image = $edit->image;
+            if ($edit->url) $url = $edit->url;
         }
 
         return view('frontend.ad.edit', compact('ad', 'image', 'url'));
@@ -43,7 +43,10 @@ class AdController extends Controller
             $edit->image = $request->file('image')->store('user-photos/' . Auth::id());
         }
         $edit->ad_id = $ad->id;
-        $edit->url = $request->url;
+        if ($request->has('url')) {
+            $edit->url = $request->url;
+        }
+
         $edit->save();
         DB::commit();
 

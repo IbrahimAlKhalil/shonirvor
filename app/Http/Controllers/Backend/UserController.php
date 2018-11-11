@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\Package;
 use Illuminate\Http\Request;
@@ -25,6 +26,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load(['references.package']);
+
         $referPackages = Package::with('properties')->where('package_type_id', 5)->get();
 
         if ($user->referPackage()->exists()) {
@@ -33,7 +36,9 @@ class UserController extends Controller
             $userReferPackageId = $this->defaultReferPackage->id;
         }
 
-        return view('backend.users.show', compact('user', 'referPackages', 'userReferPackageId'));
+        $paymentMethods = PaymentMethod::select('id', 'name')->get();
+
+        return view('backend.users.show', compact('user', 'referPackages', 'userReferPackageId', 'paymentMethods'));
     }
 
     public function updateReferPackage(User $user, Request $request)
@@ -62,5 +67,10 @@ class UserController extends Controller
         $referPackage->save();
 
         return back()->with('success', 'রেফার প্যাকেজ পরিবর্তিত হয়েছে।');
+    }
+
+    public function pay()
+    {
+        //
     }
 }
