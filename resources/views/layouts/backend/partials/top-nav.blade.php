@@ -22,11 +22,11 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="packageDropdown">
                     <a class="dropdown-item @if(request()->is('dashboard/requests/individual*') || request()->get('type') == 3 || (request()->is('dashboard/requests/top-service') && request()->get('type') != 4)){{ 'active' }}@endif"
-                       href="{{ route('backend.request.top-service.index').'?type=3' }}">ব্যাক্তিগত সার্ভিস</a>
+                       href="{{ route('backend.request.ind-service-request.index') }}">ব্যাক্তিগত সার্ভিস</a>
                     <a class="dropdown-item @if(request()->is('dashboard/requests/organization*')  || request()->get('type') == 4){{ 'active' }}@endif"
-                       href="{{ route('backend.request.top-service.index').'?type=4' }}">প্রাতিষ্ঠানিক সার্ভিস</a>
-                    <a class="dropdown-item @if(request()->is('dashboard/requests/ad*')){{ 'active' }}@endif"
-                       href="{{ route('backend.request.ad.index') }}">বিজ্ঞাপন</a>
+                       href="{{ route('backend.request.org-service-request.index') }}">প্রাতিষ্ঠানিক সার্ভিস</a>
+                    <a class="dropdown-item @if(request()->is('dashboard')){{ 'active' }}@endif"
+                       href="{{ route('dashboard') }}">বিজ্ঞাপন</a>
                 </div>
             </li>
             <li class="nav-item @if(request()->is('dashboard/*category*')){{ 'active' }}@endif">

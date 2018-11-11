@@ -8,40 +8,36 @@
 
 @section('content')
     @include('components.success')
-    <div class="container">
-        <div class="row mt-4">
-            <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service-request.index') }}" class="btn btn-secondary">বেক্তিগত</a>
-                <a href="{{ route('organization-service-request.index') }}" class="btn btn-secondary active">প্রাতিষ্ঠানিক</a>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active h5 mb-0">প্রাতিষ্ঠানিক সার্ভিস রিকোয়েস্ট</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 mt-4">
-                <h4 class="mb-4">সকল প্রাতিষ্ঠানিক সার্ভিস রিকোয়েস্ট</h4>
-            </div>
+        <div class="row mt-3">
             <div class="col-md-9">
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">প্রতিষ্ঠানের নাম</th>
-                        <th scope="col">ইমেইল</th>
                         <th scope="col">সার্ভিস</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($serviceRequests as $serviceRequest)
-
-                        @php($serial = $serviceRequests->perPage() * ($serviceRequests->currentPage() - 1) + $loop->iteration)
+                    @forelse($applications as $application)
+                        @php($serial = $applications->perPage() * ($applications->currentPage() - 1) + $loop->iteration)
                         <tr>
-                            <th scope="row">{{ en2bnNumber($serial) }}</th>
+                            <td scope="row">{{ en2bnNumber($serial) }}</td>
                             <td>
-                                <a href="{{ route('organization-service-request.show', $serviceRequest->id) }}">{{ $serviceRequest->name }}</a>
+                                <a href="{{ route('backend.request.org-service-request.show', $application->id) }}">{{ $application->name }}</a>
                             </td>
-                            <td>{{ $serviceRequest->email }}</td>
-                            <td>{{ $serviceRequest->service }}</td>
+                            <td>{{ $application->category->name }}</td>
                         </tr>
-
                     @empty
                         <tr>
                             <td colspan="5">কোন সেবা প্রদানকারী খুঁজে পাওয়া যায়নি ।</td>
@@ -51,7 +47,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $serviceRequests->links('pagination::bootstrap-4') }}
+                        {{ $applications->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

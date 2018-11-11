@@ -110,6 +110,18 @@ Route::namespace('Backend')->group(function () {
                     'parameters' => ['top-service' => 'application']
                 ]);
 
+                Route::resource('individual-service-request', 'IndServiceRequestController', [
+                    'except' => ['create', 'store', 'edit'],
+                    'parameters' => ['individual-service-request' => 'application'],
+                    'names' => 'ind-service-request'
+                ]);
+
+                Route::resource('organization-service-request', 'OrgServiceRequestController', [
+                    'except' => ['create', 'store', 'edit'],
+                    'parameters' => ['organization-service-request' => 'application'],
+                    'names' => 'org-service-request'
+                ]);
+
                 Route::resource('ad', 'AdRequestController', [
                     'only' => ['index', 'show', 'update', 'destroy'],
                     'parameters' => ['ad' => 'application']
@@ -161,7 +173,7 @@ Route::namespace('Backend')->group(function () {
 
             }, '');
 
-            // TODO: This route should be removed
+            // TODO: Should removed..
             Route::resource('ads', 'AdController', [
                 'except' => ['create', 'show', 'edit']
             ])->names('ad');
@@ -224,25 +236,13 @@ Route::middleware('auth')->group(function () {
 
 
 Route::namespace('Frontend')->name('frontend.')->group(function () {
-
     Route::resource('ad', 'AdController', [
-        'only' => [
-            'edit', 'update'
-        ]
+        'only' => ['edit', 'update']
     ]);
-
 }, '');
 
 
 Route::namespace('Backend')->prefix('dashboard')->group(function () {
-    Route::resource('individual-service-request', 'IndServiceRequestController', [
-        'only' => ['index', 'show', 'update', 'destroy'],
-        'parameters' => ['individual-service-request' => 'service-request']
-    ]);
-    Route::resource('organization-service-request', 'OrgServiceRequestController', [
-        'only' => ['index', 'show', 'update', 'destroy'],
-        'parameters' => ['organization-service-request' => 'service-request']
-    ]);
 
     Route::get('individual-service/disabled', 'IndServiceController@showDisabledAccounts')->name('individual-service.disabled');
     Route::get('organization-service/disabled', 'OrgServiceController@showDisabledAccounts')->name('organization-service.disabled');

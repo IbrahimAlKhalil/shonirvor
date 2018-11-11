@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 
 class ReferrerPackageController extends Controller
 {
+    private $defaultPackage;
     private $packageTypeId = 5;
     private $packageProperties = [
         ['id' => 1, 'name' => 'name'],
@@ -19,31 +20,21 @@ class ReferrerPackageController extends Controller
         ['id' => 6, 'name' => 'refer_onetime_interest'],
         ['id' => 7, 'name' => 'refer_renew_interest'],
         ['id' => 8, 'name' => 'refer_fail_onetime_interest'],
-        ['id' => 9, 'name' => 'refer_fail_renew_interest'],
-        ['id' => 10, 'name' => 'is_default']
+        ['id' => 9, 'name' => 'refer_fail_renew_interest']
     ];
+
+    public function __construct()
+    {
+        $this->defaultPackage = Package::where('package_type_id', $this->packageTypeId)->first();
+    }
 
     public function index()
     {
-        $packages = Package::with('properties')
-            ->select('packages.id',
-                'packages.package_type_id',
-                'package_values.package_property_id',
-                'package_values.value as is_default')
-            ->join('package_values', function ($join) {
-                $join->on('packages.id', 'package_values.package_id')
-                    ->where('package_values.package_property_id', 10);
-            })
-            ->where('package_type_id', $this->packageTypeId)
-            ->select('packages.id',
-                'packages.package_type_id',
-                'package_values.package_property_id',
-                'package_values.value as is_default')
-            ->orderBy('is_default', 'desc')
-            ->paginate(10);
+        $defaultPackage = $this->defaultPackage;
 
-//        dd(Package::where('package_type_id', $this->packageTypeId)->get());
-//        dd($packages);
+        $packages = Package::with('properties')
+            ->where('package_type_id', $this->packageTypeId)
+            ->paginate(10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -54,7 +45,7 @@ class ReferrerPackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'বিজ্ঞাপন প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.referrer.index', compact('packages', 'navs'));
+        return view('backend.packages.referrer.index', compact('packages', 'defaultPackage', 'navs'));
     }
 
     public function store(Request $request)
@@ -66,24 +57,6 @@ class ReferrerPackageController extends Controller
         $package = new Package;
         $package->package_type_id = $this->packageTypeId;
         $package->save();
-
-        if ($request->input('is_default'))
-            DB::table('package_values')->select(
-                'package_values.id as id',
-                'packages.id as package_id',
-                'packages.package_type_id',
-                'package_values.package_property_id',
-                'package_values.value'
-                )
-                ->join('packages', 'package_values.package_id', 'packages.id')
-                ->where([
-                    ['package_property_id', 10],
-                    ['package_type_id', 5],
-                    ['value', 1]
-                ])
-                ->update([
-                    'package_values.value' => null
-                ]);
 
         foreach ($this->packageProperties as $property) {
             array_push($packageValues, [
@@ -106,25 +79,6 @@ class ReferrerPackageController extends Controller
     {
         DB::beginTransaction();
 
-        if ($request->input('is_default'))
-            DB::table('package_values')->select(
-                'package_values.id as id',
-                'packages.id as package_id',
-                'packages.package_type_id',
-                'package_values.package_property_id',
-                'package_values.value'
-                )
-                ->join('packages', 'package_values.package_id', 'packages.id')
-                ->where([
-                    ['package_id', '!=', $package->id],
-                    ['package_property_id', 10],
-                    ['package_type_id', 5],
-                    ['value', 1]
-                ])
-                ->update([
-                    'package_values.value' => null
-                ]);
-
         foreach ($this->packageProperties as $property) {
             $package->properties()
                 ->where('package_property_id', $property['id'])
@@ -141,6 +95,8 @@ class ReferrerPackageController extends Controller
 
     public function destroy(Package $package)
     {
+        if ($package->id == $this->defaultPackage->id) return back()->with('error', 'ডিফল্ট প্যাকেজ ডিলিট করা যাবে না।');
+
         $package->delete();
 
         return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে।');

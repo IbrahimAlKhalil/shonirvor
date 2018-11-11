@@ -17,14 +17,19 @@ class OrgServiceRequestController extends Controller
 {
     public function index()
     {
-        $serviceRequests = Org::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
-        $navs = $this->navs();
-        return view('backend.org-service-request.index', compact('serviceRequests', 'navs'));
+        $applications = Org::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
+        $navs = [
+            ['url' => route('backend.request.org-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('backend.request.top-service.index').'?type=4', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট']
+        ];
+
+        return view('backend.request.service.org.index', compact('applications', 'navs'));
     }
 
-    public function show(Org $serviceRequest)
+    public function show(Org $application)
     {
-        $serviceRequest->load([
+        $application->load([
             'referredBy.user',
             'district',
             'thana',
@@ -46,16 +51,16 @@ class OrgServiceRequestController extends Controller
             }
         ]);
 
-        $packages = $serviceRequest->payments->first() ? Package::with('properties')->where('package_type_id', 2)->get() : null;
-        $navs = $this->navs();
-        $thanas = $serviceRequest->thana->is_pending ? Thana::where('district_id', $serviceRequest->district_id)->get() : [];
-        $unions = !$serviceRequest->thana->is_pending && $serviceRequest->union->is_pending ? Union::where('thana_id', $serviceRequest->thana_id)->get() : [];
-        $villages = !$serviceRequest->union->is_pending && $serviceRequest->village->is_pending ? Village::where('union_id', $serviceRequest->union_id)->get() : [];
-        $categories = !$serviceRequest->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
-        return view('backend.org-service-request.show', compact('serviceRequest', 'navs', 'thanas', 'unions', 'villages', 'categories', 'payments', 'packages'));
+        $packages = $application->payments->first() ? Package::with('properties')->where('package_type_id', 2)->get() : null;
+        $thanas = $application->thana->is_pending ? Thana::where('district_id', $application->district_id)->get() : [];
+        $unions = !$application->thana->is_pending && $application->union->is_pending ? Union::where('thana_id', $application->thana_id)->get() : [];
+        $villages = !$application->union->is_pending && $application->village->is_pending ? Village::where('union_id', $application->union_id)->get() : [];
+        $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
+
+        return view('backend.request.service.org.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'payments', 'packages'));
     }
 
-    public function update(Request $request, Org $serviceRequest)
+    public function update(Request $request, Org $application)
     {
         // TODO:: Validation needed
 
@@ -77,16 +82,16 @@ class OrgServiceRequestController extends Controller
         if (!$request->has('village')) $village = Union::find($request->post('village'));
         elseif (!$request->filled('village-request')) array_push($relations, 'village');
 
-        $serviceRequest->load($relations);
+        $application->load($relations);
 
-        $category = $request->filled('category') ? Category::find($request->post('category')) : $serviceRequest->category;
-        $subCategories = $serviceRequest->subCategories;
+        $category = $request->filled('category') ? Category::find($request->post('category')) : $application->category;
+        $subCategories = $application->subCategories;
         $subCategoryIds = $request->post('sub-categories') ? array_map(function ($element) {
             return $element['id'];
         }, $request->post('sub-categories')) : null;
-        $thana = !isset($thana) ? $serviceRequest->thana : $thana;
-        $union = !isset($union) ? $serviceRequest->union : $union;
-        $village = !isset($village) ? $serviceRequest->village : $village;
+        $thana = !isset($thana) ? $application->thana : $thana;
+        $union = !isset($union) ? $application->union : $union;
+        $village = !isset($village) ? $application->village : $village;
 
 
         // payments
@@ -100,22 +105,22 @@ class OrgServiceRequestController extends Controller
         if ($category->is_confirmed == 0) {
             $category->update(['name' => $request->post('category-request'), 'is_confirmed' => 1]);
         } else {
-            $serviceRequest->category_id = $category->id;
+            $application->category_id = $category->id;
         }
 
 
         // sub category
 
         if ($request->filled('confirmed-sub-categories')) {
-            DB::table('sub_categoriables')->where('sub_categoriable_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
-            DB::table('org_sub_category_rates')->where('org_id', $serviceRequest->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
+            DB::table('sub_categoriables')->where('sub_categoriable_id', $application->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
+            DB::table('org_sub_category_rates')->where('org_id', $application->id)->whereNotIn('sub_category_id', $request->post('confirmed-sub-categories'))->delete();
         }
 
         if ($subCategoryIds) {
             // Delete sub-categories
             foreach ($subCategories as $subCategory) {
                 if (!in_array($subCategory->id, $subCategoryIds)) {
-                    $serviceRequest->subCategories()->detach($subCategory->id);
+                    $application->subCategories()->detach($subCategory->id);
                     $subCategory->delete();
                 }
             }
@@ -138,7 +143,7 @@ class OrgServiceRequestController extends Controller
             $thana->is_pending = 0;
             $thana->save();
         } else {
-            $serviceRequest->thana_id = $thana->id;
+            $application->thana_id = $thana->id;
         }
 
         if ($union->is_pending == 1) {
@@ -147,7 +152,7 @@ class OrgServiceRequestController extends Controller
             $union->is_pending = 0;
             $union->save();
         } else {
-            $serviceRequest->union_id = $union->id;
+            $application->union_id = $union->id;
         }
 
         if ($village->is_pending == 1) {
@@ -156,34 +161,34 @@ class OrgServiceRequestController extends Controller
             $village->is_pending = 0;
             $village->save();
         } else {
-            $serviceRequest->village_id = $village->id;
+            $application->village_id = $village->id;
         }
 
         $duration = Package::with('properties')->find($request->post('package'))->properties->groupBy('name')['duration'][0]->value;
 
-        $serviceRequest->expire = Carbon::now()->addDays($duration)->format('Y-m-d H:i:s');
-        $serviceRequest->save();
+        $application->expire = Carbon::now()->addDays($duration)->format('Y-m-d H:i:s');
+        $application->save();
 
         if ($request->has('category-request') && $request->filled('category')) {
-            $serviceRequest->category()->delete();
+            $application->category()->delete();
         }
 
         DB::commit();
 
-        return redirect(route('organization-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
+        return redirect(route('backend.request.org-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
-    public function destroy(Org $serviceRequest)
+    public function destroy(Org $application)
     {
         DB::beginTransaction();
-        $category = $serviceRequest->category;
-        $thana = $serviceRequest->thana;
-        $subCategories = $serviceRequest->subCategories('requested');
+        $category = $application->category;
+        $thana = $application->thana;
+        $subCategories = $application->subCategories('requested');
 
-        $serviceRequest->subCategories()->detach();
+        $application->subCategories()->detach();
         $subCategories->delete();
 
-        $serviceRequest->forceDelete();
+        $application->forceDelete();
         $category->is_confirmed == 0 && $category->delete();
         $thana->is_confirmed == 0 && $thana->delete();
 
@@ -191,16 +196,6 @@ class OrgServiceRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('organization-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
-    }
-
-    private function navs()
-    {
-        return [
-            ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
-            ['url' => route('organization-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
-            ['url' => route('organization-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
-        ];
+        return redirect(route('backend.request.org-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 }

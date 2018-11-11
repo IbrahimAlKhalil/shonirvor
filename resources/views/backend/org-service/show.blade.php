@@ -25,7 +25,9 @@
                             <tbody>
                             <tr>
                                 <th scope="row">নাম (ব্যাক্তিগত)</th>
-                                <td><a href="#">{{ $org->user->name }}</a></td>
+                                <td>
+                                    <a href="{{ route('backend.users.show', $org->user->id) }}" target="_blank">{{ $org->user->name }}</a>
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">মোবাইল</th>

@@ -35,9 +35,9 @@
                     </div>
                     <div class="col-md-9 h3 pl-4">
                         @if($application->package->package_type_id == 3)
-                            <a href="javascript:">{{ $application->incomeable->user->name }}</a>
+                            <a href="{{ route('individual-service.show', $application->incomeable->id) }}" target="_blank">{{ $application->incomeable->user->name }}</a>
                         @else
-                            <a href="javascript:">{{ $application->incomeable->name }}</a>
+                            <a href="{{ route('organization-service.show', $application->incomeable->id) }}" target="_blank">{{ $application->incomeable->name }}</a>
                         @endif
                     </div>
                     <div class="col-12 mt-4">
@@ -94,7 +94,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header border-bottom-0">
-                                        <h5 class="modal-title" id="exampleModalLabel">সত্যিই কি আপনি রিকোয়েস্টটি মুছে ফেলতে চান?</h5>
+                                        <h5 class="modal-title">সত্যিই কি আপনি রিকোয়েস্টটি মুছে ফেলতে চান?</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>

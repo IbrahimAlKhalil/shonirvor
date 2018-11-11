@@ -210,11 +210,11 @@ class IndProfileController extends Controller
         $navs = [];
 
         foreach ($inds as $ind) {
-            array_push($navs, ['url' => route('profile.backend.individual-service.show', $ind->id), 'text' => $ind->category->name, 'after' => '&nbsp;<span class="badge badge-light float-right">ব্যাক্তিগত</span>']);
+            array_push($navs, ['url' => route('profile.backend.individual-service.show', $ind->id)]);
         }
 
         foreach ($orgs as $org) {
-            array_push($navs, ['url' => route('profile.backend.organization-service.show', $org->id), 'text' => $org->name, 'after' => '&nbsp;<span class="badge badge-light float-right">প্রাতিষ্ঠানিক</span>']);
+            array_push($navs, ['url' => route('profile.backend.organization-service.show', $org->id)]);
         }
 
         return $navs;

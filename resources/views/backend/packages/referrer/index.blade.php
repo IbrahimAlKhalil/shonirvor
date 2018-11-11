@@ -8,6 +8,7 @@
 
 @section('content')
     @include('components.success')
+    @include('components.error')
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
@@ -35,7 +36,7 @@
                     @forelse($packages as $key => $package)
                         @php($properties = $package->properties->groupBy('name'))
                         @php($serial = $packages->perPage() * ($packages->currentPage() - 1) + $loop->iteration)
-                        <tr @if($properties['is_default'][0]->value)style="background-color: #caa31025"@endif>
+                        <tr @if($defaultPackage->id == $package->id)style="background-color: #caa31025"@endif>
                             <td class="align-middle">{{ en2bnNumber($serial) }}</td>
                             <td class="align-middle">{{ $properties['name'][0]->value }}</td>
                             <td class="align-middle">{{ $properties['duration'][0]->value ? en2bnNumber($properties['duration'][0]->value.' দিন') : '-' }}</td>
@@ -134,15 +135,6 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group row">
-                                                                <label for="edit-is-default{{ $key }}" class="col-3 col-form-label text-right">ডিফল্ট প্যাকেজ:</label>
-                                                                <div class="col-9">
-                                                                    <label class="checkbox mt-3">
-                                                                        <input type="checkbox" id="edit-is-default{{ $key }}" name="is_default" value="1" @if($properties['is_default'][0]->value){{ 'checked' }}@endif>
-                                                                        <span></span>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
                                                                 <label for="edit-refer-target{{ $key }}" class="col-3 col-form-label text-right">টার্গেট:</label>
                                                                 <div class="col-9">
                                                                     <input type="number"
@@ -198,11 +190,11 @@
                                 </div>
 
                                 <!-- Delete Modal -->
-                                <div class="modal fade" id="deleteModal{{ $key }}" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
+                                <div class="modal fade" id="deleteModal{{ $key }}">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
-                                                <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই ক্যাটাগরিটি মুছে ফেলতে চান?</p>
+                                                <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই প্যাকেজটি মুছে ফেলতে চান?</p>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -312,15 +304,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label for="create-refer-target" class="col-3 col-form-label text-right">ডিফল্ট প্যাকেজ:</label>
-                                                        <div class="col-9">
-                                                            <label for="create-is-default" class="checkbox mt-3">
-                                                                <input type="checkbox" id="create-is-default" name="is_default" value="1">
-                                                                <span></span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
                                                     <div class="form-group row">
                                                         <label for="create-refer-target" class="col-3 col-form-label text-right">টার্গেট:</label>
                                                         <div class="col-9">

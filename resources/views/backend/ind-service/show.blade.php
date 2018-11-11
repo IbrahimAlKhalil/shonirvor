@@ -19,72 +19,69 @@
                     </div>
 
                     <div class="col-md-8">
-                        <h4 class="mb-3">{{ $ind->user->name }}</h4>
+                        <h4 class="mb-3">
+                            <a href="{{ route('backend.users.show', $ind->user->id) }}" target="_blank">{{ $ind->user->name }}</a>
+                        </h4>
                         <table class="table table-striped table-bordered table-hover table-sm">
                             <tbody>
-                            <tr>
-                                <th scope="row">নাম</th>
-                                <td>{{ $ind->user->name }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">কাজের মোবাইল নম্বর</th>
-                                <td>{{ $ind->mobile }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ব্যক্তিগত মোবাইল নম্বর</th>
-                                <td>{{ $ind->user->mobile }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">কাজের ইমেইল</th>
-                                <td>{{ $ind->user->email }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ব্যক্তিগত ইমেইল</th>
-                                <td>{{ $ind->email }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">বয়স</th>
-                                <td>{{ $ind->user->age }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
-                                <td>{{ $ind->user->qualification }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                <td>{{ $ind->user->nid }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">জেলা</th>
-                                <td>{{ $ind->district->bn_name}}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">থানা</th>
-                                <td>{{ $ind->thana->bn_name}} @if($ind->thana->is_pending) <span
-                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
-                            </tr>
-
-                            <tr>
-                                <th scope="row">ইউনিয়ন</th>
-                                <td>{{ $ind->union->bn_name}}  @if($ind->union->is_pending) <span
-                                            class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ঠিকানা</th>
-                                <td>{{ $ind->address }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">ক্যাটাগরি</th>
-                                <td>{{ $ind->category->name }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">সাব-ক্যাটাগরি</th>
-                                <td>
-                                    @foreach($ind->subCategories('confirmed')->get() as $subCategory)
-                                        <span class="badge badge-success">{{ $subCategory->name }}</span>&nbsp;
-                                    @endforeach
-                                </td>
-                            </tr>
+                                <tr>
+                                    <th scope="row">কাজের মোবাইল নম্বর</th>
+                                    <td>{{ $ind->mobile }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ব্যক্তিগত মোবাইল নম্বর</th>
+                                    <td>{{ $ind->user->mobile }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">কাজের ইমেইল</th>
+                                    <td>{{ $ind->user->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ব্যক্তিগত ইমেইল</th>
+                                    <td>{{ $ind->email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">বয়স</th>
+                                    <td>{{ $ind->user->age }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
+                                    <td>{{ $ind->user->qualification }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                    <td>{{ $ind->user->nid }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">জেলা</th>
+                                    <td>{{ $ind->district->bn_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">থানা</th>
+                                    <td>{{ $ind->thana->bn_name}} @if($ind->thana->is_pending) <span
+                                                class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ইউনিয়ন</th>
+                                    <td>{{ $ind->union->bn_name}}  @if($ind->union->is_pending) <span
+                                                class="badge badge-primary pull-right">অনুরোধকৃত</span> @endif</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ঠিকানা</th>
+                                    <td>{{ $ind->address }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ক্যাটাগরি</th>
+                                    <td>{{ $ind->category->name }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">সাব-ক্যাটাগরি</th>
+                                    <td>
+                                        @foreach($ind->subCategories('confirmed')->get() as $subCategory)
+                                            <span class="badge badge-success">{{ $subCategory->name }}</span>&nbsp;
+                                        @endforeach
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="row">
