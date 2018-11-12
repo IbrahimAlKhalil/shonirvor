@@ -66,21 +66,27 @@ class IndProfileController extends Controller
 
         $data = $request->only([
             'mobile',
-            'email',
             'website',
             'facebook',
+            'day',
+            'month',
+            'year',
+            'qualification',
+            'nid',
             'division',
             'district',
             'thana',
             'union',
+            'village',
             'address',
             'sub-categories',
-            'work-methods',
-            'qualification',
-            'nid',
+            'cv',
+            'experience_certificate',
             'identities',
-            'experience-certificate',
+            'identities'
         ]);
+
+        dd($data);
 
         DB::beginTransaction();
 

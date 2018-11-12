@@ -3,13 +3,22 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
+use App\Models\ServiceEdit;
 use App\Models\Village;
+use App\Models\Division;
 use App\Models\WorkMethod;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class IndMyServiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('provider');
+    }
+
     public function show()
     {
         $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
@@ -26,7 +35,7 @@ class IndMyServiceController extends Controller
     {
         $navs = [];
 
-        $inds = Auth::user()
+        $services = Auth::user()
             ->inds()
             ->with('category')
             ->withTrashed()
@@ -38,10 +47,10 @@ class IndMyServiceController extends Controller
             ->withTrashed()
             ->get();
 
-        foreach ($inds as $ind) {
+        foreach ($services as $service) {
             array_push($navs, [
-                'url' => route('frontend.my-service.ind.show', $ind->id),
-                'text' => $ind->category->name
+                'url' => route('frontend.my-service.ind.show', $service->id),
+                'text' => $service->category->name
             ]);
         }
 
@@ -75,5 +84,68 @@ class IndMyServiceController extends Controller
         $villages = Village::where('union_id', $service->union_id)->get();
 
         return view('frontend.my-services.ind-service-edit', compact('service', 'navs', 'workMethods', 'indWorkMethods', 'divisions', 'districts', 'thanas', 'villages', 'unions'));
+    }
+
+    public function update(Ind $service, Request $request)
+    {
+        $data = $request->only([
+            'mobile',
+            'website',
+            'facebook',
+            'day',
+            'month',
+            'year',
+            'qualification',
+            'nid',
+            'division',
+            'district',
+            'thana',
+            'union',
+            'village',
+            'address',
+            'sub-categories',
+            'sub-category-requests'
+        ]);
+
+        if ($request->hasFile('cv')) {
+            $data['cv'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
+        }
+
+        if ($request->hasFile('experience-certificate')) {
+            $data['cv'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
+        }
+
+        if ($request->has('images') && $request->hasFile('images')) {
+            $images = [];
+
+            // TODO:: Validation
+            foreach ($request->post('images') as $image) {
+                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+            }
+            foreach ($request->file('images') as $key => $image) {
+                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $service->id . '/' . 'images');
+            }
+
+            $data['images'] = $images;
+        }
+
+        // identities
+        if ($request->hasFile('identities')) {
+            $data['identities'] = [];
+            foreach ($request->file('identities') as $identity) {
+                array_push($data['identities'], $identity->store('user-photos/' . $service->user->id));
+            }
+        }
+
+        DB::beginTransaction();
+
+        $edit = new ServiceEdit;
+        $edit->service_editable_id = $service->id;
+        $edit->service_editable_type = 'ind';
+        $edit->data = $data;
+        $edit->save();
+        DB::commit();
+
+        return redirect(route('frontend.my-service.ind.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
     }
 }

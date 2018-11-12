@@ -20,7 +20,16 @@ export class FormChangeChecker {
     }
 
     getMD5() {
-        let data = [...(new FormData(this.form)).entries()];
+        let data = {};
+
+        [...this.form.elements].forEach(element => {
+            if (element.type === 'file' && element.files[0]) {
+                data[element.name] = element.files[0].lastModified;
+                return;
+            }
+
+            data[element.name] = element.value;
+        });
         return md5(JSON.stringify(data));
     }
 }

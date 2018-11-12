@@ -11,6 +11,21 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     });
 
+    new ImagePicker(document.getElementsByClassName('file-picker'));
+
+    let form = document.getElementById('update-form');
+    let formIntegrity = new FormChangeChecker(form);
+    window.bla = formIntegrity;
+
+    document.getElementById('submit-btn').addEventListener('click', evt => {
+        if (!formIntegrity.changed()) {
+            console.log('Hello');
+            evt.preventDefault();
+            evt.stopPropagation();
+            return false;
+        }
+    });
+
     document.querySelectorAll('.delete-sub-category').forEach(button => {
         button.addEventListener('click', () => {
             if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
@@ -23,49 +38,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let container = document.getElementById('sub-categories');
     let repeater = new Repeater(container, function () {
-        let length = container.children.length;
+        let count = this.count;
         let tr = `
                       <tr data-repeater-clone="true">
-                                <td> ${length + 2}</td>
-                                <td><input type="text" class="form-control"></td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-center align-content-center">
-                                        <label for="no-thana" class="mt-3 checkbox">
-                                            <input type="checkbox" id="no-thana" class="mt-2" name="no-thana">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>
+                                    <td> 2 </td>
+                                    <td>
+                                        <input type="hidden" name="sub-categories[1][id]" value="32">
+                                        <input type="text" name="sub-category-requests[${count}][name]" class="form-control">
+                                    </td>
+                                                                                                                                                                                                                                            <td>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">৳</span>
+                                                    </div>
+                                                    <input type="text" name="sub-category-requests[${count}][work-methods][1][rate]" class="form-control">
+                                                </div>
+                                                                                                                                                                                                            </td><td>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">৳</span>
+                                                    </div>
+                                                    <input type="text" name="sub-category-requests[${count}][work-methods][2][rate]" class="form-control">
+                                                </div>
+                                                                                                                                                                                                            </td><td>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">৳</span>
+                                                    </div>
+                                                    <input type="text" name="sub-category-requests[${count}][work-methods][3][rate]" class="form-control">
+                                                </div>
+                                                                                                                                                                </td><td>
+                                                <div class="d-flex justify-content-center align-content-center">
+                                                    <label for="negotiable-${count}" class="mt-3 checkbox">
+                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][4][negotiable]">
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                                                                                                <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট
                                         </span>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
         `;
 
         let fragment = document.createElement('tbody');
@@ -82,6 +97,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('add-new').addEventListener('click', function () {
         repeater.repeat();
     });
-
-    new ImagePicker(document.getElementsByClassName('file-picker'));
 });

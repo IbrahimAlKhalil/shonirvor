@@ -75,7 +75,7 @@ Route::namespace('Frontend')->group(function () {
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
             Route::resource('individual-service', 'IndMyServiceController', [
-                'only' => ['show', 'edit'],
+                'only' => ['show', 'edit', 'update'],
                 'parameters' => ['individual-service' => 'service'],
                 'names' => 'ind'
             ]);
@@ -134,6 +134,12 @@ Route::namespace('Backend')->group(function () {
 
                 Route::resource('ad-edit', 'AdEditRequestController', [
                     'only' => ['index', 'show', 'update', 'destroy']
+                ]);
+
+                Route::resource('individual-service-edit', 'IndServiceEditRequestController', [
+                    'only' => ['store', 'show', 'index', 'destroy'],
+                    'parameters' => ['individual-service-edit' => 'application'],
+                    'names' => 'ind-service-edit'
                 ]);
 
             }, '');
@@ -293,14 +299,14 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         ]);
     }, '');
 
-    Route::resource('individual-service-edit', 'IndServiceEditController', [
-        'only' => ['index', 'show', 'store', 'destroy'],
-        'parameters' => ['individual-service-edit' => 'service-edit']
-    ]);
-    Route::resource('organization-service-edit', 'OrgServiceEditController', [
-        'only' => ['index', 'show', 'store', 'destroy'],
-        'parameters' => ['organization-service-edit' => 'service-edit']
-    ]);
+//    Route::resource('individual-service-edit', 'IndServiceEditController', [
+//        'only' => ['index', 'show', 'store', 'destroy'],
+//        'parameters' => ['individual-service-edit' => 'service-edit']
+//    ]);
+//    Route::resource('organization-service-edit', 'OrgServiceEditController', [
+//        'only' => ['index', 'show', 'store', 'destroy'],
+//        'parameters' => ['organization-service-edit' => 'service-edit']
+//    ]);
 
     Route::name('contents.')->prefix('contents')->group(function () {
         Route::resource('registration-instruction', 'RegistrationInstructionController', [

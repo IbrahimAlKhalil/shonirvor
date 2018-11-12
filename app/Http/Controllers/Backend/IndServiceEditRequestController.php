@@ -2,67 +2,78 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\District;
+use App\Models\Division;
 use App\Models\Ind;
-use App\Models\Category;
-use App\Models\Package;
+use App\Models\ServiceEdit;
 use App\Models\SubCategory;
-use App\Models\Village;
-use App\Models\WorkMethod;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use App\Models\Thana;
 use App\Models\Union;
+use App\Models\Village;
+use App\Models\WorkMethod;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class IndServiceRequestController extends Controller
+class IndServiceEditRequestController extends Controller
 {
     public function index()
     {
-        $applications = Ind::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
+        $applications = ServiceEdit::with([
+            'serviceEditable' => function ($query) {
+                $query->with('category');
+            }
+        ])->where('service_editable_type', 'ind')->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = [
             ['url' => route('backend.request.ind-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('backend.request.top-service.index').'?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('backend.request.top-service.index') . '?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.ind-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
-        return view('backend.request.service.ind.index', compact('applications', 'navs'));
+        return view('backend.request.ind-service-edit.index', compact('applications', 'navs'));
     }
 
-    public function show(Ind $application)
+    public function show(ServiceEdit $application)
     {
         $application->load([
-            'referredBy.user',
-            'district',
-            'thana',
-            'union',
-            'village',
-            'category',
-            'workMethods',
-            'subCategories',
-            'user' => function ($query) {
-                $query->with('identities');
-            },
-            'payments' => function ($query) {
-                $query->with([
-                    'package' => function ($query) {
-                        $query->with('properties');
-                    },
-                    'paymentMethod'
-                ]);
+            'serviceEditable' => function ($query) {
+                $query->with('user');
             }
         ]);
 
-        $packages = $application->payments->first() ? Package::with('properties')->where('package_type_id', 1)->get() : null;
+        $subCategoryArr = $application->data['sub-categories'];
 
-        $workMethods = WorkMethod::all();
-        $indWorkMethods = $application->workMethods->groupBy('pivot.sub_category_id');
-        $thanas = $application->thana->is_pending ? Thana::where('district_id', $application->district_id)->get() : [];
-        $unions = !$application->thana->is_pending && $application->union->is_pending ? Union::where('thana_id', $application->thana_id)->get() : [];
-        $villages = !$application->union->is_pending && $application->village->is_pending ? Village::where('union_id', $application->union_id)->get() : [];
-        $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
+        $subCategoryIds = array_map(function ($item) {
+            return $item['id'];
+        }, $subCategoryArr);
 
-        return view('backend.request.service.ind.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments', 'packages'));
+        $workMethodNames = WorkMethod::select('name')->get();
+        $subCategoryCollection = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get();
+
+        $subCategories = [];
+
+
+
+        foreach ($subCategoryCollection as $i => $subCategory) {
+            $item = [];
+            foreach ($workMethodNames as $c => $methodName) {
+                if (isset($subCategoryArr[$i]['work-methods'][$c])) {
+                    $item[$methodName->name] = $subCategoryArr[$i]['work-methods'][$c]['rate'];
+                    continue;
+                }
+                $item[$methodName->name] = 'off';
+            }
+            $subCategories[$subCategory->name] = $item;
+        }
+
+        $user = $application->serviceEditable->user;
+        $data = $application->data;
+        $division = Division::find($data['division']);
+        $district = District::find($data['district']);
+        $thana = Thana::find($data['thana']);
+        $union = Union::find($data['union']);
+        $village = Village::find($data['village']);
+
+        return view('backend.request.ind-service-edit.show', compact('application', 'user', 'data', 'division', 'district', 'thana', 'union', 'village', 'subCategories', 'workMethodNames'));
     }
 
     public function update(Request $request, Ind $application)

@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Income;
 use App\Models\Ind;
-use App\Models\Category;
-use App\Models\Package;
-use App\Models\PaymentMethod;
-use App\Models\Reference;
 use App\Models\User;
+use App\Models\Thana;
+use App\Models\Union;
+use App\Models\Income;
 use App\Models\Village;
+use App\Models\Package;
+use App\Models\Division;
+use App\Models\Category;
+use App\Models\District;
+use App\Models\Reference;
 use App\Models\WorkMethod;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
+use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Http\Requests\StoreInd;
 use App\Http\Requests\UpdateInd;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Models\Division;
-use App\Models\Thana;
-use App\Models\Union;
-use App\Models\District;
 
 class IndServiceRegistrationController extends Controller
 {

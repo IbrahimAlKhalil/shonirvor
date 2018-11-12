@@ -169,63 +169,96 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p class="h4 border-bottom">ডকুমেন্টঃ</p>
-                        <div class="row">
-                            @if($service->experience_certificate)
-                                <div class="col-md-3">
-                                    <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
-                                    <a href="{{ asset('storage/' . $service->experience_certificate) }}"
-                                       target="_blank">
-                                        <img src="{{ asset('storage/' . $service->experience_certificate) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
+                <div class="col-12 mt-5">
+                    <p class="h4 border-bottom">ডকুমেন্টঃ</p>
+                    <div class="row">
+                        @if($service->cv)
+                            <div class="col-md-3">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <span class="text-muted">বায়োডাটা</span>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <a href="{{ asset('storage/' . $service->cv) }}" target="_blank">
+                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}" alt=""
+                                                 class="img-fluid img-thumbnail rounded">
+                                        </a>
+                                    </div>
                                 </div>
-                            @endif
-                            @if($service->cv)
-                                <div class="col-md-3">
-                                    <span class="text-muted">বায়োডাটা</span>
-                                    <a href="{{ asset('storage/' . $service->cv) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $service->cv) }}"
-                                             class="img-responsive img-thumbnail">
-                                    </a>
+
+
+                            </div>
+                        @endif
+                        @if($service->experience_certificate)
+                            <div class="col-md-3">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="{{ asset('storage/' . $service->experience_certificate) }}"
+                                           target="_blank">
+                                            <img class="img-thumbnail img-fluid rounded"
+                                                 src="{{ asset('storage/' . $service->experience_certificate) }}">
+                                        </a>
+                                    </div>
                                 </div>
-                            @endif
-                            @if( ! $service->experience_certificate
-                                && ! $service->cv)
-                                <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
-                            @endif
+                            </div>
+                        @endif
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">
+                                        <span class="text-muted">
+                                            জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ
+                                        </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach($service->user->identities as $identity)
+                                            <div class="col">
+                                                <a href="{{ asset('storage/' . $identity->path) }}" target="_blank">
+                                                    <img src="{{ asset('storage/' . $identity->path) }}"
+                                                         class="img-fluid img-thumbnail rounded">
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if( ! $service->experience_certificate
+                            && ! $service->cv && !$service->user->identities->first())
+                            <p class="text-muted col-12">কোন ডকুমেন্ট আপলোড করা হয়নি!</p>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="col-12 mt-5">
+                    <p class="h4 border-bottom">কাজের ছবিঃ</p>
+                    <div class="row">
+                        <div class="col-12">
+                            @forelse($service->workImages->chunk(2) as $chunk)
+                                <div class="card-deck py-2">
+                                    @foreach($chunk as $image)
+                                        <div class="card shadow-sm">
+                                            <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
+                                                <img class="card-img-top img-fluid"
+                                                     src="{{ asset('storage/' . $image->path) }}">
+                                            </a>
+                                            <div class="card-body">
+                                                <p class="card-text">{{ $image->description }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @empty
+                                <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
+                            @endforelse
                         </div>
                     </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
-                        <div class="row">
-                            <div class="col-12">
-                                @forelse($service->workImages->chunk(2) as $chunk)
-                                    <div class="card-deck py-2">
-                                        @foreach($chunk as $image)
-                                            <div class="card shadow-sm">
-                                                <a href="{{ asset('storage/' . $image->path) }}" target="_blank">
-                                                    <img class="card-img-top img-fluid"
-                                                         src="{{ asset('storage/' . $image->path) }}">
-                                                </a>
-                                                <div class="card-body">
-                                                    <p class="card-text">{{ $image->description }}</p>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @empty
-                                    <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="col-md-3">
                 <div class="row">
@@ -250,7 +283,8 @@
                 @endif
                 <div class="row mt-4">
                     <div class="col-12">
-                        <a type="button" target="_blank" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
+                        <a type="button" target="_blank"
+                           href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
                            class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</a>
                     </div>
                 </div>

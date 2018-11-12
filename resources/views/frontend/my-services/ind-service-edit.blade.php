@@ -10,7 +10,10 @@
 @section('content')
     <div class="container my-5">
         <div class="row">
-            <div class="col-md-9 bg-white rounded p-4">
+            <form class="col-md-9 bg-white rounded p-4" method="post" id="update-form" enctype="multipart/form-data"
+                  action="{{ route('frontend.my-service.ind.update', $service->id) }}">
+                {{ method_field('put') }}
+                {{ csrf_field() }}
                 <div class="row">
                     <div class="col-md-3">
                         <img src="{{ asset('storage/' . $service->user->photo) }}"
@@ -225,8 +228,7 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
-                        <table class="table table-striped table-bordered table-hover table-sm w-100 text-center"
-                               id="sub-categories">
+                        <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -237,7 +239,7 @@
                                 <th>পদক্ষেপ</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="sub-categories">
                             @forelse($service->subCategories as $index => $subCategory)
                                 <tr data-repeater-clone="true">
                                     <td> {{ $index+1 }} </td>
@@ -248,7 +250,7 @@
                                     </td>
                                     @php($methods = $indWorkMethods[$subCategory->id])
                                     @php($methodIds = $methods->pluck('id')->toArray())
-                                    @foreach($workMethods as $method)
+                                    @foreach($workMethods as $c => $method)
                                         @if($method->id != 4)
                                             @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
                                             <td>
@@ -256,17 +258,17 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">৳</span>
                                                     </div>
-                                                    <input type="text"
-                                                           name="sub-categories[{{ $index }}][work-methods][{{ $method->id }}][price]"
+                                                    <input type="number"
+                                                           name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
                                                            class="form-control"
-                                                           value="@if($currentMethod->first()){{ en2bnNumber($currentMethod->first()->pivot->rate) }}@endif">
+                                                           value="@if($currentMethod->first()){{ $currentMethod->first()->pivot->rate }}@endif">
                                                 </div>
                                         @else
                                             <td>
                                                 <div class="d-flex justify-content-center align-content-center">
-                                                    <label for="no-thana" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="no-thana" class="mt-2"
-                                                               name="sub-categories[{{ $index }}][work-methods][{{ $method->id }}][negotiable]" {{ checkBox(in_array(4, $methodIds)) }}>
+                                                    <label for="negotiabl-{{ $index }}" class="mt-3 checkbox">
+                                                        <input type="checkbox" id="negotiabl-{{ $index }}" class="mt-2"
+                                                               name="sub-categories[{{ $index }}][work-methods][{{ $c }}][negotiable]" {{ checkBox(in_array(4, $methodIds)) }}>
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -303,8 +305,7 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <input type="file" id="cv"
-                                               name="image"
-                                               form="update-form"
+                                               name="cv"
                                                class="file-picker">
                                     </div>
                                 </div>
@@ -320,8 +321,7 @@
                                     </div>
                                     <div class="card-body">
                                         <input type="file" id="image"
-                                               name="experience_certificate"
-                                               form="update-form"
+                                               name="experience-certificate"
                                                class="file-picker"
                                                data-image="{{ asset('storage/' . $service->experience_certificate) }}">
                                     </div>
@@ -341,7 +341,6 @@
                                             <div class="col">
                                                 <input type="file" id="image"
                                                        name="identities"
-                                                       form="update-form"
                                                        class="file-picker"
                                                        data-image="{{ asset('storage/' . $identity->path) }}"
                                                        multiple>
@@ -368,11 +367,7 @@
                                     <div class="card-deck py-2">
                                         @foreach($chunk as $index => $image)
                                             <div class="card shadow-sm">
-                                                <input type="file" id="image"
-                                                       name="work-images[{{ $index }}][file]"
-                                                       form="update-form"
-                                                       class="file-picker"
-                                                       data-image="{{ asset('storage/' . $image->path) }}">
+
                                                 <div class="card-body">
                                                     <label for="des">বর্ণনাঃ</label>
                                                     <textarea type="text"
@@ -391,10 +386,11 @@
                     </div>
 
                     <div class="col-12 mt-4 text-center">
-                        <button class="btn btn-success w-25" data-toggle="modal" data-target="#confirmModal">সাবমিট
+                        <button class="btn btn-success w-25" type="button" data-toggle="modal" id="submit-btn"
+                                data-target="#confirmModal">সাবমিট
                         </button>
 
-                        <!-- Accept Modal -->
+                        <!-- Modal -->
                         <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -406,7 +402,7 @@
                                     </div>
                                     <div class="modal-footer border-top-0">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
-                                        <button type="submit" class="btn btn-success" form="submit-form">সাবমিট
+                                        <button type="submit" class="btn btn-success" form="update-form">সাবমিট
                                         </button>
                                     </div>
                                 </div>
@@ -414,7 +410,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-12">
@@ -445,11 +441,4 @@
             </div>
         </div>
     </div>
-    <script>
-        $('#division, #district, #thana, #union, #village').selectize({
-            plugins: [
-                'option-loader'
-            ]
-        });
-    </script>
 @endsection
