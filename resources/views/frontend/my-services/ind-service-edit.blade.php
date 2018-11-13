@@ -442,3 +442,8 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\UpdateIndMyService::class, '#update-form') !!}
+@endsection
