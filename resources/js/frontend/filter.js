@@ -3,7 +3,7 @@
 /***************/
 
 // Bootstrap CSS
-import './../../../../node_modules/bootstrap/dist/css/bootstrap.css';
+import './../../../node_modules/bootstrap/dist/css/bootstrap.css';
 
 // Common frontend css for all page
 import '../../scss/frontend/components/_common.scss';
@@ -24,9 +24,9 @@ import 'bootstrap';
 import '../modules/selectize-option-loader-plugin'
 
 // BS Star Rating
-import './../../../../bower_components/bootstrap-star-rating/css/star-rating.css';
-import './../../../../bower_components/bootstrap-star-rating/themes/krajee-fa/theme.css';
-import './../../../../bower_components/bootstrap-star-rating/js/star-rating';
+import './../../../bower_components/bootstrap-star-rating/css/star-rating.css';
+import './../../../bower_components/bootstrap-star-rating/themes/krajee-fa/theme.css';
+import './../../../bower_components/bootstrap-star-rating/js/star-rating';
 
 import {UrlParser} from "../modules/url-parser";
 

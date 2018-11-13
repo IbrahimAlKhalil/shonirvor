@@ -1,6 +1,6 @@
 import '../../../scss/frontend/registration/common.scss';
-import '../../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
-import '../../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
+import '../../../../node_modules/smartwizard/dist/css/smart_wizard.css';
+import '../../../../node_modules/smartwizard/dist/css/smart_wizard_theme_arrows.css';
 
 import {ImagePicker} from "../../modules/image-picker";
 import 'smartwizard';

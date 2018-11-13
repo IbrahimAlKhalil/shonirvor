@@ -1,6 +1,6 @@
 // Selectize JS
 import '../../modules/selectize-option-loader-plugin';
-import '../../../../../node_modules/selectize/dist/css/selectize.default.css';
+import '../../../../node_modules/selectize/dist/css/selectize.default.css';
 
 document.addEventListener('DOMContentLoaded', () => {
     let selects = document.querySelectorAll('#division, #district, #thana, #union, #village');
