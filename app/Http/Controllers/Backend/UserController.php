@@ -38,7 +38,7 @@ class UserController extends Controller
 
         });
 
-        dd();
+        dd('');
 
         return view('backend.users.show', compact('user', 'referPackages', 'userReferPackageId', 'paymentMethods'));
     }
