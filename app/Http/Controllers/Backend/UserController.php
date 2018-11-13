@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\User;
 use App\Models\Expense;
 use App\Models\Package;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\UserReferPackage;
@@ -31,6 +32,13 @@ class UserController extends Controller
         }
 
         $paymentMethods = PaymentMethod::select('id', 'name')->get();
+
+        $totalEarn = 0;
+        $user->references->each(function (){
+
+        });
+
+        dd();
 
         return view('backend.users.show', compact('user', 'referPackages', 'userReferPackageId', 'paymentMethods'));
     }
