@@ -1,4 +1,4 @@
-import '../../../scss/frontend/applications/ad/create.scss';
+import '../../../sass/frontend/applications/ad/create.scss';
 import {ImagePicker} from "../../modules/image-picker";
 import {FormChangeChecker} from "../../modules/form-change-checker";
 

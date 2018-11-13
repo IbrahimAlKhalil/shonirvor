@@ -1,4 +1,4 @@
-import '../../scss/frontend/components/_image-picker.scss';
+import '../../sass/frontend/components/_image-picker.scss';
 
 export class ImagePicker {
     constructor(inputElements) {

@@ -1,4 +1,4 @@
-import '../../../../scss/frontend/my-services/edit.scss';
+import '../../../../sass/frontend/my-services/edit.scss';
 import '../../../modules/selectize-option-loader-plugin';
 import {Repeater} from "../../../modules/repeater";
 import {FormChangeChecker} from "../../../modules/form-change-checker";

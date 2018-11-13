@@ -6,10 +6,10 @@
 import './../../../node_modules/bootstrap/dist/css/bootstrap.css';
 
 // Common frontend css for all page
-import '../../scss/frontend/components/_common.scss';
+import '../../sass/frontend/components/_common.scss';
 
 // Page lavel CSS
-import '../../scss/frontend/filter.scss';
+import '../../sass/frontend/filter.scss';
 
 
 

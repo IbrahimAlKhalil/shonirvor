@@ -1,7 +1,7 @@
 /***** CSS *****/
 import './../../../../node_modules/bootstrap/dist/css/bootstrap.css'; // Bootstrap CSS
-import './../../../scss/backend/components/_common.scss';
-import '../../../scss/backend/contents/slider.scss';
+import './../../../sass/backend/components/_common.scss';
+import '../../../sass/backend/contents/slider.scss';
 
 /***** JS *****/
 import 'bootstrap'; // Bootstrap JS
