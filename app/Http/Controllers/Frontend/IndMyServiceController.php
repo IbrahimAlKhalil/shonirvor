@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Http\Requests\StoreIndServiceEditApplication;
+use App\Http\Requests\UpdateIndMyService;
 use App\Models\Ind;
 use App\Models\ServiceEdit;
 use App\Models\Village;
@@ -86,10 +88,11 @@ class IndMyServiceController extends Controller
         return view('frontend.my-services.ind-service-edit', compact('service', 'navs', 'workMethods', 'indWorkMethods', 'divisions', 'districts', 'thanas', 'villages', 'unions'));
     }
 
-    public function update(Ind $service, Request $request)
+    public function update(Ind $service, UpdateIndMyService $request)
     {
         $data = $request->only([
             'mobile',
+            'email',
             'website',
             'facebook',
             'day',
@@ -112,18 +115,25 @@ class IndMyServiceController extends Controller
         }
 
         if ($request->hasFile('experience-certificate')) {
-            $data['cv'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
+            $data['experience-certificate'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
         }
 
-        if ($request->has('images') && $request->hasFile('images')) {
+        if ($request->has('work-images')) {
             $images = [];
 
             // TODO:: Validation
-            foreach ($request->post('images') as $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+            foreach ($request->post('work-images') as $id => $image) {
+                if (isset($image['description']) && !is_null($image['description'])) {
+                    $images[$id]['description'] = $image['description'];
+                };
             }
-            foreach ($request->file('images') as $key => $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $service->id . '/' . 'images');
+
+            if ($request->hasFile('work-images')) {
+                foreach ($request->file('work-images') as $id => $image) {
+                    if (isset($image['file']) && !is_null($image['file'])) {
+                        $images[$id]['file'] = $image['file']->store('ind/' . $service->id . '/' . 'images');
+                    };
+                }
             }
 
             $data['images'] = $images;

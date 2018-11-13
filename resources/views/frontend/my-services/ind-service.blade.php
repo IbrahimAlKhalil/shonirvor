@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    @include('components.success');
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9 bg-white rounded p-4">
@@ -283,9 +284,10 @@
                 @endif
                 <div class="row mt-4">
                     <div class="col-12">
-                        <a type="button" target="_blank"
-                           href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
-                           class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</a>
+                        <button type="button" class="btn btn-info btn-block"><a target="_blank"
+                                                                                class="text-white"
+                                                                                href="{{ route('frontend.my-service.ind.edit', $service->id) }}">প্রোফাইলটি
+                                এডিট করুন</a></button>
                     </div>
                 </div>
             </div>

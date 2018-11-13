@@ -15,11 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let form = document.getElementById('update-form');
     let formIntegrity = new FormChangeChecker(form);
-    window.bla = formIntegrity;
 
     document.getElementById('submit-btn').addEventListener('click', evt => {
         if (!formIntegrity.changed()) {
-            console.log('Hello');
             evt.preventDefault();
             evt.stopPropagation();
             return false;
@@ -43,10 +41,16 @@ document.addEventListener('DOMContentLoaded', function () {
                       <tr data-repeater-clone="true">
                                     <td> 2 </td>
                                     <td>
-                                        <input type="hidden" name="sub-categories[1][id]" value="32">
                                         <input type="text" name="sub-category-requests[${count}][name]" class="form-control">
                                     </td>
                                                                                                                                                                                                                                             <td>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">৳</span>
+                                                    </div>
+                                                    <input type="text" name="sub-category-requests[${count}][work-methods][0][rate]" class="form-control">
+                                                </div>
+                                                                                                                                                                                                            </td><td>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">৳</span>
@@ -60,17 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                                     </div>
                                                     <input type="text" name="sub-category-requests[${count}][work-methods][2][rate]" class="form-control">
                                                 </div>
-                                                                                                                                                                                                            </td><td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="text" name="sub-category-requests[${count}][work-methods][3][rate]" class="form-control">
-                                                </div>
                                                                                                                                                                 </td><td>
                                                 <div class="d-flex justify-content-center align-content-center">
                                                     <label for="negotiable-${count}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][4][negotiable]">
+                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][3][rate]" value="negotiable">
                                                         <span></span>
                                                     </label>
                                                 </div>

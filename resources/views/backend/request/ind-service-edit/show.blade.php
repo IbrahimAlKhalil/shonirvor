@@ -17,7 +17,7 @@
         }
     </style>
     <div class="container d-flex justify-content-center">
-        <div class="bg-white mt-4 p-4 rounded row w-50">
+        <div class="bg-white mt-4 p-4 rounded row col-9">
             <div class="col-md-12 mb-3">
                 <div class="rounded row">
                     <div class="col-md-12 p-2">
@@ -27,7 +27,7 @@
                                      style="background-image: url({{ asset('storage/' . $user->photo) }});"></div>
                             </div>
                             <div class="col-md-9">
-                                <div class="w-100 h-100">
+                                <div class="w-100 h-100 d-flex align-items-center">
                                     <a href="{{ route('backend.users.show', $user->id) }}">{{ $user->name }}</a>
                                 </div>
                             </div>
@@ -53,14 +53,6 @@
                                 <td>{{ $data['day'] . '/' . $data['month'] . '/' . $data['year'] }}</td>
                             </tr>
                             <tr>
-                                <th scope="row"> যোগ্যতা/অভিজ্ঞতাঃ</th>
-                                <td>{{ $data['qualification'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> জাতীয় পরিচয়পত্রের নাম্বারঃ</th>
-                                <td>{{ $data['nid'] }}</td>
-                            </tr>
-                            <tr>
                                 <th scope="row"> বিভাগঃ</th>
                                 <td>{{ $division->bn_name }}</td>
                             </tr>
@@ -84,6 +76,58 @@
                                 <th scope="row"> ঠিকানাঃ</th>
                                 <td>{{ $data['address'] }}</td>
                             </tr>
+                            <tr>
+                                <th scope="row"> যোগ্যতা/অভিজ্ঞতাঃ</th>
+                                <td>{{ $data['qualification'] }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> জাতীয় পরিচয়পত্রের নাম্বারঃ</th>
+                                <td>{{ $data['nid'] }}</td>
+                            </tr>
+                            @isset($data['experience-certificate'])
+                                <tr>
+                                    <th scope="row" class="w-25"> অভিজ্ঞতা/প্রত্যয়ন পত্রঃ</th>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $data['experience-certificate']) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/' . $data['experience-certificate']) }}"
+                                                 style="height: 50px;"
+                                                 class="img-fluid img-thumbnail">
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endisset
+
+                            @isset($data['identities'])
+
+                                <tr>
+                                    <th scope="row" class="w-25"> জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদঃ</th>
+                                    <td>
+                                        @foreach($data['identities'] as $identity)
+                                            <a href="{{ asset('storage/' . $identity) }}"
+                                               target="_blank">
+                                                <img src="{{ asset('storage/' . $identity) }}"
+                                                     style="height: 50px;"
+                                                     class="img-fluid img-thumbnail">
+                                            </a>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endisset
+
+                            @isset($data['cv'])
+                                <tr>
+                                    <th scope="row"> বায়োডাটাঃ</th>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $data['cv']) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}"
+                                                 style="height: 50px;"
+                                                 class="img-fluid img-thumbnail">
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endisset
                             </tbody>
                         </table>
                     </div>
@@ -121,7 +165,7 @@
                                             </td>
                                         @else
                                             <td>
-                                                @if($rate == 'off')
+                                                @if($rate == '')
                                                     <i class="fa fa-times"></i>
                                                 @else
                                                     <i class="fa fa-check"></i>
@@ -131,7 +175,91 @@
                                     @endforeach
                                 </tr>
                             @endforeach
+                            @php($count = 0)
+                            @foreach($subCategoryRequests as $name => $subCategory)
+                                <tr>
+                                    <td> {{ en2bnNumber(++$count) }} </td>
+                                    <td><input type="text" class="form-control"
+                                               name="sub-category-requests[{{ $count-1 }}]" value="{{ $name }}"></td>
+                                    @php($methodCount = 0)
+                                    @foreach($subCategory as $methodName => $rate)
+                                        @php($methodCount++)
+                                        @if($methodCount != 4)
+                                            <td>
+                                                @if($rate)
+                                                    {{ $rate }}
+                                                @else
+                                                    <i class="fa fa-times"></i>
+                                                @endif
+                                            </td>
+                                        @else
+                                            <td>
+                                                @if($rate == 'negotiable')
+                                                    <i class="fa fa-check"></i>
+                                                @else
+                                                    <i class="fa fa-times"></i>
+                                                @endif
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-12 mb-3">
+                <div class="rounded row">
+                    <div class="col-md-12 p-0 list-group mt-4">
+                        <table class="table-sm table-striped table-hover">
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="rounded row">
+                    <div class="col-md-12 p-0 list-group mt-4">
+                        <table class="table-sm table-striped table-hover table-responsive">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">কাজের ছবি</th>
+                                <th scope="col">বর্ণনা</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php($count = 0)
+                            @foreach($data['images'] as $id => $image)
+                                <tr>
+                                    <td>
+                                        {{ en2bnNumber(++$count) }}
+                                    </td>
+                                    <td>
+                                        @if(isset($image['file']))
+                                            <a href="{{ asset('storage/' . $image['file']) }}">
+                                                <img src="{{ asset('storage/' . $image['file']) }}"
+                                                     style="min-width: 150px;"
+                                                     class="img-fluid img-thumbnail">
+                                            </a>
+                                        @else
+                                            <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
+                                                <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
+                                                     style="min-width: 150px;"
+                                                     class="img-fluid img-thumbnail">
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $image['description'] }}
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -190,12 +318,13 @@
         </div>
     </div>
 
-    <form action="{{ route('backend.request.ad.update', $application->id) }}" id="approve-form" method="post">
-        {{ method_field('put') }}
+    <form action="{{ route('backend.request.ind-service-edit.store', $application->id) }}" id="approve-form"
+          method="post">
         {{ csrf_field() }}
     </form>
 
-    <form action="{{ route('backend.request.ad.destroy', $application->id) }}" id="delete-form" method="post">
+    <form action="{{ route('backend.request.ind-service-edit.destroy', $application->id) }}" id="delete-form"
+          method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}
     </form>

@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <th scope="row"><label for="email">ইমেইল</label></th>
-                                <td><input type="text" id="email" name="mobile" class="form-control"
+                                <td><input type="text" id="email" name="email" class="form-control"
                                            value="{{ $service->email }}"></td>
                             </tr>
                             <tr>
@@ -268,7 +268,8 @@
                                                 <div class="d-flex justify-content-center align-content-center">
                                                     <label for="negotiabl-{{ $index }}" class="mt-3 checkbox">
                                                         <input type="checkbox" id="negotiabl-{{ $index }}" class="mt-2"
-                                                               name="sub-categories[{{ $index }}][work-methods][{{ $c }}][negotiable]" {{ checkBox(in_array(4, $methodIds)) }}>
+                                                               name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
+                                                               value="negotiable" {{ checkBox(in_array(4, $methodIds)) }}>
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -305,6 +306,7 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <input type="file" id="cv"
+                                               accept="application/pdf"
                                                name="cv"
                                                class="file-picker">
                                     </div>
@@ -321,6 +323,7 @@
                                     </div>
                                     <div class="card-body">
                                         <input type="file" id="image"
+                                               accept="image/*"
                                                name="experience-certificate"
                                                class="file-picker"
                                                data-image="{{ asset('storage/' . $service->experience_certificate) }}">
@@ -340,10 +343,10 @@
                                         @foreach($service->user->identities as $identity)
                                             <div class="col">
                                                 <input type="file" id="image"
-                                                       name="identities"
+                                                       name="identities[]"
                                                        class="file-picker"
-                                                       data-image="{{ asset('storage/' . $identity->path) }}"
-                                                       multiple>
+                                                       accept="image/*"
+                                                       data-image="{{ asset('storage/' . $identity->path) }}">
                                             </div>
                                         @endforeach
                                     </div>
@@ -367,11 +370,14 @@
                                     <div class="card-deck py-2">
                                         @foreach($chunk as $index => $image)
                                             <div class="card shadow-sm">
-
+                                                <input type="file"
+                                                       name="work-images[{{ $image->id }}][file]"
+                                                       class="file-picker"
+                                                       data-image="{{ asset('storage/' . $image->path) }}">
                                                 <div class="card-body">
                                                     <label for="des">বর্ণনাঃ</label>
                                                     <textarea type="text"
-                                                              name="work-images[{{ $index }}][description]"
+                                                              name="work-images[{{ $image->id }}][description]"
                                                               id="des"
                                                               class="form-control">{{ $image->description }}</textarea>
                                                 </div>
@@ -432,12 +438,6 @@
                         </div>
                     </div>
                 @endif
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
