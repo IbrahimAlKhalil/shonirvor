@@ -13,8 +13,12 @@ class CreateReferencesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('service_id');
             $table->unsignedInteger('service_type_id');
-            $table->integer('onetime_interest')->nullable();
+            $table->integer('onetime_interest');
             $table->integer('renew_interest')->nullable();
+            $table->integer('duration')->nullable();
+            $table->integer('target')->nullable();
+            $table->integer('fail_onetime_interest')->nullable();
+            $table->integer('fail_renew_interest')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
