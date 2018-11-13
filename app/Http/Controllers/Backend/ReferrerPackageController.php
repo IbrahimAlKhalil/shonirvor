@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 
 class ReferrerPackageController extends Controller
 {
-    private $defaultPackage;
     private $packageTypeId = 5;
     private $packageProperties = [
         ['id' => 1, 'name' => 'name'],
@@ -23,15 +22,8 @@ class ReferrerPackageController extends Controller
         ['id' => 9, 'name' => 'refer_fail_renew_interest']
     ];
 
-    public function __construct()
-    {
-        $this->defaultPackage = Package::where('package_type_id', $this->packageTypeId)->first();
-    }
-
     public function index()
     {
-        $defaultPackage = $this->defaultPackage;
-
         $packages = Package::with('properties')
             ->where('package_type_id', $this->packageTypeId)
             ->paginate(10);
@@ -45,7 +37,7 @@ class ReferrerPackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'বিজ্ঞাপন প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.referrer.index', compact('packages', 'defaultPackage', 'navs'));
+        return view('backend.packages.referrer.index', compact('packages', 'navs'));
     }
 
     public function store(Request $request)
@@ -95,7 +87,7 @@ class ReferrerPackageController extends Controller
 
     public function destroy(Package $package)
     {
-        if ($package->id == $this->defaultPackage->id) return back()->with('error', 'ডিফল্ট প্যাকেজ ডিলিট করা যাবে না।');
+        if ($package->id == 1) return back()->with('error', 'ডিফল্ট প্যাকেজ ডিলিট করা যাবে না।');
 
         $package->delete();
 

@@ -118,7 +118,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $categories->links('pagination::bootstrap-4') }}
+                        {{ $categories->links() }}
                     </div>
                 </div>
             </div>

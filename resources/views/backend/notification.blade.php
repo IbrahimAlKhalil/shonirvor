@@ -29,7 +29,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $notifications->links('pagination::bootstrap-4') }}
+                        {{ $notifications->links() }}
                     </div>
                 </div>
             </div>

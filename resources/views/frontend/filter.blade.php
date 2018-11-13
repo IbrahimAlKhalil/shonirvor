@@ -46,7 +46,7 @@
                 </div>
                 <div class="row bg-white">
                     <div class="mx-auto">
-                        {{ $providers->links('pagination::bootstrap-4') }}
+                        {{ $providers->links() }}
                     </div>
                 </div>
             </div>

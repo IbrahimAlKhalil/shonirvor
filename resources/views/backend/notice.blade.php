@@ -97,7 +97,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $notices->links('pagination::bootstrap-4') }}
+                        {{ $notices->links() }}
                     </div>
                 </div>
             </div>

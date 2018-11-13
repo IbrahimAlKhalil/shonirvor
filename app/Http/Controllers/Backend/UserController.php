@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\PaymentMethod;
 use App\Models\User;
+use App\Models\Expense;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Models\UserReferPackage;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
-    private $defaultReferPackage;
-
-    public function __construct()
-    {
-        $this->defaultReferPackage = Package::where('package_type_id', 5)->first();
-    }
-
     public function index()
     {
         $users = User::select('id', 'name', 'mobile')->paginate(20);
@@ -33,7 +27,7 @@ class UserController extends Controller
         if ($user->referPackage()->exists()) {
             $userReferPackageId = $user->referPackage->package_id;
         } else {
-            $userReferPackageId = $this->defaultReferPackage->id;
+            $userReferPackageId = 1; // default referrer package always be the first package.
         }
 
         $paymentMethods = PaymentMethod::select('id', 'name')->get();
@@ -45,7 +39,7 @@ class UserController extends Controller
     {
         if ($user->referPackage()->exists()) {
 
-            if ($request->input('refer-id') == $this->defaultReferPackage->id) {
+            if ($request->input('refer-id') == 1) {
 
                 $user->referPackage->delete();
                 return back()->with('success', 'রেফার প্যাকেজ পরিবর্তিত হয়েছে।');
@@ -69,8 +63,17 @@ class UserController extends Controller
         return back()->with('success', 'রেফার প্যাকেজ পরিবর্তিত হয়েছে।');
     }
 
-    public function pay()
+    public function payReferrer(User $user, Request $request)
     {
-        //
+        $expense = new Expense;
+        $expense->user_id = $user->id;
+        $expense->payment_method_id = $request->input('method');
+        $expense->expense_type_id = 1;
+        $expense->amount = $request->input('amount');
+        $expense->from = $request->input('from');
+        $expense->transactionId = $request->input('transaction-id');
+        $expense->save();
+
+        return back()->with('success', 'রেফারার পেমেন্ট হিসাবভুক্ত হয়েছে।');
     }
 }

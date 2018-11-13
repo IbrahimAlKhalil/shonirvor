@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Ind;
 use App\Models\Village;
+use App\Models\Division;
 use App\Models\WorkMethod;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

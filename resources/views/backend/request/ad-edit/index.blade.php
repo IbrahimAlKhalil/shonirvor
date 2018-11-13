@@ -60,7 +60,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $adEdits->links('pagination::bootstrap-4') }}
+                        {{ $adEdits->links() }}
                     </div>
                 </div>
             </div>
