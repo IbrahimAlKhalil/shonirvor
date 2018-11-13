@@ -5,15 +5,11 @@ use Illuminate\Support\Facades\DB;
 
 $factory->define(Reference::class, function () {
 
-    $referrerPackageIds = DB::table('packages')
-        ->where('package_type_id', 5)
-        ->pluck('id')
-        ->toArray();
-
     return [
         'user_id' => rand(1, 200),
         'service_id' => rand(1, 200),
         'service_type_id' => rand(1, 2),
-        'package_id' => array_random($referrerPackageIds)
+        'onetime_interest' => rand(5, 40),
+        'renew_interest' => rand(5, 40)
     ];
 });

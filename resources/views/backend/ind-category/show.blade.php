@@ -107,7 +107,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $subCategories->links('pagination::bootstrap-4') }}
+                        {{ $subCategories->links() }}
                     </div>
                 </div>
             </div>

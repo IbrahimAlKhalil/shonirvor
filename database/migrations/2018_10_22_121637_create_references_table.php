@@ -13,7 +13,8 @@ class CreateReferencesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('service_id');
             $table->unsignedInteger('service_type_id');
-            $table->unsignedInteger('package_id');
+            $table->integer('onetime_interest')->nullable();
+            $table->integer('renew_interest')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -23,11 +24,7 @@ class CreateReferencesTable extends Migration
 
             $table->foreign('service_type_id')
                 ->references('id')
-                ->on('service_types');
-
-            $table->foreign('package_id')
-                ->references('id')
-                ->on('packages')
+                ->on('service_types')
                 ->onUpdate('cascade');
         });
     }

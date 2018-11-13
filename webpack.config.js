@@ -3,29 +3,29 @@ const CopyWebpack = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
-        'frontend/home': './resources/assets/js/frontend/home.js',
-        'frontend/filter': './resources/assets/js/frontend/filter.js',
-        'frontend/registration/ind-service/index': './resources/assets/js/frontend/registration/ind-service/index.js',
-        'frontend/registration/org-service/index': './resources/assets/js/frontend/registration/org-service/index.js',
-        'frontend/registration/common': './resources/assets/js/frontend/registration/common.js',
-        'frontend/ind-service/show': './resources/assets/js/frontend/ind-service/show.js',
-        'frontend/org-service/show': './resources/assets/js/frontend/org-service/show.js',
-        'frontend/applications/top-service/ind': './resources/assets/js/frontend/applications/top-service/ind.js',
-        'frontend/applications/ad/create': './resources/assets/js/frontend/applications/ad/create.js',
-        'frontend/common': './resources/assets/js/frontend/common.js',
-        'frontend/ad/edit': './resources/assets/js/frontend/ad/edit.js',
-        'frontend/my-services/ind-service/edit': './resources/assets/js/frontend/my-services/ind-service/edit.js',
+        'frontend/home': './resources/js/frontend/home.js',
+        'frontend/filter': './resources/js/frontend/filter.js',
+        'frontend/registration/ind-service/index': './resources/js/frontend/registration/ind-service/index.js',
+        'frontend/registration/org-service/index': './resources/js/frontend/registration/org-service/index.js',
+        'frontend/registration/common': './resources/js/frontend/registration/common.js',
+        'frontend/ind-service/show': './resources/js/frontend/ind-service/show.js',
+        'frontend/org-service/show': './resources/js/frontend/org-service/show.js',
+        'frontend/applications/top-service/ind': './resources/js/frontend/applications/top-service/ind.js',
+        'frontend/applications/ad/create': './resources/js/frontend/applications/ad/create.js',
+        'frontend/common': './resources/js/frontend/common.js',
+        'frontend/ad/edit': './resources/js/frontend/ad/edit.js',
+        'frontend/my-services/ind-service/edit': './resources/js/frontend/my-services/ind-service/edit.js',
 
-        'backend/dashboard': './resources/assets/js/backend/dashboard.js',
-        'backend/contents/registration-instruction': './resources/assets/js/backend/contents/registration-instruction.js',
-        'backend/ind-service-request/show': './resources/assets/js/backend/ind-service-request/show.js',
-        'backend/contents/slider': './resources/assets/js/backend/contents/slider.js',
-        'backend/area/modal': './resources/assets/js/backend/area/modal.js',
-        'backend/area/option-loader': './resources/assets/js/backend/area/option-loader.js',
-        'backend/request/ad-edit/index': './resources/assets/js/backend/request/index.js',
-        'backend/common': './resources/assets/js/backend/common.js',
+        'backend/dashboard': './resources/js/backend/dashboard.js',
+        'backend/contents/registration-instruction': './resources/js/backend/contents/registration-instruction.js',
+        'backend/ind-service-request/show': './resources/js/backend/ind-service-request/show.js',
+        'backend/contents/slider': './resources/js/backend/contents/slider.js',
+        'backend/area/modal': './resources/js/backend/area/modal.js',
+        'backend/area/option-loader': './resources/js/backend/area/option-loader.js',
+        'backend/request/ad-edit/index': './resources/js/backend/request/index.js',
+        'backend/common': './resources/js/backend/common.js',
 
-        'errors/404': './resources/assets/js/errors/404.js'
+        'errors/404': './resources/js/errors/404.js'
     },
     output: {
         path: path.resolve(__dirname, "public/assets/js"),
@@ -90,7 +90,7 @@ module.exports = {
     },
     plugins: [
         new CopyWebpack([
-            {from: './resources/assets/js/backend/contents/skins', to: 'backend/contents/skins'}
+            {from: './resources/js/backend/contents/skins', to: 'backend/contents/skins'}
         ])
     ],
     performance: {

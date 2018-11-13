@@ -69,10 +69,16 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <form action="#" method="post">
+                                                <form action="{{ route('backend.user.pay-referrer', $user->id) }}" method="post">
                                                     {{ csrf_field() }}
                                                     {{ method_field('put') }}
                                                     <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="amount">টাকার পরিমাণ
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="number" name="amount" id="amount" class="form-control" autocomplete="off">
+                                                        </div>
                                                         <div class="form-group">
                                                             <label for="method-select">পেমেন্ট মেথড
                                                                 <span class="text-danger">*</span>

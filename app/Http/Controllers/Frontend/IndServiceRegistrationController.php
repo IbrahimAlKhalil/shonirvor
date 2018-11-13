@@ -28,29 +28,31 @@ use Illuminate\Support\Facades\Route;
 class IndServiceRegistrationController extends Controller
 {
     private $referrer;
-    private $defaultReferPackage;
+    private $referrerInterests;
 
     public function __construct(Request $request)
     {
         if (Route::currentRouteName() == 'individual-service-registration.store'
             || Route::currentRouteName() == 'individual-service-registration.update') {
 
-            $this->referrer = User::where('mobile', $request->input('referrer'))->first();
-
-            $this->defaultReferPackage = Package::with('properties')
-                ->select('packages.id',
-                    'packages.package_type_id',
-                    'package_values.package_property_id',
-                    'package_values.value as is_default')
-                ->join('package_values', function ($join) {
-                    $join->on('packages.id', 'package_values.package_id')
-                        ->where('package_values.package_property_id', 10);
-                })
-                ->where([
-                    ['package_type_id', 5],
-                    ['package_values.value', 1]
-                ])
+            $this->referrer = User::with('referPackage.package.properties')
+                ->where('mobile', $request->input('referrer'))
                 ->first();
+
+            if ($this->referrer->referPackage()->exists()) {
+                $referrerPackage = $this->referrer->referPackage->package;
+            } else {
+                $referrerPackage = Package::find(1);
+            }
+
+            if ($referrerPackage->properties()->where('name', 'refer_target')->first()->value) {
+                dd('ki korum');
+            } else {
+                $this->referrerInterests['onetime'] = $referrerPackage->properties()->where('name', 'refer_onetime_interest')->first()->value;
+                $this->referrerInterests['renew'] = $referrerPackage->properties()->where('name', 'refer_renew_interest')->first()->value;
+            }
+
+            dd('wait', 'hi');
         }
     }
 
@@ -182,9 +184,8 @@ class IndServiceRegistrationController extends Controller
             $referrer->user_id = $this->referrer->id;
             $referrer->service_id = $ind->id;
             $referrer->service_type_id = 1;
-            $referrer->package_id = $this->referrer->referPackage()->exists()
-                ? $this->referrer->referPackage->package_id
-                : $this->defaultReferPackage->id;
+            $referrer->onetime_interest = $this->referrerInterests['onetime'];
+            $referrer->renew_interest = $this->referrerInterests['renew'];
             $referrer->save();
         }
 

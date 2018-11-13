@@ -51,7 +51,7 @@
                 </table>
                 <div class="row">
                     <div class="mx-auto">
-                        {{ $applications->links('pagination::bootstrap-4') }}
+                        {{ $applications->links() }}
                     </div>
                 </div>
             </div>

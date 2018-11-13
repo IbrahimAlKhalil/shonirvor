@@ -9,7 +9,6 @@ class CreateUserReferPackagesTable extends Migration
     public function up()
     {
         Schema::create('user_refer_packages', function (Blueprint $table) {
-            $table->increments('id');
             $table->unsignedInteger('user_id')->unique();
             $table->unsignedInteger('package_id');
             $table->timestamps();

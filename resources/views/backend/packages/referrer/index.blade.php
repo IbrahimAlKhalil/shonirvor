@@ -36,7 +36,7 @@
                     @forelse($packages as $key => $package)
                         @php($properties = $package->properties->groupBy('name'))
                         @php($serial = $packages->perPage() * ($packages->currentPage() - 1) + $loop->iteration)
-                        <tr @if($defaultPackage->id == $package->id)style="background-color: #caa31025"@endif>
+                        <tr @if($package->id == 1)style="background-color: #caa31025"@endif>
                             <td class="align-middle">{{ en2bnNumber($serial) }}</td>
                             <td class="align-middle">{{ $properties['name'][0]->value }}</td>
                             <td class="align-middle">{{ $properties['duration'][0]->value ? en2bnNumber($properties['duration'][0]->value.' দিন') : '-' }}</td>
