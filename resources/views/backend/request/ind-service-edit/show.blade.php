@@ -41,16 +41,16 @@
                                 <td>{{ $data['mobile']  }}</td>
                             </tr>
                             <tr>
+                                <th scope="row">মোবাইলঃ</th>
+                                <td>{{ $data['email']  }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">ওয়েবসাইটঃ</th>
                                 <td>{{ $data['website'] }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">ফেসবুকঃ</th>
                                 <td>{{ $data['facebook'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">জন্ম তারিখঃ</th>
-                                <td>{{ $data['day'] . '/' . $data['month'] . '/' . $data['year'] }}</td>
                             </tr>
                             <tr>
                                 <th scope="row"> বিভাগঃ</th>
@@ -76,52 +76,13 @@
                                 <th scope="row"> ঠিকানাঃ</th>
                                 <td>{{ $data['address'] }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row"> যোগ্যতা/অভিজ্ঞতাঃ</th>
-                                <td>{{ $data['qualification'] }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> জাতীয় পরিচয়পত্রের নাম্বারঃ</th>
-                                <td>{{ $data['nid'] }}</td>
-                            </tr>
-                            @isset($data['experience-certificate'])
+                            @isset($data['cover-photo'])
                                 <tr>
-                                    <th scope="row" class="w-25"> অভিজ্ঞতা/প্রত্যয়ন পত্রঃ</th>
+                                    <th scope="row"> কভার ছবিঃ</th>
                                     <td>
-                                        <a href="{{ asset('storage/' . $data['experience-certificate']) }}"
+                                        <a href="{{ asset('storage/' . $data['cover-photo']) }}"
                                            target="_blank">
-                                            <img src="{{ asset('storage/' . $data['experience-certificate']) }}"
-                                                 style="height: 50px;"
-                                                 class="img-fluid img-thumbnail">
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endisset
-
-                            @isset($data['identities'])
-
-                                <tr>
-                                    <th scope="row" class="w-25"> জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদঃ</th>
-                                    <td>
-                                        @foreach($data['identities'] as $identity)
-                                            <a href="{{ asset('storage/' . $identity) }}"
-                                               target="_blank">
-                                                <img src="{{ asset('storage/' . $identity) }}"
-                                                     style="height: 50px;"
-                                                     class="img-fluid img-thumbnail">
-                                            </a>
-                                        @endforeach
-                                    </td>
-                                </tr>
-                            @endisset
-
-                            @isset($data['cv'])
-                                <tr>
-                                    <th scope="row"> বায়োডাটাঃ</th>
-                                    <td>
-                                        <a href="{{ asset('storage/' . $data['cv']) }}"
-                                           target="_blank">
-                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}"
+                                            <img src="{{ asset('storage/' . $data['cover-photo']) }}"
                                                  style="height: 50px;"
                                                  class="img-fluid img-thumbnail">
                                         </a>
@@ -222,49 +183,51 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mb-3">
-                <div class="rounded row">
-                    <div class="col-md-12 p-0 list-group mt-4">
-                        <table class="table-sm table-striped table-hover table-responsive">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">কাজের ছবি</th>
-                                <th scope="col">বর্ণনা</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php($count = 0)
-                            @foreach($data['images'] as $id => $image)
+            @if($data['images'] && count($data['images']) != 0)
+                <div class="col-md-12 mb-3">
+                    <div class="rounded row">
+                        <div class="col-md-12 p-0 list-group mt-4">
+                            <table class="table-sm table-striped table-hover table-responsive">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ en2bnNumber(++$count) }}
-                                    </td>
-                                    <td>
-                                        @if(isset($image['file']))
-                                            <a href="{{ asset('storage/' . $image['file']) }}">
-                                                <img src="{{ asset('storage/' . $image['file']) }}"
-                                                     style="min-width: 150px;"
-                                                     class="img-fluid img-thumbnail">
-                                            </a>
-                                        @else
-                                            <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
-                                                <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
-                                                     style="min-width: 150px;"
-                                                     class="img-fluid img-thumbnail">
-                                            </a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $image['description'] }}
-                                    </td>
+                                    <th scope="col">#</th>
+                                    <th scope="col">কাজের ছবি</th>
+                                    <th scope="col">বর্ণনা</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @php($count = 0)
+                                @foreach($data['images'] as $id => $image)
+                                    <tr>
+                                        <td>
+                                            {{ en2bnNumber(++$count) }}
+                                        </td>
+                                        <td>
+                                            @if(isset($image['file']))
+                                                <a href="{{ asset('storage/' . $image['file']) }}">
+                                                    <img src="{{ asset('storage/' . $image['file']) }}"
+                                                         style="min-width: 150px;"
+                                                         class="img-fluid img-thumbnail">
+                                                </a>
+                                            @else
+                                                <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
+                                                    <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
+                                                         style="min-width: 150px;"
+                                                         class="img-fluid img-thumbnail">
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $image['description'] }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="col-md-12">
                 <div class="p-2 rounded row d-flex justify-content-center">
@@ -318,8 +281,9 @@
         </div>
     </div>
 
-    <form action="{{ route('backend.request.ind-service-edit.store', $application->id) }}" id="approve-form"
+    <form action="{{ route('backend.request.ind-service-edit.store') }}" id="approve-form"
           method="post">
+        <input type="hidden" value="{{ $application->id }}" name="application-id">
         {{ csrf_field() }}
     </form>
 

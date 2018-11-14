@@ -81,7 +81,7 @@ Route::namespace('Frontend')->group(function () {
             ]);
 
             Route::resource('organization-service', 'OrgMyServiceController', [
-                'only' => ['show', 'edit'],
+                'only' => ['show', 'edit', 'update'],
                 'parameters' => ['organization-service' => 'service'],
                 'names' => 'org'
             ]);
@@ -140,6 +140,12 @@ Route::namespace('Backend')->group(function () {
                     'only' => ['store', 'show', 'index', 'destroy'],
                     'parameters' => ['individual-service-edit' => 'application'],
                     'names' => 'ind-service-edit'
+                ]);
+
+                Route::resource('organization-service-edit', 'OrgServiceEditRequestController', [
+                    'only' => ['store', 'show', 'index', 'destroy'],
+                    'parameters' => ['organization-service-edit' => 'application'],
+                    'names' => 'org-service-edit'
                 ]);
 
             }, '');
@@ -233,11 +239,11 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 Route::middleware('auth')->group(function () {
     Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
         'only' => ['index', 'store', 'update', 'edit'],
-        'parameters' => ['individual-service-registration' => 'ind_id']
+        'parameters' => ['individual-service-registration' => 'ind']
     ]);
     Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
         'only' => ['index', 'store', 'update', 'edit'],
-        'parameters' => ['organization-service-registration' => 'org_id']
+        'parameters' => ['organization-service-registration' => 'org']
     ]);
 }, '');
 

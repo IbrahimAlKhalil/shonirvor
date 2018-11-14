@@ -8,7 +8,7 @@ export class ImagePicker {
         let controlOptions = {
             classList: ['image-picker-control'],
             image: {
-                classList: ['image-picker-image']
+                classList: ['image-picker-image', 'shadow-sm', 'border']
             },
             button: {
                 classList: [

@@ -109,12 +109,8 @@ class IndMyServiceController extends Controller
             'sub-category-requests'
         ]);
 
-        if ($request->hasFile('cv')) {
-            $data['cv'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
-        }
-
-        if ($request->hasFile('experience-certificate')) {
-            $data['experience-certificate'] = $request->file('cv')->store('ind/' . $service->id . '/' . 'docs');
+        if ($request->hasFile('cover-photo')) {
+            $data['cover-photo'] = $request->file('cover-photo')->store('ind/' . $service->id . '/' . 'docs');
         }
 
         if ($request->has('work-images')) {
@@ -136,14 +132,6 @@ class IndMyServiceController extends Controller
             }
 
             $data['images'] = $images;
-        }
-
-        // identities
-        if ($request->hasFile('identities')) {
-            $data['identities'] = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($data['identities'], $identity->store('user-photos/' . $service->user->id));
-            }
         }
 
         DB::beginTransaction();

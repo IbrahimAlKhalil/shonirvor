@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\District;
 use App\Models\Division;
-use App\Models\Ind;
-use App\Models\IndWorkMethod;
 use App\Models\ServiceEdit;
 use App\Models\SubCategory;
 use App\Models\Thana;
@@ -17,7 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class IndServiceEditRequestController extends Controller
+class OrgServiceEditRequestController extends Controller
 {
     public function index()
     {
@@ -25,11 +23,11 @@ class IndServiceEditRequestController extends Controller
             'serviceEditable' => function ($query) {
                 $query->with('category');
             }
-        ])->where('service_editable_type', 'ind')->orderBy('updated_at', 'DSC')->paginate(15);
+        ])->where('service_editable_type', 'org')->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = [
-            ['url' => route('backend.request.ind-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('backend.request.org-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.top-service.index') . '?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('backend.request.ind-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
+            ['url' => route('backend.request.org-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
         return view('backend.request.ind-service-edit.index', compact('applications', 'navs'));

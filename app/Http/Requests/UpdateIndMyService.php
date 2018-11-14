@@ -20,10 +20,6 @@ class UpdateIndMyService extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'day' => 'required|between:1,31',
-            'month' => 'required|between:1,12',
-            'year' => 'required|max:' . (string)(Date('Y') - 18),
-            'nid' => 'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required',
@@ -31,12 +27,10 @@ class UpdateIndMyService extends FormRequest
             'village' => 'required',
             'address' => 'required|string',
             'sub-categories.*.id' => 'exists:sub_categories,id',
+            // TODO: Subcategory
 //            'sub-categories.*.work-methods.*.rate' => 'nullable|integer',
             'work-images.*.description' => 'string|min:10|nullable',
-            'work-images.*.file' => 'nullable|image',
-            'identities.*' => 'nullable|image',
-            'experience-certificate' => 'nullable|image',
-            'cv' => 'mimes:pdf'
+            'work-images.*.file' => 'nullable|image'
         ];
     }
 
@@ -53,10 +47,6 @@ class UpdateIndMyService extends FormRequest
             'email.email' => 'ইমেইলে ভুল আছে, দয়া করে চেক করুন',
             'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
-            'year.required' => 'বছর দিতে হবে',
-            'day.required' => 'দিন দিতে হবে',
-            'month.required' => 'মাস দিতে হবে',
-            'nid.required' => 'জাতীয় পরিচয়পত্রের নাম্বার দিতে হবে',
             'address.required' => 'ঠিকানা দিতে হবে'
         ];
     }

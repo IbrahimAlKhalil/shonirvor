@@ -1,10 +1,10 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'বেক্তিগত সার্ভিস - ' . $service->user->name)
+@section('title', 'প্রাতিষ্ঠানিক সার্ভিস - ' . $service->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/frontend/my-services/ind-service/edit.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/my-services/org-service/edit.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -16,12 +16,14 @@
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="col-md-3">
-                        <img src="{{ asset('storage/' . $service->user->photo) }}"
-                             alt="{{ $service->user->name }}" class="img-thumbnail w-100">
+                        <input type="file"
+                               name="logo"
+                               class="file-picker"
+                               data-image="{{ asset('storage/' . $service->logo) }}">
                     </div>
 
                     <div class="col-md-7 d-flex flex-column flex-wrap justify-content-end">
-                        <h1>{{ $service->user->name }}</h1>
+                        <h1>{{ $service->name }}</h1>
                         <p class="h5">{{ $service->category->name }}</p>
                         <p class="h5">{{ $service->village->bn_name.', '.$service->union->bn_name.', '.$service->thana->bn_name.', '.$service->district->bn_name.', '.$service->division->bn_name }}</p>
                     </div>
@@ -42,6 +44,11 @@
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
+                            <tr>
+                                <th scope="row"><label for="name">প্রতিষ্ঠানের নামঃ</label></th>
+                                <td><input type="text" id="name" name="name" class="form-control"
+                                           value="{{ $service->name }}"></td>
+                            </tr>
                             <tr>
                                 <th scope="row"><label for="mobile">মোবাইল নম্বর</label></th>
                                 <td><input type="text" id="mobile" name="mobile" class="form-control"
@@ -68,7 +75,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
+                <div class="row mt-5">
                     <div class="col-12">
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
@@ -168,7 +175,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
+                <div class="row mt-5">
                     <div class="col-12">
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
@@ -182,57 +189,32 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
+                <div class="row mt-5">
                     <div class="col-12">
                         <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
-                        <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <thead>
                             <tr>
-                                <th>#</th>
-                                <th>নাম</th>
-                                @foreach($workMethods as $workMethod)
-                                    <th>{{ $workMethod->name }}</th>
-                                @endforeach
-                                <th>পদক্ষেপ</th>
+                                <th scope="col">#</th>
+                                <th scope="col">নাম</th>
+                                <th scope="col" class="text-center">মূল্য</th>
+                                <th scope="col" class="text-center">পদক্ষেপ</th>
                             </tr>
                             </thead>
-                            <tbody id="sub-categories">
-                            @forelse($service->subCategories as $index => $subCategory)
-                                <tr data-repeater-clone="true">
-                                    <td> {{ $index+1 }} </td>
-                                    <td>
+                            <tbody class="text-center">
+                            @forelse($service->subCategoryRates as $index => $subCategory)
+                                <tr>
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td class="@if($subCategory->is_confirmed){{ 'text-left' }}@endif">
+                                        <input name="sub-categories[{{ $index }}][name]" type="text"
+                                               class="form-control" value="{{ $subCategory->name }}">
                                         <input type="hidden" name="sub-categories[{{ $index }}][id]"
                                                value="{{ $subCategory->id }}">
-                                        {{ $subCategory->name }}
                                     </td>
-                                    @php($methods = $indWorkMethods[$subCategory->id])
-                                    @php($methodIds = $methods->pluck('id')->toArray())
-                                    @foreach($workMethods as $c => $method)
-                                        @if($method->id != 4)
-                                            @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
-                                            <td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="number"
-                                                           name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
-                                                           class="form-control"
-                                                           value="@if($currentMethod->first()){{ $currentMethod->first()->pivot->rate }}@endif">
-                                                </div>
-                                        @else
-                                            <td>
-                                                <div class="d-flex justify-content-center align-content-center">
-                                                    <label for="negotiabl-{{ $index }}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiabl-{{ $index }}" class="mt-2"
-                                                               name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
-                                                               value="negotiable" {{ checkBox(in_array(4, $methodIds)) }}>
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                    <td><input type="number" class="form-control"
+                                               value="{{ $subCategory->pivot->rate }}"
+                                               name="sub-categories[{{ $index }}][rate]">
+                                    </td>
                                     <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট
@@ -241,14 +223,50 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-muted small" colspan="6">কোন সাব-ক্যাটাগরি নেই</td>
+                                    <td><span class="text-muted small">কোন সাব-ক্যাটাগরি নেই</span></td>
                                 </tr>
                             @endforelse
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+
+                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-category"><i
                                     class="fa fa-plus"></i> আরও যুক্ত করুন
                         </button>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <p class="h4 border-bottom">অতিরিক্ত কাজের তথ্যঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">কাজের নাম</th>
+                                <th scope="col">তথ্য</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($service->additionalPrices as $index => $additionalPrice)
+                                <tr>
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td><input type="text" class="form-control"
+                                               name="additional-prices[{{ $additionalPrice->id }}][name]"
+                                               value="{{ $additionalPrice->name }}"></td>
+                                    <td>
+                                    <textarea class="form-control"
+                                              name="additional-prices[{{ $additionalPrice->id }}][info]" cols="50"
+                                              rows="5">{{ $additionalPrice->info }}</textarea>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center"><span class="text-muted">অতিরিক্ত কাজ নেই</span>
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

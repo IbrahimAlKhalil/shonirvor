@@ -94,7 +94,7 @@
                                     <select name="day" type="text" class="form-control mr-5 rounded-right">
                                         <option value="">-- দিন --</option>
                                         @for($i = 1; $i < 32; $i++)
-                                            <option value="{{ $i }}" {{ selectOpt($i, $dob->day) }}>{{ en2bnNumber($i) }}</option>
+                                            <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->day) }}@endif>{{ en2bnNumber($i) }}</option>
                                         @endfor
                                     </select>
                                     <select name="month" type="text"
@@ -102,7 +102,7 @@
                                         <option value="">-- মাস --</option>
                                         @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
                                         @foreach($months as $index => $month)
-                                            <option value="{{ ++$index }}" {{ selectOpt($index, $dob->month) }}>{{ $month }}</option>
+                                            <option value="{{ ++$index }}" @if(!is_null($dob)){{ selectOpt($index, $dob->month) }}@endif>{{ $month }}</option>
                                         @endforeach
                                     </select>
                                     <select name="year" type="text" class="form-control rounded-left">
@@ -110,7 +110,7 @@
                                         @php($begining = Date('Y') - 50)
                                         @php($ending = Date('Y') - 18)
                                         @for($i = $ending; $i > $begining; $i--)
-                                            <option value="{{ $i }}" {{ selectOpt($i, $dob->year) }}>{{ en2bnNumber($i) }}</option>
+                                            <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->year) }}@endif>{{ en2bnNumber($i) }}</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -520,7 +520,9 @@
                         <div class="form-group row mx-5">
                             <label for="from" class="col-3 col-form-label">যে নাম্বার থেকে পাঠানো হয়েছে</label>
                             <div class="col-9">
-                                <input type="text" name="from" id="from" class="form-control" placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"  value="{{ oldOrData('from', $ind->payments->first()->from) }}">
+                                <input type="text" name="from" id="from" class="form-control"
+                                       placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
+                                       value="{{ oldOrData('from', $ind->payments->first()->from) }}">
                             </div>
                         </div>
 

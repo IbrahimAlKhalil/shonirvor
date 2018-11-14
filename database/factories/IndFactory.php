@@ -24,7 +24,6 @@ $factory->define(Ind::class, function (Faker $faker) {
         'mobile' => '01'
             . $faker->randomElement([1, 6, 7, 8, 9])
             . $faker->unique()->randomNumber(8),
-        'dob' => $faker->date(),
         'website' => 'http://' . $faker->domainName,
         'facebook' => 'https://facebook.com/' . $faker->userName,
         'address' => $faker->address,
