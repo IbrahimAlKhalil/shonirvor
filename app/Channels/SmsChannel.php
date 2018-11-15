@@ -9,9 +9,13 @@ class SmsChannel
 {
     public function send($notifiable, Notification $notification)
     {
-        dd('মেসেজ সার্ভিসটি আপাদত বন্ধ আছে।');
-
         $message = $notification->toSms($notifiable);
+
+        if (! env('SMS_ENABLED')) {
+            dump($message);
+            dump('মেসেজ সার্ভিসটি আপাদত বন্ধ আছে।');
+            return;
+        }
 
         $client = new Client([
             'base_uri' => 'http://portal.smsinbd.com'
@@ -19,7 +23,7 @@ class SmsChannel
 
         $client->request('GET','/smsapi',[
             'query' => [
-                'api_key' => 65465165,
+                'api_key' => env('SMS_API_KEY'),
                 'type' => 'text',
                 'contacts' => $notifiable->mobile,
                 'senderid' => 'WIFAQ',

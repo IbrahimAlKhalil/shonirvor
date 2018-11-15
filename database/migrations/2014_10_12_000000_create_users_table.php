@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('photo')->default('default/user-photos/person.jpg');
             $table->string('password');
+            $table->integer('verification_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

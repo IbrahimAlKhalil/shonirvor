@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+Route::get('verification/{user}', 'Auth\RegisterController@verificationForm')->name('verification');
+Route::post('verification/{user}', 'Auth\RegisterController@verification');
 
 Route::prefix('command')->group(function () {
 
