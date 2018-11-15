@@ -57,7 +57,8 @@
                             <div class="card-header text-center">রেফারেন্স</div>
                             <div class="card-body">
                                 @if($user->references->isNotEmpty())
-                                    <p>পাওনাঃ<span class="float-right">{{ en2bnNumber(521) }} টাকা</span></p>
+                                    <p>পাওনাঃ<span class="float-right">{{ en2bnNumber(round($payable, 2)) }} টাকা</span></p>
+                                    <p>মোট উপার্জনঃ<span class="float-right">{{ en2bnNumber(round($totalEarn, 2)) }} টাকা</span></p>
                                     <button type="button" href="javascript:" class="btn btn-info w-100" data-toggle="modal" data-target="#referrencePaymentModal">পেমেন্ট করুন</button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="referrencePaymentModal" role="dialog">

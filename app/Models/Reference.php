@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reference extends Model
 {
+    protected $dates = ['target_start_time', 'target_end_time'];
+
     /*********************/
     /***** Relations *****/
     /*********************/
