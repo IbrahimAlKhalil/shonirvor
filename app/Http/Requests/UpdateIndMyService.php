@@ -27,6 +27,7 @@ class UpdateIndMyService extends FormRequest
             'village' => 'required',
             'address' => 'required|string',
             'sub-categories.*.id' => 'exists:sub_categories,id',
+            'sub-category-reqeusts.*.name' => 'required|min:3',
             // TODO: Subcategory
 //            'sub-categories.*.work-methods.*.rate' => 'nullable|integer',
             'work-images.*.description' => 'string|min:10|nullable',

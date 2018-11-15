@@ -33,13 +33,9 @@ class OrgServiceEditRequestController extends Controller
         return view('backend.request.ind-service-edit.index', compact('applications', 'navs'));
     }
 
-    public function show(ServiceEdit $application)
+    public function show($id)
     {
-        $application->load([
-            'serviceEditable' => function ($query) {
-                $query->with('user');
-            }
-        ]);
+        $application = ServiceEdit::where('service_editable_type', 'org')->with('serviceEditable')->findOrFail($id);
 
         $subCategoryArr = $application->data['sub-categories'];
         $subCategoryIds = array_map(function ($item) {
@@ -83,7 +79,6 @@ class OrgServiceEditRequestController extends Controller
 
         $workImages = WorkImages::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 
-        $user = $application->serviceEditable->user;
         $data = $application->data;
         $division = Division::find($data['division']);
         $district = District::find($data['district']);
@@ -91,44 +86,38 @@ class OrgServiceEditRequestController extends Controller
         $union = Union::find($data['union']);
         $village = Village::find($data['village']);
 
-        return view('backend.request.ind-service-edit.show', compact('application', 'user', 'data', 'division', 'district', 'thana', 'union', 'village', 'subCategories', 'workMethodNames', 'subCategoryRequests', 'workImages'));
+        return view('backend.request.org-service-edit.show', compact('application', 'data', 'division', 'district', 'thana', 'union', 'village', 'subCategories', 'workMethodNames', 'subCategoryRequests', 'workImages'));
     }
 
     public function store(Request $request)
     {
+
         DB::beginTransaction();
-        $application = ServiceEdit::findOrFail($request->post('application-id'));
-        $ind = $application->serviceEditable;
+        $application = ServiceEdit::with('serviceEditable')->where('service_editable_type', 'org')->findOrFail($request->post('application-id'));
+        $org = $application->serviceEditable;
         $data = $application->data;
 
-        $ind->mobile = $data['mobile'];
-        $ind->email = $data['email'];
-        $ind->facebook = $data['facebook'];
-        $ind->website = $data['website'];
-        $ind->address = $data['address'];
-        $ind->division_id = $data['division'];
-        $ind->district_id = $data['district'];
-        $ind->thana_id = $data['thana'];
-        $ind->village_id = $data['village'];
-        if (isset($data['cover-photo'])) {
-            $ind->cover_photo = $data['cover-photo'];
+        $org->mobile = $data['mobile'];
+        $org->email = $data['email'];
+        $org->facebook = $data['facebook'];
+        $org->website = $data['website'];
+        $org->address = $data['address'];
+        $org->division_id = $data['division'];
+        $org->district_id = $data['district'];
+        $org->thana_id = $data['thana'];
+        $org->village_id = $data['village'];
+        if (isset($data['logo'])) {
+            $org->cover_photo = $data['logo'];
         }
-        $ind->save();
+        if (isset($data['cover-photo'])) {
+            $org->cover_photo = $data['cover-photo'];
+        }
+        $org->save();
 
-        foreach ($data['sub-categories'] as $subcategory) {
-            foreach ($subcategory['work-methods'] as $key => $workmethod) {
-                $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subcategory['id'])->where('work_method_id', $key + 1)->first();
-                if (!$method) continue;
-                if ($key == 3) {
-                    if ($workmethod['rate'] != 'negotiable') {
-                        $method->delete();
-                    }
-                    continue;
-                }
-
-                $method->rate = $workmethod['rate'];
-                $method->save();
-            }
+        foreach ($data['sub-categories'] as $datum) {
+            DB::table('org_sub_category_rates')->where('org_id', $org->id)->where('sub_category_id', $datum['id'])->update([
+                'name'
+            ]);
         }
 
         $application->delete();
@@ -137,8 +126,10 @@ class OrgServiceEditRequestController extends Controller
         return redirect(route('backend.request.ind-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
-    public function destroy(ServiceEdit $application)
+    public function destroy($id)
     {
+        $application = ServiceEdit::where('service_editable_type', 'org')->findOrFail($id);
+
         DB::beginTransaction();
 
         // TODO:: Don't forget to delete documents/images

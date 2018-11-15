@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'সার্ভিস সমূহ')
+@section('title', 'প্রাতিষ্ঠানিক সার্ভিস - ' . $service->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>

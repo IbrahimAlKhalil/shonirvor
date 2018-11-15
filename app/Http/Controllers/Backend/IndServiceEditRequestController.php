@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\Division;
-use App\Models\Ind;
 use App\Models\IndWorkMethod;
 use App\Models\ServiceEdit;
 use App\Models\SubCategory;
@@ -14,7 +14,6 @@ use App\Models\Village;
 use App\Models\WorkImages;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class IndServiceEditRequestController extends Controller
@@ -35,13 +34,13 @@ class IndServiceEditRequestController extends Controller
         return view('backend.request.ind-service-edit.index', compact('applications', 'navs'));
     }
 
-    public function show(ServiceEdit $application)
+    public function show($id)
     {
-        $application->load([
+        $application = ServiceEdit::with([
             'serviceEditable' => function ($query) {
                 $query->with('user');
             }
-        ]);
+        ])->where('service_editable_type', 'ind')->findOrFail($id);
 
         $subCategoryArr = $application->data['sub-categories'];
         $subCategoryIds = array_map(function ($item) {
@@ -99,7 +98,7 @@ class IndServiceEditRequestController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $application = ServiceEdit::findOrFail($request->post('application-id'));
+        $application = ServiceEdit::where('service_editable_type', 'ind')->findOrFail($request->post('application-id'));
         $ind = $application->serviceEditable;
         $data = $application->data;
 
@@ -117,20 +116,59 @@ class IndServiceEditRequestController extends Controller
         }
         $ind->save();
 
-        foreach ($data['sub-categories'] as $subcategory) {
-            foreach ($subcategory['work-methods'] as $key => $workmethod) {
-                $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subcategory['id'])->where('work_method_id', $key + 1)->first();
+        // store sub-category edits
+        foreach ($data['sub-categories'] as $subCategory) {
+            foreach ($subCategory['work-methods'] as $key => $workMethod) {
+                $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subCategory['id'])->where('work_method_id', $key + 1)->first();
                 if (!$method) continue;
                 if ($key == 3) {
-                    if ($workmethod['rate'] != 'negotiable') {
+                    if ($workMethod['rate'] != 'negotiable') {
                         $method->delete();
                     }
                     continue;
                 }
 
-                $method->rate = $workmethod['rate'];
+                $method->rate = $workMethod['rate'];
                 $method->save();
             }
+        }
+
+        // store sub-category requests
+        foreach ($data['sub-category-requests'] as $datum) {
+            $subCategory = new SubCategory;
+            $subCategory->category_id = $ind->category_id;
+            $subCategory->name = $datum['name'];
+            $subCategory->is_confirmed = 1;
+            $subCategory->save();
+
+            $workMethods = [];
+            foreach ($datum['work-methods'] as $index => $workMethod) {
+                if ($index != 3) {
+                    if (!is_null($workMethod['rate'])) {
+                        array_push($workMethods, [
+                            'ind_id' => $ind->id,
+                            'sub_category_id' => $subCategory->id,
+                            'work_method_id' => $index + 1,
+                            'rate' => $workMethod['rate']
+                        ]);
+                    }
+
+                    continue;
+                }
+
+                if ($workMethod['rate'] == 'negotiable') {
+                    array_push($workMethods, [
+                        'ind_id' => $ind->id,
+                        'sub_category_id' => $subCategory->id,
+                        'work_method_id' => $index + 1,
+                        'rate' => 0
+                    ]);
+                }
+            }
+
+            DB::table('ind_work_method')->insert($workMethods);
+
+            $ind->subCategories()->attach($subCategory);
         }
 
         $application->delete();
@@ -139,8 +177,9 @@ class IndServiceEditRequestController extends Controller
         return redirect(route('backend.request.ind-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
-    public function destroy(ServiceEdit $application)
+    public function destroy($id)
     {
+        $application = ServiceEdit::where('service_editable_type', 'ind')->findOrFail($id);
         DB::beginTransaction();
 
         // TODO:: Don't forget to delete documents/images

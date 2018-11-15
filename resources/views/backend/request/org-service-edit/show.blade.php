@@ -1,9 +1,9 @@
 @extends('layouts.backend.master')
 
-@section('title', $application->serviceEditable->user->name)
+@section('title', $application->serviceEditable->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/backend/common.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/backend/ind-service-request/show.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -24,11 +24,11 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="rounded-circle shadow user-photo"
-                                     style="background-image: url({{ asset('storage/' . $user->photo) }});"></div>
+                                     style="background-image: url({{ asset('storage/' . $application->serviceEditable->logo) }});"></div>
                             </div>
                             <div class="col-md-9">
                                 <div class="w-100 h-100 d-flex align-items-center">
-                                    <a href="{{ route('backend.users.show', $user->id) }}">{{ $user->name }}</a>
+                                    <a href="{{ route('backend.users.show', $application->service_editable_id) }}">{{ $application->serviceEditable->name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -76,6 +76,19 @@
                                 <th scope="row"> ঠিকানাঃ</th>
                                 <td>{{ $data['address'] }}</td>
                             </tr>
+                            @isset($data['logo'])
+                                <tr>
+                                    <th scope="row"> লোগোঃ</th>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $data['logo']) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/' . $data['logo']) }}"
+                                                 style="height: 50px;"
+                                                 class="img-fluid img-thumbnail">
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endisset
                             @isset($data['cover-photo'])
                                 <tr>
                                     <th scope="row"> কভার ছবিঃ</th>
@@ -94,6 +107,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-12 mb-3">
                 <div class="rounded row">
                     <div class="col-md-12 p-0 list-group mt-4">
@@ -102,67 +116,64 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">সাব-ক্যাটাগরি</th>
-                                @foreach($workMethodNames as $method)
-                                    <th scope="col">{{ $method->name }}</th>
-                                @endforeach
+                                <th scope="col">মূল্য</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @php($count = 0)
-                            @foreach($subCategories as $name => $subCategory)
+
+                            @foreach($data['sub-categories'] as $index => $subCategory)
                                 <tr>
-                                    <td> {{ en2bnNumber(++$count) }} </td>
-                                    <td>{{ $name }}</td>
-                                    @php($methodCount = 0)
-                                    @foreach($subCategory as $methodName => $rate)
-                                        @php($methodCount++)
-                                        @if($methodCount != 4)
-                                            <td>
-                                                @if($rate)
-                                                    {{ $rate }}
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td>
-                                                @if($rate == '')
-                                                    <i class="fa fa-times"></i>
-                                                @else
-                                                    <i class="fa fa-check"></i>
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td>{{ $subCategory['name'] }}</td>
+                                    <td>{{ $subCategory['rate'] }}</td>
                                 </tr>
                             @endforeach
-                            @php($count = 0)
-                            @foreach($subCategoryRequests as $name => $subCategory)
+                            @foreach($data['sub-categories'] as $index => $subCategory)
                                 <tr>
-                                    <td> {{ en2bnNumber(++$count) }} </td>
-                                    <td><input type="text" class="form-control"
-                                               name="sub-category-requests[{{ $count-1 }}]" value="{{ $name }}"></td>
-                                    @php($methodCount = 0)
-                                    @foreach($subCategory as $methodName => $rate)
-                                        @php($methodCount++)
-                                        @if($methodCount != 4)
-                                            <td>
-                                                @if($rate)
-                                                    {{ $rate }}
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td>
-                                                @if($rate == 'negotiable')
-                                                    <i class="fa fa-check"></i>
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                    <td> {{ en2bnNumber($index+1) }} </td>
+                                    <td>
+                                        <input type="text" class="form-control"
+                                               name="sub-category-requests[{{ $index }}][name]"
+                                               value="{{ $subCategory['name'] }}">
+                                    </td>
+                                    <td>{{ $subCategory['rate'] }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="rounded row">
+                    <div class="col-md-12 p-0 list-group mt-4">
+                        <table class="table-sm table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">নামঃ</th>
+                                <th scope="col">তথ্য</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($data['kaj'] as $index => $kaj)
+                                <tr>
+                                    <td>
+                                        {{ $kaj['name'] }}
+                                    </td>
+                                    <td>
+                                        {{ $kaj['info'] }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @foreach($data['kaj-requests'] as $index => $kaj)
+                                <tr>
+                                    <td>
+                                        {{ $kaj['name'] }}
+                                    </td>
+                                    <td>
+                                        {{ $kaj['info'] }}
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -269,13 +280,13 @@
         </div>
     </div>
 
-    <form action="{{ route('backend.request.ind-service-edit.store') }}" id="approve-form"
+    <form action="{{ route('backend.request.org-service-edit.store') }}" id="approve-form"
           method="post">
         <input type="hidden" value="{{ $application->id }}" name="application-id">
         {{ csrf_field() }}
     </form>
 
-    <form action="{{ route('backend.request.ind-service-edit.destroy', $application->id) }}" id="delete-form"
+    <form action="{{ route('backend.request.org-service-edit.destroy', $application->id) }}" id="delete-form"
           method="post">
         {{ method_field('delete') }}
         {{ csrf_field() }}

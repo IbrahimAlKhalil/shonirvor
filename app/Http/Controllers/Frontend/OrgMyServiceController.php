@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Requests\UpdateOrgMyService;
 use App\Models\Division;
 use App\Models\Org;
+use App\Models\ServiceEdit;
 use App\Models\Village;
-use App\Models\WorkMethod;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrgMyServiceController extends Controller
 {
@@ -58,7 +59,7 @@ class OrgMyServiceController extends Controller
     public function edit($id)
     {
         $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
-            ->withTrashed()->findOrFail($id);
+            ->onlyApproved()->findOrFail($id);
 
         $navs = $this->navs();
 
@@ -90,11 +91,17 @@ class OrgMyServiceController extends Controller
             'village',
             'address',
             'sub-categories',
-            'sub-category-requests'
+            'sub-category-requests',
+            'kaj',
+            'kaj-requests'
         ]);
 
         if ($request->hasFile('cover-photo')) {
-            $data['cover-photo'] = $request->file('cover-photo')->store('ind/' . $service->id . '/' . 'docs');
+            $data['cover-photo'] = $request->file('cover-photo')->store('org/' . $service->id . '/' . 'docs');
+        }
+
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $request->file('logo')->store('org/' . $service->id);
         }
 
         if ($request->has('work-images')) {
@@ -122,11 +129,11 @@ class OrgMyServiceController extends Controller
 
         $edit = new ServiceEdit;
         $edit->service_editable_id = $service->id;
-        $edit->service_editable_type = 'ind';
+        $edit->service_editable_type = 'org';
         $edit->data = $data;
         $edit->save();
         DB::commit();
 
-        return redirect(route('frontend.my-service.ind.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
+        return redirect(route('frontend.my-service.org.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
     }
 }

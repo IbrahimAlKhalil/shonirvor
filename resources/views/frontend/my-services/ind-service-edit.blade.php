@@ -196,12 +196,15 @@
                                 <th>পদক্ষেপ</th>
                             </tr>
                             </thead>
-                            <tbody id="sub-categories">
+                            <tbody id="sub-categories"
+                                   data-route="{{ route('api.sub-categories') }}?category={{ $service->category->id }}">
                             @forelse($service->subCategories as $index => $subCategory)
                                 <tr data-repeater-clone="true">
                                     <td> {{ $index+1 }} </td>
                                     <td>
-                                        <input type="hidden" name="sub-categories[{{ $index }}][id]"
+                                        <input type="hidden"
+                                               class="id-field"
+                                               name="sub-categories[{{ $index }}][id]"
                                                value="{{ $subCategory->id }}">
                                         {{ $subCategory->name }}
                                     </td>
@@ -223,8 +226,8 @@
                                         @else
                                             <td>
                                                 <div class="d-flex justify-content-center align-content-center">
-                                                    <label for="negotiabl-{{ $index }}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiabl-{{ $index }}" class="mt-2"
+                                                    <label for="negotiable-{{ $index }}" class="mt-3 checkbox">
+                                                        <input type="checkbox" id="negotiable-{{ $index }}" class="mt-2"
                                                                name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
                                                                value="negotiable" {{ checkBox(in_array(4, $methodIds)) }}>
                                                         <span></span>
@@ -247,6 +250,78 @@
                             </tbody>
                         </table>
                         <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+                                    class="fa fa-plus"></i> আরও যুক্ত করুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরির জন্য অনুরোধ করুনঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>নাম</th>
+                                @foreach($workMethods as $workMethod)
+                                    <th>{{ $workMethod->name }}</th>
+                                @endforeach
+                                <th>পদক্ষেপ</th>
+                            </tr>
+                            </thead>
+                            <tbody id="sub-category-requests">
+                            <tr data-repeater-clone="true">
+                                <td>1</td>
+                                <td>
+                                    <input type="text" name="sub-category-requests[0][name]" class="form-control"
+                                           placeholder="সাব-ক্যাটাগরির নাম">
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[0][work-methods][0][rate]"
+                                               class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[0][work-methods][1][rate]"
+                                               class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[0][work-methods][2][rate]"
+                                               class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-content-center">
+                                        <label for="requests-negotiable-0" class="mt-3 checkbox">
+                                            <input type="checkbox" id="requests-negotiable-0" class="mt-2"
+                                                   name="sub-category-requests[0][work-methods][3][rate]"
+                                                   value="negotiable">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                        <span class="btn btn-outline-danger btn-sm disabled">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-req"><i
                                     class="fa fa-plus"></i> আরও যুক্ত করুন
                         </button>
                     </div>

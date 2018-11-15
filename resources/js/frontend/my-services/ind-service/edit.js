@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let form = document.getElementById('update-form');
     let formIntegrity = new FormChangeChecker(form);
-
     document.getElementById('submit-btn').addEventListener('click', evt => {
         if (!formIntegrity.changed()) {
             evt.preventDefault();
@@ -24,50 +23,65 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    document.querySelectorAll('.delete-sub-category').forEach(button => {
-        button.addEventListener('click', () => {
-            if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
-                $(button).closest('tr').hide(500, function () {
-                    $(this).remove();
-                });
-            }
-        });
-    });
 
-    let container = document.getElementById('sub-categories');
-    let repeater = new Repeater(container, function () {
-        let count = this.count;
-        let tr = `
-                      <tr data-repeater-clone="true">
-                                    <td> 2 </td>
+    /****************** Subcategories *************************/
+
+    (function () {
+        let container = document.getElementById('sub-categories');
+        fetch($(container).data('route')).then(response => response.json().then(subCategories => {
+
+            let selected = $(container).find('.id-field').toArray().map(field => parseInt(field.value));
+            let preSelected = [...selected];
+
+            let repeater = new Repeater(container, function () {
+                let count = this.count;
+                let length = container.children.length;
+                let options = '';
+
+                subCategories.forEach(subCategory => {
+                    if (!selected.includes(subCategory.id)) {
+                        options += `
+                        <option value="${subCategory.id}">
+                            ${subCategory.name}
+                        </option>
+                        `;
+                    }
+                });
+
+                let tr = `
+                      <tr>
+                                    <td> ${length + 1} </td>
                                     <td>
-                                        <input type="text" name="sub-category-requests[${count}][name]" class="form-control">
+                                        <select name="sub-categories[${count}][id]" class="form-control">
+                                            <option value="">--- সাব-ক্যাটাগরি ---</option>
+                                            ${options}
+                                        </select>
                                     </td>
                                                                                                                                                                                                                                             <td>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">৳</span>
                                                     </div>
-                                                    <input type="text" name="sub-category-requests[${count}][work-methods][0][rate]" class="form-control">
+                                                    <input type="text" name="sub-categories[${count}][work-methods][0][rate]" class="form-control">
                                                 </div>
                                                                                                                                                                                                             </td><td>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">৳</span>
                                                     </div>
-                                                    <input type="text" name="sub-category-requests[${count}][work-methods][1][rate]" class="form-control">
+                                                    <input type="text" name="sub-categories[${count}][work-methods][1][rate]" class="form-control">
                                                 </div>
                                                                                                                                                                                                             </td><td>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">৳</span>
                                                     </div>
-                                                    <input type="text" name="sub-category-requests[${count}][work-methods][2][rate]" class="form-control">
+                                                    <input type="text" name="sub-categories[${count}][work-methods][2][rate]" class="form-control">
                                                 </div>
                                                                                                                                                                 </td><td>
                                                 <div class="d-flex justify-content-center align-content-center">
                                                     <label for="negotiable-${count}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][3][rate]" value="negotiable">
+                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-categories[${count}][work-methods][3][rate]" value="negotiable">
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -80,18 +94,129 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </tr>
         `;
 
-        let fragment = document.createElement('tbody');
-        fragment.innerHTML = tr;
-        let node = fragment.firstElementChild.cloneNode(true);
-        $(node).find('.delete-sub-category').on('click', function () {
-            $(this).closest('tr').hide(500, function () {
-                $(this).remove();
+                let fragment = document.createElement('tbody');
+                fragment.innerHTML = tr;
+                let node = fragment.firstElementChild.cloneNode(true);
+                $(node).find('.delete-sub-category').on('click', function () {
+                    let tr = $(this).closest('tr');
+                    let tbody = tr.closest('tbody');
+                    tr.nextAll().hide(500, function () {
+                        $(this).remove();
+                    });
+                    tr.hide(500, function () {
+                        $(this).remove();
+                        selected = [...tbody
+                            .find('select')
+                            .toArray()
+                            .map(sl => parseInt(sl.value)), ...preSelected];
+                    });
+                });
+                $(node).find('select').on('change', function () {
+                    let select = $(this);
+                    let value = parseInt(select.val());
+                    if (value) {
+                        selected.push(value);
+                        select.closest('tr').nextAll().hide(500, function () {
+                            $(this).remove();
+                            selected = [...select.closest('tbody')
+                                .find('select')
+                                .toArray()
+                                .map(sl => parseInt(sl.value)), ...preSelected];
+                        });
+                    }
+                });
+                return node;
+            });
+
+            document.getElementById('add-new').addEventListener('click', function () {
+                let dontRepeat = $(container).find('select').toArray().some(select => {
+                    return !select.value || select.value === '';
+                }) || subCategories.length === selected.length;
+
+                !dontRepeat && repeater.repeat();
+            });
+        }));
+
+        document.querySelectorAll('.delete-sub-category').forEach(button => {
+            button.addEventListener('click', () => {
+                if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
+                    $(button).closest('tr').hide(500, function () {
+                        $(this).remove();
+                    });
+                }
             });
         });
-        return node;
-    });
+    })();
 
-    document.getElementById('add-new').addEventListener('click', function () {
-        repeater.repeat();
-    });
+
+    /**************************** Subcategory requests **********************/
+
+    (function () {
+        let container = document.getElementById('sub-category-requests');
+        console.log(container);
+        let repeater = new Repeater(container, function () {
+            let count = this.count;
+            let length = container.children.length + 1;
+
+            let tr = `
+            <tr>
+                                <td>${length}</td>
+                                <td>
+                                    <input type="text" name="sub-category-requests[${count}][name]" class="form-control" placeholder="সাব-ক্যাটাগরির নাম">
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[${count}][work-methods][0][rate]" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[${count}][work-methods][1][rate]" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">৳</span>
+                                        </div>
+                                        <input type="text" name="sub-category-requests[${count}][work-methods][2][rate]" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-content-center">
+                                        <label for="requests-negotiable-${count}" class="mt-3 checkbox">
+                                            <input type="checkbox" id="requests-negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][3][rate]" value="negotiable">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                        <span class="btn btn-outline-danger btn-sm delete-sub-category">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                </td>
+                            </tr>
+            `;
+
+            let fragment = document.createElement('tbody');
+            fragment.innerHTML = tr;
+            let node = fragment.firstElementChild;
+            $(node).find('.delete-sub-category').on('click', function () {
+                $(this).closest('tr').hide(500, function () {
+                    $(this).remove();
+                });
+            });
+            return node;
+        });
+
+        document.getElementById('add-new-req').addEventListener('click', function () {
+            repeater.repeat();
+        });
+    })();
 });

@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'প্রাতিষ্ঠানিক সার্ভিস - ' . $service->name)
+@section('title', 'প্রাতিষ্ঠানিক সার্ভিস এডিট- ' . $service->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
@@ -8,10 +8,11 @@
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <div class="row">
             <form class="col-md-9 bg-white rounded p-4" method="post" id="update-form" enctype="multipart/form-data"
-                  action="{{ route('frontend.my-service.ind.update', $service->id) }}">
+                  action="{{ route('frontend.my-service.org.update', $service->id) }}">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
                 <div class="row">
@@ -201,7 +202,7 @@
                                 <th scope="col" class="text-center">পদক্ষেপ</th>
                             </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody class="text-center" id="sub-categories">
                             @forelse($service->subCategoryRates as $index => $subCategory)
                                 <tr>
                                     <td> {{ en2bnNumber($index+1) }} </td>
@@ -236,38 +237,43 @@
                 </div>
 
                 <div class="row mt-5">
-                    <div class="col-12">
+                    <div class="col-12" id="otirikto-kaj">
                         <p class="h4 border-bottom">অতিরিক্ত কাজের তথ্যঃ</p>
-                        <table class="table table-striped table-bordered table-hover table-sm w-100">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">কাজের নাম</th>
-                                <th scope="col">তথ্য</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($service->additionalPrices as $index => $additionalPrice)
-                                <tr>
-                                    <td> {{ en2bnNumber($index+1) }} </td>
-                                    <td><input type="text" class="form-control"
-                                               name="additional-prices[{{ $additionalPrice->id }}][name]"
-                                               value="{{ $additionalPrice->name }}"></td>
-                                    <td>
-                                    <textarea class="form-control"
-                                              name="additional-prices[{{ $additionalPrice->id }}][info]" cols="50"
-                                              rows="5">{{ $additionalPrice->info }}</textarea>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center"><span class="text-muted">অতিরিক্ত কাজ নেই</span>
-                                    </td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                        @forelse($service->additionalPrices as $index => $additionalPrice)
+                            <div class="row border rounded shadow-sm mt-2 position-relative otirikto-kaj"
+                                 data-repeater-clone="true">
+                                <div class="form-group  col-md-12 row mt-3">
+                                    <label for="kaj-name-{{ $index }}" class="col-3 col-form-label">কাজের
+                                        নামঃ </label>
+                                    <div class="col-9">
+                                        <input id="kaj-name-{{ $index }}" type="text"
+                                               name="kaj[{{ $index }}][name]"
+                                               class="form-control" value="{{ $additionalPrice->name }}">
+                                        <input type="hidden" name="kaj[{{ $index }}][id]"
+                                               value="{{ $additionalPrice->id }}">
+                                    </div>
+                                </div>
+                                <div class="form-group  col-md-12 row mt-2">
+                                    <label for="kaj-info-{{ $index }}" class="col-3 col-form-label">তথ্যঃ </label>
+                                    <div class="col-9">
+                                    <textarea id="kaj-info-{{ $index }}"
+                                              name="kaj[{{ $index }}][info]"
+                                              cols="50"
+                                              rows="4"
+                                              class="form-control">{{ $additionalPrice->info }}</textarea>
+                                    </div>
+                                </div>
+                                <i class="fa fa-trash-o delete-kaj text-danger" style="cursor: pointer"></i>
+                            </div>
+                        @empty
+                            <div class="text-center">
+                                <span class="text-muted">অতিরিক্ত কাজ নেই</span>
+                            </div>
+                        @endforelse
                     </div>
+                    <button type="button" class="btn btn-light float-left shadow-sm mt-2" id="add-new-kaj">
+                        <i class="fa fa-plus"></i> আরও যুক্ত করুন
+                    </button>
                 </div>
 
                 <div class="row mt-5">
@@ -367,5 +373,5 @@
 
 @section('script')
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\UpdateIndMyService::class, '#update-form') !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\UpdateOrgMyService::class, '#update-form') !!}
 @endsection
