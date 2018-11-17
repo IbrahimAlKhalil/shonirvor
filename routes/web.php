@@ -98,9 +98,6 @@ Route::namespace('Backend')->group(function () {
 
     Route::get('dashboard', 'DashboardController')->name('dashboard');
 
-    Route::post('individual-service/top/{ind}', 'IndServiceController@isTop')->name('ind-service.top');
-    Route::post('organization-service/top/{org}', 'OrgServiceController@isTop')->name('org-service.top');
-
     Route::name('backend.')->group(function () {
 
         Route::prefix('dashboard')->group(function () {

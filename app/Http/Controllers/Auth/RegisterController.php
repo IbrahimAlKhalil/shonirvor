@@ -27,7 +27,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'mobile' => 'required|unique:users|digits:11',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6|confirmed'
         ]);
     }
 
@@ -37,7 +37,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'mobile' => $data['mobile'],
             'verification_token' => rand(100000, 999999),
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['password'])
         ]);
     }
 
@@ -54,7 +54,11 @@ class RegisterController extends Controller
     {
         $user = User::withoutGlobalScope('validate')->findOrFail($user);
 
-        return view('frontend.verification', compact('user'));
+        if ($user->verification_token == null) {
+            abort(404, 'This user is already varified.');
+        }
+
+        return view('auth.verification', compact('user'));
     }
 
     public function verification(Request $request, $user)

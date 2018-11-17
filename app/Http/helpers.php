@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client;
 use App\Models\ContentType;
 use Illuminate\Support\Facades\DB;
 
@@ -99,6 +100,12 @@ function getContent($name)
     return ContentType::where('name', $name)->with('contents')->first()->contents()->first();
 }
 
+/**
+ * Visitor counter for Ind service
+ *
+ * @param int $indId
+ * @return array
+ */
 function indVisitorCount($indId)
 {
     $visitor['today'] = DB::table('ind_visitor_counts')->where('ind_id', $indId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
@@ -108,6 +115,12 @@ function indVisitorCount($indId)
     return $visitor;
 }
 
+/**
+ * Visitor counter for Org service
+ *
+ * @param int $orgId
+ * @return array
+ */
 function orgVisitorCount($orgId)
 {
     $visitor['today'] = DB::table('org_visitor_counts')->where('org_id', $orgId)->whereDate('created_at', date('Y-m-d'))->sum('how_much');
@@ -117,6 +130,12 @@ function orgVisitorCount($orgId)
     return $visitor;
 }
 
+/**
+ * Convert days to day-month-year
+ *
+ * @param int $days
+ * @return string
+ */
 function readableDays(int $days)
 {
     $years = floor($days / 365);
@@ -129,4 +148,64 @@ function readableDays(int $days)
     if ($remainingDays) $result .= en2bnNumber($remainingDays) . ' দিন';
 
     return $result;
+}
+
+/**
+ * Send SMS
+ *
+ * @param string $mobile
+ * @param string $message
+ * @return array
+ */
+function sms($mobile, $message)
+{
+    if (strlen($mobile) != 11) {
+        return [
+            'success' => false,
+            'status' => 'মোবাইল নাম্বারটি ১১ সংখ্যার নয়।'
+        ];
+    }
+
+    if (empty($message)) {
+        return [
+            'success' => false,
+            'status' => 'মেসেজে কিছু বলা হয়নি'
+        ];
+    }
+
+    if (! env('SMS_ENABLED')) {
+        return [
+            'success' => false,
+            'status' => 'মেসেজ সার্ভিসটি env তে বন্ধ আছে।'
+        ];
+    }
+
+    $client = new Client([
+        'base_uri' => 'http://portal.smsinbd.com'
+    ]);
+
+    $response = $client->request('GET','/smsapi', [
+        'query' => [
+            'api_key' => env('SMS_API_KEY'),
+            'type' => 'text',
+            'contacts' => $mobile,
+            'senderid' => 'WIFAQ',
+            'msg' => $message,
+            'method' => 'api'
+        ]
+    ]);
+
+    $status = strtolower(json_decode(trim($response->getBody()->getContents()))->status);
+
+    if ($status == 'success') {
+        return [
+            'success' => true,
+            'status' => 'মেসেজ পাঠানো হয়েছে।'
+        ];
+    } else {
+        return [
+            'success' => false,
+            'status' => 'এসএমএস সার্ভারে সমস্যার কারণে মেসেজ পাঠানো সম্ভব হয়নি।'
+        ];
+    }
 }

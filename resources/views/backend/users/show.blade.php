@@ -8,6 +8,7 @@
 
 @section('content')
     @include('components.success')
+    @include('components.error')
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9">
@@ -15,6 +16,16 @@
             </div>
             <div class="col-md-3">
                 <div class="row">
+                    <div class="col-12">
+                        @include('components.notification')
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.sms')
+                    </div>
+                </div>
+                <div class="row mt-4">
                     <div class="col-12">
                         <button type="button" href="javascript:" class="btn w-100 @if($user->referPackage()->exists()){{ 'btn-success' }}@else{{ 'btn-info' }}@endif" data-toggle="modal" data-target="#referPackageModal">রেফার প্যাকেজ</button>
                         <!-- Modal -->

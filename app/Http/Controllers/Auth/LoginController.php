@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Notifications\Sms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -34,6 +35,8 @@ class LoginController extends Controller
             $user = User::withoutGlobalScope('validate')
                 ->where('mobile', $request->input('mobile'))
                 ->first();
+
+            $user->notify(new Sms('Verification code of AreaSheba: '. $user->verification_token));
 
             return redirect()->route('verification', $user->id);
         }

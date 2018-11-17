@@ -11,7 +11,7 @@ class NotificationController extends Controller
 {
     public function send(User $user, Request $request)
     {
-        $user->notify(new Notification($request->input('notification')));
+        $user->notify(new Notification($request->input('message')));
         return back()->with('success', 'নোটিফিকেশন পাঠানো হয়েছে।');
     }
 

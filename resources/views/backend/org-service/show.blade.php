@@ -174,16 +174,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.notification', ['userId' => $org->user->id])
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.sms', ['userId' => $org->user->id])
-                    </div>
-                </div>
             </div>
         </div>
     </div>
