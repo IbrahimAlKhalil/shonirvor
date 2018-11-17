@@ -23,7 +23,7 @@ class ProductionSeeder extends Seeder
         /**** Create Admin ****/
         $user = new User;
         $user->name = 'Arif Uzzaman';
-        $user->mobile = '0';
+        $user->mobile = '00000000000';
         $user->photo = 'default/user-photos/person.jpg';
         $user->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC'; // 123456
         $user->save();

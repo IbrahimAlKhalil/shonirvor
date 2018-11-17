@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+Route::get('verification/{user}', 'Auth\RegisterController@verificationForm')->name('verification');
+Route::post('verification/{user}', 'Auth\RegisterController@verification');
 
 Route::prefix('command')->group(function () {
 
@@ -95,9 +97,6 @@ Route::namespace('Frontend')->group(function () {
 Route::namespace('Backend')->group(function () {
 
     Route::get('dashboard', 'DashboardController')->name('dashboard');
-
-    Route::post('individual-service/top/{ind}', 'IndServiceController@isTop')->name('ind-service.top');
-    Route::post('organization-service/top/{org}', 'OrgServiceController@isTop')->name('org-service.top');
 
     Route::name('backend.')->group(function () {
 

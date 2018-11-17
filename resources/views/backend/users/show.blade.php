@@ -8,6 +8,7 @@
 
 @section('content')
     @include('components.success')
+    @include('components.error')
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9">
@@ -15,6 +16,16 @@
             </div>
             <div class="col-md-3">
                 <div class="row">
+                    <div class="col-12">
+                        @include('components.notification')
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.sms')
+                    </div>
+                </div>
+                <div class="row mt-4">
                     <div class="col-12">
                         <button type="button" href="javascript:" class="btn w-100 @if($user->referPackage()->exists()){{ 'btn-success' }}@else{{ 'btn-info' }}@endif" data-toggle="modal" data-target="#referPackageModal">রেফার প্যাকেজ</button>
                         <!-- Modal -->
@@ -57,7 +68,8 @@
                             <div class="card-header text-center">রেফারেন্স</div>
                             <div class="card-body">
                                 @if($user->references->isNotEmpty())
-                                    <p>পাওনাঃ<span class="float-right">{{ en2bnNumber(521) }} টাকা</span></p>
+                                    <p>পাওনাঃ<span class="float-right">{{ en2bnNumber(round($payable, 2)) }} টাকা</span></p>
+                                    <p>মোট উপার্জনঃ<span class="float-right">{{ en2bnNumber(round($totalEarn, 2)) }} টাকা</span></p>
                                     <button type="button" href="javascript:" class="btn btn-info w-100" data-toggle="modal" data-target="#referrencePaymentModal">পেমেন্ট করুন</button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="referrencePaymentModal" role="dialog">

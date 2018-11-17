@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Reference;
-use Illuminate\Support\Facades\DB;
+use Faker\Generator as Faker;
 
-$factory->define(Reference::class, function () {
+$factory->define(Reference::class, function (Faker $faker) {
 
     return [
         'user_id' => rand(1, 200),
@@ -11,8 +11,9 @@ $factory->define(Reference::class, function () {
         'service_type_id' => rand(1, 2),
         'onetime_interest' => rand(5, 40),
         'renew_interest' => rand(5, 40),
-        'duration' => rand(0, 1) ? rand(10, 300) : null,
         'target' => rand(0, 1) ? rand(5, 20) : null,
+        'target_start_time' => rand(0, 1) ? $faker->dateTimeBetween('-3 months', '1 months') : null,
+        'target_end_time' => rand(0, 1) ? $faker->dateTimeBetween('-3 months', '1 months') : null,
         'fail_onetime_interest' => rand(0, 1) ? rand(5, 40) : null,
         'fail_renew_interest' => rand(0, 1) ? rand(5, 40) : null
     ];

@@ -272,16 +272,6 @@
                         @include('components.visitor-conuter', ['visitor' => indVisitorCount($ind->id)])
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.notification', ['userId' => $ind->user->id])
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        @include('components.sms', ['userId' => $ind->user->id])
-                    </div>
-                </div>
             </div>
         </div>
     </div>

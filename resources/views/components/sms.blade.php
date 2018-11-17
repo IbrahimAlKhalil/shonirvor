@@ -1,7 +1,8 @@
 <button type="button" href="javascript:" class="btn btn-info w-100" data-toggle="modal" data-target="#smsModal">মেসেজ পাঠান</button>
+
 <!-- Modal -->
-<div class="modal fade" id="smsModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="smsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">মেসেজ</h5>
@@ -9,10 +10,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('sms.send', $userId) }}" method="post">
+            <form action="{{ route('sms.send', $user->id) }}" method="post">
                 {{ csrf_field() }}
                 <div class="modal-body">
-                    <textarea name="notification" class="form-control" rows="4"></textarea>
+                    <textarea name="message" class="form-control" rows="4"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল</button>

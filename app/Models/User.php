@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,12 +12,21 @@ class User extends Authenticatable
     use Notifiable, EntrustUserTrait;
 
     protected $fillable = [
-        'name', 'mobile', 'password',
+        'name', 'mobile', 'password', 'verification_token'
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('validate', function (Builder $builder) {
+            $builder->whereNull('verification_token');
+        });
+    }
 
 
     /**********************/
@@ -68,5 +78,10 @@ class User extends Authenticatable
     public function ads()
     {
         return $this->hasMany(Ad::class);
+    }
+
+    public function earns()
+    {
+        return $this->hasMany(Expense::class);
     }
 }

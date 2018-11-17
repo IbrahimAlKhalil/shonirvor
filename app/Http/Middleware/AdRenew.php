@@ -7,18 +7,8 @@ use Closure;
 
 class AdRenew
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
-
-//        dd($request->route()->parameters);
-
         $ad = $request->route()->parameters['ad'];
 
         if ($ad->user_id != $request->user()->id || is_null($ad->expire)) {
