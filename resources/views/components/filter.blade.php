@@ -1,23 +1,9 @@
 <div class="filter-root bg-white rounded py-3">
     <form action="{{ route('frontend.filter') }}">
-        <div class="d-flex">
-            {{--<div class="px-4">
-                <div class="pt-3 mb-0">
-                    <label class="radio-container">বেক্তিগত
-                        <input type="radio" name="type" value="ind" @if(request()->get('type') == 'ind'){{ 'checked' }}@endif>
-                        <span class="checkmark mt-1"></span>
-                    </label>
-                </div>
-                <div class="pt-3 mb-0">
-                    <label class="radio-container">প্রাতিষ্ঠানিক
-                        <input type="radio" name="type" value="org" @if(request()->get('type') == 'org'){{ 'checked' }}@endif>
-                        <span class="checkmark mt-1"></span>
-                    </label>
-                </div>
-            </div>--}}
+        <div class="d-md-flex">
             <div class="flex-grow-1">
-                <div class="d-flex">
-                    <div class="flex-fill pr-1 py-2 pl-4">
+                <div class="d-md-flex px-4 px-md-0">
+                    <div class="flex-fill pl-md-4 pr-md-1 py-2">
                         <select name="type" id="service-type"
                                 data-option-loader-url="{{ route('api.categories') }}"
                                 data-option-loader-target="#category"
@@ -31,7 +17,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="flex-fill pr-1 py-2">
+                    <div class="flex-fill pr-md-1 py-2">
                         <select name="division" id="division"
                                 data-option-loader-url="{{ route('api.districts') }}"
                                 data-option-loader-target="#district"
@@ -45,7 +31,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex-fill px-1 py-2">
+                    <div class="flex-fill px-md-1 py-2">
                         <select name="district" id="district"
                                 @if(! request()->filled('division')){{ 'disabled' }}@endif
                                 data-placeholder="-- জেলা --"
@@ -64,7 +50,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill px-1 py-2">
+                    <div class="flex-fill px-md-1 py-2">
                         <select name="thana" id="thana"
                                 @if(! request()->filled('district')){{ 'disabled' }}@endif
                                 data-placeholder="-- থানা --"
@@ -83,7 +69,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill px-1 py-2">
+                    <div class="flex-fill px-md-1 py-2">
                         <select name="union" id="union"
                                 @if(! request()->filled('thana')){{ 'disabled' }}@endif
                                 data-placeholder="-- ইউনিয়ন --"
@@ -102,7 +88,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill pl-1 py-2">
+                    <div class="flex-fill pl-md-1 py-2">
                         <select name="village" id="village"
                                 @if(! request()->filled('union')){{ 'disabled' }}@endif
                                 data-placeholder="-- এলাকা --"
@@ -116,10 +102,10 @@
                         </select>
                     </div>
                 </div>
-                <div class="d-flex">
-                    <div class="col-3 py-2 pl-0 pr-1">
+                <div class="d-md-flex px-4 px-md-0">
+                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
                         <select name="category" id="category"
-                                class="pl-4"
+                                class="pl-md-4"
                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                 data-option-loader-target="#subCategory"
                                 @if(request()->filled('category'))
@@ -133,7 +119,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-3 py-2 px-1">
+                    <div class="col-md-3 py-2 px-0 px-md-1">
                         <select name="sub-category" id="subCategory"
                                 @if(! request()->filled('category')){{ 'disabled' }}@endif
                                 data-placeholder="-- সার্ভিস --"
@@ -147,7 +133,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="col-3 py-2 pl-0 pr-1">
+                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
                         <select name="method" id="method">
                             <option value="">-- Work Methods --</option>
                             @foreach($workMethods as $workMethod)
@@ -155,21 +141,21 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-3 py-2 pl-0 pr-1">
+                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
                         <select name="price" id="price"
                                 data-placeholder="-- দাম --">
                             <option value="">-- দাম --</option>
-                            <option value="low" @if(request()->get('price') == 'low'){{ 'selected' }}@endif>দাম কম থেকে
-                                বেশি
+                            <option value="low" @if(request()->get('price') == 'low'){{ 'selected' }}@endif>
+                                দাম কম থেকে বেশি
                             </option>
-                            <option value="high" @if(request()->get('price') == 'high'){{ 'selected' }}@endif>দাম বেশি
-                                থেকে কম
+                            <option value="high" @if(request()->get('price') == 'high'){{ 'selected' }}@endif>
+                                দাম বেশি থেকে কম
                             </option>
                         </select>
                     </div>
                 </div>
             </div>
-            <div class="m-auto px-4">
+            <div class="m-auto px-4 text-center text-md-left">
                 <button type="submit" class="btn btn-info">সার্ভিস সার্চ করুন</button>
             </div>
         </div>

@@ -19,6 +19,14 @@
   height: 22rem;
   object-fit: cover;
 }
+@include media-breakpoint-down(sm) {
+  .carousel-item {
+    height: 12rem;
+  }
+  .carousel-item > img {
+    height: 12rem;
+  }
+}
 
 
 /* RESPONSIVE CSS

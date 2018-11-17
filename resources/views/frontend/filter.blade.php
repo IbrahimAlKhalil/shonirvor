@@ -9,7 +9,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row pt-4 justify-content-center">
-            <div class="col-md-11 pl-0">
+            <div class="col-md-11 pl-md-0">
                 @include('components.filter')
             </div>
         </div>
