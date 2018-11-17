@@ -3,7 +3,7 @@
 @section('title', $provider->user->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/ind-service/show.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/ind-service.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -40,9 +40,6 @@
                         <a class="btn btn-secondary fa fa-file-text text-white" href="{{ 'https://docs.google.com/viewer?url='.asset('storage/'.$provider->cv) }}" target="_blank"> বায়োডাটা</a>
                         <span class="btn btn-warning">
                             <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
-                        </span>
-                        <span class="btn btn-success">
-                            <i class="fa fa-comments"></i> চ্যাট করুন
                         </span>
                     </div>
                 </div>
@@ -81,7 +78,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <p class="h4 border-bottom"> কাজের ফিডব্যাকঃ</p>
+                        <p class="h4 border-bottom">কাজের ফিডব্যাকঃ</p>
                         <div class="row">
                             <div class="col-12">
                                 @if($canFeedback)

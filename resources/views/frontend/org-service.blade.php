@@ -3,7 +3,7 @@
 @section('title', $provider->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/org-service/show.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/org-service.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -39,9 +39,6 @@
                         @endif
                         <span class="btn btn-secondary">
                             <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
-                        </span>
-                        <span class="btn btn-secondary">
-                            <i class="fa fa-comments"></i> চ্যাট করুন
                         </span>
                     </div>
                 </div>
