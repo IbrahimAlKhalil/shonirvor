@@ -21,7 +21,7 @@ class OrgServiceRequestController extends Controller
         $navs = [
             ['url' => route('backend.request.org-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.top-service.index').'?type=4', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট']
+            ['url' => route('backend.request.org-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
         return view('backend.request.service.org.index', compact('applications', 'navs'));

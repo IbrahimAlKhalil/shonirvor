@@ -71,6 +71,21 @@
                                            value="{{ $service->facebook }}"></td>
                             </tr>
 
+                            <tr>
+                                <th scope="row"><label for="service-link">সার্ভিস লিঙ্কঃ</label></th>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/individual-service/
+                                            </span>
+                                        </div>
+                                        <input type="text" id="slug" name="slug" class="form-control"
+                                               value="{{ $service->slug }}">
+                                    </div>
+                                </td>
+                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -202,13 +217,13 @@
                                 <th scope="col" class="text-center">পদক্ষেপ</th>
                             </tr>
                             </thead>
-                            <tbody class="text-center" id="sub-categories">
+                            <tbody class="text-center" id="sub-categories"
+                                   data-route="{{ route('api.sub-categories') }}?category={{ $service->category->id }}">
                             @forelse($service->subCategoryRates as $index => $subCategory)
-                                <tr>
+                                <tr data-repeater-clone="true">
                                     <td> {{ en2bnNumber($index+1) }} </td>
                                     <td class="@if($subCategory->is_confirmed){{ 'text-left' }}@endif">
-                                        <input name="sub-categories[{{ $index }}][name]" type="text"
-                                               class="form-control" value="{{ $subCategory->name }}">
+                                        {{ $subCategory->name }}
                                         <input type="hidden" name="sub-categories[{{ $index }}][id]"
                                                value="{{ $subCategory->id }}">
                                     </td>
@@ -231,6 +246,43 @@
                         </table>
 
                         <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-category"><i
+                                    class="fa fa-plus"></i> আরও যুক্ত করুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরির জন্য অনুরোধ করুনঃ</p>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">নাম</th>
+                                <th scope="col" class="text-center">মূল্য</th>
+                                <th scope="col" class="text-center">পদক্ষেপ</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center" id="sub-category-requests">
+                            <tr>
+                                <td> 1</td>
+                                <td class="text-left">
+                                    <input name="sub-category-requests[0][name]" type="text"
+                                           class="form-control">
+                                </td>
+                                <td><input type="number" class="form-control"
+                                           name="sub-category-requests[0][rate]">
+                                </td>
+                                <td>
+                                        <span class="btn btn-outline-danger btn-sm disabled">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-req"><i
                                     class="fa fa-plus"></i> আরও যুক্ত করুন
                         </button>
                     </div>

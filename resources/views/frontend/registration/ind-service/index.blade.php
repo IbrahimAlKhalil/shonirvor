@@ -367,7 +367,7 @@
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
                                        class="file-picker">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker">
+                                       class="file-picker" multiple>
                             </div>
                         </div>
 

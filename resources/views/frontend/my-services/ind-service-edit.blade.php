@@ -63,6 +63,21 @@
                                            value="{{ $service->facebook }}"></td>
                             </tr>
 
+                            <tr>
+                                <th scope="row"><label for="service-link">সার্ভিস লিঙ্কঃ</label></th>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/individual-service/
+                                            </span>
+                                        </div>
+                                        <input type="text" id="slug" name="slug" class="form-control"
+                                               value="{{ $service->slug }}">
+                                    </div>
+                                </td>
+                            </tr>
+
                             </tbody>
                         </table>
                     </div>

@@ -30,6 +30,7 @@ class CreateIndsTable extends Migration
             $table->string('status')->nullable();
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
+            $table->string('slug')->nullable();
             $table->boolean('is_available')->default(1);
             $table->timestamps();
             $table->softDeletes();

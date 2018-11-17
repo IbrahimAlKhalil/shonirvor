@@ -90,6 +90,7 @@ class OrgMyServiceController extends Controller
             'union',
             'village',
             'address',
+            'slug',
             'sub-categories',
             'sub-category-requests',
             'kaj',

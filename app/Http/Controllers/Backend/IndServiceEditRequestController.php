@@ -11,7 +11,7 @@ use App\Models\SubCategory;
 use App\Models\Thana;
 use App\Models\Union;
 use App\Models\Village;
-use App\Models\WorkImages;
+use App\Models\WorkImage;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +82,7 @@ class IndServiceEditRequestController extends Controller
             }
         }
 
-        $workImages = WorkImages::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 
         $user = $application->serviceEditable->user;
         $data = $application->data;
@@ -111,6 +111,7 @@ class IndServiceEditRequestController extends Controller
         $ind->district_id = $data['district'];
         $ind->thana_id = $data['thana'];
         $ind->village_id = $data['village'];
+        $ind->slug = $data['slug'];
         if (isset($data['cover-photo'])) {
             $ind->cover_photo = $data['cover-photo'];
         }
@@ -169,6 +170,18 @@ class IndServiceEditRequestController extends Controller
             DB::table('ind_work_method')->insert($workMethods);
 
             $ind->subCategories()->attach($subCategory);
+        }
+
+        if (isset($data['images'])) {
+            // TODO: work image request
+            foreach ($data['images'] as $id => $datum) {
+                $image = WorkImage::find($id);
+                $image->description = $datum['description'];
+                if (isset($datum['file'])) {
+                    $image->path = $datum['file'];
+                }
+                $image->save();
+            }
         }
 
         $application->delete();

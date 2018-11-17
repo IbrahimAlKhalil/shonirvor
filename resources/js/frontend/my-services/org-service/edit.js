@@ -24,6 +24,105 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    /*********************** Sub-categories ***********************/
+    (function () {
+        let container = document.getElementById('sub-categories');
+        fetch($(container).data('route')).then(response => response.json().then(subCategories => {
+
+            let selected = $(container).find('.id-field').toArray().map(field => parseInt(field.value));
+            let preSelected = [...selected];
+
+            let repeater = new Repeater(container, function () {
+                let count = this.count;
+                let length = container.children.length;
+                let options = '';
+
+                subCategories.forEach(subCategory => {
+                    if (!selected.includes(subCategory.id)) {
+                        options += `
+                        <option value="${subCategory.id}">
+                            ${subCategory.name}
+                        </option>
+                        `;
+                    }
+                });
+
+                let tr = `
+                      <tr>
+                                    <td> ${length + 1} </td>
+                                    <td class="text-left">
+                                        <select name="sub-categories[${count}][id]" class="form-control">
+                                            <option value="">--- সাব-ক্যাটাগরি ---</option>
+                                            ${options}
+                                        </select>
+                                    </td>
+                                    <td><input type="number" class="form-control"
+                                               name="sub-categories[${count}][rate]">
+                                    </td>
+                                    <td>
+                                        <span class="btn btn-outline-danger btn-sm delete-sub-category">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                    </td>
+                                </tr>
+        `;
+
+                let fragment = document.createElement('tbody');
+                fragment.innerHTML = tr;
+                let node = fragment.firstElementChild.cloneNode(true);
+                $(node).find('.delete-sub-category').on('click', function () {
+                    let tr = $(this).closest('tr');
+                    let tbody = tr.closest('tbody');
+                    tr.nextAll().hide(500, function () {
+                        $(this).remove();
+                    });
+                    tr.hide(500, function () {
+                        $(this).remove();
+                        selected = [...tbody
+                            .find('select')
+                            .toArray()
+                            .map(sl => parseInt(sl.value)), ...preSelected];
+                    });
+                });
+                $(node).find('select').on('change', function () {
+                    let select = $(this);
+                    let value = parseInt(select.val());
+                    if (value) {
+                        selected.push(value);
+                        select.closest('tr').nextAll().hide(500, function () {
+                            $(this).remove();
+                            selected = [...select.closest('tbody')
+                                .find('select')
+                                .toArray()
+                                .map(sl => parseInt(sl.value)), ...preSelected];
+                        });
+                    }
+                });
+                return node;
+            });
+
+            document.getElementById('add-new-category').addEventListener('click', function () {
+                let dontRepeat = $(container).find('select').toArray().some(select => {
+                    return !select.value || select.value === '';
+                }) || subCategories.length === selected.length;
+
+                !dontRepeat && repeater.repeat();
+            });
+        }));
+
+        document.querySelectorAll('.delete-sub-category').forEach(button => {
+            button.addEventListener('click', () => {
+                if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
+                    $(button).closest('tr').hide(500, function () {
+                        $(this).remove();
+                    });
+                }
+            });
+        });
+    })();
+
+
+    /******************** Sub-category requests *********************/
     (function () {
         document.querySelectorAll('.delete-sub-category').forEach(button => {
             button.addEventListener('click', () => {
@@ -36,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-        let container = document.getElementById('sub-categories');
+        let container = document.getElementById('sub-category-requests');
         let repeater = new Repeater(container, function () {
             let count = this.count;
             let tr = `
@@ -65,12 +164,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             return node;
         });
-        document.getElementById('add-new-category').addEventListener('click', function () {
+        document.getElementById('add-new-req').addEventListener('click', function () {
             repeater.repeat();
         });
     })();
 
 
+    /******************** Additional pricing ********************/
     (function () {
 
         document.querySelectorAll('.delete-kaj').forEach(button => {

@@ -57,7 +57,7 @@ class TopServiceRequestController extends Controller
         $navs = [
             ['url' => route($serviceRequestRoute), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.top-service.index').'?type='.$packageTypeId, 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট']
+            ['url' => route('backend.request.org-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
         return view('backend.request.top-service.index', compact('applications', 'navs'));

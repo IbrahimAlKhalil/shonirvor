@@ -121,24 +121,31 @@
                             </thead>
                             <tbody>
 
-                            @foreach($data['sub-categories'] as $index => $subCategory)
+                            @foreach($subCategories as $index => $subCategory)
                                 <tr>
                                     <td> {{ en2bnNumber($index+1) }} </td>
                                     <td>{{ $subCategory['name'] }}</td>
                                     <td>{{ $subCategory['rate'] }}</td>
                                 </tr>
                             @endforeach
-                            @foreach($data['sub-categories'] as $index => $subCategory)
-                                <tr>
-                                    <td> {{ en2bnNumber($index+1) }} </td>
-                                    <td>
-                                        <input type="text" class="form-control"
-                                               name="sub-category-requests[{{ $index }}][name]"
-                                               value="{{ $subCategory['name'] }}">
-                                    </td>
-                                    <td>{{ $subCategory['rate'] }}</td>
-                                </tr>
-                            @endforeach
+                            @isset($data['sub-category-requests'])
+                                @foreach($data['sub-category-requests'] as $index => $subCategory)
+                                    <tr>
+                                        <td> {{ en2bnNumber($index+1) }} </td>
+                                        <td>
+                                            <input type="text" class="form-control"
+                                                   form="approve-form"
+                                                   name="sub-category-requests[{{ $index }}][name]"
+                                                   value="{{ $subCategory['name'] }}">
+                                        </td>
+                                        <td>{{ $subCategory['rate'] }}
+                                            <input type="hidden" class="form-control"
+                                                   form="approve-form"
+                                                   name="sub-category-requests[{{ $index }}][rate]"
+                                                   value="{{ $subCategory['rate'] }}"></td>
+                                    </tr>
+                                @endforeach
+                            @endisset
                             </tbody>
                         </table>
                     </div>
@@ -166,16 +173,18 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            @foreach($data['kaj-requests'] as $index => $kaj)
-                                <tr>
-                                    <td>
-                                        {{ $kaj['name'] }}
-                                    </td>
-                                    <td>
-                                        {{ $kaj['info'] }}
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @isset($data['kaj-requests'])
+                                @foreach($data['kaj-requests'] as $index => $kaj)
+                                    <tr>
+                                        <td>
+                                            {{ $kaj['name'] }}
+                                        </td>
+                                        <td>
+                                            {{ $kaj['info'] }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endisset
                             </tbody>
                         </table>
                     </div>

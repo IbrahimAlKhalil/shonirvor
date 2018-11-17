@@ -32,6 +32,7 @@ $factory->define(Org::class, function (Faker $faker) {
         'expire' => rand(0, 1) ? $faker->dateTimeBetween('-3 years', '3 years') : null,
         'top_expire' => rand(0, 1) ? $faker->dateTimeBetween('-3 years', '3 years') : null,
         'trade_license' => 'seed/org/trade-license.png',
+        'slug' => $faker->slug(rand(1, 6)),
         'deleted_at' => rand(0, 1) ? $faker->dateTime : null
     ];
 });

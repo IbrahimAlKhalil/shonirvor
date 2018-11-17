@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\District;
 use App\Models\Division;
+use App\Models\OrgAdditionalPrice;
 use App\Models\ServiceEdit;
 use App\Models\SubCategory;
 use App\Models\Thana;
 use App\Models\Union;
 use App\Models\Village;
-use App\Models\WorkImages;
+use App\Models\WorkImage;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -30,7 +31,7 @@ class OrgServiceEditRequestController extends Controller
             ['url' => route('backend.request.org-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
-        return view('backend.request.ind-service-edit.index', compact('applications', 'navs'));
+        return view('backend.request.org-service-edit.index', compact('applications', 'navs'));
     }
 
     public function show($id)
@@ -41,43 +42,9 @@ class OrgServiceEditRequestController extends Controller
         $subCategoryIds = array_map(function ($item) {
             return $item['id'];
         }, $subCategoryArr);
-        $workMethodNames = WorkMethod::select('name')->get();
-        $subCategoryCollection = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get();
-        $subCategories = [];
+        $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get();
 
-
-        foreach ($subCategoryCollection as $i => $subCategory) {
-            $item = [];
-            foreach ($workMethodNames as $c => $methodName) {
-                if (isset($subCategoryArr[$i]['work-methods'][$c]['rate'])) {
-                    $item[$methodName->name] = $subCategoryArr[$i]['work-methods'][$c]['rate'];
-                    continue;
-                }
-
-                $item[$methodName->name] = '';
-            }
-            $subCategories[$subCategory->name] = $item;
-        }
-
-        $subCategoryRequests = [];
-
-        if (isset($application->data['sub-category-requests'])) {
-            foreach ($application->data['sub-category-requests'] as $i => $subCategory) {
-                $item = [];
-                foreach ($workMethodNames as $c => $methodName) {
-                    if (isset($subCategory['work-methods'][$c]['rate'])) {
-                        $item[$methodName->name] = $subCategory['work-methods'][$c]['rate'];
-                        continue;
-                    }
-
-                    $item[$methodName->name] = '';
-                }
-
-                $subCategoryRequests[$subCategory['name']] = $item;
-            }
-        }
-
-        $workImages = WorkImages::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 
         $data = $application->data;
         $division = Division::find($data['division']);
@@ -86,7 +53,7 @@ class OrgServiceEditRequestController extends Controller
         $union = Union::find($data['union']);
         $village = Village::find($data['village']);
 
-        return view('backend.request.org-service-edit.show', compact('application', 'data', 'division', 'district', 'thana', 'union', 'village', 'subCategories', 'workMethodNames', 'subCategoryRequests', 'workImages'));
+        return view('backend.request.org-service-edit.show', compact('application', 'data', 'division', 'district', 'thana', 'union', 'village', 'subCategories', 'workImages'));
     }
 
     public function store(Request $request)
@@ -106,6 +73,7 @@ class OrgServiceEditRequestController extends Controller
         $org->district_id = $data['district'];
         $org->thana_id = $data['thana'];
         $org->village_id = $data['village'];
+        $org->slug = $data['slug'];
         if (isset($data['logo'])) {
             $org->cover_photo = $data['logo'];
         }
@@ -114,16 +82,90 @@ class OrgServiceEditRequestController extends Controller
         }
         $org->save();
 
+        $subCategoryIds = array_map(function ($item) {
+            return $item['id'];
+        }, $application->data['sub-categories']);
+
+        $org->subCategories()->detach();
+        DB::table('org_sub_category_rates')->whereIn('sub_category_id', $subCategoryIds)->where('org_id', $org->id)->delete();
+
+
+        $subCategories = [];
+        $subCategoryRates = [];
         foreach ($data['sub-categories'] as $datum) {
-            DB::table('org_sub_category_rates')->where('org_id', $org->id)->where('sub_category_id', $datum['id'])->update([
-                'name'
+            array_push($subCategoryRates, [
+                'org_id' => $org->id,
+                'sub_category_id' => $datum['id'],
+                'rate' => $datum['rate']
             ]);
+
+            array_push($subCategories, [
+                'sub_category_id' => $datum['id'],
+                'sub_categoriable_id' => $org->id,
+                'sub_categoriable_type' => 'org'
+            ]);
+        }
+
+        if (isset($data['sub-category-requests'])) {
+            foreach ($request->post('sub-category-requests') as $datum) {
+                $newSubCategory = new SubCategory;
+                $newSubCategory->category_id = $org->category_id;
+                $newSubCategory->name = $datum['name'];
+                $newSubCategory->is_confirmed = 1;
+                $newSubCategory->save();
+
+                array_push($subCategoryRates, [
+                    'org_id' => $org->id,
+                    'sub_category_id' => $newSubCategory->id,
+                    'rate' => $datum['rate']
+                ]);
+
+                array_push($subCategories, [
+                    'sub_category_id' => $newSubCategory->id,
+                    'sub_categoriable_id' => $org->id,
+                    'sub_categoriable_type' => 'org'
+                ]);
+            }
+            DB::table('sub_categoriables')->insert($subCategories);
+        }
+
+        DB::table('org_sub_category_rates')->insert($subCategoryRates);
+
+        foreach ($data['kaj'] as $datum) {
+            DB::table('org_additional_prices')->where('id', $datum['id'])->update([
+                'name' => $datum['name'],
+                'info' => $datum['info'],
+            ]);
+        }
+
+        if (isset($data['kaj-requests'])) {
+            $kajRequests = [];
+            foreach ($data['kaj-requests'] as $datum) {
+                array_push($kajRequests, [
+                    'org_id' => $org->id,
+                    'name' => $datum['name'],
+                    'info' => $datum['info']
+                ]);
+            }
+            DB::table('org_additional_prices')->insert($kajRequests);
+        }
+
+        if (isset($data['images'])) {
+            // TODO: work image request
+            foreach ($data['images'] as $id => $datum) {
+                $image = WorkImage::find($id);
+                $image->description = $datum['description'];
+                if (isset($datum['file'])) {
+                    $image->path = $datum['file'];
+                }
+                $image->save();
+            }
         }
 
         $application->delete();
         DB::commit();
 
-        return redirect(route('backend.request.ind-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
+        return redirect(route('backend.request.org-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে গৃহীত হয়েছে!');
     }
 
     public function destroy($id)
@@ -138,6 +180,6 @@ class OrgServiceEditRequestController extends Controller
 
         DB::commit();
 
-        return redirect(route('backend.request.ind-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
+        return redirect(route('backend.request.org-service-edit.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');
     }
 }

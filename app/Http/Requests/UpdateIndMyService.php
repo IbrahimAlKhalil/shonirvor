@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateIndMyService extends FormRequest
 {
@@ -26,6 +27,7 @@ class UpdateIndMyService extends FormRequest
             'union' => 'required',
             'village' => 'required',
             'address' => 'required|string',
+            'slug' => Rule::unique('inds')->ignore(request('service')),
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-reqeusts.*.name' => 'required|min:3',
             // TODO: Subcategory
@@ -48,7 +50,8 @@ class UpdateIndMyService extends FormRequest
             'email.email' => 'ইমেইলে ভুল আছে, দয়া করে চেক করুন',
             'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
-            'address.required' => 'ঠিকানা দিতে হবে'
+            'address.required' => 'ঠিকানা দিতে হবে',
+            'slug.unique' => 'দুঃখিত! এই লিংকটি কেউ নিয়ে নিয়েছে ।'
         ];
     }
 }
