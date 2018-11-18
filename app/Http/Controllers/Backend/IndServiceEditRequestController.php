@@ -111,7 +111,9 @@ class IndServiceEditRequestController extends Controller
         $ind->district_id = $data['district'];
         $ind->thana_id = $data['thana'];
         $ind->village_id = $data['village'];
-        $ind->slug = $data['slug'];
+        if (isset($data['slug'])) {
+            $ind->slug = $data['slug'];
+        }
         if (isset($data['cover-photo'])) {
             $ind->cover_photo = $data['cover-photo'];
         }
@@ -173,7 +175,6 @@ class IndServiceEditRequestController extends Controller
         }
 
         if (isset($data['images'])) {
-            // TODO: work image request
             foreach ($data['images'] as $id => $datum) {
                 $image = WorkImage::find($id);
                 $image->description = $datum['description'];
@@ -183,6 +184,19 @@ class IndServiceEditRequestController extends Controller
                 $image->save();
             }
         }
+
+        $newWorkImages = [];
+        if (isset($data['new-work-images'])) {
+            foreach ($data['new-work-images'] as $id => $datum) {
+                array_push($newWorkImages, [
+                    'work_imagable_type' => 'ind',
+                    'work_imagable_id' => $ind->id,
+                    'path' => $datum['file'],
+                    'description' => isset($datum['description']) ? $datum['description'] : null
+                ]);
+            }
+        }
+        DB::table('work_images')->insert($newWorkImages);
 
         $application->delete();
         DB::commit();

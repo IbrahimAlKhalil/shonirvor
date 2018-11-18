@@ -342,35 +342,55 @@
                 </div>
 
                 <div class="row mt-5">
-                    <div class="col-12 kajer-chobi">
+                    <div class="col-12">
                         <p class="h4 border-bottom">কাজের ছবিঃ</p>
-                        <div class="row">
-                            <div class="col-12">
-                                @forelse($service->workImages->chunk(2) as $chunk)
-                                    <div class="card-deck py-2">
-                                        @foreach($chunk as $index => $image)
-                                            <div class="card shadow-sm">
-                                                <input type="file"
-                                                       name="work-images[{{ $image->id }}][file]"
-                                                       class="file-picker"
-                                                       data-image="{{ asset('storage/' . $image->path) }}">
-                                                <div class="card-body">
-                                                    <label for="des">বর্ণনাঃ</label>
-                                                    <textarea type="text"
-                                                              name="work-images[{{ $image->id }}][description]"
-                                                              id="des"
-                                                              class="form-control">{{ $image->description }}</textarea>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @empty
-                                    <p class="text-muted col-12">কোন ছবি আপলোড করা হয়নি!</p>
-                                @endforelse
-                            </div>
-                        </div>
+                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ছবি</th>
+                                <th scope="col">বর্ণনা</th>
+                            </tr>
+                            </thead>
+                            <tbody id="work-images">
+                            @forelse($service->workImages as $index => $image)
+                                <tr data-repeater-clone="true">
+                                    <td>
+                                        {{ $index }}
+                                    </td>
+                                    <td>
+                                        <input type="file"
+                                               name="work-images[{{ $image->id }}][file]"
+                                               class="file-picker"
+                                               data-image="{{ asset('storage/' . $image->path) }}">
+                                    </td>
+                                    <td>
+                                        <textarea type="text"
+                                                  rows="4"
+                                                  name="work-images[{{ $image->id }}][description]"
+                                                  id="des"
+                                                  class="form-control">{{ $image->description }}</textarea>
+                                    </td>
+                                    <td>
+                                        <span class="btn btn-outline-danger btn-sm delete-image">
+                                            <i class="fa fa-trash-o"></i> ডিলিট
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">কোন ছবি আপলোড করা হয়নি</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-image"><i
+                                    class="fa fa-plus"></i> আরও যুক্ত করুন
+                        </button>
                     </div>
+                </div>
 
+                <div class="row mt-5">
                     <div class="col-12 mt-4 text-center">
                         <button class="btn btn-success w-25" type="button" data-toggle="modal" id="submit-btn"
                                 data-target="#confirmModal">সাবমিট

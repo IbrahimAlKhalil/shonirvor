@@ -171,7 +171,7 @@
                 </div>
             </div>
 
-            @if($data['images'] && count($data['images']) != 0)
+            @if(($data['images'] && count($data['images'])) || ($data['new-work-images'] && count($data['new-work-images'])))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">
@@ -204,6 +204,23 @@
                                                          class="img-fluid img-thumbnail">
                                                 </a>
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{ $image['description'] }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @foreach($data['new-work-images'] as $image)
+                                    <tr>
+                                        <td>
+                                            {{ en2bnNumber(++$count) }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ asset('storage/' . $image['file']) }}">
+                                                <img src="{{ asset('storage/' . $image['file']) }}"
+                                                     style="max-width: 150px; min-width: 150px;"
+                                                     class="img-fluid img-thumbnail">
+                                            </a>
                                         </td>
                                         <td>
                                             {{ $image['description'] }}

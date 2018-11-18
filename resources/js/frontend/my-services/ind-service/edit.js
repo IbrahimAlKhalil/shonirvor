@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let fragment = document.createElement('tbody');
             fragment.innerHTML = tr;
-            let node = fragment.firstElementChild;
+            let node = fragment.firstElementChild.cloneNode(true);
             $(node).find('.delete-sub-category').on('click', function () {
                 $(this).closest('tr').hide(500, function () {
                     $(this).remove();
@@ -218,5 +218,54 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('add-new-req').addEventListener('click', function () {
             repeater.repeat();
         });
+    })();
+
+    /******************** Work images ********************/
+    (function () {
+        let container = document.getElementById('work-images');
+        let repeater = new Repeater(container, function () {
+            let count = this.count;
+            let length = container.children.length;
+            let tr = `
+            <tr>
+                <td>${length + 1}</td>
+                <td>
+                    <input type="file"
+                           name="new-work-images[${count}][file]"
+                           class="file-picker">
+                </td>
+                <td>
+                    <textarea type="text" rows="4" name="new-work-images[${count}][description]" class="form-control"></textarea>
+                </td>
+                <td>
+                    <span class="btn btn-outline-danger btn-sm delete-image">
+                        <i class="fa fa-trash-o"></i> ডিলিট
+                    </span>
+                </td>
+            </tr>
+            `;
+            let fragment = document.createElement('tbody');
+            fragment.innerHTML = tr;
+            let node = fragment.firstElementChild.cloneNode(true);
+            $(node).find('.delete-image').on('click', function () {
+                $(this).closest('tr').hide(500, function () {
+                    $(this).remove();
+                });
+            });
+            return node;
+        });
+
+        $('#add-new-image').on('click', function () {
+            repeater.repeat().then(item => {
+                new ImagePicker(item.querySelector('input'));
+            });
+        });
+
+        $('.delete-image').on('click', function () {
+            $(this).closest('tr').hide(500, function () {
+                $(this).remove();
+            });
+        });
+
     })();
 });

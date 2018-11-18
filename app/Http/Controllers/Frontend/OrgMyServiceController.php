@@ -118,12 +118,26 @@ class OrgMyServiceController extends Controller
             if ($request->hasFile('work-images')) {
                 foreach ($request->file('work-images') as $id => $image) {
                     if (isset($image['file']) && !is_null($image['file'])) {
-                        $images[$id]['file'] = $image['file']->store('ind/' . $service->id . '/' . 'images');
+                        $images[$id]['file'] = $image['file']->store('org/' . $service->id . '/' . 'images');
                     };
                 }
             }
 
             $data['images'] = $images;
+        }
+
+        $data['new-work-images'] = [];
+        foreach ($request->file('new-work-images') as $image) {
+            array_push($data['new-work-images'], [
+                'file' => $image['file']->store('org/' . $service->id . '/' . 'images')
+            ]);
+        }
+        $count = 0;
+        foreach ($request->post('new-work-images') as $item) {
+            if (isset($data['new-work-images'][$count])) {
+                $data['new-work-images'][$count]['description'] = $item['description'];
+            }
+            $count++;
         }
 
         DB::beginTransaction();

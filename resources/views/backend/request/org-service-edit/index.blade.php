@@ -34,7 +34,7 @@
                         <tr>
                             <td scope="row">{{ en2bnNumber($serial) }}</td>
                             <td>
-                                <a href="{{ route('backend.request.org-service-edit.show', $application->id) }}">{{ $application->serviceEditable->user->name }}</a>
+                                <a href="{{ route('backend.request.org-service-edit.show', $application->id) }}">{{ $application->serviceEditable->name }}</a>
                             </td>
                             <td>{{ $application->serviceEditable->category->name }}</td>
                         </tr>

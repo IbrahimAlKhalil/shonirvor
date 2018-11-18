@@ -40,9 +40,6 @@ export class ImagePicker {
 
             this.pickers.push(picker);
             container.insertBefore(picker.element, nextSibling);
-            if (callbacks.hasOwnProperty('forEachPicker')) {
-                callbacks.forEachPicker.call(picker);
-            }
         });
     }
 }

@@ -162,6 +162,19 @@ class OrgServiceEditRequestController extends Controller
             }
         }
 
+        $newWorkImages = [];
+        if (isset($data['new-work-images'])) {
+            foreach ($data['new-work-images'] as $id => $datum) {
+                array_push($newWorkImages, [
+                    'work_imagable_type' => 'org',
+                    'work_imagable_id' => $org->id,
+                    'path' => $datum['file'],
+                    'description' => isset($datum['description']) ? $datum['description'] : null
+                ]);
+            }
+        }
+        DB::table('work_images')->insert($newWorkImages);
+
         $application->delete();
         DB::commit();
 

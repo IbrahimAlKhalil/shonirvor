@@ -15,7 +15,6 @@ class UpdateIndMyService extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
         return [
             'mobile' => 'required|digits:11',
             'email' => 'nullable|email',
