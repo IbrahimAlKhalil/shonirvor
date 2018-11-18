@@ -12,17 +12,17 @@
 
     <div class="container-fluid">
         <div class="row pt-4 justify-content-center">
-            <div class="col-md-11 pl-md-0">
+            <div class="col-lg-11 pl-lg-0">
                 @include('components.filter')
             </div>
         </div>
         <div class="row pt-4 justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <div class="row bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom text-center">টপ ক্যাটাগরি</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         <div class="row border-right">
                             @foreach($indCategories as $category)
@@ -37,8 +37,8 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="col-md-6 text-md-right">
-                        <p class="h5 pl-2 pl-md-0 pr-md-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                    <div class="col-lg-6 text-lg-right">
+                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <div class="row border-left">
                             @foreach($orgCategories as $category)
                                 <div class="col-4 text-center">
@@ -57,7 +57,7 @@
                     <div class="col-12">
                         <p class="h4 border-bottom text-center">টপ সার্ভিস প্রভাইডার</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
                         <ul class="list-unstyled">
                             @foreach($indTopServices as $key => $service)
@@ -82,12 +82,12 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-md-6 text-md-right">
-                        <p class="h5 pl-2 pl-md-0 pr-md-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                    <div class="col-lg-6 text-lg-right">
+                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <ul class="list-unstyled">
                             @foreach($orgTopServices as $service)
                                 <li class="media mt-3 p-2 service-card-shadow">
-                                    <img class="mr-3 w-25 shadow-sm d-inline-block d-md-none" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
+                                    <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
                                             <a href="{{ route('frontend.org-service.show', $service->id) }}">{{ $service->name }}</a>
@@ -97,25 +97,25 @@
                                             <i>{{ $service->category->name }}</i>
                                         </p>
                                         <p class="mb-0">
-                                            <span class="fa fa-phone d-inline-block d-md-none"></span>
+                                            <span class="fa fa-phone d-inline-block d-lg-none"></span>
                                             {{ $service->mobile }}
-                                            <span class="fa fa-phone flipX d-none d-md-inline-block"></span>
+                                            <span class="fa fa-phone flipX d-none d-lg-inline-block"></span>
 
                                             <br>
 
-                                            <span class="fa fa-map-marker d-inline-block d-md-none"></span>
+                                            <span class="fa fa-map-marker d-inline-block d-lg-none"></span>
                                             {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }}
-                                            <span class="fa fa-map-marker d-none d-md-inline-block"></span>
+                                            <span class="fa fa-map-marker d-none d-lg-inline-block"></span>
                                         </p>
                                     </div>
-                                    <img class="ml-3 w-25 shadow-sm d-none d-md-inline-block" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
+                                    <img class="ml-3 w-25 shadow-sm d-none d-lg-inline-block" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 @include('components.ad')
             </div>
         </div>

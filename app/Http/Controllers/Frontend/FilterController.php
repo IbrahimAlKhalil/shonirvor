@@ -381,7 +381,7 @@ class FilterController extends Controller
                     ['categories.is_confirmed', 1]
                 ])
                 ->whereNotNull('inds.expire')
-                ->whereDate('expire', '>', now())
+//                ->whereDate('expire', '>', now())
                 ->get();
         }
 
@@ -414,7 +414,7 @@ class FilterController extends Controller
                     ['categories.is_confirmed', 1]
                 ])
                 ->whereNotNull('orgs.expire')
-                ->whereDate('expire', '>', now())
+//                ->whereDate('expire', '>', now())
                 ->get();
         }
 

@@ -1,9 +1,9 @@
 <div class="filter-root bg-white rounded py-3">
     <form action="{{ route('frontend.filter') }}">
-        <div class="d-md-flex">
+        <div class="d-lg-flex">
             <div class="flex-grow-1">
-                <div class="d-md-flex px-4 px-md-0">
-                    <div class="flex-fill pl-md-4 pr-md-1 py-2">
+                <div class="d-lg-flex px-4 px-lg-0">
+                    <div class="flex-fill pl-lg-4 pr-lg-1 py-2">
                         <select name="type" id="service-type"
                                 data-option-loader-url="{{ route('api.categories') }}"
                                 data-option-loader-target="#category"
@@ -17,7 +17,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="flex-fill pr-md-1 py-2">
+                    <div class="flex-fill pr-lg-1 py-2">
                         <select name="division" id="division"
                                 data-option-loader-url="{{ route('api.districts') }}"
                                 data-option-loader-target="#district"
@@ -31,7 +31,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex-fill px-md-1 py-2">
+                    <div class="flex-fill px-lg-1 py-2">
                         <select name="district" id="district"
                                 @if(! request()->filled('division')){{ 'disabled' }}@endif
                                 data-placeholder="-- জেলা --"
@@ -50,7 +50,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill px-md-1 py-2">
+                    <div class="flex-fill px-lg-1 py-2">
                         <select name="thana" id="thana"
                                 @if(! request()->filled('district')){{ 'disabled' }}@endif
                                 data-placeholder="-- থানা --"
@@ -69,7 +69,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill px-md-1 py-2">
+                    <div class="flex-fill px-lg-1 py-2">
                         <select name="union" id="union"
                                 @if(! request()->filled('thana')){{ 'disabled' }}@endif
                                 data-placeholder="-- ইউনিয়ন --"
@@ -88,7 +88,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="flex-fill pl-md-1 py-2">
+                    <div class="flex-fill pl-lg-1 py-2">
                         <select name="village" id="village"
                                 @if(! request()->filled('union')){{ 'disabled' }}@endif
                                 data-placeholder="-- এলাকা --"
@@ -102,10 +102,10 @@
                         </select>
                     </div>
                 </div>
-                <div class="d-md-flex px-4 px-md-0">
-                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
+                <div class="d-lg-flex px-4 px-lg-0">
+                    <div class="col-lg-3 py-2 pl-0 pr-0 pr-lg-1">
                         <select name="category" id="category"
-                                class="pl-md-4"
+                                class="pl-lg-4"
                                 data-option-loader-url="{{ route('api.sub-categories') }}"
                                 data-option-loader-target="#subCategory"
                                 @if(request()->filled('category'))
@@ -119,7 +119,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 py-2 px-0 px-md-1">
+                    <div class="col-lg-3 py-2 px-0 px-lg-1">
                         <select name="sub-category" id="subCategory"
                                 @if(! request()->filled('category')){{ 'disabled' }}@endif
                                 data-placeholder="-- সার্ভিস --"
@@ -133,7 +133,7 @@
                             @endisset
                         </select>
                     </div>
-                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
+                    <div class="col-lg-3 py-2 pl-0 pr-0 pr-lg-1">
                         <select name="method" id="method">
                             <option value="">-- Work Methods --</option>
                             @foreach($workMethods as $workMethod)
@@ -141,7 +141,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3 py-2 pl-0 pr-0 pr-md-1">
+                    <div class="col-lg-3 py-2 pl-0 pr-0 pr-lg-1">
                         <select name="price" id="price"
                                 data-placeholder="-- দাম --">
                             <option value="">-- দাম --</option>
@@ -155,7 +155,7 @@
                     </div>
                 </div>
             </div>
-            <div class="m-auto px-4 text-center text-md-left">
+            <div class="m-auto px-4 text-center text-lg-left">
                 <button type="submit" class="btn btn-info">সার্ভিস সার্চ করুন</button>
             </div>
         </div>

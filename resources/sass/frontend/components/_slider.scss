@@ -19,7 +19,7 @@
   height: 22rem;
   object-fit: cover;
 }
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   .carousel-item {
     height: 12rem;
   }

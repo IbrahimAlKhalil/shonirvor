@@ -9,15 +9,15 @@
 @section('content')
     <div class="container-fluid">
         <div class="row pt-4 justify-content-center">
-            <div class="col-md-11 pl-md-0">
+            <div class="col-lg-11 pl-lg-0">
                 @include('components.filter')
             </div>
         </div>
         <div class="row pt-4 justify-content-center">
-            <div class="col-md-8 bg-white rounded shadow-sm">
+            <div class="col-lg-8 bg-white rounded shadow-sm">
                 <div class="row">
                     @forelse($providers as $key => $provider)
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <ul class="list-unstyled">
                                 <li class="media mt-3 p-2 service-card-shadow">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 @include('components.ad')
             </div>
         </div>

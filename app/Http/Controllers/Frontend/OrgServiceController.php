@@ -26,6 +26,7 @@ class OrgServiceController extends Controller
             'subCategoryRates' => function ($query) {
                 $query->onlyConfirmed();
             },
+            'additionalPrices',
             'workImages',
             'feedbacks'
         ]);
