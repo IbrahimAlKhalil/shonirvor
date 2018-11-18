@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Income;
 use App\Models\Ind;
-use App\Models\Category;
-use App\Models\Package;
-use App\Models\PaymentMethod;
-use App\Models\Reference;
 use App\Models\User;
+use App\Models\Thana;
+use App\Models\Union;
+use App\Models\Income;
 use App\Models\Village;
+use App\Models\Package;
+use App\Models\Division;
+use App\Models\Category;
+use App\Models\District;
+use App\Models\Reference;
 use App\Models\WorkMethod;
 use App\Models\ServiceType;
 use App\Models\SubCategory;
+use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Http\Requests\StoreInd;
 use App\Http\Requests\UpdateInd;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Models\Division;
-use App\Models\Thana;
-use App\Models\Union;
-use App\Models\District;
 
 class IndServiceRegistrationController extends Controller
 {
@@ -39,20 +39,18 @@ class IndServiceRegistrationController extends Controller
                 ->where('mobile', $request->input('referrer'))
                 ->first();
 
-            if ($this->referrer->referPackage()->exists()) {
+            if ($this->referrer && $this->referrer->referPackage()->exists()) {
                 $referrerPackage = $this->referrer->referPackage->package;
             } else {
                 $referrerPackage = Package::find(1);
             }
 
             if ($referrerPackage->properties()->where('name', 'refer_target')->first()->value) {
-                dd('ki korum');
+                // TODO: Do something
             } else {
                 $this->referrerInterests['onetime'] = $referrerPackage->properties()->where('name', 'refer_onetime_interest')->first()->value;
                 $this->referrerInterests['renew'] = $referrerPackage->properties()->where('name', 'refer_renew_interest')->first()->value;
             }
-
-            dd('wait', 'hi');
         }
     }
 
@@ -168,6 +166,7 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
+        $ind->slug = 'sp-' . now();
         $ind->save();
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
@@ -280,14 +279,23 @@ class IndServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images')) {
+        if ($request->file('images')) {
+            $files = $request->file('images');
             $images = [];
             // TODO:: Validation
-            foreach ($request->post('images') as $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+
+            foreach ($files as $image) {
+                array_push($images, [
+                    'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
+                ]);
             }
-            foreach ($request->file('images') as $key => $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+
+            foreach ($request->post('images') as $key => $image) {
+                if (array_key_exists('description', $image) && !is_null($image['description'])) {
+                    if (isset($images[$key])) {
+                        $images[$key]['description'] = $image['description'];
+                    }
+                }
             }
 
             $ind->workImages()->createMany($images);
@@ -521,15 +529,23 @@ class IndServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images') && $request->hasFile('images')) {
+        if ($request->file('images')) {
+            $files = $request->file('images');
             $images = [];
-
             // TODO:: Validation
-            foreach ($request->post('images') as $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+
+            foreach ($files as $image) {
+                array_push($images, [
+                    'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
+                ]);
             }
-            foreach ($request->file('images') as $key => $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $ind->id . '/' . 'images');
+
+            foreach ($request->post('images') as $key => $image) {
+                if (array_key_exists('description', $image) && !is_null($image['description'])) {
+                    if (isset($images[$key])) {
+                        $images[$key]['description'] = $image['description'];
+                    }
+                }
             }
 
             $ind->workImages()->createMany($images);
@@ -550,10 +566,9 @@ class IndServiceRegistrationController extends Controller
         return back()->with('success', 'সম্পন্ন!');
     }
 
-    public function edit($id)
+    public function edit(Ind $ind)
     {
-
-        $ind = Ind::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user', 'payments'])->find($id);
+        $ind->load(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user', 'payments']);
 
         // TODO:: Move this validation to a requests class
 

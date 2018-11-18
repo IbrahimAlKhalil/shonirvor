@@ -31,8 +31,8 @@ class OrgServiceRegistrationController extends Controller
 
     public function __construct(Request $request)
     {
-        if (Route::currentRouteName() == 'individual-service-registration.store'
-            || Route::currentRouteName() == 'individual-service-registration.update') {
+        if (Route::currentRouteName() == 'organization-service-registration.store'
+            || Route::currentRouteName() == 'organization-service-registration.update') {
 
             $this->referrer = User::where('mobile', $request->input('referrer'))->first();
 
@@ -149,6 +149,7 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
+        $org->slug = 'sp-' . now();
         $org->save();
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
@@ -236,14 +237,23 @@ class OrgServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images') && $request->hasFile('images')) {
+        if ($request->file('images')) {
+            $files = $request->file('images');
             $images = [];
             // TODO:: Validation
-            foreach ($request->post('images') as $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+
+            foreach ($files as $image) {
+                array_push($images, [
+                    'path' => $image['file']->store('org/' . $org->id . '/' . 'images'),
+                ]);
             }
-            foreach ($request->file('images') as $key => $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $org->id . '/' . 'images');
+
+            foreach ($request->post('images') as $key => $image) {
+                if (array_key_exists('description', $image) && !is_null($image['description'])) {
+                    if (isset($images[$key])) {
+                        $images[$key]['description'] = $image['description'];
+                    }
+                }
             }
 
             $org->workImages()->createMany($images);
@@ -295,7 +305,7 @@ class OrgServiceRegistrationController extends Controller
 
         // TODO:: Move this validation to a requests class
         if ($org->user_id != Auth::id()) {
-            return redirect(route('individual-service-registration.index'));
+            return redirect(route('organization-service-registration.index'));
         }
 
         DB::beginTransaction();
@@ -489,14 +499,23 @@ class OrgServiceRegistrationController extends Controller
         $user->save();
 
         // work images
-        if ($request->has('images') && $request->hasFile('images')) {
+        if ($request->file('images')) {
+            $files = $request->file('images');
             $images = [];
             // TODO:: Validation
-            foreach ($request->post('images') as $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && array_push($images, ['description' => $image['description']]);
+
+            foreach ($files as $image) {
+                array_push($images, [
+                    'path' => $image['file']->store('org/' . $org->id . '/' . 'images'),
+                ]);
             }
-            foreach ($request->file('images') as $key => $image) {
-                (array_key_exists('description', $image) && !is_null($image['description'])) && $images[$key]['path'] = $image['file']->store('ind/' . $org->id . '/' . 'images');
+
+            foreach ($request->post('images') as $key => $image) {
+                if (array_key_exists('description', $image) && !is_null($image['description'])) {
+                    if (isset($images[$key])) {
+                        $images[$key]['description'] = $image['description'];
+                    }
+                }
             }
 
             $org->workImages()->createMany($images);

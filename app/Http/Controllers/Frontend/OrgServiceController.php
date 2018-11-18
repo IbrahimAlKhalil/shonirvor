@@ -11,8 +11,10 @@ use App\Http\Requests\StoreOrgFeedback;
 
 class OrgServiceController extends Controller
 {
-    public function show(Org $provider)
+    public function show($slug)
     {
+        $provider = Org::whereSlug($slug)->firstOrFail();
+        
         if (is_null($provider->expire)) abort(404, 'This service request is in pending.');
 
         // Load relations

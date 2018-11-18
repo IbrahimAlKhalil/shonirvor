@@ -38,7 +38,7 @@ class Org extends Model
 
     public function workImages()
     {
-        return $this->morphMany(WorkImages::class, 'work_imagable');
+        return $this->morphMany(WorkImage::class, 'work_imagable');
     }
 
     public function edit()

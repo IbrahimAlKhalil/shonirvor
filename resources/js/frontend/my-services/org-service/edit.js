@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let form = document.getElementById('update-form');
     let formIntegrity = new FormChangeChecker(form);
+
     document.getElementById('submit-btn').addEventListener('click', evt => {
         if (!formIntegrity.changed()) {
             evt.preventDefault();
@@ -23,9 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-    /****************** Subcategories *************************/
-
+    /*********************** Sub-categories ***********************/
     (function () {
         let container = document.getElementById('sub-categories');
         fetch($(container).data('route')).then(response => response.json().then(subCategories => {
@@ -51,42 +50,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 let tr = `
                       <tr>
                                     <td> ${length + 1} </td>
-                                    <td>
+                                    <td class="text-left">
                                         <select name="sub-categories[${count}][id]" class="form-control">
                                             <option value="">--- সাব-ক্যাটাগরি ---</option>
                                             ${options}
                                         </select>
                                     </td>
-                                                                                                                                                                                                                                            <td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="text" name="sub-categories[${count}][work-methods][0][rate]" class="form-control">
-                                                </div>
-                                                                                                                                                                                                            </td><td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="text" name="sub-categories[${count}][work-methods][1][rate]" class="form-control">
-                                                </div>
-                                                                                                                                                                                                            </td><td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="text" name="sub-categories[${count}][work-methods][2][rate]" class="form-control">
-                                                </div>
-                                                                                                                                                                </td><td>
-                                                <div class="d-flex justify-content-center align-content-center">
-                                                    <label for="negotiable-${count}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiable-${count}" class="mt-2" name="sub-categories[${count}][work-methods][3][rate]" value="negotiable">
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                                                                                                <td>
+                                    <td><input type="number" class="form-control"
+                                               name="sub-categories[${count}][rate]">
+                                    </td>
+                                    <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট
                                         </span>
@@ -128,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return node;
             });
 
-            document.getElementById('add-new').addEventListener('click', function () {
+            document.getElementById('add-new-category').addEventListener('click', function () {
                 let dontRepeat = $(container).find('select').toArray().some(select => {
                     return !select.value || select.value === '';
                 }) || subCategories.length === selected.length;
@@ -149,60 +122,37 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
 
-    /**************************** Subcategory requests **********************/
-
+    /******************** Sub-category requests *********************/
     (function () {
+        document.querySelectorAll('.delete-sub-category').forEach(button => {
+            button.addEventListener('click', () => {
+                if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
+                    $(button).closest('tr').hide(500, function () {
+                        $(this).remove();
+                    });
+                }
+            });
+        });
+
+
         let container = document.getElementById('sub-category-requests');
-        console.log(container);
         let repeater = new Repeater(container, function () {
             let count = this.count;
-            let length = container.children.length + 1;
-
             let tr = `
-            <tr>
-                                <td>${length}</td>
-                                <td>
-                                    <input type="text" name="sub-category-requests[${count}][name]" class="form-control" placeholder="সাব-ক্যাটাগরির নাম">
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[${count}][work-methods][0][rate]" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[${count}][work-methods][1][rate]" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[${count}][work-methods][2][rate]" class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-center align-content-center">
-                                        <label for="requests-negotiable-${count}" class="mt-3 checkbox">
-                                            <input type="checkbox" id="requests-negotiable-${count}" class="mt-2" name="sub-category-requests[${count}][work-methods][3][rate]" value="negotiable">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>
+                      <tr>
+                                    <td> ২ </td>
+                                    <td class="text-left">
+                                        <input name="sub-category-requests[${count}][name]" type="text" class="form-control">
+                                    </td>
+                                    <td><input type="number" class="form-control" name="sub-category-requests[${count}][rate]">
+                                    </td>
+                                    <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট
                                         </span>
-                                </td>
-                            </tr>
-            `;
+                                    </td>
+                                </tr>
+        `;
 
             let fragment = document.createElement('tbody');
             fragment.innerHTML = tr;
@@ -214,8 +164,58 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             return node;
         });
-
         document.getElementById('add-new-req').addEventListener('click', function () {
+            repeater.repeat();
+        });
+    })();
+
+
+    /******************** Additional pricing ********************/
+    (function () {
+
+        document.querySelectorAll('.delete-kaj').forEach(button => {
+            button.addEventListener('click', () => {
+                if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
+                    $(button).closest('.otirikto-kaj').hide(500, function () {
+                        $(this).remove();
+                    });
+                }
+            });
+        });
+
+        let container = document.getElementById('otirikto-kaj');
+        let repeater = new Repeater(container, function () {
+            let count = this.count;
+            let kaj = `
+                      <div class="row border rounded shadow-sm mt-2 position-relative otirikto-kaj" data-repeater-clone="true">
+                                <div class="form-group  col-md-12 row mt-3">
+                                    <label for="kaj-request-name-${count}" class="col-3 col-form-label">কাজের
+                                        নামঃ </label>
+                                    <div class="col-9">
+                                        <input id="kaj-request-name-${count}" type="text" name="kaj-requests[${count}][name]" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group  col-md-12 row mt-2">
+                                    <label for="kaj-request-info-${count}" class="col-3 col-form-label">তথ্যঃ </label>
+                                    <div class="col-9">
+                                    <textarea id="kaj-request-info-${count}" name="kaj-requests[${count}][info]" cols="50" rows="4" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <i class="fa fa-trash-o delete-kaj text-danger" style="cursor: pointer"></i>
+                      </div>
+        `;
+
+            let fragment = document.createElement('div');
+            fragment.innerHTML = kaj;
+            let node = fragment.firstElementChild.cloneNode(true);
+            $(node).find('.delete-kaj').on('click', function () {
+                $(this).closest('.otirikto-kaj').hide(500, function () {
+                    $(this).remove();
+                });
+            });
+            return node;
+        });
+        document.getElementById('add-new-kaj').addEventListener('click', function () {
             repeater.repeat();
         });
     })();

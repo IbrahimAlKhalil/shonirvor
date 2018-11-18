@@ -23,7 +23,7 @@ class IndServiceRequestController extends Controller
         $navs = [
             ['url' => route('backend.request.ind-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.top-service.index').'?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('dashboard'), 'text' => 'এডিট রিকোয়েস্ট']
+            ['url' => route('backend.request.ind-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
         return view('backend.request.service.ind.index', compact('applications', 'navs'));

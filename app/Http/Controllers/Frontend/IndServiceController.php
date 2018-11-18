@@ -11,8 +11,10 @@ use App\Http\Requests\StoreIndFeedback;
 
 class IndServiceController extends Controller
 {
-    public function show(Ind $provider)
+    public function show($slug)
     {
+        $provider = Ind::whereSlug($slug)->firstOrFail();
+
         if (is_null($provider->expire)) abort(404, 'This service request is in pending.');
 
         // Load relations

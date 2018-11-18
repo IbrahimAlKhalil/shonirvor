@@ -1,12 +1,13 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'সার্ভিস সমূহ')
+@section('title', 'প্রাতিষ্ঠানিক সার্ভিস - ' . $service->name)
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
 @endsection
 
 @section('content')
+    @include('components.success')
     <div class="container my-5">
         <div class="row">
             <div class="col-md-9 bg-white rounded p-4">
@@ -37,26 +38,26 @@
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
-                                <tr>
-                                    <th scope="row">মোবাইল নম্বর</th>
-                                    <td>{{ $service->mobile }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ইমেইল</th>
-                                    <td>{{ $service->email }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ওয়েবসাইট</th>
-                                    <td>{{ $service->website }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ফেসবুক</th>
-                                    <td>{{ $service->facebook }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                    <td>{{ $service->user->nid }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">মোবাইল নম্বর</th>
+                                <td>{{ $service->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ইমেইল</th>
+                                <td>{{ $service->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ওয়েবসাইট</th>
+                                <td>{{ $service->website }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ফেসবুক</th>
+                                <td>{{ $service->facebook }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                <td>{{ $service->user->nid }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -101,10 +102,10 @@
                         <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
-                                <tr>
-                                    <th scope="row">ক্যাটাগরি</th>
-                                    <td>{{ $service->category->name }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">ক্যাটাগরি</th>
+                                <td>{{ $service->category->name }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -212,14 +213,19 @@
                     <div class="row mt-4">
                         <div class="col-12">
                             <a href="{{ route('frontend.applications.organization-top-service.index').'?service='.$service->id }}">
-                                <button type="button" href="javascript:" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                                <button type="button" href="javascript:" class="btn btn-info btn-block">টপ সার্ভিসের
+                                    জন্য আবেদন করুন
+                                </button>
                             </a>
                         </div>
                     </div>
                 @endif
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button type="button" href="javascript:" class="btn btn-info btn-block">প্রোফাইলটি এডিট করুন</button>
+                        <button type="button" class="btn btn-info btn-block"><a target="_blank"
+                                                                                class="text-white"
+                                                                                href="{{ route('frontend.my-service.org.edit', $service->id) }}">প্রোফাইলটি
+                                এডিট করুন</a></button>
                     </div>
                 </div>
             </div>

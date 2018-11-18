@@ -77,13 +77,13 @@ Route::namespace('Frontend')->group(function () {
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
             Route::resource('individual-service', 'IndMyServiceController', [
-                'only' => ['show', 'edit'],
+                'only' => ['show', 'edit', 'update'],
                 'parameters' => ['individual-service' => 'service'],
                 'names' => 'ind'
             ]);
 
             Route::resource('organization-service', 'OrgMyServiceController', [
-                'only' => ['show', 'edit'],
+                'only' => ['show', 'edit', 'update'],
                 'parameters' => ['organization-service' => 'service'],
                 'names' => 'org'
             ]);
@@ -133,6 +133,18 @@ Route::namespace('Backend')->group(function () {
 
                 Route::resource('ad-edit', 'AdEditRequestController', [
                     'only' => ['index', 'show', 'update', 'destroy']
+                ]);
+
+                Route::resource('individual-service-edit', 'IndServiceEditRequestController', [
+                    'only' => ['store', 'show', 'index', 'destroy'],
+                    'parameters' => ['individual-service-edit' => 'application'],
+                    'names' => 'ind-service-edit'
+                ]);
+
+                Route::resource('organization-service-edit', 'OrgServiceEditRequestController', [
+                    'only' => ['store', 'show', 'index', 'destroy'],
+                    'parameters' => ['organization-service-edit' => 'application'],
+                    'names' => 'org-service-edit'
                 ]);
 
             }, '');
@@ -226,11 +238,11 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 Route::middleware('auth')->group(function () {
     Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
         'only' => ['index', 'store', 'update', 'edit'],
-        'parameters' => ['individual-service-registration' => 'ind_id']
+        'parameters' => ['individual-service-registration' => 'ind']
     ]);
     Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
         'only' => ['index', 'store', 'update', 'edit'],
-        'parameters' => ['organization-service-registration' => 'org_id']
+        'parameters' => ['organization-service-registration' => 'org']
     ]);
 }, '');
 
@@ -293,14 +305,14 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
         ]);
     }, '');
 
-    Route::resource('individual-service-edit', 'IndServiceEditController', [
-        'only' => ['index', 'show', 'store', 'destroy'],
-        'parameters' => ['individual-service-edit' => 'service-edit']
-    ]);
-    Route::resource('organization-service-edit', 'OrgServiceEditController', [
-        'only' => ['index', 'show', 'store', 'destroy'],
-        'parameters' => ['organization-service-edit' => 'service-edit']
-    ]);
+//    Route::resource('individual-service-edit', 'IndServiceEditController', [
+//        'only' => ['index', 'show', 'store', 'destroy'],
+//        'parameters' => ['individual-service-edit' => 'service-edit']
+//    ]);
+//    Route::resource('organization-service-edit', 'OrgServiceEditController', [
+//        'only' => ['index', 'show', 'store', 'destroy'],
+//        'parameters' => ['organization-service-edit' => 'service-edit']
+//    ]);
 
     Route::name('contents.')->prefix('contents')->group(function () {
         Route::resource('registration-instruction', 'RegistrationInstructionController', [

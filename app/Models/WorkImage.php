@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WorkImages extends Model
+class WorkImage extends Model
 {
     protected $fillable = ['path'];
 

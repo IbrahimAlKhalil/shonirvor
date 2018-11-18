@@ -21,15 +21,16 @@ class CreateIndsTable extends Migration
             $table->mediumText('description')->nullable();
             $table->string('email')->nullable();
             $table->string('mobile', 11);
-            $table->date('dob');
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('address')->nullable();
+            $table->string('cover_photo')->nullable();
             $table->string('experience_certificate')->nullable();
             $table->string('cv')->nullable();
             $table->string('status')->nullable();
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
+            $table->string('slug')->nullable();
             $table->boolean('is_available')->default(1);
             $table->timestamps();
             $table->softDeletes();
