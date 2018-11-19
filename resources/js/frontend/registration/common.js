@@ -145,19 +145,24 @@ $(document).ready(function () {
             }
         });
 
-    $('#package')[0].selectize.on('change', value => {
-        localStorage.setItem('package', value);
-        $('#package-descriptions').find('.tab-pane').removeClass('show active');
-        $(`#package-dscr-${value}`).addClass('active show')
-    });
+    function savePackage(prefix) {
+        $(`#${prefix}package`)[0].selectize.on('change', value => {
+            localStorage.setItem('package', value);
+            $(`#${prefix}package-descriptions`).find('.tab-pane').removeClass('show active');
+            $(`#${prefix}package-dscr-${value}`).addClass('active show')
+        });
 
-    $('#payment-method')[0].selectize.on('change', value => {
-        localStorage.setItem('paymentMethod', value);
-        $('#payment-method-accountId').find('span').addClass('d-none');
-        $(`#payment-method-id-${value}`).removeClass('d-none')
-    });
+        $(`#${prefix}payment-method`)[0].selectize.on('change', value => {
+            localStorage.setItem('paymentMethod', value);
+            $(`#${prefix}payment-method-accountId`).find('span').addClass('d-none');
+            $(`#${prefix}payment-method-id-${value}`).removeClass('d-none')
+        });
 
-    document.querySelector('#package').selectize.setValue(localStorage.package);
-    document.querySelector('#payment-method').selectize.setValue(localStorage.paymentMethod);
+        document.querySelector(`#${prefix}package`).selectize.setValue(localStorage.package);
+        document.querySelector(`#${prefix}payment-method`).selectize.setValue(localStorage.paymentMethod);
+    }
+
+    savePackage('mo-');
+    savePackage('');
 
 });

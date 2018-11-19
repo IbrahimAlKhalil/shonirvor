@@ -149,7 +149,7 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->slug = 'sp-' . now();
+        $org->slug = time();
         $org->save();
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
@@ -274,7 +274,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates'])->find($id);
+        $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->find($id);
 
         if ($org->user_id != Auth::id() || !is_null($org->expire)) {
             return redirect(route('organization-service-registration.index'));
@@ -392,7 +392,7 @@ class OrgServiceRegistrationController extends Controller
         if ($request->hasFile('logo')) {
             // delete old file
             Storage::delete($org->logo);
-            $org->trade_license = $request->file('logo')->store('org/' . $org->id);
+            $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
 

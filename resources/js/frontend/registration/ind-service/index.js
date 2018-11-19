@@ -17,9 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(container.getAttribute('data-route')).then(response => response.json()).then(workMethods => {
 
         /******************************  Sub category request repeter **********************************/
-
-        (function () {
-            let container = document.getElementById('sub-category-request');
+        function subCategoryReq(container, addNew) {
             let repeater = new Repeater(container, function () {
                 let cardBody = '';
                 let serial = this.count;
@@ -58,10 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 fragment.innerHTML = `
                 <div class="card mt-2">
                     <div class="card-header pt-2 m-0 row">
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" name="sub-category-requests[${serial}][name]" placeholder="আমার সাব-ক্যাটাগরির নাম">
+                        <div class="col-9">
+                            <input type="text" class="form-control" name="sub-category-requests[${serial}][name]" placeholder="সাব-ক্যাটাগরির নাম">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-3">
                             <a class="fa fa-trash float-right text-danger remove-btn"
                                href="#"></a>
                         </div>
@@ -82,14 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return card;
             });
 
-            document.getElementById('add-new').addEventListener('click', () => {
+            addNew.addEventListener('click', () => {
                 repeater.repeat();
             });
-        })();
+        }
+
+
+        let moSubReq = document.getElementById('mo-sub-category-request');
+        let moNoSub = document.getElementById('mo-no-sub-category');
+
+        subCategoryReq(document.getElementById('sub-category-request'), document.getElementById('add-new'));
+        subCategoryReq(moSubReq, document.getElementById('mo-add-new'));
+
+        moNoSub.addEventListener('change', function () {
+            $(moSubReq).toggleClass('d-none');
+        });
 
         /*******************************  Sub category  ********************************/
 
-        (function () {
+        function subCategory(container, select) {
             let repeater = new Repeater(container, function (id, count) {
                 let cardBody = '';
 
@@ -129,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let fragment = document.createElement('div');
                 fragment.innerHTML =
                     `<div class="card mt-2">
-                    <div class="card-header pb-0 pt-2">${subCategorySelect.querySelector(`[value='${id}']`).innerHTML}</div>
+                    <div class="card-header pb-0 pt-2">${select.querySelector(`[value='${id}']`).innerHTML}</div>
                     <div class="card-body">
                           ${cardBody}
                     </div>
@@ -137,16 +146,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return fragment.firstElementChild.cloneNode(true);
             });
 
-            let subCategorySelect = document.getElementById('sub-categories');
-            subCategorySelect.selectize.on('change', values => {
+            select.selectize.on('change', values => {
                 repeater.removeAll();
                 values.forEach((value, count) => {
                     if (!value) return;
                     repeater.repeat([value, count]);
                 });
             });
-        })();
+        }
 
-
+        subCategory(document.getElementById('sub-category-parent'), document.getElementById('sub-categories'));
+        subCategory(document.getElementById('mo-sub-category-parent'), document.getElementById('mo-sub-categories'));
     });
 });

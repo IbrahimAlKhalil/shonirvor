@@ -9,11 +9,12 @@
 
 @section('content')
     @include('components.success')
-    <div class="container my-5">
+    <div class="container-fluid my-5">
 
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
 
         <form method="post" id="registration-form" enctype="multipart/form-data"
+              class="d-none d-md-block"
               action="{{ route('organization-service-registration.store') }}">
             {{ csrf_field() }}
             <div id="smartwizard" class="mx-5">
@@ -230,7 +231,7 @@
                                 </select>
 
 
-                                <ul id="repeater-container" class="list-group">
+                                <ul id="sub-repeater-container" class="list-group">
                                     <li class="repeater-insert-before d-none"></li>
                                 </ul>
 
@@ -240,7 +241,7 @@
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                            class="mt-2 no-something">
                                     <span></span>
-                                    <ul id="req-repeater-container" class="list-group input-div">
+                                    <ul id="sub-req-repeater-container" class="list-group input-div">
                                         <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                                             <div class="row">
                                                 <input type="text" class="form-control col-md-5 sub-category-name"
@@ -255,7 +256,8 @@
                                         </li>
                                         <li class="repeater-insert-before d-none"></li>
                                         <li class="list-group-item border-0">
-                                            <button type="button" class="btn btn-light float-left shadow-sm add-new"><i
+                                            <button type="button" id="add-new-sub"
+                                                    class="btn btn-light float-left shadow-sm"><i
                                                         class="fa fa-plus"></i> আরও
                                             </button>
                                         </li>
@@ -290,7 +292,8 @@
                                     </div>
                                 </div>
                                 <span class="repeater-insert-before d-none"></span>
-                                <button type="button" class="btn btn-light float-left shadow-sm add-new mt-2"><i
+                                <button type="button" id="add-new-price"
+                                        class="btn btn-light float-left shadow-sm mt-2"><i
                                             class="fa fa-plus"></i> আরও
                                 </button>
                             </div>
@@ -389,7 +392,8 @@
                         <div class="form-group row mx-5">
                             <label for="from" class="col-3 col-form-label">যে নাম্বার থেকে পাঠানো হয়েছে</label>
                             <div class="col-9">
-                                <input type="text" name="from" id="from" class="form-control" placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"  value="{{ old('from') }}">
+                                <input type="text" name="from" id="from" class="form-control"
+                                       placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে" value="{{ old('from') }}">
                             </div>
                         </div>
 
@@ -410,12 +414,312 @@
                 </div>
             </div>
         </form>
+
+        <form method="post" id="mo-registration-form" enctype="multipart/form-data"
+              class="d-block d-md-none bg-white p-2 rounded shadow-sm"
+              action="{{ route('organization-service-registration.store') }}">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <label for="mo-name" class="col-form-label font-weight-bold">প্রতিষ্ঠানের নাম <span
+                            class="text-danger">*</span></label>
+                <input id="mo-name" name="name" type="text" value="{{ old('name') }}"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-description" class="col-form-label font-weight-bold">প্রতিষ্ঠানের বর্ণনা</label>
+                <textarea rows="6" id="mo-description" name="description"
+                          class="form-control">{{ old('description') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-mobile" class="col-form-label font-weight-bold">মোবাইল নাম্বার <span
+                            class="text-danger">*</span></label>
+                <input id="mo-mobile" name="mobile" type="number" value="{{ old('mobile') }}"
+                       class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-referrer" class="col-form-label font-weight-bold">রেফারার</label>
+                <input id="mo-referrer" name="referrer" type="number" value="{{ old('referrer') }}"
+                       class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-email" class="col-form-label font-weight-bold">ইমেইল</label>
+                <input id="mo-email" name="email" type="text" value="{{ old('email') }}"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-website" class="col-form-label font-weight-bold">ওয়েবসাইট</label>
+                <input id="mo-website" name="website" type="url" value="{{ old('website') }}"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-facebook" class="col-form-label font-weight-bold">ফেসবুক</label>
+                <input id="mo-facebook" name="facebook" type="url" value="{{ old('facebook') }}"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
+                            class="text-danger">*</span></label>
+                <input id="mo-nid" name="nid" type="number" value="{{ old('nid') }}"
+                       class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
+                <select name="division" id="mo-division"
+                        data-option-loader-url="{{ route('api.districts') }}"
+                        data-option-loader-target="#mo-district"
+                        data-option-loader-param="division">mo-
+                    <option value="">-- বিভাগ --</option>
+                    @foreach($divisions as $division)
+                        <option value="{{ $division->id }}">{{ $division->bn_name }}</option>
+                    @endforeach
+                </select>
+
+                <select name="district" id="mo-district"
+                        data-placeholder="-- জেলা --"
+                        data-option-loader-url="{{ route('api.thanas') }}"
+                        data-option-loader-target="#mo-thana"
+                        data-option-loader-param="district"
+                        data-option-loader-properties="value=id,text=bn_name">
+                    <option value="">-- জেলা --</option>
+                </select>
+                <select name="thana" id="mo-thana"
+                        data-placeholder="-- থানা --"
+                        data-option-loader-url="{{ route('api.unions') }}"
+                        data-option-loader-target="#mo-union"
+                        data-option-loader-param="thana"
+                        data-option-loader-properties="value=id,text=bn_name">
+                    <option value="">-- থানা --</option>
+                </select>
+                <select name="union" id="mo-union"
+                        data-placeholder="-- ইউনিয়ন --"
+                        data-option-loader-url="{{ route('api.villages') }}"
+                        data-option-loader-target="#mo-village"
+                        data-option-loader-param="union"
+                        data-option-loader-properties="value=id,text=bn_name">
+                    <option value="">-- ইউনিয়ন --</option>
+                </select>
+                <select name="village" id="mo-village"
+                        data-placeholder="-- এলাকা --"
+                        data-option-loader-properties="value=id,text=bn_name">
+                    <option value="">-- এলাকা --</option>
+                </select>
+                <label for="mo-no-thana" class="mt-3 checkbox">আমার থানা এখানে তালিকাভুক্ত নেই ।
+                    <input type="checkbox" id="mo-no-thana" class="mt-2 no-something" name="no-thana">
+                    <span></span>
+                    <input type="text" id="thana-request" name="thana-request"
+                           class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
+                </label>
+
+                <label for="mo-no-union" class="checkbox">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।
+                    <input type="checkbox" id="mo-no-union" class="mt-2 no-something" name="no-union">
+                    <span></span>
+                    <input type="text" id="union-request" name="union-request"
+                           class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+                </label>
+
+                <label for="mo-no-village" class="checkbox">আমার এলাকা এখানে তালিকাভুক্ত নেই ।
+                    <input type="checkbox" id="mo-no-village" class="mt-2 no-something" name="no-village">
+                    <span></span>
+                    <input type="text" id="village-request" name="village-request"
+                           class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার এলাকার নাম টাইপ করুন ।">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-address" class="col-form-label font-weight-bold">ঠিকানা <span
+                            class="text-danger">*</span></label>
+                <textarea id="mo-address" rows="8" name="address" required="required"
+                          class="form-control">{{ old('address') }}</textarea>
+            </div>
+
+
+            <div class="form-group">
+                <label for="mo-category" class="col-form-label font-weight-bold">ক্যাটাগরি <span
+                            class="text-danger">*</span></label>
+                <select id="mo-category" name="category"
+                        data-option-loader-url="{{ route('api.sub-categories') }}"
+                        data-option-loader-target="#mo-sub-categories"
+                        data-option-loader-param="category">
+                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                <label for="mo-no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                    <input type="checkbox" id="mo-no-category" class="mt-2 no-something"
+                           name="no-category">
+                    <span></span>
+                    <input type="text" id="category-request" name="category-request"
+                           class="form-control mt-3 mb-4"
+                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label font-weight-bold">সার্ভিস সাব-ক্যাটাগরি <span
+                            class="text-danger">*</span></label>
+                <select id="mo-sub-categories"
+                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                        data-option-loader-properties="value=id,text=name"
+                        multiple>
+                </select>
+
+                <ul id="mo-sub-repeater-container" class="list-group">
+                    <li class="repeater-insert-before d-none"></li>
+                </ul>
+
+                <label class="mt-4 checkbox" for="mo-no-sub-category">
+                    আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                    <input type="checkbox" id="mo-no-sub-category" name="no-sub-category"
+                           class="mt-2 no-something">
+                    <span></span>
+                </label>
+                <ul id="mo-sub-req-repeater-container" class="list-group d-none">
+                    <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
+                        <div class="row">
+                            <input type="text" class="form-control col-5 sub-category-name"
+                                   name="sub-category-requests[0][name]"
+                                   placeholder="সাব-ক্যাটাগরির নাম">
+                            <input type="number" class="form-control col-5 sub-category-rate ml-1"
+                                   name="sub-category-requests[0][rate]"
+                                   placeholder="রেট">
+                        </div>
+                    </li>
+                    <li class="repeater-insert-before d-none"></li>
+                </ul>
+                <button type="button" class="btn btn-light shadow-sm mt-1 d-none" id="mo-add-new-sub"><i
+                            class="fa fa-plus"></i> আরও
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label for="more-price" class="col-form-label font-weight-bold">অতিরিক্ত কাজের তথ্য </label>
+                <div id="mo-otirikto-kaj">
+                    <div class="border rounded shadow-sm mt-2 position-relative"
+                         data-repeater-clone="true">
+                        <div class="form-group col-md-12 mt-3">
+                            <label for="mo-addtional-pricing-name" class="col-form-label">কাজের
+                                নামঃ </label>
+                            <input id="mo-addtional-pricing-name" type="text"
+                                   name="additional-pricing[0][name]"
+                                   class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-12 mt-2">
+                            <label for="mo-addtional-pricing-info" class="col-form-label">তথ্যঃ </label>
+                            <textarea id="mo-addtional-pricing-info" name="additional-pricing[0][info]"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <span class="repeater-insert-before d-none"></span>
+                    <button type="button" class="btn btn-light float-left shadow-sm mt-2" id="mo-add-new-price"><i
+                                class="fa fa-plus"></i> আরও
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="mo-identities" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্রের
+                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            class="text-danger">*</span></label>
+                <div class="d-flex">
+                    <input id="mo-identities" name="identities[]" type="file" accept="image/*"
+                           class="file-picker">
+                    <input name="identities[]" type="file" accept="image/*"
+                           class="file-picker">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label font-weight-bold">কাজের ছবি</label>
+                <div>
+                    <div class="flex">
+                        @for($i=0; $i<4; $i++)
+                            <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
+                                <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
+                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
+                                          name="images[{{ $i }}][description]"></textarea>
+                                <input id="images" name="images[{{ $i }}][file]" type="file"
+                                       accept="image/*"
+                                       class="form-control-file file-picker">
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label font-weight-bold">প্যাকেজ নির্ধারণ করুন</label>
+                <select name="package" id="mo-package">
+                    <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
+                    @foreach($packages as $package)
+                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                    @endforeach
+                </select>
+                <div class="tab-content mt-2" id="mo-package-descriptions">
+                    @foreach($packages as $package)
+                        <div class="tab-pane fade" id="mo-package-dscr-{{ $package->id }}">
+                            {{ $package->properties->groupBy('name')['description'][0]->value }}
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-payment-method" class="col-form-label font-weight-bold"> পেমেন্ট এর মাধ্যম নির্ধারণ
+                    করুন</label>
+                <select name="payment-method" id="mo-payment-method">
+                    <option value="">-- পেমেন্ট এর মাধ্যম নির্ধারণ করুন --</option>
+                    @foreach($paymentMethods as $paymentMethod)
+                        <option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+                    @endforeach
+                </select>
+                <div id="mo-payment-method-accountId">
+                    @foreach($paymentMethods as $paymentMethod)
+                        <span class="text-primary d-none"
+                              id="mo-payment-method-id-{{ $paymentMethod->id }}">{{ $paymentMethod->accountId }} @if($paymentMethod->account_type)
+                                <i class="text-muted">({{ $paymentMethod->account_type }}
+                                    )</i>@endif</span>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-from" class="col-form-label font-weight-bold">যে নাম্বার থেকে পাঠানো হয়েছে</label>
+                <input type="text" name="from" id="mo-from" class="form-control"
+                       placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে" value="{{ old('from') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-transaction-id" class="col-form-label font-weight-bold"> Transaction ID দিন</label>
+                <input type="text" name="transaction-id" id="mo-transaction-id" class="form-control">
+            </div>
+
+            <div class="form-group row mt-5 text-center">
+                <div class="text-center col-12">
+                    <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 
 @section('script')
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\StoreOrg::class, '#registration-form') !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\StoreOrg::class, '#registration-form, #mo-registration-form') !!}
     <script src="{{ asset('assets/js/frontend/registration/common.bundle.js') }}"></script>
     <script>
         $('#smartwizard').smartWizard({
@@ -429,6 +733,10 @@
         });
 
         $('select').selectize({
+            plugins: ['option-loader']
+        });
+
+        $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method, #mo-category, #mo-sub-categories, #mo-division, #mo-district, #mo-thana, #mo-union, #mo-village, #mo-package, #mo-payment-method').selectize({
             plugins: ['option-loader']
         });
 

@@ -166,7 +166,7 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
-        $ind->slug = 'sp-' . now();
+        $ind->slug = time();
         $ind->save();
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
@@ -568,7 +568,7 @@ class IndServiceRegistrationController extends Controller
 
     public function edit(Ind $ind)
     {
-        $ind->load(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user', 'payments']);
+        $ind->load(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
 
         // TODO:: Move this validation to a requests class
 
