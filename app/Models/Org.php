@@ -3,12 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Thana;
-use App\Models\Union;
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Query\Builder;
-use App\Models\District;
-use App\Models\Division;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -122,9 +118,9 @@ class Org extends Model
     }
 
 
-    /*******************/
+    /******************/
     /***** Scopes *****/
-    /*******************/
+    /******************/
 
     public function scopeOnlyApproved($query)
     {

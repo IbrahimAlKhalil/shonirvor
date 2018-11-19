@@ -368,6 +368,7 @@ class FilterController extends Controller
                     'users.name',
                     'users.photo',
                     'inds.mobile',
+                    'inds.slug',
                     'categories.name as category_name',
                     'service_types.name as type',
                     'districts.bn_name as district_name',
@@ -381,7 +382,7 @@ class FilterController extends Controller
                     ['categories.is_confirmed', 1]
                 ])
                 ->whereNotNull('inds.expire')
-                ->whereDate('expire', '>', now())
+//                ->whereDate('expire', '>', now())
                 ->get();
         }
 
@@ -401,6 +402,7 @@ class FilterController extends Controller
                     'orgs.name',
                     'orgs.logo as photo',
                     'orgs.mobile',
+                    'orgs.slug',
                     'categories.name as category_name',
                     'service_types.name as type',
                     'districts.bn_name as district_name',
@@ -414,7 +416,7 @@ class FilterController extends Controller
                     ['categories.is_confirmed', 1]
                 ])
                 ->whereNotNull('orgs.expire')
-                ->whereDate('expire', '>', now())
+//                ->whereDate('expire', '>', now())
                 ->get();
         }
 
