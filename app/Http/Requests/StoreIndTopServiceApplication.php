@@ -17,6 +17,7 @@ class StoreIndTopServiceApplication extends FormRequest
     {
         $serviceIds = DB::table('inds')
             ->where('user_id', auth()->id())
+            ->where('expire', '!=', null)
             ->pluck('id')->toArray();
 
         $packageIds = DB::table('packages')

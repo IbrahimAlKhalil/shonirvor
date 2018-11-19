@@ -5,6 +5,7 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
 @endsection
+
 @section('content')
     @include('components.success')
     <div class="container mt-5 bg-white rounded">

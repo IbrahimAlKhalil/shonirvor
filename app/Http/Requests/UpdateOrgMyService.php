@@ -10,12 +10,11 @@ class UpdateOrgMyService extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        return request()->service->user_id == Auth::id();
     }
 
     public function rules()
     {
-        $user = Auth::user();
         return [
             'mobile' => 'required|digits:11',
             'email' => 'nullable|email',

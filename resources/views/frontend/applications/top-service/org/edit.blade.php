@@ -8,14 +8,14 @@
 
 @section('content')
     @include('components.success')
-    <div class="container my-5 bg-white rounded">
+    <div class="container my-lg-5 bg-white rounded">
         <form action="{{ route('frontend.applications.organization-top-service.update', $application->id) }}" class="row p-3 justify-content-center" method="post">
                 {{ method_field('put') }}
                 {{ csrf_field() }}
                 <div class="col-12">
                     <p class="h4">প্রক্রিয়াধীন এপ্লিকেশন এডিটঃ</p>
                 </div>
-                <div class="col-8">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
                         <label for="service-select" class="col-md-4 col-form-label text-md-right">সার্ভিস <span class="text-danger">*</span></label>
                         <div class="col-md-8">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-3">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
                         <label for="package-select" class="col-md-4 col-form-label text-md-right">প্যাকেজ <span class="text-danger">*</span></label>
                         <div class="col-md-8">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-3">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
                         <label for="method-select" class="col-md-4 col-form-label text-md-right">পেমেন্ট মেথড <span class="text-danger">*</span></label>
                         <div class="col-md-8">
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-2">
+                <div class="col-md-10 col-lg-8 mt-md-2">
                     <div class="form-group row">
                         <label for="from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে টাকা পাঠানো হয়েছে <span class="text-danger">*</span></label>
                         <div class="col-md-8">
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-2">
+                <div class="col-md-10 col-lg-8 mt-md-2">
                     <div class="form-group row">
                         <label for="transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction ID <span class="text-danger">*</span></label>
                         <div class="col-md-8">

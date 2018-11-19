@@ -13,53 +13,25 @@ use Illuminate\Support\Facades\DB;
 
 class OrgMyServiceController extends Controller
 {
-    public function show()
+    public function __construct()
+    {
+        $this->middleware('provider');
+    }
+
+    public function show($id)
     {
         $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories')
-            ->withTrashed()->find(request()->service);
+            ->withTrashed()->where('user_id', Auth::id())->findOrFail($id);
 
         $navs = $this->navs();
 
         return view('frontend.my-services.org-service', compact('service', 'navs'));
     }
 
-    private function navs()
-    {
-        $navs = [];
-
-        $inds = Auth::user()
-            ->inds()
-            ->with('category')
-            ->withTrashed()
-            ->get();
-
-        $orgs = Auth::user()
-            ->orgs()
-            ->with('category')
-            ->withTrashed()
-            ->get();
-
-        foreach ($inds as $ind) {
-            array_push($navs, [
-                'url' => route('frontend.my-service.ind.show', $ind->id),
-                'text' => $ind->category->name
-            ]);
-        }
-
-        foreach ($orgs as $org) {
-            array_push($navs, [
-                'url' => route('frontend.my-service.org.show', $org->id),
-                'text' => $org->name
-            ]);
-        }
-
-        return $navs;
-    }
-
     public function edit($id)
     {
         $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
-            ->onlyApproved()->findOrFail($id);
+            ->onlyApproved()->where('user_id', Auth::id())->findOrFail($id);
 
         $navs = $this->navs();
 
@@ -150,5 +122,38 @@ class OrgMyServiceController extends Controller
         DB::commit();
 
         return redirect(route('frontend.my-service.org.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
+    }
+
+    private function navs()
+    {
+        $navs = [];
+
+        $inds = Auth::user()
+            ->inds()
+            ->with('category')
+            ->withTrashed()
+            ->get();
+
+        $orgs = Auth::user()
+            ->orgs()
+            ->with('category')
+            ->withTrashed()
+            ->get();
+
+        foreach ($inds as $ind) {
+            array_push($navs, [
+                'url' => route('frontend.my-service.ind.show', $ind->id),
+                'text' => $ind->category->name
+            ]);
+        }
+
+        foreach ($orgs as $org) {
+            array_push($navs, [
+                'url' => route('frontend.my-service.org.show', $org->id),
+                'text' => $org->name
+            ]);
+        }
+
+        return $navs;
     }
 }

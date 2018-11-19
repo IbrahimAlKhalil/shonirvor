@@ -10,7 +10,7 @@ class UpdateIndMyService extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        return request()->service->user_id == Auth::id();
     }
 
     public function rules()
