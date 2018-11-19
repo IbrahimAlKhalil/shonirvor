@@ -7,10 +7,13 @@
 @endsection
 
 @section('content')
-    <main role="main" class="container">
-        <div class="error">
-            <h1>404 Not Found</h1>
-            <p class="lead">The page you requested is not found.</p>
+    <div class="container">
+        <div class="row align-items-center" style="height: 90vh">
+            <div class="col text-center">
+                <h1>404 Not Found</h1>
+                <p class="lead">The page you requested is not found.</p>
+                <a href="{{ route('home') }}" class="btn btn-secondary">Home Page</a>
+            </div>
         </div>
-    </main>
+    </div>
 @endsection
