@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(NoticesTableSeeder::class);
         $this->call(FeedbacksTableSeeder::class);
         $this->call(IncomesTableSeeder::class);
+        $this->call(OrgAdditionalPricesTableSeeder::class);
     }
 }

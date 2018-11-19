@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 px-5">
+            <div class="col-lg-8 px-lg-5">
                 <div class="row">
                     <div class="col-12 text-center">
                         @if($provider->facebook)
@@ -67,9 +67,7 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <p class="h4 border-bottom">নিজের সম্পর্কেঃ</p>
-                        <p class="pt-3 text-justify">
-                            আমি মোঃ তাওহীদুল ইসলাম। যশোর সরকারী এম.এম কলেজ এর হিসাববিজ্ঞান বিভাগের ২য় বর্ষের ছাত্র। পিতা-মাতার দু্ই সন্তানের মধ্যে আমি বড়। আমার পিতা একজন শিক্ষক। ২০০৭ সালে এস.এস.সি (জিপিএ-৪.৬৯) এবং ২০০৯ সালে এস.এস.সি (জি.পি.এ- ৫.০০)। ফ্রিল্যান্সিং শুরুটা যেভাবেঃ স্কুলে যখন ক্লাস না্ইনে পড়তাম তখন কম্পিঊটার সাবজেক্ট ছিল। বই পড়তাম আর ভাবতাম কি আছে এই জাদুর বাক্সে। যাহোক এস.এস.সি পর্যন্ত আমার কম্পিউটার এর দৌড় এ-পর্যন্ত। এইচ.এস.সি পড়ার সময়কালে কম্পিউটারকে আমি ফোরথ সারজেক্ট হিসাবে নিয়েছিলাম কারণ পরিসংখ্যান বা অংক আমার কাছে কঠিন মনে হত যদিও আমি এ্যাকাউন্টিং-এর ছাত্র। মাঝে মাঝে কম্পিউটার এর ব্যবহারিক ক্লাস হত এবং আমি প্রত্যেকটি ক্লাসে যেতাম অন্যরা কি করে তা দেখার জন্য কারণ কম্পিউটার কিভাবে চালু করতে হয় সেটাও আমি জানতাম না। আমি অবাক হয়ে শুধু দেখতাম আমার বন্ধুরা কিভাবে কোন সুইচটা চাপে। এভাবে সময় শেষ হল এবং পরীক্ষাও শেষ হল শুধু বাকি কশ্পিউটার-এর প্রাকটিক্যাল।
-                        </p>
+                        <p class="pt-3 text-justify">{{ $provider->description }}</p>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -97,46 +95,44 @@
                         @endforelse
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row mt-4 px-3">
-            <div class="col-lg-8">
-                <div class="col-12">
-                    <p class="h4 border-bottom">কাজের ফিডব্যাকঃ</p>
-                    <div class="row">
-                        <div class="col-12">
-                            @if($canFeedback)
-                                <div class="row">
-                                    <div class="col-12">
-                                        <form action="{{ route('ind-feedback.store') }}" method="post">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
-                                            <input id="storeStar" type="number" name="star" required>
-                                            <textarea name="say" class="form-control" rows="3" placeholder="আপনার মতামত দিন..." required></textarea>
-                                            <div class="my-2 text-center">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="row justify-content-center">
-                                <div class="col-12">
-                                    @include('components.success')
-                                    @forelse($provider->feedbacks->sortByDesc('id') as $key => $feedback)
-                                        <div class="row my-3">
-                                            <div class="col-2">
-                                                <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
-                                            </div>
-                                            <div class="col-10">
-                                                <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
-                                                <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
-                                                <p>{{ $feedback->say }}</p>
-                                            </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="h4 border-bottom">কাজের ফিডব্যাকঃ</p>
+                        <div class="row">
+                            <div class="col-12">
+                                @if($canFeedback)
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form action="{{ route('ind-feedback.store') }}" method="post">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
+                                                <input id="storeStar" type="number" name="star" required>
+                                                <textarea name="say" class="form-control" rows="3" placeholder="আপনার মতামত দিন..." required></textarea>
+                                                <div class="my-2 text-center">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </form>
                                         </div>
-                                    @empty
-                                        <p>কোন মতামত নেই</p>
-                                    @endforelse
+                                    </div>
+                                @endif
+                                <div class="row justify-content-center">
+                                    <div class="col-12">
+                                        @include('components.success')
+                                        @forelse($provider->feedbacks->sortByDesc('id') as $key => $feedback)
+                                            <div class="row my-3">
+                                                <div class="col-4 col-md-2 col-lg-2 mb-2">
+                                                    <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
+                                                </div>
+                                                <div class="col-lg-10">
+                                                    <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
+                                                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
+                                                    <p>{{ $feedback->say }}</p>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <p>কোন মতামত নেই</p>
+                                        @endforelse
+                                    </div>
                                 </div>
                             </div>
                         </div>

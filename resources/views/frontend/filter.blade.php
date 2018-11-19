@@ -23,7 +23,7 @@
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('frontend.'.$provider->type.'-service.show', $provider->id) }}">{{ $provider->name }}</a>
+                                            <a href="{{ route('frontend.'.$provider->type.'-service.show', $provider->slug) }}">{{ $provider->name }}</a>
                                             <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}" class="invisible">
                                         </p>
                                         <p>
