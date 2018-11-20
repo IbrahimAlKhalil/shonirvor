@@ -3,7 +3,16 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Auth::routes();
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+Route::get('password/request', 'Auth\PasswordResetController@showRequestForm')->name('password.request');
+Route::post('password/request', 'Auth\PasswordResetController@sendCode');
+Route::get('password/reset/{user}', 'Auth\PasswordResetController@showResetForm')->name('password.reset');
+Route::post('password/reset/{user}', 'Auth\PasswordResetController@reset');
+
 Route::get('verification/{user}', 'Auth\RegisterController@verificationForm')->name('verification');
 Route::post('verification/{user}', 'Auth\RegisterController@verification');
 
