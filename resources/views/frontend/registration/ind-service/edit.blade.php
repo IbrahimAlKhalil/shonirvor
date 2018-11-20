@@ -1010,7 +1010,7 @@
 
             <div class="form-group row mx-5 mt-5 text-center">
                 <div class="text-center col-12">
-                    <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
+                    <button type="submit" class="btn btn-primary">সাবমিট</button>
                 </div>
             </div>
         </form>

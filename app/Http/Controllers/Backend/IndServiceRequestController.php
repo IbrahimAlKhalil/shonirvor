@@ -22,7 +22,7 @@ class IndServiceRequestController extends Controller
         $applications = Ind::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
         $navs = [
             ['url' => route('backend.request.ind-service-request.index'), 'text' => 'সার্ভিস রিকোয়েস্ট'],
-            ['url' => route('backend.request.top-service.index').'?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
+            ['url' => route('backend.request.top-service.index') . '?type=3', 'text' => 'টপ সার্ভিস রিকোয়েস্ট'],
             ['url' => route('backend.request.ind-service-edit.index'), 'text' => 'এডিট রিকোয়েস্ট']
         ];
 
@@ -61,8 +61,9 @@ class IndServiceRequestController extends Controller
         $unions = !$application->thana->is_pending && $application->union->is_pending ? Union::where('thana_id', $application->thana_id)->get() : [];
         $villages = !$application->union->is_pending && $application->village->is_pending ? Village::where('union_id', $application->union_id)->get() : [];
         $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
+        $freePackageId = $application->payments->first()->package_id;
 
-        return view('backend.request.service.ind.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments', 'packages'));
+        return view('backend.request.service.ind.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments', 'packages', 'freePackageId'));
     }
 
     public function update(Request $request, Ind $application)
@@ -201,10 +202,9 @@ class IndServiceRequestController extends Controller
         $thana = $application->thana;
         $union = $application->union;
         $village = $application->village;
-        $subCategories = $application->subCategories;
 
-        $application->subCategories()->detach();
-        SubCategory::whereIn('id', $subCategories->pluck('id')->toArray())->delete();
+        $application->subCategories()->where('is_confirmed', 1)->detach();
+        $application->subCategories()->where('is_confirmed', 0)->delete();
 
         $application->forceDelete();
         $category->is_confirmed == 0 && $category->delete();

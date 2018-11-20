@@ -56,8 +56,9 @@ class OrgServiceRequestController extends Controller
         $unions = !$application->thana->is_pending && $application->union->is_pending ? Union::where('thana_id', $application->thana_id)->get() : [];
         $villages = !$application->union->is_pending && $application->village->is_pending ? Village::where('union_id', $application->union_id)->get() : [];
         $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
+        $freePackageId = $application->payments->first()->package_id;
 
-        return view('backend.request.service.org.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'payments', 'packages'));
+        return view('backend.request.service.org.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'payments', 'packages', 'freePackageId'));
     }
 
     public function update(Request $request, Org $application)
@@ -181,16 +182,29 @@ class OrgServiceRequestController extends Controller
     public function destroy(Org $application)
     {
         DB::beginTransaction();
+        $application->load([
+            'category',
+            'thana',
+            'union',
+            'village',
+            'subCategories' => function ($query) {
+                $query->onlyPending();
+            }
+        ]);
+
         $category = $application->category;
         $thana = $application->thana;
-        $subCategories = $application->subCategories('requested');
+        $union = $application->union;
+        $village = $application->village;
 
-        $application->subCategories()->detach();
-        $subCategories->delete();
+        $application->subCategories()->where('is_confirmed', 1)->detach();
+        $application->subCategories()->where('is_confirmed', 0)->delete();
 
         $application->forceDelete();
         $category->is_confirmed == 0 && $category->delete();
-        $thana->is_confirmed == 0 && $thana->delete();
+        $village->is_pending == 1 && $village->delete();
+        $union->is_pending == 1 && $union->delete();
+        $thana->is_pending == 1 && $thana->delete();
 
         // TODO:: Don't forget to delete documents/images
 

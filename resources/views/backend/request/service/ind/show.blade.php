@@ -40,7 +40,7 @@
                             </p>
                         </div>
 
-                        @if($application->payments->first())
+                        @if($application->payments->first()->package_id != $freePackageId)
                             @php($payment = $application->payments->first())
                             <div class="col-12 mt-4">
                                 <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
@@ -69,6 +69,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                        @else
+                            <input type="hidden" value="{{ $application->payments->first()->package_id }}"
+                                   name="package">
+                            <input type="hidden" value="{{ $payment->id }}" name="payment">
                         @endif
 
                         <div class="col-12 mt-4">

@@ -3,13 +3,18 @@
 @section('title', 'Payments')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
 @endsection
 @section('content')
     @include('components.success')
-    <div class="container mt-5 bg-white rounded">
-        <div class="row">
-            <div class="col-md-12 p-5">
+    <style>
+        th {
+            white-space: nowrap;
+        }
+    </style>
+    <div class="container bg-white rounded">
+        <div class="row mt-2">
+            <div class="col-md-12 p-md-5">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a href="#service" class="nav-link active" data-toggle="tab">সার্ভিস</a>
@@ -24,7 +29,7 @@
 
                         @if($renewRequestedServices->count())
                             <h4 class="mt-5 text-center">রিনিউ চলছে</h4>
-                            <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                            <table class="table table-striped table-bordered table-responsive-md table-hover table-sm text-center bg-white">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -62,7 +67,7 @@
                         @endif
 
                         <h4 class="mt-5 text-center">সকল সার্ভিস</h4>
-                        <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                        <table class="table table-striped table-bordered table-responsive-md table-hover table-sm text-center bg-white">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -96,7 +101,7 @@
                                         <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
                                     </td>
                                     <td>
-                                        {{ $expire?en2bnNumber($expire->format('d/m/Y')):'n/a' }}
+                                        {{ $expire?en2bnNumber($expire->format('d/m/Y')):'11/21/2018' }}
                                     </td>
                                     <td>
                                         @if(!$pending)
@@ -125,7 +130,7 @@
 
                         @if($topServices->count())
                             <h4 class="mt-5 text-center">টপ সার্ভিস</h4>
-                            <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                            <table class="table table-striped table-bordered table-responsive table-hover table-sm text-center bg-white">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -180,7 +185,7 @@
                     <div class="tab-pane fade" id="ad">
                         @if($renewRequestedAds->count())
                             <h4 class="mt-5 text-center">রিনিউ চলছে</h4>
-                            <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                            <table class="table table-striped table-responsive table-bordered table-hover table-sm text-center bg-white">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -217,7 +222,7 @@
 
 
                         <h4 class="mt-5 text-center">সকল বিজ্ঞাপন</h4>
-                        <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">
+                        <table class="table table-striped table-bordered table-responsive table-hover table-sm text-center bg-white">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -285,7 +290,7 @@
                             @endforelse
                             </tbody>
                         </table>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-md-12 text-center mt-3">
                                 <a href="{{ route('frontend.applications.ad.index') }}"
                                    class="btn btn-primary">বিজ্ঞাপনের জন্য আবেদন করুন</a>

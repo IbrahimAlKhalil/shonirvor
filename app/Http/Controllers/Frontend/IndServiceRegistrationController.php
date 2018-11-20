@@ -76,7 +76,7 @@ class IndServiceRegistrationController extends Controller
 
     public function store(StoreInd $request)
     {
-        // TODO:: Check what if the user already have an account with the requested category
+        // TODO:: Check what if the user already have an account in the requested category
         // TODO:: User should choose one of the packages made for individual service, validate it.
         // TODO:: Review validation
 
@@ -218,6 +218,14 @@ class IndServiceRegistrationController extends Controller
         $payment->payment_method_id = $request->post('payment-method');
         $payment->from = $request->post('from');
         $payment->transactionId = $request->post('transaction-id');
+
+        $freePackageId = Package::onlyInd()->first()->id;
+        if ($request->post('package') == $freePackageId) {
+            $payment->payment_method_id = null;
+            $payment->from = null;
+            $payment->transactionId = null;
+        }
+
         $ind->payments()->save($payment);
 
 
@@ -473,6 +481,14 @@ class IndServiceRegistrationController extends Controller
         $payment->payment_method_id = $request->post('payment-method');
         $payment->from = $request->post('from');
         $payment->transactionId = $request->post('transaction-id');
+
+        $freePackageId = Package::onlyInd()->first()->id;
+        if ($request->post('package') == $freePackageId) {
+            $payment->payment_method_id = null;
+            $payment->from = null;
+            $payment->transactionId = null;
+        }
+
         $ind->payments()->save($payment);
 
 

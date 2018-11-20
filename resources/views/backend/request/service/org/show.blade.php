@@ -36,7 +36,7 @@
                             </p>
                         </div>
 
-                        @if($application->payments->first())
+                        @if($application->payments->first()->package_id != $freePackageId)
                             @php($payment = $application->payments->first())
                             <div class="col-12 mt-4">
                                 <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
@@ -65,6 +65,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                        @else
+                            <input type="hidden" value="{{ $application->payments->first()->package_id }}"
+                                   name="package">
+                            <input type="hidden" value="{{ $payment->id }}" name="payment">
                         @endif
 
                         <div class="col-12 mt-4">
@@ -74,7 +78,8 @@
                                 <tr>
                                     <th scope="row">নাম (ব্যাক্তিগত)</th>
                                     <td>
-                                        <a href="{{ route('backend.users.show', $application->user->id) }}" target="_blank">{{ $application->user->name }}</a>
+                                        <a href="{{ route('backend.users.show', $application->user->id) }}"
+                                           target="_blank">{{ $application->user->name }}</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -85,7 +90,8 @@
                                     <tr>
                                         <th scope="row">রেফারার</th>
                                         <td>
-                                            <a href="{{ route('backend.users.show', $application->referredBy->user->id) }}" target="_blank">
+                                            <a href="{{ route('backend.users.show', $application->referredBy->user->id) }}"
+                                               target="_blank">
                                                 {{ $application->referredBy->user->name }}
                                             </a>
                                         </td>
@@ -309,7 +315,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center"><span class="text-muted">অতিরিক্ত কাজ নেই</span></td>
+                                        <td colspan="3" class="text-center"><span
+                                                    class="text-muted">অতিরিক্ত কাজ নেই</span></td>
                                     </tr>
                                 @endforelse
                                 </tbody>
@@ -383,8 +390,10 @@
                 </form>
                 <div class="row">
                     <div class="col-12 mt-4 btn-group">
-                        <button class="btn btn-success col" data-toggle="modal" data-target="#acceptModal">গ্রহণ করুন</button>
-                        <button class="btn btn-danger col" data-toggle="modal" data-target="#deleteModal">মুছে ফেলুন</button>
+                        <button class="btn btn-success col" data-toggle="modal" data-target="#acceptModal">গ্রহণ করুন
+                        </button>
+                        <button class="btn btn-danger col" data-toggle="modal" data-target="#deleteModal">মুছে ফেলুন
+                        </button>
 
                         <!-- Accept Modal -->
                         <div class="modal fade" id="acceptModal" tabindex="-1" role="dialog">
@@ -398,7 +407,8 @@
                                     </div>
                                     <div class="modal-footer border-top-0">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
-                                        <button type="submit" class="btn btn-success" form="approve-request">সাবমিট</button>
+                                        <button type="submit" class="btn btn-success" form="approve-request">সাবমিট
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -416,7 +426,8 @@
                                     </div>
                                     <div class="modal-footer border-top-0">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">না</button>
-                                        <button type="submit" class="btn btn-danger" form="reject-request">ডিলিট</button>
+                                        <button type="submit" class="btn btn-danger" form="reject-request">ডিলিট
+                                        </button>
                                     </div>
                                 </div>
                             </div>

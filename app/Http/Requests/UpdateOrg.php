@@ -43,6 +43,7 @@ class UpdateOrg extends FormRequest
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
             'package' => 'required',
+            'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
     }

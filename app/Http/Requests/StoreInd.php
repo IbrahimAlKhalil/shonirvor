@@ -45,6 +45,7 @@ class StoreInd extends FormRequest
             'experience-certificate' => 'image',
             'cv' => 'mimes:pdf',
             'package' => 'required',
+            'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
     }

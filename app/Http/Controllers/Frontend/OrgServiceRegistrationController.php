@@ -171,6 +171,22 @@ class OrgServiceRegistrationController extends Controller
             $referrer->save();
         }
 
+        // payment
+        $payment = new Income;
+        $payment->package_id = $request->post('package');
+        $payment->payment_method_id = $request->post('payment-method');
+        $payment->from = $request->post('from');
+        $payment->transactionId = $request->post('transaction-id');
+
+        $freePackageId = Package::onlyOrg()->first()->id;
+        if ($request->post('package') == $freePackageId) {
+            $payment->payment_method_id = null;
+            $payment->from = null;
+            $payment->transactionId = null;
+        }
+
+        $org->payments()->save($payment);
+
         // associate sub-categories$org
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
 
@@ -225,14 +241,6 @@ class OrgServiceRegistrationController extends Controller
 
 
         // User
-        if ($request->filled('transaction-id')) {
-            $payment = new Income;
-            $payment->package_id = $request->post('package');
-            $payment->payment_method_id = $request->post('payment-method');
-            $payment->from = $request->post('from');
-            $payment->transactionId = $request->post('transaction-id');
-            $org->payments()->save($payment);
-        }
         $user->nid = $request->post('nid');
         $user->save();
 
@@ -482,14 +490,20 @@ class OrgServiceRegistrationController extends Controller
 
         // payment
         $org->payments()->delete();
-        if ($request->filled('transaction-id')) {
-            $payment = new Income;
-            $payment->package_id = $request->post('package');
-            $payment->payment_method_id = $request->post('payment-method');
-            $payment->from = $request->post('from');
-            $payment->transactionId = $request->post('transaction-id');
-            $org->payments()->save($payment);
+        $payment = new Income;
+        $payment->package_id = $request->post('package');
+        $payment->payment_method_id = $request->post('payment-method');
+        $payment->from = $request->post('from');
+        $payment->transactionId = $request->post('transaction-id');
+
+        $freePackageId = Package::onlyOrg()->first()->id;
+        if ($request->post('package') == $freePackageId) {
+            $payment->payment_method_id = null;
+            $payment->from = null;
+            $payment->transactionId = null;
         }
+
+        $org->payments()->save($payment);
 
         // User
         $user->nid = $request->post('nid');

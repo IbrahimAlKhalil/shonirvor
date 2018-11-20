@@ -13,7 +13,7 @@ class CreateIncomesTable extends Migration
             $table->unsignedInteger('package_id');
             $table->unsignedInteger('payment_method_id')->nullable();
             $table->morphs('incomeable');
-            $table->string('from');
+            $table->string('from')->nullable();
             $table->string('transactionId')->nullable();
             $table->boolean('approved');
             $table->timestamps();
