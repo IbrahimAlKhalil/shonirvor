@@ -10,9 +10,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('home') }}">হোম</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
-            </li>
         </ul>
     </div>
 </nav>

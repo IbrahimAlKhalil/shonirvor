@@ -5,6 +5,7 @@
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
 @endsection
+
 @section('content')
     @include('components.success')
     <style>

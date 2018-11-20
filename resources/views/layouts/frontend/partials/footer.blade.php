@@ -1,4 +1,4 @@
-        <div class="mt-3"></div>
+        <div class="mt-lg-3"></div>
         <footer class="container-fluid bg-white py-3 border-top mt-auto">
             <p class="float-right go-top mb-0">
                 <a href="#">

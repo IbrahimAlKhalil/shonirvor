@@ -59,9 +59,9 @@
                             <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}" target="_blank"> ওয়েবসাইট</a>
                         @endif
                         <a class="btn btn-secondary fa fa-file-text text-white my-2" href="{{ 'https://docs.google.com/viewer?url='.asset('storage/'.$provider->cv) }}" target="_blank"> বায়োডাটা</a>
-                        <span class="btn btn-warning my-2">
+                        <a class="btn btn-warning my-2" href="tel:{{ $provider->mobile }}">
                             <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
-                        </span>
+                        </a>
                     </div>
                 </div>
                 <div class="row mt-4">

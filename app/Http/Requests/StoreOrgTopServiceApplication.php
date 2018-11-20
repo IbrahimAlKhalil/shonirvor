@@ -17,6 +17,7 @@ class StoreOrgTopServiceApplication extends FormRequest
     {
         $serviceIds = DB::table('orgs')
             ->where('user_id', auth()->id())
+            ->where('expire', '!=', null)
             ->pluck('id')->toArray();
 
         $packageIds = DB::table('packages')

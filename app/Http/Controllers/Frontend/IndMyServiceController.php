@@ -20,10 +20,10 @@ class IndMyServiceController extends Controller
         $this->middleware('provider');
     }
 
-    public function show()
+    public function show($id)
     {
         $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
-            ->withTrashed()->find(request()->service);
+            ->withTrashed()->where('user_id', Auth::id())->findOrFail($id);
 
         $navs = $this->navs();
         $workMethods = WorkMethod::all();
@@ -32,43 +32,10 @@ class IndMyServiceController extends Controller
         return view('frontend.my-services.ind-service', compact('service', 'navs', 'workMethods', 'indWorkMethods'));
     }
 
-    private function navs()
-    {
-        $navs = [];
-
-        $services = Auth::user()
-            ->inds()
-            ->with('category')
-            ->withTrashed()
-            ->get();
-
-        $orgs = Auth::user()
-            ->orgs()
-            ->with('category')
-            ->withTrashed()
-            ->get();
-
-        foreach ($services as $service) {
-            array_push($navs, [
-                'url' => route('frontend.my-service.ind.show', $service->id),
-                'text' => $service->category->name
-            ]);
-        }
-
-        foreach ($orgs as $org) {
-            array_push($navs, [
-                'url' => route('frontend.my-service.org.show', $org->id),
-                'text' => $org->name
-            ]);
-        }
-
-        return $navs;
-    }
-
     public function edit($id)
     {
         $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
-            ->onlyApproved()->find($id);
+            ->onlyApproved()->where('user_id', Auth::id())->findOrFail($id);
 
         if (!$service) {
             abort(404, 'Service is pending or service not found');
@@ -159,5 +126,38 @@ class IndMyServiceController extends Controller
         DB::commit();
 
         return redirect(route('frontend.my-service.ind.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
+    }
+
+    private function navs()
+    {
+        $navs = [];
+
+        $services = Auth::user()
+            ->inds()
+            ->with('category')
+            ->withTrashed()
+            ->get();
+
+        $orgs = Auth::user()
+            ->orgs()
+            ->with('category')
+            ->withTrashed()
+            ->get();
+
+        foreach ($services as $service) {
+            array_push($navs, [
+                'url' => route('frontend.my-service.ind.show', $service->id),
+                'text' => $service->category->name
+            ]);
+        }
+
+        foreach ($orgs as $org) {
+            array_push($navs, [
+                'url' => route('frontend.my-service.org.show', $org->id),
+                'text' => $org->name
+            ]);
+        }
+
+        return $navs;
     }
 }

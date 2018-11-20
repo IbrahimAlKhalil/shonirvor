@@ -8,7 +8,7 @@
 
 @section('content')
     @include('components.success')
-    <div class="container my-5 bg-white rounded">
+    <div class="container my-lg-5 bg-white rounded">
         @if($oldApplication)
             <div class="row p-3 justify-content-center">
                 <div class="col-12">
@@ -39,7 +39,7 @@
                     </tbody>
                 </table>
                 <div class="w-100"></div>
-                <div class="col-2 text-center">
+                <div class="col-4 col-md-3 col-lg-2 text-center">
                     <a href="{{ route('frontend.applications.individual-top-service.edit', $oldApplication->id) }}">
                         <button role="button" class="btn btn-info btn-block">এডিট</button>
                     </a>
@@ -52,26 +52,29 @@
                 <div class="col-12">
                     <p class="h4">বেক্তিগত টপ সার্ভিস এপ্লিকেশনঃ</p>
                 </div>
-                <div class="col-8">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
-                        <label for="service-select" class="col-md-4 col-form-label text-md-right">সার্ভিস <span
-                                    class="text-danger">*</span></label>
+                        <label for="service-select" class="col-md-4 col-form-label text-md-right">
+                            সার্ভিস <span class="text-danger">*</span>
+                        </label>
                         <div class="col-md-8">
                             <select name="service" id="service-select"
                                     class="form-control{{ $errors->has('service') ? ' is-invalid' : '' }}">
                                 <option value="">--সার্ভিস সিলেক্ট করুন--</option>
                                 @foreach($services as $service)
-                                    <option value="{{ $service->id }}"
-                                    @if(old('service') == $service->id || request()->get('service') == $service->id ){{ 'selected' }}@endif>
-                                        {{ $service->category->name }}
-                                    </option>
+                                    @if($service->expire != null)
+                                        <option value="{{ $service->id }}"
+                                        @if(old('service') == $service->id || request()->get('service') == $service->id ){{ 'selected' }}@endif>
+                                            {{ $service->category->name }}
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
                             @include('components.invalid', ['name' => 'service'])
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-3">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
                         <label for="package-select" class="col-md-4 col-form-label text-md-right">প্যাকেজ <span
                                     class="text-danger">*</span></label>
@@ -91,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-3">
+                <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">
                         <label for="method-select" class="col-md-4 col-form-label text-md-right">পেমেন্ট মেথড <span
                                     class="text-danger">*</span></label>
@@ -115,10 +118,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-2">
+                <div class="col-md-10 col-lg-8 mt-md-2">
                     <div class="form-group row">
-                        <label for="from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে টাকা
-                            পাঠানো হয়েছে <span class="text-danger">*</span></label>
+                        <label for="from-input" class="col-md-4 col-form-label text-md-right">
+                            যে নাম্বার থেকে টাকা পাঠানো হয়েছে <span class="text-danger">*</span>
+                        </label>
                         <div class="col-md-8">
                             <input type="text" name="from" id="from-input"
                                    class="form-control{{ $errors->has('from') ? ' is-invalid' : '' }}"
@@ -128,7 +132,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 mt-2">
+                <div class="col-md-10 col-lg-8 mt-md-2">
                     <div class="form-group row">
                         <label for="transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction ID
                             <span class="text-danger">*</span></label>
@@ -158,9 +162,7 @@
                             <p class="card-title text-center">{{ readableDays($properties['duration'][0]->value) }}</p>
                             <p class="card-text">{{ $properties['description'][0]->value }}</p>
                         </div>
-                        <div class="card-footer text-center font-weight-bold">{{ en2bnNumber($properties['fee'][0]->value) }}
-                            টাকা
-                        </div>
+                        <div class="card-footer text-center font-weight-bold">{{ en2bnNumber($properties['fee'][0]->value) }} টাকা</div>
                     </div>
                 </div>
             @endforeach
