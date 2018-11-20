@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class UpdateOrg extends FormRequest
 {
@@ -40,7 +42,7 @@ class UpdateOrg extends FormRequest
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
-            'package' => 'required_with:transactionId',
+            'package' => 'required',
             'payment-method' => 'required_with:transactionId'
         ];
     }
@@ -65,6 +67,13 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
         });
+
+        $indPackageIds = Package::onlyOrg()->pluck('id')->toArray();
+        if(!in_array($this->post('package'), $indPackageIds)) {
+            throw ValidationException::withMessages([
+                'package' => 'Package does not exist'
+            ]);
+        }
     }
 
     public function messages()

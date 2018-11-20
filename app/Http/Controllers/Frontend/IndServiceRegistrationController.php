@@ -213,19 +213,16 @@ class IndServiceRegistrationController extends Controller
 
 
         // payment
-        // TODO:: Validation
-        if ($request->filled('transaction-id')) {
-            $payment = new Income;
-            $payment->package_id = $request->post('package');
-            $payment->payment_method_id = $request->post('payment-method');
-            $payment->from = $request->post('from');
-            $payment->transactionId = $request->post('transaction-id');
-            $ind->payments()->save($payment);
-        }
+        $payment = new Income;
+        $payment->package_id = $request->post('package');
+        $payment->payment_method_id = $request->post('payment-method');
+        $payment->from = $request->post('from');
+        $payment->transactionId = $request->post('transaction-id');
+        $ind->payments()->save($payment);
 
 
         // ind_work_method table
-        // TODO:: Some custom validation will be needed for workmethods
+        // TODO: Some custom validation will be needed for workmethods
 
         $workMethods = [];
         // sub category rates
@@ -471,14 +468,12 @@ class IndServiceRegistrationController extends Controller
 
         // payment
         $ind->payments()->delete();
-        if ($request->filled('transaction-id')) {
-            $payment = new Income;
-            $payment->package_id = $request->post('package');
-            $payment->payment_method_id = $request->post('payment-method');
-            $payment->from = $request->post('from');
-            $payment->transactionId = $request->post('transaction-id');
-            $ind->payments()->save($payment);
-        }
+        $payment = new Income;
+        $payment->package_id = $request->post('package');
+        $payment->payment_method_id = $request->post('payment-method');
+        $payment->from = $request->post('from');
+        $payment->transactionId = $request->post('transaction-id');
+        $ind->payments()->save($payment);
 
 
         // ind_work_method table

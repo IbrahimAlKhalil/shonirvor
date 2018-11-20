@@ -11,10 +11,10 @@ class CreateIncomesTable extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('package_id');
-            $table->unsignedInteger('payment_method_id');
+            $table->unsignedInteger('payment_method_id')->nullable();
             $table->morphs('incomeable');
             $table->string('from');
-            $table->string('transactionId');
+            $table->string('transactionId')->nullable();
             $table->boolean('approved');
             $table->timestamps();
             $table->softDeletes();

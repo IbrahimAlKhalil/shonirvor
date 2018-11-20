@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class StoreInd extends FormRequest
 {
@@ -42,7 +44,7 @@ class StoreInd extends FormRequest
             'identities.*' => 'required|image',
             'experience-certificate' => 'image',
             'cv' => 'mimes:pdf',
-            'package' => 'required_with:transactionId',
+            'package' => 'required',
             'payment-method' => 'required_with:transactionId'
         ];
     }
@@ -61,6 +63,13 @@ class StoreInd extends FormRequest
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
         });
+
+        $indPackageIds = Package::onlyInd()->pluck('id')->toArray();
+        if(!in_array($this->post('package'), $indPackageIds)) {
+            throw ValidationException::withMessages([
+               'package' => 'Package does not exist'
+            ]);
+        }
     }
 
     public function messages()

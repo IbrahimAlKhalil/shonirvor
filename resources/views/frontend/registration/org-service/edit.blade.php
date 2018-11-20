@@ -463,7 +463,7 @@
                             <div class="col-9">
                                 <input type="text" name="from" id="from" class="form-control"
                                        placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
-                                       value="{{ oldOrData('from', $org->payments->first()->from) }}">
+                                       value="{{ oldOrData('from', $ind->payments->first()?$ind->payments->first()->from:null) }}">
                             </div>
                         </div>
 
@@ -471,7 +471,7 @@
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
                                 <input type="text" name="transaction-id" id="transaction-id" class="form-control"
-                                       value="{{ $org->payments->first()->transactionId }}">
+                                       value="{{ oldOrData('transactionId', $ind->payments->first()?$ind->payments->first()->transactionId:null) }}">
                             </div>
                         </div>
 
@@ -852,13 +852,13 @@
                 <label for="mo-from" class="font-weight-bold col-form-label">যে নাম্বার থেকে পাঠানো হয়েছে</label>
                 <input type="text" name="from" id="mo-from" class="form-control"
                        placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
-                       value="{{ oldOrData('from', $org->payments->first()->from) }}">
+                       value="{{ oldOrData('from', $ind->payments->first()?$ind->payments->first()->from:null) }}">
             </div>
 
             <div class="form-group">
                 <label for="mo-transaction-id" class="font-weight-bold col-form-label"> Transaction ID দিন</label>
                 <input type="text" name="transaction-id" id="mo-transaction-id" class="form-control"
-                       value="{{ $org->payments->first()->transactionId }}">
+                       value="{{ oldOrData('transactionId', $ind->payments->first()?$ind->payments->first()->transactionId:null) }}">
             </div>
 
             <div class="form-group row mx-5 mt-5 text-center">

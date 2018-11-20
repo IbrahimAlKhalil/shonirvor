@@ -468,7 +468,7 @@
                                        @if($ind->cv)
                                        data-image="{{ asset('storage/' . $ind->cv) }}"
                                        @endif
-                                       class="form-control-file">
+                                       class="file-picker">
                             </div>
                         </div>
 
@@ -485,6 +485,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
                             <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
@@ -531,7 +532,7 @@
                             <div class="col-9">
                                 <input type="text" name="from" id="from" class="form-control"
                                        placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
-                                       value="{{ oldOrData('from', $ind->payments->first()->from) }}">
+                                       value="{{ oldOrData('from', $ind->payments->first()?$ind->payments->first()->from:null) }}">
                             </div>
                         </div>
 
@@ -539,7 +540,7 @@
                             <label for="transaction-id" class="col-3 col-form-label"> Transaction ID দিন</label>
                             <div class="col-9">
                                 <input type="text" name="transaction-id" id="transaction-id" class="form-control"
-                                       value="{{ $ind->payments->first()->transactionId }}">
+                                       value="{{ oldOrData('transaction-id', $ind->payments->first()?$ind->payments->first()->transactionId:null) }}">
                             </div>
                         </div>
 
@@ -998,13 +999,13 @@
                 <label for="mo-from" class="col-form-label font-weight-bold">যে নাম্বার থেকে পাঠানো হয়েছে</label>
                 <input type="text" name="from" id="mo-from" class="form-control"
                        placeholder="কমপক্ষে শেষের চারটি ডিজিট দিতে হবে"
-                       value="{{ oldOrData('from', $ind->payments->first()->from) }}">
+                       value="{{ oldOrData('from', $ind->payments->first()?$ind->payments->first()->from:null) }}">
             </div>
 
             <div class="form-group">
                 <label for="mo-transaction-id" class="col-form-label font-weight-bold"> Transaction ID দিন</label>
                 <input type="text" name="transaction-id" id="transaction-id" class="form-control"
-                       value="{{ $ind->payments->first()->transactionId }}">
+                       value="{{ oldOrData('from', $ind->payments->first()?$ind->payments->first()->transactionId:null) }}">
             </div>
 
             <div class="form-group row mx-5 mt-5 text-center">
