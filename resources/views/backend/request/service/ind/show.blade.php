@@ -17,7 +17,7 @@
                     {{ method_field('put') }}
                     {{ csrf_field() }}
                     <div class="row">
-                        <div class="row col-12">
+                        <div class="col-12">
                             <div class="col-md-3">
                                 <img src="{{ asset('storage/' . $application->user->photo) }}"
                                      class="img-thumbnail w-100">
@@ -44,7 +44,7 @@
                             @php($payment = $application->payments->first())
                             <div class="col-12 mt-4">
                                 <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
-                                <table class="table table-striped table-bordered table-hover table-sm w-100">
+                                <table class="table table-striped table-responsive-md table-bordered table-hover table-sm w-100">
                                     <tbody>
                                     <tr>
                                         <th scope="row"><label for="package">প্যাকেজের নামঃ</label></th>
@@ -70,7 +70,8 @@
                                 </table>
                             </div>
                         @else
-                            <input type="hidden" value="{{ $application->payments->first()->package_id }}"
+                            @php($payment = $application->payments->first())
+                            <input type="hidden" value="{{ $payment->package_id }}"
                                    name="package">
                             <input type="hidden" value="{{ $payment->id }}" name="payment">
                         @endif
@@ -124,7 +125,7 @@
 
                         <div class="col-12 mt-4">
                             <p class="h4 border-bottom">ঠিকানাঃ</p>
-                            <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
+                            <table class="table table-striped table-bordered table-responsive-md table-hover table-sm w-100 th-w-15">
                                 <tbody>
                                 <tr>
                                     <th scope="row">জেলা</th>
@@ -263,7 +264,7 @@
 
                         <div class="col-12 mt-4">
                             <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
-                            <table class="table table-striped table-bordered table-hover table-sm w-100">
+                            <table class="table table-striped table-bordered table-responsive-md table-hover table-sm w-100">
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -331,13 +332,17 @@
                             <p class="h4 border-bottom">ডকুমেন্টঃ</p>
                             <div class="row">
                                 @if($application->cv)
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mt-3 mt-md-0">
                                         <span class="text-muted">বায়োডাটা</span>
-                                        <a href="{{ asset('storage/' . $application->cv) }}" target="_blank">PDF</a>
+                                        <a href="{{ asset('storage/' . $application->cv) }}"
+                                           target="_blank">
+                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}"
+                                                 class="img-responsive img-thumbnail w-100">
+                                        </a>
                                     </div>
                                 @endif
                                 @if($application->experience_certificate)
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mt-3 mt-md-0">
                                         <span class="text-muted">অভিজ্ঞতা প্রত্যয়ন পত্র</span>
                                         <a href="{{ asset('storage/' . $application->experience_certificate) }}"
                                            target="_blank">
@@ -347,7 +352,7 @@
                                     </div>
                                 @endif
                                 @foreach($application->user->identities as $identity)
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mt-3 mt-md-0">
                                         <a href="{{ asset('storage/' . $identity->path) }}"
                                            target="_blank">
                                             <img src="{{ asset('storage/' . $identity->path) }}"

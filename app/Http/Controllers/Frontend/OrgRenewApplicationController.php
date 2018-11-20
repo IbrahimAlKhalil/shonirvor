@@ -19,7 +19,6 @@ class OrgRenewApplicationController extends Controller
     {
         $this->middleware('provider');
         $this->middleware('can:org-renew-application.create,application', ['only' => 'store']);
-        $this->middleware('can:org-renew-application.view,application', ['only' => 'index']);
         $this->middleware('can:org-renew-application.update,application', ['only' => ['edit', 'update']]);
 
         $this->packages = Package::with('properties')

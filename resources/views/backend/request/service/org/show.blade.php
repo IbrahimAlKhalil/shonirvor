@@ -17,7 +17,7 @@
                     {{ method_field('put') }}
                     {{ csrf_field() }}
                     <div class="row">
-                        <div class="row col-12">
+                        <div class="col-12">
                             <div class="col-md-3">
                                 <img src="{{ asset('storage/' . $application->logo) }}" class="img-thumbnail w-100">
                             </div>
@@ -66,7 +66,8 @@
                                 </table>
                             </div>
                         @else
-                            <input type="hidden" value="{{ $application->payments->first()->package_id }}"
+                            @php($payment = $application->payments->first())
+                            <input type="hidden" value="{{ $payment->package_id }}"
                                    name="package">
                             <input type="hidden" value="{{ $payment->id }}" name="payment">
                         @endif
@@ -328,7 +329,7 @@
                             <div class="row">
                                 <div class="col-12 row">
                                     @if($application->trade_license)
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 mt-md-0 mt-3">
                                             <span class="text-muted">ট্রেড লাইসেন্স</span>
                                             <a href="{{ asset('storage/' . $application->trade_license) }}"
                                                target="_blank">
@@ -338,7 +339,7 @@
                                         </div>
                                     @endif
                                     @foreach($application->user->identities as $identity)
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 mt-md-0 mt-3">
                                             <a href="{{ asset('storage/' . $identity->path) }}"
                                                target="_blank">
                                                 <img src="{{ asset('storage/' . $identity->path) }}"

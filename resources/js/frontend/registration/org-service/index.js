@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    console.log(document.getElementById('mo-add-new-price'), document.getElementById('add-new-price'));
     priceRepeater(document.getElementById('otirikto-kaj'), document.getElementById('add-new-price'));
 
     priceRepeater(document.getElementById('mo-otirikto-kaj'), document.getElementById('mo-add-new-price'));

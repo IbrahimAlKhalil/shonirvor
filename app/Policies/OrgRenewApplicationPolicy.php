@@ -30,11 +30,6 @@ class OrgRenewApplicationPolicy
         ])->whereIn('incomes.incomeable_id', $this->services->pluck('id')->toArray())->first();
     }
 
-    public function view()
-    {
-        return !$this->oldApplication;
-    }
-
     public function create()
     {
         return !$this->oldApplication;

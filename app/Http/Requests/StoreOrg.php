@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Package;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -45,13 +46,13 @@ class StoreOrg extends FormRequest
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
             'identities.*' => 'required|image',
-            'package' => 'required',
+            'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
     }
 
-    public function withValidator($validator)
+    public function withValidator(Validator $validator)
     {
         $validator->sometimes('thana', 'exists:thanas,id', function ($data) {
             return !is_null($data->thana);
@@ -66,11 +67,9 @@ class StoreOrg extends FormRequest
             return !is_null($data->category);
         });
 
-        $indPackageIds = Package::onlyOrg()->pluck('id')->toArray();
-        if(!in_array($this->post('package'), $indPackageIds)) {
-            throw ValidationException::withMessages([
-                'package' => 'Package does not exist'
-            ]);
+        $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();
+        if (!in_array($this->post('package'), $orgPackageIds)) {
+            $validator->failed();
         }
     }
 

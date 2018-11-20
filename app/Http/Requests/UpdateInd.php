@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Package;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -53,7 +54,7 @@ class UpdateInd extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
+    public function withValidator(Validator $validator)
     {
         $validator->sometimes('thana', 'exists:thanas,id', function ($data) {
             return !is_null($data->thana);
@@ -69,10 +70,8 @@ class UpdateInd extends FormRequest
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();
-        if(!in_array($this->post('package'), $indPackageIds)) {
-            throw ValidationException::withMessages([
-                'package' => 'Package does not exist'
-            ]);
+        if (!in_array($this->post('package'), $indPackageIds)) {
+            $validator->failed();
         }
     }
 

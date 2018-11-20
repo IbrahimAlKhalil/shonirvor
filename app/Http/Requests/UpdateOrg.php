@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Package;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -48,7 +49,7 @@ class UpdateOrg extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
+    public function withValidator(Validator $validator)
     {
         $validator->sometimes('division', 'exists:divisions,id', function ($data) {
             return !is_null($data->division);
@@ -69,11 +70,9 @@ class UpdateOrg extends FormRequest
             return !is_null($data->category);
         });
 
-        $indPackageIds = Package::onlyOrg()->pluck('id')->toArray();
-        if(!in_array($this->post('package'), $indPackageIds)) {
-            throw ValidationException::withMessages([
-                'package' => 'Package does not exist'
-            ]);
+        $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();
+        if (!in_array($this->post('package'), $orgPackageIds)) {
+            $validator->failed();
         }
     }
 

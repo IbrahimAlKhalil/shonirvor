@@ -49,7 +49,7 @@
                                     <tr>
                                         <th scope="row">{{ en2bnNumber($count++) }}</th>
                                         <td>
-                                            <a href="{{ route('frontend.my-service.ind.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
+                                            <a href="{{ route('frontend.my-service.' . ($serviceType == 'Ind'?'ind':'org') . '.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
                                         </td>
                                         <td>
                                             {{ $payment->transactionId }}
@@ -96,7 +96,7 @@
                                 <tr>
                                     <th scope="row">{{ en2bnNumber($count++) }}</th>
                                     <td>
-                                        <a href="{{ route('frontend.my-service.ind.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
+                                        <a href="{{ route('frontend.my-service.' . ($serviceType == 'Ind'?'ind':'org') . '.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
                                     </td>
                                     <td>
                                         <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
@@ -131,7 +131,7 @@
 
                         @if($topServices->count())
                             <h4 class="mt-5 text-center">টপ সার্ভিস</h4>
-                            <table class="table table-striped table-bordered table-responsive table-hover table-sm text-center bg-white">
+                            <table class="table table-striped table-bordered table-responsive-md table-hover table-sm text-center bg-white">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -155,7 +155,7 @@
                                     <tr>
                                         <th scope="row">{{ en2bnNumber($count++) }}</th>
                                         <td>
-                                            <a href="{{ route('frontend.my-service.ind.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
+                                            <a href="{{ route('frontend.my-service.' . ($serviceType == 'Ind'?'ind':'org') . '.show', $service->id) }}">{{ $service->name?$service->name:$service->category->name }}</a>
                                         </td>
                                         <td>
                                             <span class="badge {{ $status[1] }}">{{ $status[0] }}</span>
