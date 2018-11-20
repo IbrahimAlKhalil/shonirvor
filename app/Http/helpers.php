@@ -176,7 +176,7 @@ function sms($mobile, $message)
     if (! env('SMS_ENABLED')) {
         return [
             'success' => false,
-            'status' => 'মেসেজ সার্ভিসটি env তে বন্ধ আছে।'
+            'status' => 'মেসেজ সার্ভিসটি বন্ধ আছে।'
         ];
     }
 
@@ -189,7 +189,7 @@ function sms($mobile, $message)
             'api_key' => env('SMS_API_KEY'),
             'type' => 'text',
             'contacts' => $mobile,
-            'senderid' => 'WIFAQ',
+            'senderid' => env('SMS_SENDERID'),
             'msg' => $message,
             'method' => 'api'
         ]

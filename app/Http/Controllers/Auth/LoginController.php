@@ -7,6 +7,7 @@ use App\Notifications\Sms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -21,27 +22,55 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
     protected function validateLogin(Request $request)
     {
-        $this->validate($request, [
-            $this->username() => 'required|digits:11',
-            'password' => 'required|string',
-        ]);
+        $rules = [
+            $this->username() => 'required|digits:11||exists:users',
+            'password' => 'required|string'
+        ];
+
+        $messages = [
+            $this->username().'.required' => 'মোবাইল নাম্বার দিতে হবে।',
+            $this->username().'.digits' => 'মোবাইল নাম্বার অবশ্যই ১১ সংখ্যার হতে হবে।',
+            $this->username().'.exists' => 'আপনি ভুল মোবাইল নাম্বার দিয়েছেন। এই নাম্বারে কোন একাউন্ট নেই।'
+        ];
+
+        $this->validate($request, $rules, $messages);
     }
 
     public function login(Request $request)
     {
-        if (User::withoutGlobalScope('validate')->where('mobile', $request->input('mobile'))->whereNotNull('verification_token')->exists()) {
-            $user = User::withoutGlobalScope('validate')
+        if (User::withoutGlobalScope('validate')
+            ->where('mobile', $request->input('mobile'))
+            ->whereNotNull('verification_token')->exists()) {
+
+            if (Hash::check($request->input('password'), User::withoutGlobalScope('validate')
                 ->where('mobile', $request->input('mobile'))
-                ->first();
+                ->whereNotNull('verification_token')->first()->password)) {
 
-            $user->notify(new Sms('Verification code of AreaSheba: '. $user->verification_token));
+                $user = User::withoutGlobalScope('validate')
+                    ->where('mobile', $request->input('mobile'))
+                    ->first();
 
-            return redirect()->route('verification', $user->id);
+                $user->notify(new Sms('Verification code of AreaSheba: '. $user->verification_token));
+
+                return redirect()->route('verification', $user->id);
+            }
         }
 
         return $this->traitlogin($request);
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->reset_token) {
+            $user->reset_token = null;
+            $user->save();
+        }
     }
 
     public function username()
