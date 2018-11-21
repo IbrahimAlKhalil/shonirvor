@@ -34,11 +34,11 @@ class StoreAdApplication extends FormRequest
 
     public function withValidator($validator)
     {
-        $validator->sometimes('image', 'nullable|image', function () {
+        $validator->sometimes('image', 'nullable|image||max:800', function () {
             return request()->method == 'PUT';
         });
 
-        $validator->sometimes('image', 'required|image', function () {
+        $validator->sometimes('image', 'required|image|max:800', function () {
             return request()->method == 'POST';
         });
     }
@@ -61,7 +61,8 @@ class StoreAdApplication extends FormRequest
 
             'image.required' => 'বিজ্ঞাপনের জন্য ছবি দিতে হবে',
 
-            'url.url' => 'লিঙ্কটি সঠিক নয়'
+            'url.url' => 'লিঙ্কটি সঠিক নয়',
+            'image.max' => 'বিজ্ঞাপনের ছবি :max কিলোবাইটের বেশি হতে পারবে না'
         ];
     }
 }

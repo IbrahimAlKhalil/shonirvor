@@ -98,7 +98,6 @@ class orgServiceController extends Controller
         return [
             ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
-            ['url' => route('organization-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];
     }
 }

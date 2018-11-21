@@ -57,10 +57,8 @@
             </div>
             <div class="col-md-3">
                 <div class="row">
-                    <div class="row">
-                        <div class="col-12">
-                            @include('components.side-nav')
-                        </div>
+                    <div class="col-12">
+                        @include('components.side-nav')
                     </div>
                 </div>
             </div>
