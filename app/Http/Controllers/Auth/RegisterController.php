@@ -73,7 +73,6 @@ class RegisterController extends Controller
 
     public function verification(Verification $request, $user)
     {
-        dd($request->all());
         $user = User::withoutGlobalScope('validate')->findOrFail($user);
 
         if ($user->verification_token == $request->verification) {
