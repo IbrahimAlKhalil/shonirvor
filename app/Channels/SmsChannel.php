@@ -26,7 +26,7 @@ class SmsChannel
                 'api_key' => env('SMS_API_KEY'),
                 'type' => 'text',
                 'contacts' => $notifiable->mobile,
-                'senderid' => 'WIFAQ',
+                'senderid' => env('SMS_SENDERID'),
                 'msg' => $message,
                 'method' => 'api'
             ]
