@@ -23,10 +23,6 @@ class StoreInd extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'day' => 'required|between:1,31',
-            'month' => 'required|between:1,12',
-            'year' => 'required|max:' . (string)(Date('Y') - 18),
-            'nid' => 'required|integer|unique:users,nid',
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -64,6 +60,24 @@ class StoreInd extends FormRequest
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
+        });
+
+
+        $user = Auth::user();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+            return !$user->nid;
+        });
+
+        $validator->sometimes('month', 'required|between:1,12', function () use(&$user) {
+            return !$user->dob;
+        });
+
+        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use(&$user) {
+            return !$user->dob;
+        });
+
+        $validator->sometimes('day', 'required|between:1,31', function () use(&$user) {
+            return !$user->dob;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();

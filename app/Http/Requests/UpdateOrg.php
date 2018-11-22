@@ -17,7 +17,6 @@ class UpdateOrg extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
 
         return [
             'name' => 'required|min:3',
@@ -26,7 +25,6 @@ class UpdateOrg extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'nid' => 'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -69,6 +67,13 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
         });
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
+            return $first;
+        });
+
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();
         if (!in_array($this->post('package'), $orgPackageIds)) {

@@ -104,15 +104,17 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mx-5">
-                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <input id="nid" name="nid" type="number"
-                                       value="{{ oldOrData('nid', $org->user->nid) }}"
-                                       class="form-control" required>
+                        @if($first)
+                            <div class="form-group row mx-5">
+                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="nid" name="nid" type="number"
+                                           value="{{ oldOrData('nid', $org->user->nid) }}"
+                                           class="form-control" required>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
@@ -541,13 +543,15 @@
                        class="form-control">
             </div>
 
-            <div class="form-group">
-                <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
-                            class="text-danger">*</span></label>
-                <input id="mo-nid" name="nid" type="number"
-                       value="{{ oldOrData('nid', $org->user->nid) }}"
-                       class="form-control" required>
-            </div>
+            @if($first)
+                <div class="form-group">
+                    <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
+                                class="text-danger">*</span></label>
+                    <input id="mo-nid" name="nid" type="number"
+                           value="{{ oldOrData('nid', $org->user->nid) }}"
+                           class="form-control" required>
+                </div>
+            @endif
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>

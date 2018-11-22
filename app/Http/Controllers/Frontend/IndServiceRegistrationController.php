@@ -77,7 +77,6 @@ class IndServiceRegistrationController extends Controller
     public function store(StoreInd $request)
     {
         // TODO:: Check what if the user already have an account in the requested category
-        // TODO:: User should choose one of the packages made for individual service, validate it.
         // TODO:: Review validation
 
         DB::beginTransaction();
@@ -277,10 +276,14 @@ class IndServiceRegistrationController extends Controller
             $user->nid = $request->post('nid');
         }
 
+        if (!$user->dob) {
+            $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        }
 
-        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        if (!$user->qualification) {
+            $user->qualification = $request->post('qualification');
+        }
 
-        $user->qualification = $request->post('qualification');
         $user->save();
 
         // work images
@@ -357,7 +360,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         // Create sub categories
-        if ($isSubCategoryRequest) {
+        if ($isSubCategoryRequest && $request->filled('sub-category-requests')) {
             $data = [];
             foreach ($request->post('sub-category-requests') as $subCategory) {
                 array_key_exists('name', $subCategory) && array_push($data, [
@@ -513,7 +516,7 @@ class IndServiceRegistrationController extends Controller
             }
         }
         // requested subcategory rates
-        if ($isSubCategoryRequest) {
+        if ($isSubCategoryRequest && $request->filled('sub-category-requests')) {
             foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
                 if (array_key_exists('name', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
@@ -533,10 +536,17 @@ class IndServiceRegistrationController extends Controller
         DB::table('ind_work_method')->insert($workMethods);
 
         // User
-        $user->nid = $request->post('nid');
-        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        if (!$user->nid && $request->has('nid')) {
+            $user->nid = $request->post('nid');
+        }
 
-        $user->qualification = $request->post('qualification');
+        if (!$user->dob) {
+            $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        }
+
+        if (!$user->qualification) {
+            $user->qualification = $request->post('qualification');
+        }
         $user->save();
 
         // work images
@@ -587,6 +597,9 @@ class IndServiceRegistrationController extends Controller
             return redirect(route('individual-service-registration.index'));
         }
 
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+
         $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
         $subCategories = SubCategory::whereCategoryId($ind->category_id)->whereIsConfirmed(1)->get();
         $indSubCategories = $ind->subCategories()->whereIsConfirmed(1)->get();
@@ -601,7 +614,6 @@ class IndServiceRegistrationController extends Controller
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
-
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first'));
     }
 }

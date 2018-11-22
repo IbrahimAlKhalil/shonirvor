@@ -19,6 +19,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $dates = ['dob'];
+
     protected static function boot()
     {
         parent::boot();

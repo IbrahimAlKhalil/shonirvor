@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="number"
                            id="sub-category-${length - 1}-${value}"
                            name="sub-categories[${length - 1}][rate]"
-                           class="form-control col-md-6"
+                           class="form-control col-md-6 ml-2"
                            placeholder="রেট">
                     <input type="hidden" name="sub-categories[${length - 1}][id]" value="${value}">
                 </div>

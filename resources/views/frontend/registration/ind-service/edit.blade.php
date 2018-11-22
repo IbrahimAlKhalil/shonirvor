@@ -86,54 +86,61 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mx-5">
-                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <div class="input-group mb-3">
-                                    @php($dob = \Carbon\Carbon::make($ind->user->dob))
-                                    <select name="day" type="text" class="form-control mr-5 rounded-right">
-                                        <option value="">-- দিন --</option>
-                                        @for($i = 1; $i < 32; $i++)
-                                            <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->day) }}@endif>{{ en2bnNumber($i) }}</option>
-                                        @endfor
-                                    </select>
-                                    <select name="month" type="text"
-                                            class="form-control mr-5 rounded-right rounded-left">
-                                        <option value="">-- মাস --</option>
-                                        @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
-                                        @foreach($months as $index => $month)
-                                            <option value="{{ ++$index }}" @if(!is_null($dob)){{ selectOpt($index, $dob->month) }}@endif>{{ $month }}</option>
-                                        @endforeach
-                                    </select>
-                                    <select name="year" type="text" class="form-control rounded-left">
-                                        <option value="">-- বছর --</option>
-                                        @php($begining = Date('Y') - 50)
-                                        @php($ending = Date('Y') - 18)
-                                        @for($i = $ending; $i > $begining; $i--)
-                                            <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->year) }}@endif>{{ en2bnNumber($i) }}</option>
-                                        @endfor
-                                    </select>
+                        @if($first)
+                            <div class="form-group row mx-5">
+                                <label for="age" class="col-3 col-form-label">জন্ম তারিখ <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <div class="input-group mb-3">
+                                        @php($dob = \Carbon\Carbon::make($ind->user->dob))
+                                        <select name="day" type="text" class="form-control mr-5 rounded-right">
+                                            <option value="">-- দিন --</option>
+                                            @for($i = 1; $i < 32; $i++)
+                                                <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->day) }}@endif>{{ en2bnNumber($i) }}</option>
+                                            @endfor
+                                        </select>
+                                        <select name="month" type="text"
+                                                class="form-control mr-5 rounded-right rounded-left">
+                                            <option value="">-- মাস --</option>
+                                            @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                            @foreach($months as $index => $month)
+                                                <option value="{{ ++$index }}" @if(!is_null($dob)){{ selectOpt($index, $dob->month) }}@endif>{{ $month }}</option>
+                                            @endforeach
+                                        </select>
+                                        <select name="year" type="text" class="form-control rounded-left">
+                                            <option value="">-- বছর --</option>
+                                            @php($begining = Date('Y') - 50)
+                                            @php($ending = Date('Y') - 18)
+                                            @for($i = $ending; $i > $begining; $i--)
+                                                <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->year) }}@endif>{{ en2bnNumber($i) }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="form-group row mx-5">
-                            <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
-                            <div class="col-9">
-                                <input id="qualification" name="qualification" type="text" class="form-control here"
-                                       value="{{ oldOrData('qualification', $ind->user->qualification) }}">
+                        @if($first)
+                            <div class="form-group row mx-5">
+                                <label for="qualification" class="col-3 col-form-label">যোগ্যতা/অভিজ্ঞতা</label>
+                                <div class="col-9">
+                                    <input id="qualification" name="qualification" type="text" class="form-control here"
+                                           value="{{ oldOrData('qualification', $ind->user->qualification) }}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row mx-5">
-                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <input id="nid" name="nid" type="number"
-                                       value="{{ oldOrData('nid', $ind->user->nid) }}"
-                                       class="form-control" required>
+                        @endif
+
+                        @if($first)
+                            <div class="form-group row mx-5">
+                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="nid" name="nid" type="number"
+                                           value="{{ oldOrData('nid', $ind->user->nid) }}"
+                                           class="form-control" required>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="form-group row mx-5">
                             <label for="description" class="col-3 col-form-label">কাজের বর্ণনা</label>
@@ -597,51 +604,56 @@
                        class="form-control">
             </div>
 
-            <div class="form-group">
-                <label class="col-form-label">জন্ম তারিখ <span
-                            class="text-danger">*</span></label>
-                <div class="pr-0">
-                    <div class="input-group">
-                        @php($dob = \Carbon\Carbon::make($ind->user->dob))
-                        <select name="day" type="text" class="form-control">
-                            <option value="">-- দিন --</option>
-                            @for($i = 1; $i < 32; $i++)
-                                <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->day) }}@endif>{{ en2bnNumber($i) }}</option>
-                            @endfor
-                        </select>
-                        <select name="month" type="text"
-                                class="form-control">
-                            <option value="">-- মাস --</option>
-                            @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
-                            @foreach($months as $index => $month)
-                                <option value="{{ ++$index }}" @if(!is_null($dob)){{ selectOpt($index, $dob->month) }}@endif>{{ $month }}</option>
-                            @endforeach
-                        </select>
-                        <select name="year" type="text" class="form-control">
-                            <option value="">-- বছর --</option>
-                            @php($begining = Date('Y') - 50)
-                            @php($ending = Date('Y') - 18)
-                            @for($i = $ending; $i > $begining; $i--)
-                                <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->year) }}@endif>{{ en2bnNumber($i) }}</option>
-                            @endfor
-                        </select>
+            @if($first)
+                <div class="form-group">
+                    <label class="col-form-label">জন্ম তারিখ <span
+                                class="text-danger">*</span></label>
+                    <div class="pr-0">
+                        <div class="input-group">
+                            @php($dob = $ind->user->dob)
+                            <select name="day" type="text" class="form-control">
+                                <option value="">-- দিন --</option>
+                                @for($i = 1; $i < 32; $i++)
+                                    <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->day) }}@endif>{{ en2bnNumber($i) }}</option>
+                                @endfor
+                            </select>
+                            <select name="month" type="text"
+                                    class="form-control">
+                                <option value="">-- মাস --</option>
+                                @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                @foreach($months as $index => $month)
+                                    <option value="{{ ++$index }}" @if(!is_null($dob)){{ selectOpt($index, $dob->month) }}@endif>{{ $month }}</option>
+                                @endforeach
+                            </select>
+                            <select name="year" type="text" class="form-control">
+                                <option value="">-- বছর --</option>
+                                @php($begining = Date('Y') - 50)
+                                @php($ending = Date('Y') - 18)
+                                @for($i = $ending; $i > $begining; $i--)
+                                    <option value="{{ $i }}" @if(!is_null($dob)){{ selectOpt($i, $dob->year) }}@endif>{{ en2bnNumber($i) }}</option>
+                                @endfor
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
+            @if($first)
+                <div class="form-group">
+                    <label for="mo-qualification" class="col-form-label font-weight-bold">যোগ্যতা/অভিজ্ঞতা</label>
+                    <input id="mo-qualification" name="qualification" type="text" class="form-control"
+                           value="{{ oldOrData('qualification', $ind->user->qualification) }}">
+                </div>
+            @endif
 
-            <div class="form-group">
-                <label for="mo-qualification" class="col-form-label font-weight-bold">যোগ্যতা/অভিজ্ঞতা</label>
-                <input id="mo-qualification" name="qualification" type="text" class="form-control"
-                       value="{{ oldOrData('qualification', $ind->user->qualification) }}">
-            </div>
-
-            <div class="form-group">
-                <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
-                            class="text-danger">*</span></label>
-                <input id="mo-nid" name="nid" type="number"
-                       value="{{ oldOrData('nid', $ind->user->nid) }}"
-                       class="form-control" required>
-            </div>
+            @if($first)
+                <div class="form-group">
+                    <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
+                                class="text-danger">*</span></label>
+                    <input id="mo-nid" name="nid" type="number"
+                           value="{{ oldOrData('nid', $ind->user->nid) }}"
+                           class="form-control" required>
+                </div>
+            @endif
 
             <div class="form-group">
                 <label for="mo-description" class="col-form-label font-weight-bold">কাজের বর্ণনা</label>

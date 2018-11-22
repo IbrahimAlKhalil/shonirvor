@@ -61,7 +61,6 @@ class OrgServiceRegistrationController extends Controller
             return redirect(route('organization-service-registration.edit', $orgs->first()->id));
         }
 
-
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
         $categories = Category::getAll('org')->get();
@@ -79,7 +78,6 @@ class OrgServiceRegistrationController extends Controller
         $user = Auth::user();
 
         // handle category  and sub-category request
-        // TODO:: Do some custom validation for category and subcategory
 
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
@@ -241,7 +239,9 @@ class OrgServiceRegistrationController extends Controller
 
 
         // User
-        $user->nid = $request->post('nid');
+        if (!$user->nid) {
+            $user->nid = $request->post('nid');
+        }
         $user->save();
 
         // work images
@@ -295,6 +295,8 @@ class OrgServiceRegistrationController extends Controller
             return $sub['is_confirmed'] == 0;
         })->count();
 
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
         $divisions = Division::all();
@@ -303,7 +305,7 @@ class OrgServiceRegistrationController extends Controller
         $unions = $org->thana->unions()->whereIsPending(0)->get();
         $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
 
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods'));
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first'));
     }
 
     public function update(UpdateOrg $request, $id)
@@ -506,7 +508,9 @@ class OrgServiceRegistrationController extends Controller
         $org->payments()->save($payment);
 
         // User
-        $user->nid = $request->post('nid');
+        if (!$user->nid) {
+            $user->nid = $request->post('nid');
+        }
         if ($request->hasFile('photo')) {
             $user->photo = $request->file('photo')->store('user-photos');
         }

@@ -19,7 +19,6 @@ class StoreOrg extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
 
         return [
             'name' => 'required|min:3',
@@ -28,8 +27,6 @@ class StoreOrg extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'nid' => /*($user->nid ? '' : 'required|') . */
-                'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -65,6 +62,11 @@ class StoreOrg extends FormRequest
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
+        });
+
+        $user = Auth::user();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+            return !$user->nid;
         });
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();
