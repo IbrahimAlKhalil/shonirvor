@@ -38,7 +38,6 @@ class StoreInd extends FormRequest
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
-            'identities.*' => 'required|image',
             'experience-certificate' => 'image',
             'cv' => 'mimes:pdf',
             'package' => 'required',
@@ -78,6 +77,10 @@ class StoreInd extends FormRequest
 
         $validator->sometimes('day', 'required|between:1,31', function () use(&$user) {
             return !$user->dob;
+        });
+
+        $validator->sometimes('identities.*', 'required|image', function() use(&$user) {
+            return !$user->nid;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();

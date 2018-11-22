@@ -61,6 +61,7 @@ class OrgServiceRegistrationController extends Controller
             return redirect(route('organization-service-registration.edit', $orgs->first()->id));
         }
 
+        $hasAccount = $user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
         $categories = Category::getAll('org')->get();
@@ -68,7 +69,7 @@ class OrgServiceRegistrationController extends Controller
         $classesToAdd = ['active', 'disabled'];
 
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index', compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods'));
+        return view('frontend.registration.org-service.index', compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount'));
     }
 
     public function store(StoreOrg $request)
@@ -268,10 +269,12 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if(!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
             }
         }
 
@@ -296,7 +299,7 @@ class OrgServiceRegistrationController extends Controller
         })->count();
 
         $user = Auth::user();
-        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
         $divisions = Division::all();
@@ -540,10 +543,12 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if(!$user->nid) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
             }
         }
 

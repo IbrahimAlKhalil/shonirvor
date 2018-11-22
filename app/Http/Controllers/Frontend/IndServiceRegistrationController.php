@@ -59,6 +59,8 @@ class IndServiceRegistrationController extends Controller
         $user = Auth::user();
         $inds = $user->inds()->onlyPending();
 
+        $hasAccount = $user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
+
         if ($inds->exists()) {
             return redirect(route('individual-service-registration.edit', $inds->first()->id));
         }
@@ -67,11 +69,10 @@ class IndServiceRegistrationController extends Controller
         $paymentMethods = PaymentMethod::all();
 
         $categories = Category::getAll('ind')->get();
-        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 
-        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods'));
+        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount'));
     }
 
     public function store(StoreInd $request)
@@ -176,6 +177,7 @@ class IndServiceRegistrationController extends Controller
         }
         $ind->save();
 
+        // TODO: Store time
         // Create reference
         if ($request->filled('referrer')) {
             $referrer = new Reference;
@@ -310,12 +312,14 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if(!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
+                DB::table('identities')->insert($identities);
             }
-            DB::table('identities')->insert($identities);
         }
 
         DB::commit();
@@ -573,12 +577,14 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if(!$user->nid) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
+                DB::table('identities')->insert($identities);
             }
-            DB::table('identities')->insert($identities);
         }
 
 
@@ -598,7 +604,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         $user = Auth::user();
-        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
 
         $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
         $subCategories = SubCategory::whereCategoryId($ind->category_id)->whereIsConfirmed(1)->get();

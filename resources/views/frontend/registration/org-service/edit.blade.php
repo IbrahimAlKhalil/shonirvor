@@ -388,6 +388,7 @@
                             </div>
                         </div>
 
+                        @if ($first)
                         <div class="form-group row mx-5">
                             <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                                 ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
@@ -400,6 +401,7 @@
                                 @endforeach
                             </div>
                         </div>
+                        @endif
 
                         <div class="form-group row mx-5">
                             <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
@@ -784,6 +786,7 @@
                        class="file-picker" data-image="{{ asset('storage/' . $org->logo) }}">
             </div>
 
+            @if ($first)
             <div class="form-group">
                 <label for="identities" class="font-weight-bold col-form-label">জাতীয় পরিচয়পত্রের
                     ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
@@ -799,6 +802,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
             <div class="form-group">
                 <label for="images" class="font-weight-bold col-form-label">কাজের ছবি</label>

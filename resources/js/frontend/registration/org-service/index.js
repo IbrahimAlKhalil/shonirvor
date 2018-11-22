@@ -1,4 +1,4 @@
-import {Repeater} from '../../../modules/repeater';
+import { Repeater } from '../../../modules/repeater';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -109,18 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*************************** Sub category *******************************/
 
-    function subRepeater(container, select) {
+    function subRepeater(container, select, $class = '') {
         let repeater = new Repeater(container, function (value) {
             let length = this.count;
             let fragment = document.createElement('ul');
             fragment.innerHTML = `
             <li class="repeater-clone mt-2 border-0 list-group-item">
                 <div class="row">
-                    <label class="col-form-label" for="sub-category-${length - 1}-${value}">${$(select).find(`[value="${value}"]`).text()}</label>
+                    <label class="${$class}" for="sub-category-${length - 1}-${value}">${$(select).find(`[value="${value}"]`).text()}</label>
                     <input type="number"
                            id="sub-category-${length - 1}-${value}"
                            name="sub-categories[${length - 1}][rate]"
-                           class="form-control col-md-6 ml-2"
+                           class="form-control col-md-6"
                            placeholder="রেট">
                     <input type="hidden" name="sub-categories[${length - 1}][id]" value="${value}">
                 </div>
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    subRepeater(document.getElementById('sub-repeater-container'), document.getElementById('sub-categories'));
-    subRepeater(document.getElementById('mo-sub-repeater-container'), document.getElementById('mo-sub-categories'))
+    subRepeater(document.getElementById('sub-repeater-container'), document.getElementById('sub-categories'), 'col-md-6');
+    subRepeater(document.getElementById('mo-sub-repeater-container'), document.getElementById('mo-sub-categories', 'col-form-label'))
 });
 

@@ -40,7 +40,6 @@ class UpdateOrg extends FormRequest
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
-            'identities.*' => 'required|image',
             'package' => 'required',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
@@ -67,13 +66,15 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
         });
+        $validator->sometimes('identities.*', 'required|image', function() use (&$first) {
+            return $first;
+        });
 
         $user = Auth::user();
         $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
         $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
             return $first;
         });
-
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();
         if (!in_array($this->post('package'), $orgPackageIds)) {

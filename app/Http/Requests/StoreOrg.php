@@ -42,7 +42,6 @@ class StoreOrg extends FormRequest
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
-            'identities.*' => 'required|image',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
@@ -65,6 +64,10 @@ class StoreOrg extends FormRequest
         });
 
         $user = Auth::user();
+        $validator->sometimes('identities.*', 'required|image', function() use(&$user) {
+            return !$user->nid;
+        });
+        
         $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
             return !$user->nid;
         });

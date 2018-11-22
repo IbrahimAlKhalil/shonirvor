@@ -437,6 +437,7 @@
                         </div>
                     </div>
                     <div class="p-4" id="step-4">
+                        @if ($first)
                         <div class="form-group row mx-5">
                             <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                                 ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
@@ -448,7 +449,8 @@
                                            class="file-picker">
                                 @endforeach
                             </div>
-                        </div>
+                        </div>                            
+                        @endif
 
                         <div class="form-group row mx-5">
                             <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
@@ -923,6 +925,7 @@
                 </div>
             </div>
 
+            @if ($first)
             <div class="form-group">
                 <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
                     ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
@@ -935,6 +938,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
             <div class="form-group">
                 <label for="images" class="col-form-label font-weight-bold">কাজের ছবি</label>

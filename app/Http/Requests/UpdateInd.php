@@ -39,7 +39,6 @@ class UpdateInd extends FormRequest
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             'images.*.file' => 'image',
-            'identities.*' => 'required|image',
             'experience-certificate' => 'image',
             'cv' => 'mimes:pdf',
             'package' => 'required',
@@ -78,6 +77,10 @@ class UpdateInd extends FormRequest
         });
 
         $validator->sometimes('day', 'required|between:1,31', function () use(&$first) {
+            return $first;
+        });
+
+        $validator->sometimes('identities.*', 'required|image', function() use (&$first){
             return $first;
         });
 
