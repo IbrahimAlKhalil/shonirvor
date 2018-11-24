@@ -6,6 +6,7 @@ use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StoreOrg extends FormRequest
@@ -41,7 +42,9 @@ class StoreOrg extends FormRequest
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
+            // TODO: Review image size
+            'images.*.file' => 'image|max:800',
+            'logo' => 'image|max:800',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
@@ -64,10 +67,10 @@ class StoreOrg extends FormRequest
         });
 
         $user = Auth::user();
-        $validator->sometimes('identities.*', 'required|image', function() use(&$user) {
+        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
             return !$user->nid;
         });
-        
+
         $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
             return !$user->nid;
         });

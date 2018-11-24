@@ -37,10 +37,12 @@ class StoreInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
-            'experience-certificate' => 'image',
-            'cv' => 'mimes:pdf',
-            'package' => 'required',
+            // TODO: Review image size
+            'images.*.file' => 'image|max:800',
+            'experience-certificate' => 'image|max:800',
+            // TODO: Review pdf size
+            'cv' => 'mimes:pdf|max:800',
+            'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
@@ -67,19 +69,19 @@ class StoreInd extends FormRequest
             return !$user->nid;
         });
 
-        $validator->sometimes('month', 'required|between:1,12', function () use(&$user) {
+        $validator->sometimes('month', 'required|between:1,12', function () use (&$user) {
             return !$user->dob;
         });
 
-        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use(&$user) {
+        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use (&$user) {
             return !$user->dob;
         });
 
-        $validator->sometimes('day', 'required|between:1,31', function () use(&$user) {
+        $validator->sometimes('day', 'required|between:1,31', function () use (&$user) {
             return !$user->dob;
         });
 
-        $validator->sometimes('identities.*', 'required|image', function() use(&$user) {
+        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
             return !$user->nid;
         });
 

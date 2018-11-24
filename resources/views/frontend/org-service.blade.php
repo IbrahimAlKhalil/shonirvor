@@ -36,7 +36,10 @@
                             <div class="card-body">
                                 @foreach($provider->subCategoryRates->shuffle() as $subCategory)
                                     <p class="border-bottom font-italic">{{ $subCategory->name }}</p>
-                                    <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }} টাকা</p>
+                                    @if($subCategory->pivot->rate)
+                                        <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }}
+                                            টাকা</p>
+                                    @endif
                                 @endforeach
                                 @foreach($provider->additionalPrices->shuffle() as $additionalPrice)
                                     <p class="border-bottom font-italic">{{ $additionalPrice->name }}</p>
@@ -51,10 +54,12 @@
                 <div class="row my-2">
                     <div class="col-12 text-center">
                         @if($provider->facebook)
-                            <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}" target="_blank"> ফেসবুক</a>
+                            <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}"
+                               target="_blank"> ফেসবুক</a>
                         @endif
                         @if($provider->website)
-                            <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}" target="_blank"> ওয়েবসাইট</a>
+                            <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}"
+                               target="_blank"> ওয়েবসাইট</a>
                         @endif
                         <a class="btn btn-warning my-2" href="tel:{{ $provider->mobile }}">
                             <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
@@ -80,7 +85,8 @@
                             <div class="card-deck py-2">
                                 @foreach($workImages as $image)
                                     <div class="card shadow-sm">
-                                        <img class="card-img-top img-fluid" src="{{ asset('storage/'.$image->path) }}" alt="Card image cap">
+                                        <img class="card-img-top img-fluid" src="{{ asset('storage/'.$image->path) }}"
+                                             alt="Card image cap">
                                         <div class="card-body">
                                             <p class="card-text">{{ $image->description }}</p>
                                         </div>
@@ -104,7 +110,8 @@
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
                                                 <input id="storeStar" type="number" name="star" required>
-                                                <textarea name="say" class="form-control" rows="3" placeholder="আপনার মতামত দিন..." required></textarea>
+                                                <textarea name="say" class="form-control" rows="3"
+                                                          placeholder="আপনার মতামত দিন..." required></textarea>
                                                 <div class="my-2 text-center">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
@@ -118,11 +125,14 @@
                                         @forelse($provider->feedbacks->sortByDesc('id') as $key => $feedback)
                                             <div class="row my-3">
                                                 <div class="col-4 col-md-2 col-lg-2 mb-2">
-                                                    <img class="img-responsive img-thumbnail" src="{{ asset('storage/'.$feedback->user->photo) }}">
+                                                    <img class="img-responsive img-thumbnail"
+                                                         src="{{ asset('storage/'.$feedback->user->photo) }}">
                                                 </div>
                                                 <div class="col-lg-10">
-                                                    <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
-                                                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
+                                                    <input id="showStar{{ $key }}" value="{{ $feedback->star }}"
+                                                           class="invisible">
+                                                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }}
+                                                        বলেন:</p>
                                                     <p>{{ $feedback->say }}</p>
                                                 </div>
                                             </div>

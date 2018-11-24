@@ -68,7 +68,9 @@ class IndServiceRegistrationController extends Controller
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
-        $categories = Category::getAll('ind')->get();
+        $categoryIds = $user->inds()->pluck('id')->toArray();
+
+        $categories = Category::onlyInd()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 
@@ -77,7 +79,7 @@ class IndServiceRegistrationController extends Controller
 
     public function store(StoreInd $request)
     {
-        // TODO:: Check what if the user already have an account in the requested category
+        // TODO:: User should choose at least one sub-caegory
         // TODO:: Review validation
 
         DB::beginTransaction();
@@ -85,7 +87,7 @@ class IndServiceRegistrationController extends Controller
         $user = Auth::user();
 
         // handle category  and sub-category request
-        // TODO:: Do some custom validation for category and subcategory
+        // TODO:: Validate that selected sub-categories belong to the selected category
 
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
@@ -116,7 +118,6 @@ class IndServiceRegistrationController extends Controller
         }
 
         // handle thana and union request
-        // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
         $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
@@ -292,7 +293,6 @@ class IndServiceRegistrationController extends Controller
         if ($request->file('images')) {
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
 
             foreach ($files as $image) {
                 array_push($images, [
@@ -312,7 +312,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if(!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+        if (!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
             if ($request->hasFile('identities')) {
                 $identities = [];
                 foreach ($request->file('identities') as $identity) {
@@ -341,7 +341,7 @@ class IndServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         // handle category  and sub-category request
-        // TODO:: Do some custom validation for category and subcategory
+        // TODO:: Validate that selected sub-categories belong to the selected category
 
         $previousCategory = $ind->category;
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
@@ -376,7 +376,6 @@ class IndServiceRegistrationController extends Controller
         }
 
         // handle thana and union request
-        // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
         $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
@@ -555,10 +554,9 @@ class IndServiceRegistrationController extends Controller
 
         // work images
         if ($request->file('images')) {
+            // TODO: Delete previous images
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
-
             foreach ($files as $image) {
                 array_push($images, [
                     'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
@@ -577,7 +575,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if(!$user->nid) {
+        if (!$user->nid) {
             if ($request->hasFile('identities')) {
                 $identities = [];
                 foreach ($request->file('identities') as $identity) {

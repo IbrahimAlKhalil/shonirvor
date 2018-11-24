@@ -32,7 +32,10 @@ class UpdateIndMyService extends FormRequest
             // TODO: Subcategory
 //            'sub-categories.*.work-methods.*.rate' => 'nullable|integer',
             'work-images.*.description' => 'string|min:10|nullable',
-            'work-images.*.file' => 'nullable|image'
+            // TODO: Review image size
+            'new-work-images.*.file' => 'nullable|image|max:800',
+            'work-images.*.file' => 'nullable|image|max:800',
+            'cover-photo' => 'nullable|image|max:800'
         ];
     }
 

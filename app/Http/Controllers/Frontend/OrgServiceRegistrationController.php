@@ -61,10 +61,12 @@ class OrgServiceRegistrationController extends Controller
             return redirect(route('organization-service-registration.edit', $orgs->first()->id));
         }
 
-        $hasAccount = $user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
+        $hasAccount = $user->orgs()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
         $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
         $paymentMethods = PaymentMethod::all();
-        $categories = Category::getAll('org')->get();
+        $categoryIds = $user->orgs()->pluck('id')->toArray();
+
+        $categories = Category::onlyOrg()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 

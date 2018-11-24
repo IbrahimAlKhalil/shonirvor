@@ -151,7 +151,6 @@ class OrgServiceEditRequestController extends Controller
         }
 
         if (isset($data['images'])) {
-            // TODO: work image request
             foreach ($data['images'] as $id => $datum) {
                 $image = WorkImage::find($id);
                 $image->description = $datum['description'];
