@@ -11,14 +11,14 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service-edit.index') }}" class="btn btn-secondary active">বেক্তিগত</a>
+                <a href="{{ route('individual-service-edit.index') }}" class="btn btn-secondary active">ব্যক্তিগত</a>
                 <a href="{{ route('organization-service-edit.index') }}" class="btn btn-secondary">প্রাতিষ্ঠানিক</a>
             </div>
         </div>
 
         <div class="row">
             <div class="col-12 mt-4">
-                <h4 class="mb-4">বেক্তিগত সার্ভিস প্রভাইডারদের প্রোফাইল আপডেট রিকুয়েস্ট</h4>
+                <h4 class="mb-4">ব্যক্তিগত সার্ভিস প্রভাইডারদের প্রোফাইল আপডেট রিকুয়েস্ট</h4>
             </div>
             <div class="col-md-9">
                 <table class="table table-striped table-bordered table-hover table-sm text-center bg-white">

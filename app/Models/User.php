@@ -29,9 +29,9 @@ class User extends Authenticatable
     }
 
 
-    /**********************/
+    /*********************/
     /***** Relations *****/
-    /**********************/
+    /*********************/
 
     public function inds()
     {
@@ -83,5 +83,10 @@ class User extends Authenticatable
     public function earns()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function paymentReceiveMethod()
+    {
+        return $this->hasOne(UserPaymentReceiveMethod::class);
     }
 }

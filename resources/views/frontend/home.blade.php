@@ -23,7 +23,7 @@
                         <p class="h4 border-bottom text-center">টপ ক্যাটাগরি</p>
                     </div>
                     <div class="col-lg-6">
-                        <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
+                        <p class="h5 pl-2 service-type-title-left mb-4">ব্যক্তিগত সার্ভিস</p>
                         <div class="row border-right">
                             @foreach($indCategories as $category)
                                 <div class="col-4 text-center">
@@ -58,7 +58,7 @@
                         <p class="h4 border-bottom text-center">টপ সার্ভিস প্রভাইডার</p>
                     </div>
                     <div class="col-lg-6">
-                        <p class="h5 pl-2 service-type-title-left mb-4">বেক্তিগত সার্ভিস</p>
+                        <p class="h5 pl-2 service-type-title-left mb-4">ব্যক্তিগত সার্ভিস</p>
                         <ul class="list-unstyled">
                             @foreach($indTopServices as $key => $service)
                                 <li class="media mt-3 p-2 service-card-shadow">

@@ -14,13 +14,13 @@
                     <div class="col-12">
                         @if($application->incomeable->top_expire == null)
                             @if($application->package->package_type_id == 3)
-                                <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিকোয়েস্ট</span>
+                                <span class="badge badge-info float-right">ব্যক্তিগত টপ সার্ভিস রিকোয়েস্ট</span>
                             @else
                                 <span class="badge badge-info float-right">প্রাতিষ্ঠানিক টপ সার্ভিস রিকোয়েস্ট</span>
                             @endif
                         @else
                             @if($application->package->package_type_id == 3)
-                                <span class="badge badge-info float-right">বেক্তিগত টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
+                                <span class="badge badge-info float-right">ব্যক্তিগত টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
                             @else
                                 <span class="badge badge-info float-right">প্রাতিষ্ঠানিক টপ সার্ভিস রিনিউ রিকোয়েস্ট</span>
                             @endif

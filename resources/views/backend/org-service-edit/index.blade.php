@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row mt-4">
             <div class="btn-group mx-auto">
-                <a href="{{ route('individual-service-edit.index') }}" class="btn btn-secondary">বেক্তিগত</a>
+                <a href="{{ route('individual-service-edit.index') }}" class="btn btn-secondary">ব্যক্তিগত</a>
                 <a href="{{ route('organization-service-edit.index') }}" class="btn btn-secondary active">প্রাতিষ্ঠানিক</a>
             </div>
         </div>

@@ -11,7 +11,7 @@ class SmsChannel
     {
         $message = $notification->toSms($notifiable);
 
-        if (! env('SMS_ENABLED')) {
+        if (! config('sms.enabled')) {
             dump($message);
             dump('মেসেজ সার্ভিসটি আপাদত বন্ধ আছে।');
             return;
@@ -23,10 +23,10 @@ class SmsChannel
 
         $client->request('GET','/smsapi',[
             'query' => [
-                'api_key' => env('SMS_API_KEY'),
+                'api_key' => config('sms.api'),
                 'type' => 'text',
                 'contacts' => $notifiable->mobile,
-                'senderid' => env('SMS_SENDERID'),
+                'senderid' => config('sms.senderid'),
                 'msg' => $message,
                 'method' => 'api'
             ]

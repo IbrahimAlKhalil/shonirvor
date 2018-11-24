@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->date('dob')->nullable();
             $table->string('qualification')->nullable();
             $table->string('address')->nullable();
-            $table->string('photo')->default('default/user-photos/person.jpg');
+            $table->string('photo')->default('default/user-photo/person.jpg');
             $table->string('password');
             $table->integer('verification_token')->nullable();
             $table->integer('reset_token')->nullable();

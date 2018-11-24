@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use GuzzleHttp\Client;
+use App\Models\Package;
 use App\Models\ContentType;
 use Illuminate\Support\Facades\DB;
 
@@ -173,7 +175,7 @@ function sms($mobile, $message)
         ];
     }
 
-    if (! env('SMS_ENABLED')) {
+    if (! config('sms.enabled')) {
         return [
             'success' => false,
             'status' => 'মেসেজ সার্ভিসটি বন্ধ আছে।'
@@ -186,10 +188,10 @@ function sms($mobile, $message)
 
     $response = $client->request('GET','/smsapi', [
         'query' => [
-            'api_key' => env('SMS_API_KEY'),
+            'api_key' => config('sms.api'),
             'type' => 'text',
             'contacts' => $mobile,
-            'senderid' => env('SMS_SENDERID'),
+            'senderid' => config('sms.senderid'),
             'msg' => $message,
             'method' => 'api'
         ]
@@ -208,4 +210,93 @@ function sms($mobile, $message)
             'status' => 'এসএমএস সার্ভারে সমস্যার কারণে মেসেজ পাঠানো সম্ভব হয়নি।'
         ];
     }
+}
+
+/**
+ * Get lifetime earn of a user
+ *
+ * @param User $user
+ * @return int
+ */
+function userTotalEarn(User $user)
+{
+    $paymentPackageIds = Package::whereIn('package_type_id', [1, 2])->pluck('id')->toArray();
+
+    $totalEarn = 0;
+    $user->references->each(function ($reference) use (&$totalEarn, $user, $paymentPackageIds) {
+        if ( ! ($reference->target && $reference->target_start_time && $reference->target_end_time)) {
+            $reference->service->payments()
+                ->whereIn('package_id', $paymentPackageIds)
+                ->where('approved', 1)
+                ->get()->each(function ($payment, $key) use (&$totalEarn, $reference) {
+                    $fee = $payment->package->properties
+                        ->where('name', 'fee')->first()->value;
+
+                    if ( ! $key) {
+                        $totalEarn += $fee * $reference->onetime_interest / 100;
+                    } else {
+                        $totalEarn += $fee * $reference->renew_interest / 100;
+                    }
+                });
+        } elseif ($reference->target_end_time->lt(now())) {
+            $reference->service->payments()
+                ->whereIn('package_id', $paymentPackageIds)
+                ->where('approved', 1)
+                ->get()->each(function ($payment, $key) use (&$totalEarn, $user, $reference) {
+                    $howManyReferred = $user->references()->whereDate('created_at', '>', $reference->target_start_time)
+                        ->whereDate('created_at', '<', $reference->target_end_time)->count();
+
+                    $fee = $payment->package->properties
+                        ->where('name', 'fee')->first()->value;
+
+                    if ($howManyReferred >= $reference->target) {
+                        if ( ! $key) {
+                            $totalEarn += $fee * $reference->onetime_interest / 100;
+                        } else {
+                            $totalEarn += $fee * $reference->renew_interest / 100;
+                        }
+                    } else {
+                        if ( ! $key) {
+                            $totalEarn += $fee * $reference->fail_onetime_interest / 100;
+                        } else {
+                            $totalEarn += $fee * $reference->fail_renew_interest / 100;
+                        }
+                    }
+                });
+        }
+    });
+
+    return $totalEarn;
+}
+
+/**
+ * Get user's current referrer package
+ *
+ * @param User $user
+ * @return Package
+ */
+function userReferrerPackage(User $user) {
+
+    if ($user->referPackage()->exists()) {
+
+        if ($user->referPackage->package->properties->where('name', 'duration')->first()->value
+            && $user->referPackage->package->properties->where('name', 'refer_target')->first()->value) {
+
+            if ($user->referPackage->created_at->addDays($user->referPackage->package->properties->where('name', 'duration')->first()->value)->gt(now())) {
+
+                $package = $user->referPackage->package;
+
+            } else {
+                $package = Package::find(1);
+            }
+
+        } else {
+            $package = $user->referPackage->package;
+        }
+
+    } else {
+        $package = Package::find(1);
+    }
+
+    return $package;
 }

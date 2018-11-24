@@ -82,7 +82,7 @@ class OrgCategoryController extends Controller
     private function navs()
     {
         return [
-            ['url' => route('individual-category.index'), 'text' => 'বেক্তিগত ক্যাটাগরি সমূহ'],
+            ['url' => route('individual-category.index'), 'text' => 'ব্যক্তিগত ক্যাটাগরি সমূহ'],
             ['url' => route('organization-category.index'), 'text' => 'প্রাতিষ্ঠানিক ক্যাটাগরি সমূহ']
         ];
     }

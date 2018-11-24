@@ -58,7 +58,7 @@ class ProductionSeeder extends Seeder
         DB::table('package_values')->insert([
             ['package_id' => $indPackage->id, 'package_property_id' => 1, 'value' => 'ফ্রি প্যাকেজ'],
             ['package_id' => $indPackage->id, 'package_property_id' => 2,
-                'value' => 'এটি একটি ট্রায়াল প্যাকেজ। সম্পূর্ণ বিনামূল্যে ৭ দিনের জন্য এই প্যাকেজটি ব্যাবহার করতে পারবেন।'],
+                'value' => 'এটি একটি ট্রায়াল প্যাকেজ। সম্পূর্ণ বিনামূল্যে ৭ দিনের জন্য এই প্যাকেজটি ব্যবহার করতে পারবেন।'],
             ['package_id' => $indPackage->id, 'package_property_id' => 3, 'value' => 7],
             ['package_id' => $indPackage->id, 'package_property_id' => 4, 'value' => 0]
         ]);
@@ -66,7 +66,7 @@ class ProductionSeeder extends Seeder
         DB::table('package_values')->insert([
             ['package_id' => $orgPackage->id, 'package_property_id' => 1, 'value' => 'ফ্রি প্যাকেজ'],
             ['package_id' => $orgPackage->id, 'package_property_id' => 2,
-                'value' => 'এটি একটি ট্রায়াল প্যাকেজ। সম্পূর্ণ বিনামূল্যে ৭ দিনের জন্য এই প্যাকেজটি ব্যাবহার করতে পারবেন।'],
+                'value' => 'এটি একটি ট্রায়াল প্যাকেজ। সম্পূর্ণ বিনামূল্যে ৭ দিনের জন্য এই প্যাকেজটি ব্যবহার করতে পারবেন।'],
             ['package_id' => $orgPackage->id, 'package_property_id' => 3, 'value' => 7],
             ['package_id' => $orgPackage->id, 'package_property_id' => 4, 'value' => 0]
         ]);

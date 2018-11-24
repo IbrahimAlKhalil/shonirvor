@@ -10,7 +10,7 @@
                                 data-option-loader-param="type">
                             <option value="">-- সার্ভিসের ধরন --</option>
                             <option value="ind" @if(request()->get('type') == 'ind'){{ 'selected' }}@endif>
-                                বেক্তিগত
+                                ব্যক্তিগত
                             </option>
                             <option value="org" @if(request()->get('type') == 'org'){{ 'selected' }}@endif>
                                 প্রাতিষ্ঠানিক

@@ -19,7 +19,7 @@
                 <div class="row justify-content-around">
                     <div class="col-lg-6 mb-2 mb-lg-0 text-center text-lg-right">
                         <a href="{{ route('individual-service-registration.index') }}"
-                           class="btn btn-secondary btn-success" role="button">বেক্তিগত সার্ভিস রেজিস্ট্রেশান</a>
+                           class="btn btn-secondary btn-success" role="button">ব্যক্তিগত সার্ভিস রেজিস্ট্রেশান</a>
                     </div>
                     <div class="col-lg-6 text-center text-lg-left">
                         <a href="{{ route('organization-service-registration.index') }}"

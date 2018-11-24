@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 
-@section('title', 'সকল বেক্তিগত সার্ভিস রিকোয়েস্ট')
+@section('title', 'সকল ব্যক্তিগত সার্ভিস রিকোয়েস্ট')
 
 @section('webpack')
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
@@ -13,7 +13,7 @@
             <div class="col-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active h5 mb-0">বেক্তিগত সার্ভিস এডিট রিকোয়েস্ট</li>
+                        <li class="breadcrumb-item active h5 mb-0">ব্যক্তিগত সার্ভিস এডিট রিকোয়েস্ট</li>
                     </ol>
                 </nav>
             </div>
