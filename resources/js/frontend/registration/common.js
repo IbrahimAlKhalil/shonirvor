@@ -11,6 +11,10 @@ $(document).ready(function () {
 
     new ImagePicker(document.getElementsByClassName('file-picker'));
 
+    let checkbox = $('#no-sub-category');
+    checkbox.next().on('click', function () {
+        checkbox[0].checked = !checkbox[0].checked;
+    });
 
     let form = document.getElementById('registration-form');
     let validation = $(form).validate();

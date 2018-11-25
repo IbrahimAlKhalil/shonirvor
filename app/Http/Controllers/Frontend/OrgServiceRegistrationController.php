@@ -39,7 +39,7 @@ class OrgServiceRegistrationController extends Controller
         $paymentMethods = PaymentMethod::all();
         $categoryIds = $user->orgs()->pluck('id')->toArray();
 
-        $categories = Category::onlyOrg()->whereNotIn('id', $categoryIds)->get();
+        $categories = Category::onlyOrg()->onlyConfirmed()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 

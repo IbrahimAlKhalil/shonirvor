@@ -463,12 +463,12 @@
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
+                                                      name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
                                                    class="file-picker mt-3"
-                                                   @isset($ind->workImages[$i])
-                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                                   @isset($workImages[$i])
+                                                   data-image="{{ $workImages[$i]->path }}"
                                                    @endisset
                                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
@@ -957,13 +957,10 @@
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
+                                      name="images[{{ $i }}][description]"></textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                    accept="image/*"
                                    class="file-picker mt-3"
-                                   @isset($ind->workImages[$i])
-                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
-                                   @endisset
                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                         </div>
                     @endfor

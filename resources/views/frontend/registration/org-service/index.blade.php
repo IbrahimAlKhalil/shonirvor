@@ -308,12 +308,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
+                        <div class="form-group row mx-5">
+                            <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে) <span
                                         class="text-danger">*</span></label>
-                            <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                   class="file-picker"
-                                   data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                            <div class="col-9">
+                                <input id="trade-license" name="trade-license" type="file" accept="image/*"
+                                       class="file-picker"
+                                       data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                            </div>
                         </div>
 
                         @if (!$hasAccount)
@@ -436,7 +438,7 @@
             <div class="form-group">
                 <label for="mo-mobile" class="col-form-label font-weight-bold">মোবাইল নাম্বার <span
                             class="text-danger">*</span></label>
-                <input id="mo-mobile" name="mobile" type="number" value="{{ old('mobile') }}"
+                <input id="mo-mobile" name="mobile" type="number" value="{{ oldOrData('mobile', $user->mobile) }}"
                        class="form-control" required>
             </div>
 
@@ -625,7 +627,7 @@
                         </div>
                     </div>
                     <span class="repeater-insert-before d-none"></span>
-                    <button type="button" class="btn btn-light float-left shadow-sm mt-2" id="mo-add-new-price"><i
+                    <button type="button" class="btn btn-light shadow-sm mt-2" id="mo-add-new-price"><i
                                 class="fa fa-plus"></i> আরও
                     </button>
                 </div>
