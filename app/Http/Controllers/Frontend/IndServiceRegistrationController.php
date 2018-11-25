@@ -593,7 +593,7 @@ class IndServiceRegistrationController extends Controller
 
     public function edit(Ind $ind)
     {
-        $ind->load(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
+        $ind->load(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
 
         // TODO:: Move this validation to a requests class
 

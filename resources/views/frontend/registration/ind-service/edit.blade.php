@@ -438,18 +438,19 @@
                     </div>
                     <div class="p-4" id="step-4">
                         @if ($first)
-                        <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                @foreach($ind->user->identities as $identity)
-                                    <input id="identities" name="identities[]" type="file" accept="image/*"
-                                           data-image="{{ asset('storage/' . $identity->path) }}"
-                                           class="file-picker">
-                                @endforeach
+                            <div class="form-group row mx-5">
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
+                                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    @foreach($ind->user->identities as $index => $identity)
+                                        <input id="identities" name="identities[]" type="file" accept="image/*"
+                                               data-image="{{ asset('storage/' . $identity->path) }}"
+                                               class="file-picker"
+                                               data-error="@if($errors->has('identities.' . $index)) {{ $errors->first('identities.' . $index) }} @endif">
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>                            
                         @endif
 
                         <div class="form-group row mx-5">
@@ -460,10 +461,14 @@
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]"></textarea>
+                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="file-picker mt-3">
+                                                   class="file-picker mt-3"
+                                                   @isset($ind->workImages[$i])
+                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                                   @endisset
+                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -477,7 +482,8 @@
                                        @if($ind->cv)
                                        data-image="{{ asset('storage/' . $ind->cv) }}"
                                        @endif
-                                       class="file-picker">
+                                       class="file-picker"
+                                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
                             </div>
                         </div>
 
@@ -490,7 +496,8 @@
                                        @if($ind->experience_certificate)
                                        data-image="{{ asset('storage/' . $ind->experience_certificate) }}"
                                        @endif
-                                       class="file-picker">
+                                       class="file-picker"
+                                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
                             </div>
                         </div>
                     </div>
@@ -926,18 +933,19 @@
             </div>
 
             @if ($first)
-            <div class="form-group">
-                <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
-                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
-                            class="text-danger">*</span></label>
-                <div class="d-flex">
-                    @foreach($ind->user->identities as $identity)
-                        <input id="mo-identities" name="identities[]" type="file" accept="image/*"
-                               data-image="{{ asset('storage/' . $identity->path) }}"
-                               class="file-picker">
-                    @endforeach
+                <div class="form-group">
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
+                        ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                                class="text-danger">*</span></label>
+                    <div class="d-flex">
+                        @foreach($ind->user->identities as $identity)
+                            <input id="mo-identities" name="identities[]" type="file" accept="image/*"
+                                   data-image="{{ asset('storage/' . $identity->path) }}"
+                                   class="file-picker"
+                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                        @endforeach
+                    </div>
                 </div>
-            </div>
             @endif
 
             <div class="form-group">
@@ -947,10 +955,14 @@
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]"></textarea>
+                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                    accept="image/*"
-                                   class="file-picker mt-3">
+                                   class="file-picker mt-3"
+                                   @isset($ind->workImages[$i])
+                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                   @endisset
+                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                         </div>
                     @endfor
                 </div>
@@ -962,7 +974,8 @@
                        @if($ind->cv)
                        data-image="{{ asset('storage/default/icons/pdf.svg') }}"
                        @endif
-                       class="file-picker">
+                       class="file-picker"
+                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
             </div>
 
             <div class="form-group">
@@ -973,7 +986,8 @@
                        data-image="{{ asset('storage/' . $ind->experience_certificate) }}"
                        @endif
                        accept="image/*"
-                       class="file-picker">
+                       class="file-picker"
+                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
             </div>
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">প্যাকেজ নির্ধারণ করুন</label>

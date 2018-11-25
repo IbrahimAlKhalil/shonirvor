@@ -233,9 +233,11 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span class="text-danger">*</span></label>
+                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
-                                <textarea id="address" rows="8" name="address" required="required" class="form-control">{{ old('address') }}</textarea>
+                                <textarea id="address" rows="8" name="address" required="required"
+                                          class="form-control">{{ old('address') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -368,13 +370,18 @@
                     </div>
                     <div class="p-4" id="step-4">
                         @if (!$hasAccount)
-                        <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span class="text-danger">*</span></label>
-                            <div class="col-9 d-flex">
-                                <input id="identities" name="identities[]" type="file" accept="image/*" class="file-picker">
-                                <input id="identities" name="identities[]" type="file" accept="image/*" class="file-picker">
+                            <div class="form-group row mx-5">
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ
+                                    - এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                                <div class="col-9 d-flex">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                         <div class="form-group row mx-5">
@@ -387,8 +394,8 @@
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*"
-                                                   class="form-control-file file-picker">
+                                                   accept="image/*" class="form-control-file file-picker"
+                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -398,23 +405,25 @@
                         <div class="form-group row mx-5">
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
-                                <input id="cv" name="cv" type="file" accept="application/pdf"
-                                       class="file-picker">
+                                <input id="cv" name="cv" type="file" accept="application/pdf" class="file-picker"
+                                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি থাকে)</label>
+                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি
+                                থাকে)</label>
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
-                                       accept="image/*"
-                                       class="file-picker">
+                                       accept="image/*" class="file-picker"
+                                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
                             </div>
                         </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
-                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span class="text-danger">*</span></label>
+                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
@@ -648,7 +657,8 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-category" class="col-form-label font-weight-bold">সেবার ধরন <span class="text-danger">*</span></label>
+                <label for="mo-category" class="col-form-label font-weight-bold">সেবার ধরন <span
+                            class="text-danger">*</span></label>
                 <select id="mo-category" name="category"
                         data-option-loader-url="{{ route('api.sub-categories') }}"
                         data-option-loader-target="#mo-sub-categories"
@@ -767,15 +777,16 @@
             </div>
 
             @if (!$hasAccount)
-            <div class="form-group">
-                <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
-                <div class="d-flex">
-                    <input id="mo-identities" name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
-                    <input name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
+                <div class="form-group">
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম
+                        সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                    <div class="d-flex">
+                        <input id="mo-identities" name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                        <input name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                    </div>
                 </div>
-            </div>
             @endif
 
             <div class="form-group">
@@ -789,7 +800,8 @@
                                           name="images[{{ $i }}][description]"></textarea>
                                 <input id="images" name="images[{{ $i }}][file]" type="file"
                                        accept="image/*"
-                                       class="form-control-file file-picker">
+                                       class="form-control-file file-picker"
+                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                             </div>
                         @endfor
                     </div>
@@ -798,19 +810,21 @@
 
             <div class="form-group">
                 <label for="mo-cv" class="col-form-label font-weight-bold">বায়োডাটা</label>
-                <input id="mo-cv" name="cv" type="file" accept="application/pdf"
-                       class="file-picker">
+                <input id="mo-cv" name="cv" type="file" accept="application/pdf" class="file-picker"
+                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
             </div>
 
             <div class="form-group">
-                <label for="mo-experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি থাকে)</label>
-                <input id="mo-experience-certificate" name="experience-certificate" type="file"
-                       accept="image/*"
-                       class="file-picker">
+                <label for="mo-experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি
+                    থাকে)</label>
+                <input id="mo-experience-certificate" name="experience-certificate" type="file" accept="image/*"
+                       class="file-picker"
+                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span
+                            class="text-danger">*</span></label>
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)

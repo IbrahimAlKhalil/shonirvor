@@ -384,8 +384,17 @@
                             <div class="col-9">
                                 <input id="logo" name="logo" type="file" accept="image/*"
                                        data-image="{{ asset('storage/' . $org->logo) }}"
-                                       class="file-picker">
+                                       class="file-picker"
+                                       data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
+                                        class="text-danger">*</span></label>
+                            <input id="trade-license" name="trade-license" type="file" accept="image/*"
+                                   class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
+                                   data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
                         </div>
 
                         @if ($first)
@@ -394,10 +403,11 @@
                                 ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                         class="text-danger">*</span></label>
                             <div class="col-9 d-flex flex-wrap">
-                                @foreach($org->user->identities as $identity)
+                                @foreach($org->user->identities as $orgex => $identity)
                                     <input id="identities" name="identities[]" type="file" accept="image/*"
                                            data-image="{{ asset('storage/' . $identity->path) }}"
-                                           class="file-picker">
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.' . $orgex)) {{ $errors->first('identities.' . $orgex) }} @endif">
                                 @endforeach
                             </div>
                         </div>
@@ -411,10 +421,14 @@
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]"></textarea>
+                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
-                                                   class="file-picker">
+                                                   class="file-picker mt-3"
+                                                   @isset($ind->workImages[$i])
+                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                                   @endisset
+                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -783,25 +797,32 @@
                 <label for="mo-logo" class="font-weight-bold col-form-label d-block">লোগো <span
                             class="text-danger">*</span></label>
                 <input id="mo-logo" name="logo" type="file" accept="image/*"
-                       class="file-picker" data-image="{{ asset('storage/' . $org->logo) }}">
+                       class="file-picker" data-image="{{ asset('storage/' . $org->logo) }}"
+                       data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
+            </div>
+
+            <div class="form-group">
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
+                            class="text-danger">*</span></label>
+                <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
+                       class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
+                       data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
             </div>
 
             @if ($first)
-            <div class="form-group">
-                <label for="identities" class="font-weight-bold col-form-label">জাতীয় পরিচয়পত্রের
-                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
-                            class="text-danger">*</span></label>
-                <div class="d-flex flex-wrap">
-                    @foreach($org->user->identities as $identity)
-                        <input id="identities"
-                               name="identities[]"
-                               type="file"
-                               accept="image/*"
-                               data-image="{{ asset('storage/' . $identity->path) }}"
-                               class="file-picker">
-                    @endforeach
+                <div class="form-group">
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
+                        ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                                class="text-danger">*</span></label>
+                    <div class="d-flex">
+                        @foreach($org->user->identities as $identity)
+                            <input id="mo-identities" name="identities[]" type="file" accept="image/*"
+                                   data-image="{{ asset('storage/' . $identity->path) }}"
+                                   class="file-picker"
+                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                        @endforeach
+                    </div>
                 </div>
-            </div>
             @endif
 
             <div class="form-group">
@@ -811,10 +832,14 @@
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]"></textarea>
+                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                    accept="image/*"
-                                   class="file-picker">
+                                   class="file-picker mt-3"
+                                   @isset($ind->workImages[$i])
+                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                   @endisset
+                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                         </div>
                     @endfor
                 </div>

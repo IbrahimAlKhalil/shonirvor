@@ -303,21 +303,32 @@
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <input id="logo" name="logo" type="file" accept="image/*"
-                                       class="file-picker">
+                                       class="file-picker"
+                                       data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
                             </div>
                         </div>
 
-                        @if (!$hasAccount)
-                        <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
+                        <div class="form-group">
+                            <label for="trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
                                         class="text-danger">*</span></label>
-                            <div class="col-9 d-flex">
-                                <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker">
-                                <input id="identities" name="identities[]" type="file" accept="image/*"
-                                       class="file-picker">
-                            </div>
+                            <input id="trade-license" name="trade-license" type="file" accept="image/*"
+                                   class="file-picker"
+                                   data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
                         </div>
+
+                        @if (!$hasAccount)
+                            <div class="form-group row mx-5">
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ
+                                    - এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                                <div class="col-9 d-flex">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                                </div>
+                            </div>
                         @endif
 
                         <div class="form-group row mx-5">
@@ -325,13 +336,13 @@
                             <div class="col-9">
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
-                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
+                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
                                             <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*"
-                                                   class="file-picker">
+                                                   accept="image/*" class="form-control-file file-picker"
+                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -620,17 +631,33 @@
                 </div>
             </div>
 
-            @if (!$hasAccount)
             <div class="form-group">
-                <label for="mo-identities" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
+                <label for="mo-logo" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
                             class="text-danger">*</span></label>
-                <div class="d-flex">
-                    <input id="mo-identities" name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
-                    <input name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
-                </div>
+                <input id="mo-logo" name="logo" type="file" accept="image/*"
+                       class="file-picker"
+                       data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
             </div>
+
+            <div class="form-group">
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
+                            class="text-danger">*</span></label>
+                <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
+                       class="file-picker"
+                       data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+            </div>
+
+            @if (!$hasAccount)
+                <div class="form-group">
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম
+                        সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                    <div class="d-flex">
+                        <input id="mo-identities" name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                        <input name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                    </div>
+                </div>
             @endif
 
             <div class="form-group">
@@ -644,7 +671,8 @@
                                           name="images[{{ $i }}][description]"></textarea>
                                 <input id="images" name="images[{{ $i }}][file]" type="file"
                                        accept="image/*"
-                                       class="form-control-file file-picker">
+                                       class="form-control-file file-picker"
+                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                             </div>
                         @endfor
                     </div>
