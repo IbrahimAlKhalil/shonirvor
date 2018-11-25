@@ -287,7 +287,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['referredBy.user', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->find($id);
+        $org = Org::with(['referredBy.user', 'workImages','division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->find($id);
 
         if ($org->user_id != Auth::id() || !is_null($org->expire)) {
             return redirect(route('organization-service-registration.index'));
