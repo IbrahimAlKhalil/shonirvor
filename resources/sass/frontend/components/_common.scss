@@ -85,6 +85,10 @@ a:hover {
   cursor: pointer;
   user-select: none;
 
+  label {
+    cursor: pointer !important;
+  }
+
   > [type="checkbox"] {
     position: absolute;
     opacity: 0;

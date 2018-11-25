@@ -70,7 +70,7 @@ class IndServiceRegistrationController extends Controller
 
         $categoryIds = $user->inds()->pluck('id')->toArray();
 
-        $categories = Category::onlyInd()->whereNotIn('id', $categoryIds)->get();
+        $categories = Category::onlyInd()->onlyConfirmed()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 
