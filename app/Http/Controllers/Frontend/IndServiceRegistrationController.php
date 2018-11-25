@@ -27,33 +27,6 @@ use Illuminate\Support\Facades\Route;
 
 class IndServiceRegistrationController extends Controller
 {
-    private $referrer;
-    private $referrerInterests;
-
-    public function __construct(Request $request)
-    {
-        if (Route::currentRouteName() == 'individual-service-registration.store'
-            || Route::currentRouteName() == 'individual-service-registration.update') {
-
-            $this->referrer = User::with('referPackage.package.properties')
-                ->where('mobile', $request->input('referrer'))
-                ->first();
-
-            if ($this->referrer && $this->referrer->referPackage()->exists()) {
-                $referrerPackage = $this->referrer->referPackage->package;
-            } else {
-                $referrerPackage = Package::find(1);
-            }
-
-            if ($referrerPackage->properties()->where('name', 'refer_target')->first()->value) {
-                // TODO: Do something
-            } else {
-                $this->referrerInterests['onetime'] = $referrerPackage->properties()->where('name', 'refer_onetime_interest')->first()->value;
-                $this->referrerInterests['renew'] = $referrerPackage->properties()->where('name', 'refer_renew_interest')->first()->value;
-            }
-        }
-    }
-
     public function index()
     {
         $user = Auth::user();
@@ -179,13 +152,27 @@ class IndServiceRegistrationController extends Controller
 
         // Create reference
         if ($request->filled('referrer')) {
-            $referrer = new Reference;
-            $referrer->user_id = $this->referrer->id;
-            $referrer->service_id = $ind->id;
-            $referrer->service_type_id = 1;
-            $referrer->onetime_interest = $this->referrerInterests['onetime'];
-            $referrer->renew_interest = $this->referrerInterests['renew'];
-            $referrer->save();
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $reference = new Reference;
+            $reference->user_id = $referrer->id;
+            $reference->service_id = $ind->id;
+            $reference->service_type_id = 1;
+            $reference->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $reference->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $reference->target = $referrerPackage['refer_target'][0]->value;
+                $reference->target_start_time = $referrer->referPackage->created_at;
+                $reference->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $reference->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            }
+            $reference->save();
         }
 
         // associate sub-categories
@@ -317,12 +304,11 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return redirect(route('individual-service-registration.edit', $ind->id))->with('success', 'ধন্যবাদ! আমরা আপনার অনুরোধ যত তাড়াতাড়ি সম্ভব পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
+        return redirect(route('individual-service-registration.edit', $ind->id))->with('success', 'ধন্যবাদ! আপনার অনুরোধটি সাবমিট হয়েছে। যত তাড়াতাড়ি সম্ভব আমরা অনুরোধটি পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
     public function update(UpdateInd $request, $id)
     {
-
         $user = Auth::user();
         $ind = Ind::find($id);
 
@@ -428,6 +414,64 @@ class IndServiceRegistrationController extends Controller
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
         $ind->save();
+
+        // Create reference
+        if ($request->filled('referrer')
+            && $ind->referredBy
+            && $ind->referredBy->user->mobile != $request->input('referrer')) {
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $ind->referredBy->user_id = $referrer->id;
+            $ind->referredBy->service_id = $ind->id;
+            $ind->referredBy->service_type_id = 1;
+            $ind->referredBy->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $ind->referredBy->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $ind->referredBy->target = $referrerPackage['refer_target'][0]->value;
+                $ind->referredBy->target_start_time = $referrer->referPackage->created_at;
+                $ind->referredBy->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $ind->referredBy->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $ind->referredBy->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            } else {
+                $ind->referredBy->target = null;
+                $ind->referredBy->target_start_time = null;
+                $ind->referredBy->target_end_time = null;
+                $ind->referredBy->fail_onetime_interest = null;
+                $ind->referredBy->fail_renew_interest = null;
+            }
+            $ind->referredBy->save();
+        }
+        elseif ($request->filled('referrer')) {
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $reference = new Reference;
+            $reference->user_id = $referrer->id;
+            $reference->service_id = $ind->id;
+            $reference->service_type_id = 1;
+            $reference->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $reference->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $reference->target = $referrerPackage['refer_target'][0]->value;
+                $reference->target_start_time = $referrer->referPackage->created_at;
+                $reference->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $reference->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            }
+            $reference->save();
+        }
+        elseif (! $request->filled('referrer') && $ind->referredBy) {
+            $ind->referredBy->delete();
+        }
 
         // delete category and subcategories
         $ind->workMethods()->detach();
@@ -574,7 +618,7 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'সম্পন্ন!');
+        return back()->with('success', 'রিকোয়েস্টটি এডিট হয়েছে!');
     }
 
     public function edit(Ind $ind)

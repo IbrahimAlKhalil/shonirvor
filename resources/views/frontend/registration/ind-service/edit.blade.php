@@ -11,7 +11,7 @@
     @include('components.success')
     <div class="container my-5">
 
-        <h3 class="text-center mb-5">আপনার তথ্য সম্পাদনা করুন</h3>
+        <h3 class="text-center mb-5">আপনার রিকোয়েস্ট এডিট করুন</h3>
 
         <form id="registration-form" method="post" enctype="multipart/form-data"
               class="d-none d-md-block"
@@ -353,16 +353,18 @@
                                 <div class="mt-4 checkbox">
                                     <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
-                                           class="mt-2 no-something" {{ checkBox(!!$pendingSubCategories) }}>
+                                           class="mt-2 no-something" {{ checkBox($pendingSubCategories->isNotEmpty()) }}>
                                     <span></span>
                                     <div class="input-div" id="sub-category-request">
                                         @foreach($pendingSubCategories as $subCategoryCount => $subCategory)
                                             <div class="card mt-2" data-repeater-clone="true">
                                                 <div class="card-header pt-2 m-0 row">
-                                                    <div class="col-md-9"><input type="text" class="form-control"
-                                                                                 name="sub-category-requests[{{ $subCategoryCount }}][name]"
-                                                                                 placeholder="আমার সাব-ক্যাটাগরির নাম"
-                                                                                 value="{{ $subCategory->name }}"></div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control"
+                                                               name="sub-category-requests[{{ $subCategoryCount }}][name]"
+                                                               placeholder="আমার সাব-ক্যাটাগরির নাম"
+                                                               value="{{ $subCategory->name }}">
+                                                    </div>
                                                     @if(!$loop->first)
                                                         <div class="col-md-3">
                                                             <a class="fa fa-trash float-right text-danger remove-btn"

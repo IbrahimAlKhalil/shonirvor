@@ -85,39 +85,58 @@
                                                     {{ csrf_field() }}
                                                     {{ method_field('put') }}
                                                     <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="amount">টাকার পরিমাণ
-                                                                <span class="text-danger">*</span>
-                                                            </label>
-                                                            <input type="number" name="amount" id="amount" class="form-control" autocomplete="off">
+                                                        <div class="row">
+                                                            @if($user->paymentReceiveMethod)
+                                                                <div class="col-md-6">
+                                                                    টাকা গ্রহণের মাধ্যম
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    {{ $user->paymentReceiveMethod->number }} ({{ $user->paymentReceiveMethod->type }})
+                                                                </div>
+                                                            @else
+                                                                <div class="col-12 text-center text-danger">
+                                                                    এই ইউজার কোন পেমেন্ট গ্রহণের মাধ্যম দেয় নি।
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="method-select">পেমেন্ট মেথড
-                                                                <span class="text-danger">*</span>
-                                                            </label>
-                                                            <select name="method" id="method-select" class="form-control">
-                                                                <option value="">-- মেথড সিলেক্ট করুন --</option>
-                                                                @foreach($paymentMethods as $method)
-                                                                    <option value="{{ $method->id }}">{{ $method->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="send-from">যে নাম্বার থেকে টাকা পাঠানো হয়েছে
-                                                                <span class="text-danger">*</span>
-                                                            </label>
-                                                            <input type="number" name="from" id="send-from" class="form-control" placeholder="কমপক্ষে শেষ ৪ ডিজিট" autocomplete="off">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="transaction-id-input">Transaction ID
-                                                                <span class="text-danger">*</span>
-                                                            </label>
-                                                            <input type="text" id="transaction-id-input" name="transaction-id" class="form-control" autocomplete="off">
-                                                        </div>
+                                                        @if($user->paymentReceiveMethod)
+                                                            <hr>
+                                                            <div class="form-group">
+                                                                <label for="amount">টাকার পরিমাণ
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <input type="number" name="amount" id="amount" class="form-control" autocomplete="off">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="method-select">পেমেন্ট মেথড
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <select name="method" id="method-select" class="form-control">
+                                                                    <option value="">-- মেথড সিলেক্ট করুন --</option>
+                                                                    @foreach($paymentMethods as $method)
+                                                                        <option value="{{ $method->id }}">{{ $method->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="send-from">যে নাম্বার থেকে টাকা পাঠানো হয়েছে
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <input type="number" name="from" id="send-from" class="form-control" placeholder="কমপক্ষে শেষ ৪ ডিজিট" autocomplete="off">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="transaction-id-input">Transaction ID
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <input type="text" id="transaction-id-input" name="transaction-id" class="form-control" autocomplete="off">
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <div class="modal-footer  border-top-0">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল</button>
-                                                        <button type="submit" class="btn btn-primary">সাবমিট</button>
+                                                        @if($user->paymentReceiveMethod)
+                                                            <button type="submit" class="btn btn-primary">সাবমিট</button>
+                                                        @endif
                                                     </div>
                                                 </form>
                                             </div>
