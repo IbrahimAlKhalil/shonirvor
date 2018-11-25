@@ -46,155 +46,233 @@
                                 <a href="javascript:" class="mr-2 btn btn-outline-info btn-sm" data-toggle="modal" data-target="#editModal{{ $key }}">
                                     <i class="fa fa-pencil-square-o"></i> এডিট
                                 </a>
+                                @if($package->id != 1)
                                 <a href="javascript:" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ $key }}">
                                     <i class="fa fa-trash-o"></i> ডিলিট
                                 </a>
+                                @endif
 
                                 <!-- Edit Modal -->
-                                <div class="modal fade" id="editModal{{ $key }}">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <p class="modal-title h5">{{ $properties['name'][0]->value }} প্যাকেজটি এডিট করুন</p>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action="{{ route('backend.package.referrer.update', $package->id) }}" method="post" enctype="multipart/form-data">
-                                                {{ csrf_field() }}
-                                                {{ method_field('put') }}
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group row">
-                                                                <label for="edit-name{{ $key }}" class="col-3 col-form-label text-right">নাম:</label>
-                                                                <div class="col-9">
-                                                                    <input type="text"
-                                                                           name="name"
-                                                                           class="form-control"
-                                                                           id="edit-name{{ $key }}"
-                                                                           value="{{ $properties['name'][0]->value }}"
-                                                                           required>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="edit-description{{ $key }}" class="col-3 col-form-label text-right">বর্ণনা:</label>
-                                                                <div class="col-9">
-                                                                    <textarea name="description" id="edit-description{{ $key }}" class="form-control">{{ $properties['description'][0]->value }}</textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="edit-duration{{ $key }}" class="col-3 col-form-label text-right">সময়:</label>
-                                                                <div class="col-9">
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="duration"
+                                @if($package->id != 1)
+                                    <div class="modal fade" id="editModal{{ $key }}">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <p class="modal-title h5">{{ $properties['name'][0]->value }} প্যাকেজটি এডিট করুন</p>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ route('backend.package.referrer.update', $package->id) }}" method="post" enctype="multipart/form-data">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('put') }}
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label for="edit-name{{ $key }}" class="col-3 col-form-label text-right">নাম:</label>
+                                                                    <div class="col-9">
+                                                                        <input type="text"
+                                                                               name="name"
                                                                                class="form-control"
-                                                                               id="edit-duration{{ $key }}"
-                                                                               value="{{ $properties['duration'][0]->value }}"
-                                                                               placeholder="ইংরেজিতে লিখুন">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text">দিন</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row align-items-center">
-                                                                <label for="edit-refer-onetime-interest{{ $key }}" class="col-3 col-form-label text-right">এককালীন ইন্টারেস্ট:</label>
-                                                                <div class="col-9">
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="refer_onetime_interest"
-                                                                               class="form-control"
-                                                                               id="edit-refer-onetime-interest{{ $key }}"
-                                                                               value="{{ $properties['refer_onetime_interest'][0]->value }}"
-                                                                               placeholder="ইংরেজিতে লিখুন"
+                                                                               id="edit-name{{ $key }}"
+                                                                               value="{{ $properties['name'][0]->value }}"
                                                                                required>
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="edit-description{{ $key }}" class="col-3 col-form-label text-right">বর্ণনা:</label>
+                                                                    <div class="col-9">
+                                                                        <textarea name="description" id="edit-description{{ $key }}" class="form-control">{{ $properties['description'][0]->value }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="edit-duration{{ $key }}" class="col-3 col-form-label text-right">সময়:</label>
+                                                                    <div class="col-9">
+                                                                        <div class="input-group">
+                                                                            <input type="number"
+                                                                                   name="duration"
+                                                                                   class="form-control"
+                                                                                   id="edit-duration{{ $key }}"
+                                                                                   value="{{ $properties['duration'][0]->value }}"
+                                                                                   placeholder="ইংরেজিতে লিখুন">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">দিন</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row align-items-center">
+                                                                    <label for="edit-refer-onetime-interest{{ $key }}" class="col-3 col-form-label text-right">এককালীন ইন্টারেস্ট:</label>
+                                                                    <div class="col-9">
+                                                                        <div class="input-group">
+                                                                            <input type="number"
+                                                                                   name="refer_onetime_interest"
+                                                                                   class="form-control"
+                                                                                   id="edit-refer-onetime-interest{{ $key }}"
+                                                                                   value="{{ $properties['refer_onetime_interest'][0]->value }}"
+                                                                                   placeholder="ইংরেজিতে লিখুন"
+                                                                                   required>
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">%</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row align-items-center">
+                                                                    <label for="edit-refer-renew-interest{{ $key }}" class="col-3 col-form-label text-right">রিনিউ ইন্টারেস্ট:</label>
+                                                                    <div class="col-9">
+                                                                        <div class="input-group">
+                                                                            <input type="number"
+                                                                                   name="refer_renew_interest"
+                                                                                   class="form-control"
+                                                                                   id="edit-refer-renew-interest{{ $key }}"
+                                                                                   value="{{ $properties['refer_renew_interest'][0]->value }}"
+                                                                                   placeholder="ইংরেজিতে লিখুন">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">%</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group row align-items-center">
-                                                                <label for="edit-refer-renew-interest{{ $key }}" class="col-3 col-form-label text-right">রিনিউ ইন্টারেস্ট:</label>
-                                                                <div class="col-9">
-                                                                    <div class="input-group">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label for="edit-refer-target{{ $key }}" class="col-3 col-form-label text-right">টার্গেট:</label>
+                                                                    <div class="col-9">
                                                                         <input type="number"
-                                                                               name="refer_renew_interest"
+                                                                               name="refer_target"
                                                                                class="form-control"
-                                                                               id="edit-refer-renew-interest{{ $key }}"
-                                                                               value="{{ $properties['refer_renew_interest'][0]->value }}"
+                                                                               id="edit-refer-target{{ $key }}"
+                                                                               value="{{ $properties['refer_target'][0]->value }}"
                                                                                placeholder="ইংরেজিতে লিখুন">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row align-items-center">
+                                                                    <label for="edit-refer-fail-onetime-interest{{ $key }}" class="col-3 col-form-label text-right">ব্যর্থ হলে এককালীন ইন্টারেস্ট:</label>
+                                                                    <div class="col-9">
+                                                                        <div class="input-group">
+                                                                            <input type="number"
+                                                                                   name="refer_fail_onetime_interest"
+                                                                                   class="form-control"
+                                                                                   id="edit-refer-fail-onetime-interest{{ $key }}"
+                                                                                   value="{{ $properties['refer_fail_onetime_interest'][0]->value }}"
+                                                                                   placeholder="ইংরেজিতে লিখুন">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">%</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group row">
-                                                                <label for="edit-refer-target{{ $key }}" class="col-3 col-form-label text-right">টার্গেট:</label>
-                                                                <div class="col-9">
-                                                                    <input type="number"
-                                                                           name="refer_target"
-                                                                           class="form-control"
-                                                                           id="edit-refer-target{{ $key }}"
-                                                                           value="{{ $properties['refer_target'][0]->value }}"
-                                                                           placeholder="ইংরেজিতে লিখুন">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row align-items-center">
-                                                                <label for="edit-refer-fail-onetime-interest{{ $key }}" class="col-3 col-form-label text-right">ব্যর্থ হলে এককালীন ইন্টারেস্ট:</label>
-                                                                <div class="col-9">
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="refer_fail_onetime_interest"
-                                                                               class="form-control"
-                                                                               id="edit-refer-fail-onetime-interest{{ $key }}"
-                                                                               value="{{ $properties['refer_fail_onetime_interest'][0]->value }}"
-                                                                               placeholder="ইংরেজিতে লিখুন">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text">%</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row align-items-center">
-                                                                <label for="edit-refer-fail-renew-interest{{ $key }}" class="col-3 col-form-label text-right">ব্যর্থ হলে রিনিউ ইন্টারেস্ট:</label>
-                                                                <div class="col-9">
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="refer_fail_renew_interest"
-                                                                               class="form-control"
-                                                                               id="edit-refer-fail-renew-interest{{ $key }}"
-                                                                               value="{{ $properties['refer_fail_renew_interest'][0]->value }}"
-                                                                               placeholder="ইংরেজিতে লিখুন">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text">%</span>
+                                                                <div class="form-group row align-items-center">
+                                                                    <label for="edit-refer-fail-renew-interest{{ $key }}" class="col-3 col-form-label text-right">ব্যর্থ হলে রিনিউ ইন্টারেস্ট:</label>
+                                                                    <div class="col-9">
+                                                                        <div class="input-group">
+                                                                            <input type="number"
+                                                                                   name="refer_fail_renew_interest"
+                                                                                   class="form-control"
+                                                                                   id="edit-refer-fail-renew-interest{{ $key }}"
+                                                                                   value="{{ $properties['refer_fail_renew_interest'][0]->value }}"
+                                                                                   placeholder="ইংরেজিতে লিখুন">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">%</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer border-top-0">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল করুন</button>
-                                                    <button type="submit" class="btn btn-success">সাবমিট করুন</button>
-                                                </div>
-                                            </form>
+                                                    <div class="modal-footer border-top-0">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল করুন</button>
+                                                        <button type="submit" class="btn btn-success">সাবমিট করুন</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="modal fade" id="editModal{{ $key }}">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <p class="modal-title h5">{{ $properties['name'][0]->value }} প্যাকেজটি এডিট করুন</p>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ route('backend.package.referrer.update', $package->id) }}" method="post" enctype="multipart/form-data">
+                                                    {{ csrf_field() }}
+                                                    {{ method_field('put') }}
+                                                    <div class="modal-body">
+                                                        <div class="form-group row">
+                                                            <label for="edit-name{{ $key }}" class="col-3 col-form-label text-right">নাম:</label>
+                                                            <div class="col-9">
+                                                                <input type="text"
+                                                                       name="name"
+                                                                       class="form-control"
+                                                                       id="edit-name{{ $key }}"
+                                                                       value="{{ $properties['name'][0]->value }}"
+                                                                       required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="edit-description{{ $key }}" class="col-3 col-form-label text-right">বর্ণনা:</label>
+                                                            <div class="col-9">
+                                                                <textarea name="description" id="edit-description{{ $key }}" class="form-control">{{ $properties['description'][0]->value }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row align-items-center">
+                                                            <label for="edit-refer-onetime-interest{{ $key }}" class="col-3 col-form-label text-right">এককালীন ইন্টারেস্ট:</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group">
+                                                                    <input type="number"
+                                                                           name="refer_onetime_interest"
+                                                                           class="form-control"
+                                                                           id="edit-refer-onetime-interest{{ $key }}"
+                                                                           value="{{ $properties['refer_onetime_interest'][0]->value }}"
+                                                                           placeholder="ইংরেজিতে লিখুন"
+                                                                           required>
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row align-items-center">
+                                                            <label for="edit-refer-renew-interest{{ $key }}" class="col-3 col-form-label text-right">রিনিউ ইন্টারেস্ট:</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group">
+                                                                    <input type="number"
+                                                                           name="refer_renew_interest"
+                                                                           class="form-control"
+                                                                           id="edit-refer-renew-interest{{ $key }}"
+                                                                           value="{{ $properties['refer_renew_interest'][0]->value }}"
+                                                                           placeholder="ইংরেজিতে লিখুন">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text">%</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer border-top-0">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">বাতিল করুন</button>
+                                                        <button type="submit" class="btn btn-success">সাবমিট করুন</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
 
+                                @if($package->id != 1)
                                 <!-- Delete Modal -->
                                 <div class="modal fade" id="deleteModal{{ $key }}">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
-                                                <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি এই প্যাকেজটি মুছে ফেলতে চান?</p>
+                                                <p class="modal-title h5" id="exampleModalLabel">সত্যিই কি আপনি {{ $properties['name'][0]->value }} প্যাকেজটি মুছে ফেলতে চান?</p>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -210,6 +288,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </td>
                         </tr>
                     @empty

@@ -8,20 +8,13 @@ use Closure;
 
 class Provider
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
-        $indService = Ind::where('user_id', $request->user()->id)->exists();
-        $orgService = Org::where('user_id', $request->user()->id)->exists();
+        $indService = Ind::withTrashed()->where('user_id', $request->user()->id)->exists();
+        $orgService = Org::withTrashed()->where('user_id', $request->user()->id)->exists();
 
         if ( ! $indService && ! $orgService) {
-            return abort(403);
+            return abort(403, 'Your request is blocked by provider middleware');
         }
 
         return $next($request);

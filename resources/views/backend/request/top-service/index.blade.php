@@ -16,7 +16,7 @@
                         @if(request()->get('type') == 4)
                             <li class="breadcrumb-item active h5 mb-0">প্রাতিষ্ঠানিক টপ সার্ভিস রিকোয়েস্ট</li>
                         @else
-                            <li class="breadcrumb-item active h5 mb-0">বেক্তিগত টপ সার্ভিস রিকোয়েস্ট</li>
+                            <li class="breadcrumb-item active h5 mb-0">ব্যক্তিগত টপ সার্ভিস রিকোয়েস্ট</li>
                         @endif
                     </ol>
                 </nav>

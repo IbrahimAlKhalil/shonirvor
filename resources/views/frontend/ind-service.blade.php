@@ -9,7 +9,7 @@
 @section('content')
     <div class="container bg-white shadow">
         <div class="row">
-            <img class="cover" src="{{ asset('storage/seed/user-covers/cover.jpg') }}"/>
+            <img class="cover" src="{{ asset('storage/'.$provider->cover_photo) }}"/>
         </div>
         <div class="row py-3">
             <div class="col-lg-3 text-center text-lg-right">

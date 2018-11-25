@@ -24,7 +24,6 @@ Route::prefix('command')->group(function () {
 
 Route::post('sms/send/{user}', 'SmsController@send')->name('sms.send');
 
-Route::get('dashboard/notifications', 'NotificationController@show')->name('notification.show');
 Route::post('notification/send/{user}', 'NotificationController@send')->name('notification.send');
 
 Route::namespace('Frontend')->group(function () {
@@ -33,6 +32,7 @@ Route::namespace('Frontend')->group(function () {
 
     Route::get('profile/mobile-verification/{profile}', 'ProfileController@showMobileVerificationPage')->name('profile.mobile-verification.show');
     Route::post('profile/mobile-verification/{profile}', 'ProfileController@saveMobileEdit')->name('profile.mobile-verification.store');
+    Route::post('profile/payment-receive-method/{profile}', 'ProfileController@paymentReceiveMethod')->name('profile.payment-receive-method');
     Route::resource('profile', 'ProfileController', ['only' => ['index', 'edit', 'update']]);
 
     Route::post('individual-feedback', 'IndServiceController@feedbackStore')->name('ind-feedback.store');

@@ -14,10 +14,4 @@ class NotificationController extends Controller
         $user->notify(new Notification($request->input('message')));
         return back()->with('success', 'নোটিফিকেশন পাঠানো হয়েছে।');
     }
-
-    public function show()
-    {
-        $notifications = Auth::user()->notifications()->paginate(10);
-        return view('backend.notification', compact('notifications'));
-    }
 }

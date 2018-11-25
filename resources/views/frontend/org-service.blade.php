@@ -9,7 +9,7 @@
 @section('content')
     <div class="container bg-white shadow">
         <div class="row">
-            <img align="left" class="cover" src="{{ asset('storage/seed/user-covers/cover.jpg') }}"/>
+            <img class="cover" src="{{ asset('storage/'.$provider->cover_photo) }}"/>
         </div>
         <div class="row py-3">
             <div class="col-lg-3 text-center text-lg-right">
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header h5 text-center">কাজ সমূহ</div>
+                            <div class="card-header h5 text-center">প্রাতিষ্ঠানিক তথ্য</div>
                             <div class="card-body">
                                 @foreach($provider->subCategoryRates->shuffle() as $subCategory)
                                     <p class="border-bottom font-italic">{{ $subCategory->name }}</p>

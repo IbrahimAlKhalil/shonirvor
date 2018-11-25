@@ -3,16 +3,16 @@
 @section('title', 'Payments')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
-@endsection
-
-@section('content')
-    @include('components.success')
     <style>
         th {
             white-space: nowrap;
         }
     </style>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
+@endsection
+
+@section('content')
+    @include('components.success')
     <div class="container bg-white rounded">
         <div class="row mt-2">
             <div class="col-md-12 p-md-5">

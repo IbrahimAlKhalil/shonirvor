@@ -21,64 +21,15 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load(['references.package']);
+        $user->load(['references']);
 
         $referPackages = Package::with('properties')->where('package_type_id', 5)->get();
 
-        if ($user->referPackage()->exists()) {
-            $userReferPackageId = $user->referPackage->package_id;
-        } else {
-            $userReferPackageId = 1; // default referrer package always be the first package.
-        }
+        $userReferPackageId = userReferrerPackage($user)->id;
 
         $paymentMethods = PaymentMethod::select('id', 'name')->get();
-        $paymentPackageIds = Package::whereIn('package_type_id', [1, 2])->pluck('id')->toArray();
 
-        $totalEarn = 0;
-        $user->references->each(function ($reference) use (&$totalEarn, $user, $paymentPackageIds) {
-            if ( ! ($reference->target && $reference->target_start_time && $reference->target_end_time)) {
-                $reference->service->payments()
-                    ->whereIn('package_id', $paymentPackageIds)
-                    ->where('approved', 1)
-                    ->get()->each(function ($payment, $key) use (&$totalEarn, $reference) {
-                        $fee = $payment->package->properties
-                            ->where('name', 'fee')->first()->value;
-
-                        if ( ! $key) {
-                            $totalEarn += $fee * $reference->onetime_interest / 100;
-                        } else {
-                            $totalEarn += $fee * $reference->renew_interest / 100;
-                        }
-                        dump($totalEarn);
-                    });
-            } elseif ($reference->target_end_time->lt(now())) {
-                $reference->service->payments()
-                    ->whereIn('package_id', $paymentPackageIds)
-                    ->where('approved', 1)
-                    ->get()->each(function ($payment, $key) use (&$totalEarn, $user, $reference) {
-                        $howManyReferred = $user->references()->whereDate('created_at', '>', $reference->target_start_time)
-                            ->whereDate('created_at', '<', $reference->target_end_time)->count();
-
-                        $fee = $payment->package->properties
-                            ->where('name', 'fee')->first()->value;
-
-                        if ($howManyReferred >= $reference->target) {
-                            if ( ! $key) {
-                                $totalEarn += $fee * $reference->onetime_interest / 100;
-                            } else {
-                                $totalEarn += $fee * $reference->renew_interest / 100;
-                            }
-                        } else {
-                            if ( ! $key) {
-                                $totalEarn += $fee * $reference->fail_onetime_interest / 100;
-                            } else {
-                                $totalEarn += $fee * $reference->fail_renew_interest / 100;
-                            }
-                        }
-                    });
-            }
-        });
-
+        $totalEarn = userTotalEarn($user);
         $totalPaymentGet = $user->earns()->where('expense_type_id', 1)->sum('amount');
         $payable = $totalEarn - $totalPaymentGet;
 

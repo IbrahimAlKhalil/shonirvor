@@ -27,7 +27,7 @@ class CreateOrgsTable extends Migration
             $table->string('facebook')->nullable();
             $table->string('address');
             $table->string('trade_license')->nullable();
-            $table->string('cover_photo')->nullable();
+            $table->string('cover_photo')->default('default/cover/cover.jpg');
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
             $table->string('slug')->nullable();

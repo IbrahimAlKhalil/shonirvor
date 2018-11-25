@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন')
+@section('title', 'প্রাতিষ্ঠানিক সেবা নিবন্ধন')
 
 @section('webpack')
     <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
@@ -11,7 +11,7 @@
     @include('components.success')
     <div class="container-fluid my-5">
 
-        <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা প্রদানকারী নিবন্ধন</h3>
+        <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা নিবন্ধন</h3>
 
         <form method="post" id="registration-form" enctype="multipart/form-data"
               class="d-none d-md-block"
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা</label>
+                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠান সম্পর্কে</label>
                             <div class="col-9">
                     <textarea rows="6" id="description" name="description"
                               class="form-control">{{ old('description') }}</textarea>
@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="referrer" class="col-3 col-form-label">রেফারার</label>
+                            <label for="referrer" class="col-3 col-form-label">রেফারার (যদি থাকে)</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
                                        class="form-control" required>
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="facebook" class="col-3 col-form-label">ফেসবুক</label>
+                            <label for="facebook" class="col-3 col-form-label">ফেসবুক লিঙ্ক</label>
                             <div class="col-9">
                                 <input id="facebook" name="facebook" type="url" value="{{ old('facebook') }}"
                                        class="form-control">
@@ -109,7 +109,7 @@
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
-                            <label class="col-3 col-form-label">এলাকা <span class="text-danger">*</span></label>
+                            <label class="col-3 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                             <div class="col-9">
                                 <div class="row">
                                     <div class="col-md">
@@ -145,12 +145,12 @@
                                     </div>
                                     <div class="col-md">
                                         <select name="union" id="union"
-                                                data-placeholder="-- ইউনিয়ন --"
+                                                data-placeholder="-- ইউনিয়ন/ওয়ার্ড --"
                                                 data-option-loader-url="{{ route('api.villages') }}"
                                                 data-option-loader-target="#village"
                                                 data-option-loader-param="union"
                                                 data-option-loader-properties="value=id,text=bn_name">
-                                            <option value="">-- ইউনিয়ন --</option>
+                                            <option value="">-- ইউনিয়ন/ওয়ার্ড --</option>
                                         </select>
                                     </div>
                                     <div class="col-md">
@@ -169,15 +169,15 @@
                                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
                                 </label>
 
-                                <label for="no-union" class="checkbox">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।
+                                <label for="no-union" class="checkbox">আমার ইউনিয়ন/ওয়ার্ড এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-union" class="mt-2 no-something" name="no-union">
                                     <span></span>
                                     <input type="text" id="union-request" name="union-request"
                                            class="form-control mt-3 mb-4"
-                                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+                                           placeholder="এখানে আপনার ইউনিয়ন/ওয়ার্ড -এর নাম টাইপ করুন ।">
                                 </label>
 
-                                <label for="no-village" class="checkbox">আমার এলাকা এখানে তালিকাভুক্ত নেই ।
+                                <label for="no-village" class="checkbox">আমার এলাকার নাম এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-village" class="mt-2 no-something" name="no-village">
                                     <span></span>
                                     <input type="text" id="village-request" name="village-request"
@@ -188,7 +188,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="address" class="col-3 col-form-label">ঠিকানা <span
+                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea id="address" rows="8" name="address" required="required"
@@ -198,36 +198,36 @@
                     </div>
                     <div class="p-4" id="step-3">
                         <div class="form-group row mx-5">
-                            <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span
+                            <label for="category" class="col-3 col-form-label">প্রতিষ্ঠানের সেবার ধরন <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="category" name="category"
                                         data-option-loader-url="{{ route('api.sub-categories') }}"
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category">
-                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- প্রতিষ্ঠানের ধরন নির্বাচন করুন --</option>
 
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-                                <label for="no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                <label for="no-category" class="checkbox mt-4">আমার প্রতিষ্ঠানের ধরন এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-category" class="mt-2 no-something"
                                            name="no-category">
                                     <span></span>
                                     <input type="text" id="category-request" name="category-request"
                                            class="form-control mt-3 mb-4"
-                                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
+                                           placeholder="এখানে আপনার প্রতিষ্ঠানের ধরন টাইপ করুন ।">
                                 </label>
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            <label class="col-3 col-form-label">আপনার প্রতিষ্ঠানের সেবার ধরন <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="sub-categories"
-                                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                        data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
                                         multiple>
                                 </select>
@@ -239,7 +239,7 @@
 
 
                                 <div class="mt-4 checkbox">
-                                    <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                    <label for="no-sub-category">আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই ।</label>
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                            class="mt-2 no-something">
                                     <span></span>
@@ -248,7 +248,7 @@
                                             <div class="row">
                                                 <input type="text" class="form-control col-md-5 sub-category-name"
                                                        name="sub-category-requests[0][name]"
-                                                       placeholder="সাব-ক্যাটাগরির নাম">
+                                                       placeholder="সেবার ধরনের নাম">
                                                 <input type="number" class="form-control col-md-5 sub-category-rate"
                                                        name="sub-category-requests[0][rate]"
                                                        placeholder="রেট">
@@ -258,26 +258,22 @@
                                         </li>
                                         <li class="repeater-insert-before d-none"></li>
                                         <li class="list-group-item border-0">
-                                            <button type="button" id="add-new-sub"
-                                                    class="btn btn-light float-left shadow-sm"><i
-                                                        class="fa fa-plus"></i> আরও
+                                            <button type="button" id="add-new-sub" class="btn btn-light float-left shadow-sm">
+                                                <i class="fa fa-plus"></i> আরও
                                             </button>
                                         </li>
                                     </ul>
                                 </div>
-
-
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
+                            <label for="more-price" class="col-3 col-form-label">প্রাতিষ্ঠানিক তথ্য </label>
                             <div class="col-9" id="otirikto-kaj">
                                 <div class="row border rounded shadow-sm mt-2 position-relative"
                                      data-repeater-clone="true">
                                     <div class="form-group  col-md-12 row mt-3">
-                                        <label for="addtional-pricing-name" class="col-3 col-form-label">কাজের
-                                            নামঃ </label>
+                                        <label for="addtional-pricing-name" class="col-3 col-form-label">সেবার নামঃ </label>
                                         <div class="col-9">
                                             <input id="addtional-pricing-name" type="text"
                                                    name="additional-pricing[0][name]"
@@ -313,8 +309,7 @@
 
                         @if (!$hasAccount)
                         <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9 d-flex">
                                 <input id="identities" name="identities[]" type="file" accept="image/*"
@@ -326,12 +321,12 @@
                         @endif
 
                         <div class="form-group row mx-5">
-                            <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
+                            <label for="images" class="col-3 col-form-label">প্রাতিষ্ঠানিক ছবি</label>
                             <div class="col-9">
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                                            <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
+                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
@@ -345,7 +340,7 @@
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
-                            <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন</label>
                             <div class="col-9">
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
@@ -422,7 +417,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-description" class="col-form-label font-weight-bold">প্রতিষ্ঠানের বর্ণনা</label>
+                <label for="mo-description" class="col-form-label font-weight-bold">প্রতিষ্ঠানের সম্পর্কে</label>
                 <textarea rows="6" id="mo-description" name="description"
                           class="form-control">{{ old('description') }}</textarea>
             </div>
@@ -435,7 +430,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-referrer" class="col-form-label font-weight-bold">রেফারার</label>
+                <label for="mo-referrer" class="col-form-label font-weight-bold">রেফারার (যদে থাকে)</label>
                 <input id="mo-referrer" name="referrer" type="number" value="{{ old('referrer') }}"
                        class="form-control" required>
             </div>
@@ -453,7 +448,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-facebook" class="col-form-label font-weight-bold">ফেসবুক</label>
+                <label for="mo-facebook" class="col-form-label font-weight-bold">ফেসবুক লিঙ্ক</label>
                 <input id="mo-facebook" name="facebook" type="url" value="{{ old('facebook') }}"
                        class="form-control">
             </div>
@@ -468,7 +463,7 @@
             @endif
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">ঠিকানা <span class="text-danger">*</span></label>
                 <select name="division" id="mo-division"
                         data-option-loader-url="{{ route('api.districts') }}"
                         data-option-loader-target="#mo-district"
@@ -496,12 +491,12 @@
                     <option value="">-- থানা --</option>
                 </select>
                 <select name="union" id="mo-union"
-                        data-placeholder="-- ইউনিয়ন --"
+                        data-placeholder="-- ইউনিয়ন/ওয়ার্ড --"
                         data-option-loader-url="{{ route('api.villages') }}"
                         data-option-loader-target="#mo-village"
                         data-option-loader-param="union"
                         data-option-loader-properties="value=id,text=bn_name">
-                    <option value="">-- ইউনিয়ন --</option>
+                    <option value="">-- ইউনিয়ন/ওয়ার্ড --</option>
                 </select>
                 <select name="village" id="mo-village"
                         data-placeholder="-- এলাকা --"
@@ -516,15 +511,15 @@
                            placeholder="এখানে আপনার থানার নাম টাইপ করুন ।">
                 </label>
 
-                <label for="mo-no-union" class="checkbox">আমার ইউনিয়ন এখানে তালিকাভুক্ত নেই ।
+                <label for="mo-no-union" class="checkbox">আমার ইউনিয়ন/ওয়ার্ড এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-union" class="mt-2 no-something" name="no-union">
                     <span></span>
                     <input type="text" id="union-request" name="union-request"
                            class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার ইউনিয়নের নাম টাইপ করুন ।">
+                           placeholder="এখানে আপনার ইউনিয়ন/ওয়ার্ড -এর নাম টাইপ করুন ।">
                 </label>
 
-                <label for="mo-no-village" class="checkbox">আমার এলাকা এখানে তালিকাভুক্ত নেই ।
+                <label for="mo-no-village" class="checkbox">আমার এলাকার নাম এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-village" class="mt-2 no-something" name="no-village">
                     <span></span>
                     <input type="text" id="village-request" name="village-request"
@@ -534,7 +529,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-address" class="col-form-label font-weight-bold">ঠিকানা <span
+                <label for="mo-address" class="col-form-label font-weight-bold">পূর্ণাঙ্গ ঠিকানা <span
                             class="text-danger">*</span></label>
                 <textarea id="mo-address" rows="8" name="address" required="required"
                           class="form-control">{{ old('address') }}</textarea>
@@ -542,33 +537,32 @@
 
 
             <div class="form-group">
-                <label for="mo-category" class="col-form-label font-weight-bold">ক্যাটাগরি <span
+                <label for="mo-category" class="col-form-label font-weight-bold">প্রতিষ্ঠানের সেবার ধরন <span
                             class="text-danger">*</span></label>
                 <select id="mo-category" name="category"
                         data-option-loader-url="{{ route('api.sub-categories') }}"
                         data-option-loader-target="#mo-sub-categories"
                         data-option-loader-param="category">
-                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+                    <option value="">-- প্রতিষ্ঠানের ধরন নির্বাচন করুন --</option>
 
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
-                <label for="mo-no-category" class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                <label for="mo-no-category" class="checkbox mt-4">আমার প্রতিষ্ঠানের ধরন এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-category" class="mt-2 no-something"
                            name="no-category">
                     <span></span>
                     <input type="text" id="category-request" name="category-request"
                            class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।">
+                           placeholder="এখানে আপনার প্রতিষ্ঠানের ধরন টাইপ করুন ।">
                 </label>
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">সার্ভিস সাব-ক্যাটাগরি <span
-                            class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">আপনার প্রতিষ্ঠানের সেবার ধরন <span class="text-danger">*</span></label>
                 <select id="mo-sub-categories"
-                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                        data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
                         data-option-loader-properties="value=id,text=name"
                         multiple>
                 </select>
@@ -578,7 +572,7 @@
                 </ul>
 
                 <label class="mt-4 checkbox" for="mo-no-sub-category">
-                    আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                    আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-sub-category" name="no-sub-category"
                            class="mt-2 no-something">
                     <span></span>
@@ -588,7 +582,7 @@
                         <div class="row">
                             <input type="text" class="form-control col-5 sub-category-name"
                                    name="sub-category-requests[0][name]"
-                                   placeholder="সাব-ক্যাটাগরির নাম">
+                                   placeholder="সেবার ধরনের নাম">
                             <input type="number" class="form-control col-5 sub-category-rate ml-1"
                                    name="sub-category-requests[0][rate]"
                                    placeholder="রেট">
@@ -602,13 +596,12 @@
             </div>
 
             <div class="form-group">
-                <label for="more-price" class="col-form-label font-weight-bold">অতিরিক্ত কাজের তথ্য </label>
+                <label for="more-price" class="col-form-label font-weight-bold">প্রাতিষ্ঠানিক তথ্য </label>
                 <div id="mo-otirikto-kaj">
                     <div class="border rounded shadow-sm mt-2 position-relative"
                          data-repeater-clone="true">
                         <div class="form-group col-md-12 mt-3">
-                            <label for="mo-addtional-pricing-name" class="col-form-label">কাজের
-                                নামঃ </label>
+                            <label for="mo-addtional-pricing-name" class="col-form-label">সেবার নামঃ </label>
                             <input id="mo-addtional-pricing-name" type="text"
                                    name="additional-pricing[0][name]"
                                    class="form-control">
@@ -629,8 +622,7 @@
 
             @if (!$hasAccount)
             <div class="form-group">
-                <label for="mo-identities" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্রের
-                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                <label for="mo-identities" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
                             class="text-danger">*</span></label>
                 <div class="d-flex">
                     <input id="mo-identities" name="identities[]" type="file" accept="image/*"
@@ -642,7 +634,7 @@
             @endif
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">কাজের ছবি</label>
+                <label class="col-form-label font-weight-bold">প্রাতিষ্ঠানিক ছবি</label>
                 <div>
                     <div class="flex">
                         @for($i=0; $i<4; $i++)
@@ -660,7 +652,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">প্যাকেজ নির্ধারণ করুন</label>
+                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন</label>
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)

@@ -50,7 +50,7 @@
                   class="row p-3 justify-content-center" method="post">
                 {{ csrf_field() }}
                 <div class="col-12">
-                    <p class="h4">বেক্তিগত সার্ভিস রিনিউ এপ্লিকেশনঃ</p>
+                    <p class="h4">ব্যক্তিগত সার্ভিস রিনিউ এপ্লিকেশনঃ</p>
                 </div>
                 <div class="col-md-10 col-lg-8 mt-md-3">
                     <div class="form-group row">

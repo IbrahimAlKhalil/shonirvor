@@ -24,7 +24,7 @@ class CreateIndsTable extends Migration
             $table->string('website')->nullable();
             $table->string('facebook')->nullable();
             $table->string('address')->nullable();
-            $table->string('cover_photo')->nullable();
+            $table->string('cover_photo')->default('default/cover/cover.jpg');
             $table->string('experience_certificate')->nullable();
             $table->string('cv')->nullable();
             $table->string('status')->nullable();

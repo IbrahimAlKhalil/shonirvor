@@ -17,11 +17,7 @@ class Reference extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
-    }
-
+    // This relation cannot be call in with() method..
     public function service()
     {
         if ($this->service_type_id == 1) {
