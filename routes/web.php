@@ -31,6 +31,8 @@ Route::namespace('Frontend')->group(function () {
 
     Route::get('/', 'HomeController')->name('home');
 
+    Route::get('profile/mobile-verification/{profile}', 'ProfileController@showMobileVerificationPage')->name('profile.mobile-verification.show');
+    Route::post('profile/mobile-verification/{profile}', 'ProfileController@saveMobileEdit')->name('profile.mobile-verification.store');
     Route::resource('profile', 'ProfileController', ['only' => ['index', 'edit', 'update']]);
 
     Route::post('individual-feedback', 'IndServiceController@feedbackStore')->name('ind-feedback.store');

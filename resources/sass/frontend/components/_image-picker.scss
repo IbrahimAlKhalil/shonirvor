@@ -4,6 +4,15 @@
 
   .image-picker-control {
     @extend .image-picker;
+    &.invalid {
+      border: 2px solid #dc3545;
+      border-radius: 5px;
+    }
+    .invalid-feedback {
+      text-align: center;
+      font-weight: bold;
+      display: block;
+    }
   }
 
   .image-picker-button, .image-picker-image {

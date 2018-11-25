@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Policies\AdApplicationPolicy;
 use App\Policies\IndRenewApplicationPolicy;
 use App\Policies\OrgRenewApplicationPolicy;
+use App\Policies\ProfilePolicy;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\IndTopServiceApplicationPolicy;
 use App\Policies\OrgTopServiceApplicationPolicy;
@@ -30,5 +31,7 @@ class AuthServiceProvider extends ServiceProvider
                 && ($application->package->package_type_id == 3 || $application->package->package_type_id == 4)
                 && $application->incomeable;
         });
+
+        Gate::resource('profile', ProfilePolicy::class);
     }
 }
