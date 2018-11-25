@@ -72,13 +72,15 @@ class ProfileController extends Controller
                 ]
             );
 
-            // TODO: Uncomment the line below
-//            sms($profile->mobile, 'Your mobile number verification code from AreaSheba code is ' . $verificationCode);
+            sms($request->post('mobile'), 'Your mobile number verification code from AreaSheba: ' . $verificationCode);
+
+            $profile->save();
+            return redirect(route('profile.mobile-verification.show', $profile->id));
         }
 
         $profile->save();
 
-        return redirect(route('profile.mobile-verification.show', $profile->id));
+        return redirect(route('profile.index'))->with('success', 'আপনার প্রোফাইল সফলভাবে আপডেট হয়েছে');
     }
 
 
