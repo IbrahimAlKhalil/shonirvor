@@ -18,6 +18,11 @@ use App\Models\District;
 
 class OrgProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function edit($id)
     {
         $provider = Org::with(['division', 'district', 'thana', 'union'])->find($id);

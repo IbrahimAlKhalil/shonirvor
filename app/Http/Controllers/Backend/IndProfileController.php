@@ -19,6 +19,10 @@ use App\Models\District;
 
 class IndProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
 
     public function edit($id)
     {

@@ -10,6 +10,7 @@ class TopServiceRequestController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('role:admin');
         $this->middleware('can:top-service-request,application', ['except' => 'index']);
     }
 

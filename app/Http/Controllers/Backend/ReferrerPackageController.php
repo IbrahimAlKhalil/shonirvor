@@ -22,6 +22,11 @@ class ReferrerPackageController extends Controller
         ['id' => 9, 'name' => 'refer_fail_renew_interest']
     ];
 
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $packages = Package::with('properties')

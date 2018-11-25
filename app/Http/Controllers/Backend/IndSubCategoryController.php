@@ -13,6 +13,11 @@ use App\Http\Requests\StoreSubCategory;
 
 class IndSubCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function store(StoreSubCategory $request)
     {
         $subCategory = new SubCategory();

@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrgServiceEditRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $applications = ServiceEdit::with([

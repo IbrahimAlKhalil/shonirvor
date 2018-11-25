@@ -11,16 +11,18 @@
                 <a class="nav-link" href="{{ route('home') }}">হোম</a>
             </li>
             @auth
+                @role('admin')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('dashboard') }}">ড্যাশবোর্ড</a>
                 </li>
-                <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
-                    <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>
-                </li>
+                @endrole
                 <li class="nav-item @if(request()->is('profile')){{ 'active' }}@endif">
                     <a class="nav-link" href="{{ route('profile.index') }}">প্রোফাইল</a>
                 </li>
                 @if($myServiceLink)
+                    <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
+                        <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>
+                    </li>
                     <li class="nav-item @if(request()->is('my-services*')){{ 'active' }}@endif">
                         <a class="nav-link" href="{{ $myServiceLink }}">সার্ভিস সমূহ</a>
                     </li>

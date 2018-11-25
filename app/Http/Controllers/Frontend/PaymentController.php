@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('provider');
+    }
+
     public function index()
     {
         $navs = [

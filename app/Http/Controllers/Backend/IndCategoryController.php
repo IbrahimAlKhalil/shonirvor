@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Storage;
 
 class IndCategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $categories = Category::getAll('ind')

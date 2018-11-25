@@ -12,6 +12,11 @@ class OrgServicePackageController extends Controller
 {
     private $packageTypeId = 2;
 
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
 

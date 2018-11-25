@@ -26,33 +26,6 @@ use App\Models\District;
 
 class OrgServiceRegistrationController extends Controller
 {
-    private $referrer;
-    private $defaultReferPackage;
-
-    public function __construct(Request $request)
-    {
-        if (Route::currentRouteName() == 'organization-service-registration.store'
-            || Route::currentRouteName() == 'organization-service-registration.update') {
-
-            $this->referrer = User::where('mobile', $request->input('referrer'))->first();
-
-            $this->defaultReferPackage = Package::with('properties')
-                ->select('packages.id',
-                    'packages.package_type_id',
-                    'package_values.package_property_id',
-                    'package_values.value as is_default')
-                ->join('package_values', function ($join) {
-                    $join->on('packages.id', 'package_values.package_id')
-                        ->where('package_values.package_property_id', 10);
-                })
-                ->where([
-                    ['package_type_id', 5],
-                    ['package_values.value', 1]
-                ])
-                ->first();
-        }
-    }
-
     public function index()
     {
         $user = Auth::user();
@@ -162,14 +135,27 @@ class OrgServiceRegistrationController extends Controller
 
         // Create reference
         if ($request->filled('referrer')) {
-            $referrer = new Reference;
-            $referrer->user_id = $this->referrer->id;
-            $referrer->service_id = $org->id;
-            $referrer->service_type_id = 2;
-            $referrer->package_id = $this->referrer->referPackage()->exists()
-                ? $this->referrer->referPackage->package_id
-                : $this->defaultReferPackage->id;
-            $referrer->save();
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $reference = new Reference;
+            $reference->user_id = $referrer->id;
+            $reference->service_id = $org->id;
+            $reference->service_type_id = 2;
+            $reference->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $reference->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $reference->target = $referrerPackage['refer_target'][0]->value;
+                $reference->target_start_time = $referrer->referPackage->created_at;
+                $reference->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $reference->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            }
+            $reference->save();
         }
 
         // payment
@@ -411,6 +397,64 @@ class OrgServiceRegistrationController extends Controller
         }
         $org->save();
 
+        // Create reference
+        if ($request->filled('referrer')
+            && $org->referredBy
+            && $org->referredBy->user->mobile != $request->input('referrer')) {
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $org->referredBy->user_id = $referrer->id;
+            $org->referredBy->service_id = $org->id;
+            $org->referredBy->service_type_id = 2;
+            $org->referredBy->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $org->referredBy->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $org->referredBy->target = $referrerPackage['refer_target'][0]->value;
+                $org->referredBy->target_start_time = $referrer->referPackage->created_at;
+                $org->referredBy->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $org->referredBy->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $org->referredBy->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            } else {
+                $org->referredBy->target = null;
+                $org->referredBy->target_start_time = null;
+                $org->referredBy->target_end_time = null;
+                $org->referredBy->fail_onetime_interest = null;
+                $org->referredBy->fail_renew_interest = null;
+            }
+            $org->referredBy->save();
+        }
+        elseif ($request->filled('referrer')  && ! $org->referredBy) {
+
+            $referrer = User::with('referPackage')
+                ->where('mobile', $request->input('referrer'))
+                ->first();
+
+            $referrerPackage = userReferrerPackage($referrer)->properties->groupBy('name');
+
+            $reference = new Reference;
+            $reference->user_id = $referrer->id;
+            $reference->service_id = $org->id;
+            $reference->service_type_id = 2;
+            $reference->onetime_interest = $referrerPackage['refer_onetime_interest'][0]->value;
+            $reference->renew_interest = $referrerPackage['refer_renew_interest'][0]->value;
+            if ($referrerPackage['duration'][0]->value && $referrerPackage['refer_target'][0]->value) {
+                $reference->target = $referrerPackage['refer_target'][0]->value;
+                $reference->target_start_time = $referrer->referPackage->created_at;
+                $reference->target_end_time = $referrer->referPackage->created_at->addDays($referrerPackage['duration'][0]->value);
+                $reference->fail_onetime_interest = $referrerPackage['refer_fail_onetime_interest'][0]->value;
+                $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
+            }
+            $reference->save();
+        }
+        elseif (! $request->filled('referrer') && $org->referredBy) {
+            $org->referredBy->delete();
+        }
+
         // delete category and subcategories
         DB::table('org_sub_category_rates')->where('org_id', $org->id)->delete();
         $previousRequested = $org->subCategories('requested');
@@ -556,6 +600,6 @@ class OrgServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return back()->with('success', 'সম্পন্ন!');
+        return back()->with('success', 'রিকোয়েস্টটি এডিট হয়েছে!');
     }
 }

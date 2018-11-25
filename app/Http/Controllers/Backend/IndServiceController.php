@@ -10,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 class indServiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $inds = Ind::onlyApproved()->paginate(15);

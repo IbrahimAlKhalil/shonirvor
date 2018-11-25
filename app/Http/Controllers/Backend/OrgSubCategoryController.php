@@ -13,7 +13,10 @@ use App\Http\Requests\StoreSubCategory;
 
 class OrgSubCategoryController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
 
     public function store(StoreSubCategory $request)
     {

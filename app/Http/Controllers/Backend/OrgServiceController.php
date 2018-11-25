@@ -11,6 +11,11 @@ use App\Http\Controllers\Controller;
 
 class orgServiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $orgs = Org::paginate(15);

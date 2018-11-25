@@ -15,6 +15,11 @@ use App\Models\Union;
 
 class OrgServiceEditController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $navs = $this->navs();

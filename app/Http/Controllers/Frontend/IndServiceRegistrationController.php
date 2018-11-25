@@ -151,7 +151,6 @@ class IndServiceRegistrationController extends Controller
         }
         $ind->save();
 
-        // TODO: Store time
         // Create reference
         if ($request->filled('referrer')) {
 
@@ -452,7 +451,7 @@ class IndServiceRegistrationController extends Controller
             }
             $ind->referredBy->save();
         }
-        elseif ($request->filled('referrer')) {
+        elseif ($request->filled('referrer') && ! $ind->referredBy) {
 
             $referrer = User::with('referPackage')
                 ->where('mobile', $request->input('referrer'))

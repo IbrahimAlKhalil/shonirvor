@@ -17,6 +17,11 @@ use App\Models\Union;
 
 class IndServiceRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $applications = Ind::onlyPending()->orderBy('updated_at', 'DSC')->paginate(15);
@@ -207,6 +212,8 @@ class IndServiceRequestController extends Controller
         $application->subCategories()->where('is_confirmed', 0)->delete();
 
         $application->forceDelete();
+        $application->payments->delete();
+        if ($application->referredBy) $application->referredBy->delete();
         $category->is_confirmed == 0 && $category->delete();
         $village->is_pending == 1 && $village->delete();
         $union->is_pending == 1 && $union->delete();

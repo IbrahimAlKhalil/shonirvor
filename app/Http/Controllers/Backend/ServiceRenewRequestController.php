@@ -9,11 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceRenewRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function show(Income $application)
     {
-        if ($application->approved) {
-            abort(404);
-        }
+        if ($application->approved) abort(404);
 
         $application->load([
             'paymentMethod',

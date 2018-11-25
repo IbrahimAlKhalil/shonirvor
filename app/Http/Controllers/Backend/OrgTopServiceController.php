@@ -12,6 +12,11 @@ class OrgTopServiceController extends Controller
 {
     private $packageTypeId = 4;
 
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);

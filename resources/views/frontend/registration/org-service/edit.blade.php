@@ -38,7 +38,6 @@
                         </a></li>
                 </ul>
 
-
                 <div>
                     <div class="p-4" id="step-1">
                         <div class="form-group row mx-5">

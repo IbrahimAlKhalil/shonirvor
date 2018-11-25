@@ -13,6 +13,11 @@ use App\Models\Union;
 
 class AreaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function division()
     {
         $divisions = Division::select(['id', 'bn_name'])->get();

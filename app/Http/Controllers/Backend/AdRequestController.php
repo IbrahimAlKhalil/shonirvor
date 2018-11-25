@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class AdRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
 
     public function index()
     {

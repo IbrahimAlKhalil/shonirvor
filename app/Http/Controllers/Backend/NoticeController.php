@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class NoticeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $notices = Notice::select('id', 'say')->paginate(15);

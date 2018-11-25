@@ -19,6 +19,11 @@ class AdPackageController extends Controller
         ['id' => 4, 'name' => 'fee']
     ];
 
+    public function __construct()
+    {
+        $this->middleware('role:admin');
+    }
+
     public function index()
     {
         $packages = Package::with('properties')
