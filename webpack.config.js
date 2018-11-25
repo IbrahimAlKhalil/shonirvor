@@ -14,6 +14,7 @@ module.exports = {
         'frontend/applications/ad/create': './resources/js/frontend/applications/ad/create.js',
         'frontend/common': './resources/js/frontend/common.js',
         'frontend/ad/edit': './resources/js/frontend/ad/edit.js',
+        'frontend/profile/edit': './resources/js/frontend/profile/edit.js',
         'frontend/my-services/ind-service/edit': './resources/js/frontend/my-services/ind-service/edit.js',
         'frontend/my-services/org-service/edit': './resources/js/frontend/my-services/org-service/edit.js',
 
@@ -70,19 +71,6 @@ module.exports = {
                             name: '[sha512:hash:base64:7].[ext]',
                             outputPath: './../images/',
                             publicPath: '/assets/images'
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[sha512:hash:base64:7].[ext]',
-                            outputPath: './../fonts/',
-                            publicPath: '/assets/fonts'
                         }
                     }
                 ]

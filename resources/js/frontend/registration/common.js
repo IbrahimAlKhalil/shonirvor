@@ -17,6 +17,15 @@ $(document).ready(function () {
     let requiredSelects = $('#division, #district');
     let prev = $('.sw-btn-prev');
     let next = $('.sw-btn-next');
+
+    form.addEventListener('submit', function (evt) {
+        let $package = $('#package');
+        if (!$package.val()) {
+            $package.next().find('.selectize-input').addClass('border-danger');
+            evt.preventDefault();
+        }
+    });
+
     prev.addClass('invisible');
     let steps = {
         step2: [
@@ -146,19 +155,12 @@ $(document).ready(function () {
         });
 
     function savePackage(prefix) {
-        $(`#${prefix}package`)[0].selectize.on('change', value => {
-            localStorage.setItem('package', value);
-            $(`#${prefix}package-descriptions`).find('.tab-pane').removeClass('show active');
-            $(`#${prefix}package-dscr-${value}`).addClass('active show')
-        });
 
         $(`#${prefix}payment-method`)[0].selectize.on('change', value => {
             localStorage.setItem('paymentMethod', value);
             $(`#${prefix}payment-method-accountId`).find('span').addClass('d-none');
             $(`#${prefix}payment-method-id-${value}`).removeClass('d-none')
         });
-
-        document.querySelector(`#${prefix}package`).selectize.setValue(localStorage.package);
         document.querySelector(`#${prefix}payment-method`).selectize.setValue(localStorage.paymentMethod);
     }
 

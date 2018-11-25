@@ -186,7 +186,7 @@
                     <div class="tab-pane fade" id="ad">
                         @if($renewRequestedAds->count())
                             <h4 class="mt-5 text-center">রিনিউ চলছে</h4>
-                            <table class="table table-striped table-responsive table-bordered table-hover table-sm text-center bg-white">
+                            <table class="table table-striped table-responsive-md table-bordered table-hover table-sm text-center bg-white">
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -202,7 +202,7 @@
                                     <tr>
                                         <th scope="row">{{ en2bnNumber($count++) }}</th>
                                         <td>
-                                            <img class="img-thumbnail" style="width: 100px"
+                                            <img class="rounded shadow-sm" style="width: 100px"
                                                  src="{{ asset('storage/' . $ad->image) }}">
                                         </td>
                                         <td>
@@ -223,7 +223,7 @@
 
 
                         <h4 class="mt-5 text-center">সকল বিজ্ঞাপন</h4>
-                        <table class="table table-striped table-bordered table-responsive table-hover table-sm text-center bg-white">
+                        <table class="table table-striped table-bordered table-responsive-md table-hover table-sm text-center bg-white">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -251,7 +251,7 @@
                                 <tr>
                                     <th scope="row">{{ en2bnNumber($count++) }}</th>
                                     <td>
-                                        <img class="img-thumbnail" style="width: 100px"
+                                        <img class="rounded shadow-sm" style="width: 100px"
                                              src="{{ asset('storage/' . $ad->image) }}">
                                     </td>
                                     <td>

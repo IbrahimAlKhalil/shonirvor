@@ -32,6 +32,8 @@ class IndServiceRegistrationController extends Controller
         $user = Auth::user();
         $inds = $user->inds()->onlyPending();
 
+        $hasAccount = $user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
+
         if ($inds->exists()) {
             return redirect(route('individual-service-registration.edit', $inds->first()->id));
         }
@@ -39,18 +41,18 @@ class IndServiceRegistrationController extends Controller
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
-        $categories = Category::getAll('ind')->get();
-        // TODO:: Don't pass all the subcategories, districts, thanas, unions after implementing ajax
+        $categoryIds = $user->inds()->pluck('id')->toArray();
+
+        $categories = Category::onlyInd()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
 
-        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods'));
+        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount'));
     }
 
     public function store(StoreInd $request)
     {
-        // TODO:: Check what if the user already have an account in the requested category
-        // TODO:: User should choose one of the packages made for individual service, validate it.
+        // TODO:: User should choose at least one sub-caegory
         // TODO:: Review validation
 
         DB::beginTransaction();
@@ -58,7 +60,7 @@ class IndServiceRegistrationController extends Controller
         $user = Auth::user();
 
         // handle category  and sub-category request
-        // TODO:: Do some custom validation for category and subcategory
+        // TODO:: Validate that selected sub-categories belong to the selected category
 
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
         $isSubCategoryRequest = $request->has('no-sub-category') && $request->post('no-sub-category') == 'on';
@@ -89,7 +91,6 @@ class IndServiceRegistrationController extends Controller
         }
 
         // handle thana and union request
-        // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
         $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
@@ -150,6 +151,7 @@ class IndServiceRegistrationController extends Controller
         }
         $ind->save();
 
+        // TODO: Store time
         // Create reference
         if ($request->filled('referrer')) {
 
@@ -264,17 +266,20 @@ class IndServiceRegistrationController extends Controller
             $user->nid = $request->post('nid');
         }
 
+        if (!$user->dob) {
+            $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        }
 
-        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        if (!$user->qualification) {
+            $user->qualification = $request->post('qualification');
+        }
 
-        $user->qualification = $request->post('qualification');
         $user->save();
 
         // work images
         if ($request->file('images')) {
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
 
             foreach ($files as $image) {
                 array_push($images, [
@@ -294,12 +299,14 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if (!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
+                DB::table('identities')->insert($identities);
             }
-            DB::table('identities')->insert($identities);
         }
 
         DB::commit();
@@ -320,7 +327,7 @@ class IndServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         // handle category  and sub-category request
-        // TODO:: Do some custom validation for category and subcategory
+        // TODO:: Validate that selected sub-categories belong to the selected category
 
         $previousCategory = $ind->category;
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
@@ -343,7 +350,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         // Create sub categories
-        if ($isSubCategoryRequest) {
+        if ($isSubCategoryRequest && $request->filled('sub-category-requests')) {
             $data = [];
             foreach ($request->post('sub-category-requests') as $subCategory) {
                 array_key_exists('name', $subCategory) && array_push($data, [
@@ -355,7 +362,6 @@ class IndServiceRegistrationController extends Controller
         }
 
         // handle thana and union request
-        // TODO:: Do some custom validation for thana and union
         $isThanaRequest = $request->has('no-thana') && $request->post('no-thana') == 'on';
         $isUnionRequest = $request->has('no-union') && $request->post('no-union') == 'on';
         $isVillageRequest = $request->has('no-village') && $request->post('no-village') == 'on';
@@ -557,7 +563,7 @@ class IndServiceRegistrationController extends Controller
             }
         }
         // requested subcategory rates
-        if ($isSubCategoryRequest) {
+        if ($isSubCategoryRequest && $request->filled('sub-category-requests')) {
             foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {
                 if (array_key_exists('name', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
@@ -577,18 +583,24 @@ class IndServiceRegistrationController extends Controller
         DB::table('ind_work_method')->insert($workMethods);
 
         // User
-        $user->nid = $request->post('nid');
-        $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        if (!$user->nid && $request->has('nid')) {
+            $user->nid = $request->post('nid');
+        }
 
-        $user->qualification = $request->post('qualification');
+        if (!$user->dob) {
+            $user->dob = $request->post('year') . '-' . $request->post('month') . '-' . $request->post('day');
+        }
+
+        if (!$user->qualification) {
+            $user->qualification = $request->post('qualification');
+        }
         $user->save();
 
         // work images
         if ($request->file('images')) {
+            // TODO: Delete previous images
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
-
             foreach ($files as $image) {
                 array_push($images, [
                     'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
@@ -607,12 +619,14 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($request->hasFile('identities')) {
-            $identities = [];
-            foreach ($request->file('identities') as $identity) {
-                array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+        if (!$user->nid) {
+            if ($request->hasFile('identities')) {
+                $identities = [];
+                foreach ($request->file('identities') as $identity) {
+                    array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
+                }
+                DB::table('identities')->insert($identities);
             }
-            DB::table('identities')->insert($identities);
         }
 
 
@@ -623,13 +637,16 @@ class IndServiceRegistrationController extends Controller
 
     public function edit(Ind $ind)
     {
-        $ind->load(['referredBy.user', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
+        $ind->load(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
 
         // TODO:: Move this validation to a requests class
 
         if ($ind->user_id != Auth::id() || !is_null($ind->expire)) {
             return redirect(route('individual-service-registration.index'));
         }
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
 
         $categories = Category::whereServiceTypeId(1)->whereIsConfirmed(1)->get();
         $subCategories = SubCategory::whereCategoryId($ind->category_id)->whereIsConfirmed(1)->get();
@@ -645,7 +662,6 @@ class IndServiceRegistrationController extends Controller
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
 
-
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first'));
     }
 }

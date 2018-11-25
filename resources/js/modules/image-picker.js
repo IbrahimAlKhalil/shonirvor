@@ -117,6 +117,19 @@ class Control {
             });
             this.imageDiv.appendChild(cross);
         }
+
+        if (this.input.getAttribute('data-error')) {
+            let invalidFeedback = `
+                <div class="invalid-feedback">
+                    ${this.input.getAttribute('data-error')}
+                </div>
+            `;
+            let fragment = document.createElement('div');
+            fragment.innerHTML = invalidFeedback;
+
+            $(this.element).addClass('invalid');
+            this.element.appendChild(fragment.firstElementChild.cloneNode(true));
+        }
     }
 
     preview() {

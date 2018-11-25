@@ -24,7 +24,7 @@ class ProductionSeeder extends Seeder
         $user = new User;
         $user->name = 'Arif Uzzaman';
         $user->mobile = '00000000000';
-        $user->photo = 'default/user-photos/person.jpg';
+        $user->photo = 'default/user-photo/person.jpg';
         $user->password = '$2y$10$mBXIXfLULn4Vc7bJtVRk3.ZQ0S3Zb02x1xC/wmxsP.4H5TMGKIkHC'; // 123456
         $user->save();
         $user->attachRole(1);

@@ -6,6 +6,7 @@ use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UpdateOrg extends FormRequest
@@ -17,7 +18,6 @@ class UpdateOrg extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
 
         return [
             'name' => 'required|min:3',
@@ -26,7 +26,6 @@ class UpdateOrg extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'nid' => 'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -41,9 +40,8 @@ class UpdateOrg extends FormRequest
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
-            'identities.*' => 'required|image',
-            'package' => 'required',
+            'images.*.file' => 'image|max:800',
+            'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
@@ -66,8 +64,22 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
             return !is_null($data->village);
         });
-        $validator->sometimes('category', 'exists:categories,id', function ($data) {
+        $validator->sometimes('category', ['exists:categories,id', Rule::notIn([Auth::user()->orgs()->pluck('id')->toArray()])], function ($data) {
             return !is_null($data->category);
+        });
+
+        // TODO: Review image size
+        $validator->sometimes('logo', 'image|max:800', function ($data) {
+            return !is_null($data->logo);
+        });
+        $validator->sometimes('identities.*', 'required|image', function () use (&$first) {
+            return $first;
+        });
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
+            return $first;
         });
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();

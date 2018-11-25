@@ -31,8 +31,11 @@ class UpdateOrgMyService extends FormRequest
             // TODO: Subcategory
 //            'sub-categories.*.work-methods.*.rate' => 'nullable|integer',
             'work-images.*.description' => 'string|min:10|nullable',
-            'work-images.*.file' => 'nullable|image',
-            'logo' => 'nullable|image',
+            // TODO: Review Image size
+            'new-work-images.*.file' => 'nullable|image|max:800',
+            'work-images.*.file' => 'nullable|image|max:800',
+            'cover-photo' => 'nullable|image|max:800',
+            'logo' => 'nullable|image|max:800',
             // TODO: validation
             'additional-prices.*.id' => 'exists:org_additional_prices,id'
         ];

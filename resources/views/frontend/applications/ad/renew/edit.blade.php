@@ -8,7 +8,7 @@
 
 @section('content')
     @include('components.success')
-    <div class="container my-5 bg-white rounded">
+    <div class="container my-lg-5 bg-white rounded">
         <form action="{{ route('frontend.applications.ad-renew.update', $ad->id) }}"
               class="row p-3 justify-content-center" method="post" enctype="multipart/form-data">
             {{ method_field('put') }}
@@ -18,7 +18,7 @@
                     প্রক্রিয়াধীন রিনিউ এপ্লিকেশন এডিটঃ
                 </p>
             </div>
-            <div class="col-8 mt-3">
+            <div class="col-md-10 col-lg-8 mt-md-3">
                 <div class="form-group row">
                     <label for="create-package-select" class="col-md-4 col-form-label text-md-right">প্যাকেজ <span
                                 class="text-danger">*</span></label>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8 mt-3">
+            <div class="col-md-10 col-lg-8 mt-md-3">
                 <div class="form-group row">
                     <label for="create-method-select" class="col-md-4 col-form-label text-md-right">পেমেন্ট মেথড <span
                                 class="text-danger">*</span></label>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8 mt-2">
+            <div class="col-md-10 col-lg-8 mt-md-3">
                 <div class="form-group row">
                     <label for="create-from-input" class="col-md-4 col-form-label text-md-right">যে নাম্বার থেকে টাকা
                         পাঠানো হয়েছে <span class="text-danger">*</span></label>
@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="col-8 mt-2">
+            <div class="col-md-10 col-lg-8 mt-md-3">
                 <div class="form-group row">
                     <label for="create-transaction-id-input" class="col-md-4 col-form-label text-md-right">Transaction
                         ID <span class="text-danger">*</span></label>
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="col-8 mt-3">
+            <div class="col-md-10 col-lg-8 mt-md-3">
                 <div class="row">
                     <span class="col-md-4"></span>
                     <div class="col-md-8">

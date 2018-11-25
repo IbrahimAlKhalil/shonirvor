@@ -6,6 +6,7 @@ use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UpdateInd extends FormRequest
@@ -18,18 +19,12 @@ class UpdateInd extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
-
         return [
             'mobile' => 'required|digits:11',
             'referrer' => 'digits:11|different:mobile|exists:users,mobile|nullable',
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'day' => 'required|between:1,31',
-            'month' => 'required|between:1,12',
-            'year' => 'required|max:' . (string)(Date('Y') - 18),
-            'nid' => 'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -44,11 +39,12 @@ class UpdateInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
-            'identities.*' => 'required|image',
-            'experience-certificate' => 'image',
-            'cv' => 'mimes:pdf',
-            'package' => 'required',
+            // TODO: Review image size
+            'images.*.file' => 'image|max:800',
+            'experience-certificate' => 'image|max:800',
+            // TODO: Review pdf size
+            'cv' => 'mimes:pdf|max:1024',
+            'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
@@ -65,8 +61,30 @@ class UpdateInd extends FormRequest
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
             return !is_null($data->village);
         });
-        $validator->sometimes('category', 'exists:categories,id', function ($data) {
+        $validator->sometimes('category', ['exists:categories,id', Rule::notIn([Auth::user()->inds()->pluck('id')->toArray()])], function ($data) {
             return !is_null($data->category);
+        });
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
+            return $first;
+        });
+
+        $validator->sometimes('month', 'required|between:1,12', function () use (&$first) {
+            return $first;
+        });
+
+        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use (&$first) {
+            return $first;
+        });
+
+        $validator->sometimes('day', 'required|between:1,31', function () use (&$first) {
+            return $first;
+        });
+
+        $validator->sometimes('identities.*', 'required|image', function () use (&$first) {
+            return $first;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();

@@ -6,6 +6,7 @@ use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StoreOrg extends FormRequest
@@ -19,7 +20,6 @@ class StoreOrg extends FormRequest
 
     public function rules()
     {
-        $user = Auth::user();
 
         return [
             'name' => 'required|min:3',
@@ -28,8 +28,6 @@ class StoreOrg extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'nid' => /*($user->nid ? '' : 'required|') . */
-                'required|integer|unique:users,nid,' . $user->id,
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -44,8 +42,9 @@ class StoreOrg extends FormRequest
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
-            'identities.*' => 'required|image',
+            // TODO: Review image size
+            'images.*.file' => 'image|max:800',
+            'logo' => 'image|max:800',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
@@ -65,6 +64,15 @@ class StoreOrg extends FormRequest
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
+        });
+
+        $user = Auth::user();
+        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
+            return !$user->nid;
+        });
+
+        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+            return !$user->nid;
         });
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();

@@ -30,6 +30,8 @@ Route::namespace('Frontend')->group(function () {
 
     Route::get('/', 'HomeController')->name('home');
 
+    Route::get('profile/mobile-verification/{profile}', 'ProfileController@showMobileVerificationPage')->name('profile.mobile-verification.show');
+    Route::post('profile/mobile-verification/{profile}', 'ProfileController@saveMobileEdit')->name('profile.mobile-verification.store');
     Route::post('profile/payment-receive-method/{profile}', 'ProfileController@paymentReceiveMethod')->name('profile.payment-receive-method');
     Route::resource('profile', 'ProfileController', ['only' => ['index', 'edit', 'update']]);
 
@@ -193,11 +195,6 @@ Route::namespace('Backend')->group(function () {
                 ]);
 
             }, '');
-
-            // TODO: Should removed..
-//            Route::resource('ads', 'AdController', [
-//                'except' => ['create', 'show', 'edit']
-//            ])->names('ad');
 
             Route::resource('notices', 'NoticeController', [
                 'only' => ['index', 'store', 'update', 'destroy']

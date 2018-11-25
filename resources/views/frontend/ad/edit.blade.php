@@ -1,4 +1,4 @@
-@extends('layouts.backend.master')
+@extends('layouts.frontend.master')
 
 @section('title', 'বিজ্ঞাপন এডিট এর আবেদন')
 
@@ -10,7 +10,7 @@
 @section('content')
     @include('components.success')
     <div class="container d-flex justify-content-center">
-        <div class="bg-white mt-4 p-4 rounded row w-50">
+        <div class="bg-white mt-lg-4 p-4 rounded row">
             <div class="col-md-12 mb-3 p-0">
                 <input type="file" id="image" name="image"
                        form="update-form"

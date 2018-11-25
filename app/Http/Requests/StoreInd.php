@@ -23,10 +23,6 @@ class StoreInd extends FormRequest
             'email' => 'nullable|email',
             'website' => 'nullable|url',
             'facebook' => 'nullable|url',
-            'day' => 'required|between:1,31',
-            'month' => 'required|between:1,12',
-            'year' => 'required|max:' . (string)(Date('Y') - 18),
-            'nid' => 'required|integer|unique:users,nid',
             'division' => 'required|exists:divisions,id',
             'district' => 'required|exists:districts,id',
             'thana' => 'required_without:no-thana',
@@ -41,11 +37,12 @@ class StoreInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image',
-            'identities.*' => 'required|image',
-            'experience-certificate' => 'image',
-            'cv' => 'mimes:pdf',
-            'package' => 'required',
+            // TODO: Review image size
+            'images.*.file' => 'image|max:800',
+            'experience-certificate' => 'image|max:800',
+            // TODO: Review pdf size
+            'cv' => 'mimes:pdf|max:800',
+            'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
@@ -64,6 +61,28 @@ class StoreInd extends FormRequest
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
+        });
+
+
+        $user = Auth::user();
+        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+            return !$user->nid;
+        });
+
+        $validator->sometimes('month', 'required|between:1,12', function () use (&$user) {
+            return !$user->dob;
+        });
+
+        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use (&$user) {
+            return !$user->dob;
+        });
+
+        $validator->sometimes('day', 'required|between:1,31', function () use (&$user) {
+            return !$user->dob;
+        });
+
+        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
+            return !$user->nid;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();

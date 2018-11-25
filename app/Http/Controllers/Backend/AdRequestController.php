@@ -53,8 +53,6 @@ class AdRequestController extends Controller
 
     public function update(Income $application)
     {
-        // TODO: Check whether ad model and the payment model is related or not
-
         $application->load([
             'package.properties',
             'incomeable'
@@ -78,7 +76,6 @@ class AdRequestController extends Controller
 
         DB::commit();
 
-        // TODO: Redirect to appropriate page
         return redirect(route('backend.request.ad.index'))->with('success', 'বিজ্ঞাপন এডিট আবেদনটি গ্রহণ করা হয়েছে');
     }
 
@@ -91,7 +88,6 @@ class AdRequestController extends Controller
 
         DB::commit();
 
-        // TODO: Redirect to appropriate page
         return redirect(route('backend.request.ad.index'))->with('success', 'বিজ্ঞাপন এডিট আবেদনটি ডিলিট করা হয়েছে');
     }
 }

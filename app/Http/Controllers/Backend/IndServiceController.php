@@ -95,7 +95,6 @@ class indServiceController extends Controller
         return [
             ['url' => route('individual-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('individual-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
-            ['url' => route('individual-service-edit.index'), 'text' => 'প্রোফাইল এডিট রিকোয়েস্ট']
         ];
     }
 }

@@ -41,7 +41,6 @@ class AdEditRequestController extends Controller
         $adEdit->delete();
         DB::commit();
 
-        // TODO: Redirect to an appropriate page
         return redirect()->back()->with('success', 'বিজ্ঞাপন এডিট আবেদনটি গ্রহণ করা হয়েছে');
     }
 

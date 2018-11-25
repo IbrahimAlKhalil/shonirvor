@@ -91,58 +91,65 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mx-5">
-                            <label for="age" class="col-3 col-form-label">জন্ম তারিখ<span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9 pr-0">
-                                <div class="input-group row">
-                                    <div class="col-md-4 pr-0">
-                                        <select name="day" type="text" class="form-control">
-                                            <option value="">-- দিন --</option>
-                                            @for($i = 1; $i < 32; $i++)
-                                                <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 pr-0">
-                                        <select name="month" type="text"
-                                                class="form-control">
-                                            <option value="">-- মাস --</option>
-                                            @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
-                                            @foreach($months as $index => $month)
-                                                <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 pr-0">
-                                        <select name="year" type="text" class="form-control">
-                                            <option value="">-- বছর --</option>
-                                            @php($begining = Date('Y') - 50)
-                                            @php($ending = Date('Y') - 18)
-                                            @for($i = $ending; $i > $begining; $i--)
-                                                <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
-                                            @endfor
-                                        </select>
+                        @if(!$user->dob)
+                            <div class="form-group row mx-5">
+                                <label for="age" class="col-3 col-form-label">জন্ম তারিখ<span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9 pr-0">
+                                    <div class="input-group row">
+                                        <div class="col-md-4 pr-0">
+                                            <select name="day" type="text" class="form-control">
+                                                <option value="">-- দিন --</option>
+                                                @for($i = 1; $i < 32; $i++)
+                                                    <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 pr-0">
+                                            <select name="month" type="text"
+                                                    class="form-control">
+                                                <option value="">-- মাস --</option>
+                                                @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                                @foreach($months as $index => $month)
+                                                    <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 pr-0">
+                                            <select name="year" type="text" class="form-control">
+                                                <option value="">-- বছর --</option>
+                                                @php($begining = Date('Y') - 50)
+                                                @php($ending = Date('Y') - 18)
+                                                @for($i = $ending; $i > $begining; $i--)
+                                                    <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
-                        <div class="form-group row mx-5">
-                            <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>
-                            <div class="col-9">
-                                <input id="qualification" name="qualification" type="text" class="form-control here"
-                                       value="{{ old('qualification') }}">
+                        @if(!$user->qualification)
+                            <div class="form-group row mx-5">
+                                <label for="qualification" class="col-3 col-form-label">শিক্ষাগত যোগ্যতা</label>
+                                <div class="col-9">
+                                    <input id="qualification" name="qualification" type="text" class="form-control here"
+                                           value="{{ old('qualification') }}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row mx-5">
-                            <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9">
-                                <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
-                                       class="form-control" required>
+                        @endif
+
+                        @if(!$user->nid)
+                            <div class="form-group row mx-5">
+                                <label for="nid" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের নম্বর <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9">
+                                    <input id="nid" name="nid" type="number" value="{{ old('nid') }}"
+                                           class="form-control" required>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
@@ -226,9 +233,11 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span class="text-danger">*</span></label>
+                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
-                                <textarea id="address" rows="8" name="address" required="required" class="form-control">{{ old('address') }}</textarea>
+                                <textarea id="address" rows="8" name="address" required="required"
+                                          class="form-control">{{ old('address') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -360,13 +369,20 @@
                         </div>
                     </div>
                     <div class="p-4" id="step-4">
-                        <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span class="text-danger">*</span></label>
-                            <div class="col-9 d-flex">
-                                <input id="identities" name="identities[]" type="file" accept="image/*" class="file-picker">
-                                <input id="identities" name="identities[]" type="file" accept="image/*" class="file-picker">
+                        @if (!$hasAccount)
+                            <div class="form-group row mx-5">
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ
+                                    - এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                                <div class="col-9 d-flex">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                                    <input id="identities" name="identities[]" type="file" accept="image/*"
+                                           class="file-picker"
+                                           data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="form-group row mx-5">
                             <label for="images" class="col-3 col-form-label">সেবা প্রদানের ছবি সমূহ</label>
@@ -378,8 +394,8 @@
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]"></textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*"
-                                                   class="form-control-file file-picker">
+                                                   accept="image/*" class="form-control-file file-picker"
+                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
                                     @endfor
                                 </div>
@@ -389,23 +405,25 @@
                         <div class="form-group row mx-5">
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
                             <div class="col-9">
-                                <input id="cv" name="cv" type="file" accept="application/pdf"
-                                       class="file-picker">
+                                <input id="cv" name="cv" type="file" accept="application/pdf" class="file-picker"
+                                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি থাকে)</label>
+                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি
+                                থাকে)</label>
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
-                                       accept="image/*"
-                                       class="file-picker">
+                                       accept="image/*" class="file-picker"
+                                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
                             </div>
                         </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
-                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span class="text-danger">*</span></label>
+                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
@@ -515,49 +533,55 @@
                        class="form-control">
             </div>
 
-            <div class="form-group">
-                <label class="col-form-label font-weight-bold">জন্ম তারিখ<span
-                            class="text-danger">*</span></label>
-                <div class="pr-0">
-                    <div class="input-group">
-                        <select name="day" type="text" class="form-control">
-                            <option value="">-- দিন --</option>
-                            @for($i = 1; $i < 32; $i++)
-                                <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
-                            @endfor
-                        </select>
-                        <select name="month" type="text"
-                                class="form-control">
-                            <option value="">-- মাস --</option>
-                            @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
-                            @foreach($months as $index => $month)
-                                <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
-                            @endforeach
-                        </select>
-                        <select name="year" type="text" class="form-control">
-                            <option value="">-- বছর --</option>
-                            @php($begining = Date('Y') - 50)
-                            @php($ending = Date('Y') - 18)
-                            @for($i = $ending; $i > $begining; $i--)
-                                <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
-                            @endfor
-                        </select>
+            @if(!$user->dob)
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold">জন্ম তারিখ<span
+                                class="text-danger">*</span></label>
+                    <div class="pr-0">
+                        <div class="input-group">
+                            <select name="day" type="text" class="form-control">
+                                <option value="">-- দিন --</option>
+                                @for($i = 1; $i < 32; $i++)
+                                    <option value="{{ $i }}" {{ selectOpt(old('day'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                @endfor
+                            </select>
+                            <select name="month" type="text"
+                                    class="form-control">
+                                <option value="">-- মাস --</option>
+                                @php($months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'])
+                                @foreach($months as $index => $month)
+                                    <option value="{{ ++$index }}" {{ selectOpt(old('month'), $index) }}>{{ $month }}</option>
+                                @endforeach
+                            </select>
+                            <select name="year" type="text" class="form-control">
+                                <option value="">-- বছর --</option>
+                                @php($begining = Date('Y') - 50)
+                                @php($ending = Date('Y') - 18)
+                                @for($i = $ending; $i > $begining; $i--)
+                                    <option value="{{ $i }}" {{ selectOpt(old('year'), $i) }}>{{ en2bnNumber($i) }}</option>
+                                @endfor
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
-            <div class="form-group">
-                <label for="mo-qualification" class="col-form-label font-weight-bold">শিক্ষাগত যোগ্যতা</label>
-                <input id="mo-qualification" name="qualification" type="text" class="form-control here"
-                       value="{{ old('qualification') }}">
-            </div>
+            @if(!$user->qualification)
+                <div class="form-group">
+                    <label for="mo-qualification" class="col-form-label font-weight-bold">শিক্ষাগত যোগ্যতা</label>
+                    <input id="mo-qualification" name="qualification" type="text" class="form-control here"
+                           value="{{ old('qualification') }}">
+                </div>
+            @endif
 
-            <div class="form-group">
-                <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
-                            class="text-danger">*</span></label>
-                <input id="mo-nid" name="nid" type="number" value="{{ old('nid') }}"
-                       class="form-control" required>
-            </div>
+            @if(!$user->nid)
+                <div class="form-group">
+                    <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
+                                class="text-danger">*</span></label>
+                    <input id="mo-nid" name="nid" type="number" value="{{ old('nid') }}"
+                           class="form-control" required>
+                </div>
+            @endif
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">ঠিকানা <span class="text-danger">*</span></label>
@@ -633,7 +657,8 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-category" class="col-form-label font-weight-bold">সেবার ধরন <span class="text-danger">*</span></label>
+                <label for="mo-category" class="col-form-label font-weight-bold">সেবার ধরন <span
+                            class="text-danger">*</span></label>
                 <select id="mo-category" name="category"
                         data-option-loader-url="{{ route('api.sub-categories') }}"
                         data-option-loader-target="#mo-sub-categories"
@@ -751,15 +776,18 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
-                <div class="d-flex">
-                    <input id="mo-identities" name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
-                    <input name="identities[]" type="file" accept="image/*"
-                           class="file-picker">
+            @if (!$hasAccount)
+                <div class="form-group">
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম
+                        সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
+                    <div class="d-flex">
+                        <input id="mo-identities" name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                        <input name="identities[]" type="file" accept="image/*" class="file-picker"
+                               data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">সেবা প্রদানের ছবি সমূহ</label>
@@ -772,7 +800,8 @@
                                           name="images[{{ $i }}][description]"></textarea>
                                 <input id="images" name="images[{{ $i }}][file]" type="file"
                                        accept="image/*"
-                                       class="form-control-file file-picker">
+                                       class="form-control-file file-picker"
+                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                             </div>
                         @endfor
                     </div>
@@ -781,19 +810,21 @@
 
             <div class="form-group">
                 <label for="mo-cv" class="col-form-label font-weight-bold">বায়োডাটা</label>
-                <input id="mo-cv" name="cv" type="file" accept="application/pdf"
-                       class="file-picker">
+                <input id="mo-cv" name="cv" type="file" accept="application/pdf" class="file-picker"
+                       data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">
             </div>
 
             <div class="form-group">
-                <label for="mo-experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি থাকে)</label>
-                <input id="mo-experience-certificate" name="experience-certificate" type="file"
-                       accept="image/*"
-                       class="file-picker">
+                <label for="mo-experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি
+                    থাকে)</label>
+                <input id="mo-experience-certificate" name="experience-certificate" type="file" accept="image/*"
+                       class="file-picker"
+                       data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন <span
+                            class="text-danger">*</span></label>
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)
