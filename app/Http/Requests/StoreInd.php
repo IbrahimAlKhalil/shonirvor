@@ -65,7 +65,7 @@ class StoreInd extends FormRequest
 
 
         $user = Auth::user();
-        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+        $validator->sometimes('nid', 'required|unique:users,nid', function () use (&$user) {
             return !$user->nid;
         });
 

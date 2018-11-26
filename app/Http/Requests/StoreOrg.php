@@ -71,7 +71,7 @@ class StoreOrg extends FormRequest
             return !$user->nid;
         });
 
-        $validator->sometimes('nid', 'required|integer|unique:users,nid', function () use (&$user) {
+        $validator->sometimes('nid', 'required|unique:users,nid', function () use (&$user) {
             return !$user->nid;
         });
 

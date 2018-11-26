@@ -890,7 +890,7 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: true,
+            useURLhash: false,
             autoAdjustHeight: false
         });
 

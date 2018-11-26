@@ -89,6 +89,6 @@ class IndServiceController extends Controller
         $feedback->say = $request->post('say');
         $feedback->save();
 
-        return back()->with('success', 'Thank you for giving feedback.');
+        return back()->with('success', 'মতামত দেওয়ার জন্য ধন্যবাদ ।');
     }
 }
