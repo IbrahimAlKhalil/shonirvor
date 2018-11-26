@@ -283,6 +283,8 @@ class IndServiceRegistrationController extends Controller
             foreach ($files as $image) {
                 array_push($images, [
                     'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
+                    'work_imagable_type' => 'ind',
+                    'work_imagable_id' => $ind->id,
                 ]);
             }
 
@@ -294,7 +296,7 @@ class IndServiceRegistrationController extends Controller
                 }
             }
 
-            $ind->workImages()->createMany($images);
+            DB::table('work_images')->insert($images);
         }
 
         // identities
@@ -450,8 +452,7 @@ class IndServiceRegistrationController extends Controller
                 $ind->referredBy->fail_renew_interest = null;
             }
             $ind->referredBy->save();
-        }
-        elseif ($request->filled('referrer') && ! $ind->referredBy) {
+        } elseif ($request->filled('referrer') && !$ind->referredBy) {
 
             $referrer = User::with('referPackage')
                 ->where('mobile', $request->input('referrer'))
@@ -473,8 +474,7 @@ class IndServiceRegistrationController extends Controller
                 $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
             }
             $reference->save();
-        }
-        elseif (! $request->filled('referrer') && $ind->referredBy) {
+        } elseif (!$request->filled('referrer') && $ind->referredBy) {
             $ind->referredBy->delete();
         }
 
@@ -546,7 +546,7 @@ class IndServiceRegistrationController extends Controller
         $workMethods = [];
         // sub category rates
         if (!$isCategoryRequest) {
-            foreach ($request->post('sub-category-rates') as $subCategoryRate) {
+            foreach ($request->post('sub-category-requests') as $subCategoryRate) {
                 if (array_key_exists('id', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
                         if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
@@ -660,7 +660,8 @@ class IndServiceRegistrationController extends Controller
         $workMethods = WorkMethod::all();
         $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
         $paymentMethods = PaymentMethod::all();
+        $selectedPackage = $ind->payments()->select('package_id')->first()->package_id;
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first'));
+        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first', 'selectedPackage'));
     }
 }

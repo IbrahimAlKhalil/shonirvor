@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -61,8 +62,17 @@ class UpdateInd extends FormRequest
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
             return !is_null($data->village);
         });
-        $validator->sometimes('category', ['exists:categories,id', Rule::notIn([Auth::user()->inds()->pluck('id')->toArray()])], function ($data) {
-            return !is_null($data->category);
+
+        $serviceCategoryIds = array_map(function ($item){
+            return $item['category_id'];
+        }, Auth::user()->inds()->select('category_id')->get()->toArray());
+
+        $categoryIds = array_map(function ($item){
+            return $item['id'];
+        }, Category::onlyInd()->onlyConfirmed()->select('id')->get()->toArray());
+
+        $validator->sometimes('category', ['bail', Rule::notIn($serviceCategoryIds), Rule::in($categoryIds)], function ($data) {
+            return $data->category;
         });
 
         $user = Auth::user();

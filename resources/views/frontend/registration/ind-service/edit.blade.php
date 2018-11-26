@@ -371,6 +371,7 @@
                                                                name="sub-category-requests[{{ $subCategoryCount }}][name]"
                                                                placeholder="আমার সাব-ক্যাটাগরির নাম"
                                                                value="{{ $subCategory->name }}">
+                                                        <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][id]" value="{{ $subCategory->id }}">
                                                     </div>
                                                     @if(!$loop->first)
                                                         <div class="col-md-3">
@@ -463,12 +464,12 @@
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]"></textarea>
+                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
                                                    class="file-picker mt-3"
-                                                   @isset($workImages[$i])
-                                                   data-image="{{ $workImages[$i]->path }}"
+                                                   @isset($ind->workImages[$i])
+                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
                                                    @endisset
                                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
@@ -503,7 +504,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
                             <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
@@ -511,7 +511,7 @@
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                        <option value="{{ $package->id }}" {{ selectOpt($package->id, $selectedPackage) }}>{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
                                 </select>
                                 <div class="tab-content mt-2" id="package-descriptions">
@@ -957,10 +957,13 @@
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]"></textarea>
+                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                    accept="image/*"
                                    class="file-picker mt-3"
+                                   @isset($ind->workImages[$i])
+                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                   @endisset
                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                         </div>
                     @endfor
