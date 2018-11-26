@@ -21,7 +21,9 @@ class UserReferPackagesSeeder extends Seeder
             DB::table('user_refer_packages')->insert([
                 [
                     'user_id' => $userId,
-                    'package_id' => array_random($referPackageIds)
+                    'package_id' => array_random($referPackageIds),
+                    'created_at' => \Carbon\Carbon::now(),
+                    'updated_at' => \Carbon\Carbon::now()
                 ]
             ]);
         }

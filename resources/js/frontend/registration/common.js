@@ -6,6 +6,15 @@ import {ImagePicker} from "../../modules/image-picker";
 import 'smartwizard';
 import '../../modules/selectize-option-loader-plugin';
 
+function clearSelectize(selectize) {
+    selectize.clear();
+    selectize.clearOptions();
+    selectize.refreshOptions();
+    selectize.refreshItems();
+    selectize.clearCache();
+    selectize.disable();
+}
+
 $(document).ready(function () {
 
 
@@ -86,6 +95,14 @@ $(document).ready(function () {
             obj.select.val(null);
             let selectize = obj.select[0].selectize;
             selectize.clear(true);
+            if (obj.select[0].hasAttribute('data-option-loader-target')) {
+                let target = document.querySelector(obj.select[0].getAttribute('data-option-loader-target'));
+
+                while (target) {
+                    clearSelectize(target.selectize);
+                    target = document.querySelector(target.getAttribute('data-option-loader-target'));
+                }
+            }
         });
     });
 

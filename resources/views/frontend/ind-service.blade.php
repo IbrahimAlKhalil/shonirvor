@@ -125,7 +125,7 @@
                                                 </div>
                                                 <div class="col-lg-10">
                                                     <input id="showStar{{ $key }}" value="{{ $feedback->star }}" class="invisible">
-                                                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }} বলেন:</p>
+                                                    <p class="mb-0 font-weight-bold">{{ $feedback->user->name }}</p>
                                                     <p>{{ $feedback->say }}</p>
                                                 </div>
                                             </div>
