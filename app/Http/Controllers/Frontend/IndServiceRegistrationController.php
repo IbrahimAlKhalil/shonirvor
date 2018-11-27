@@ -337,7 +337,7 @@ class IndServiceRegistrationController extends Controller
         $subCategories = !$isCategoryRequest ? SubCategory::all()->whereIn('id', $request->post('sub-categories')) : null;
         $requestedSubCategories = [];
 
-        // Create categories
+        // Create category
         if ($isCategoryRequest && $previousCategory->is_confirmed == 0) {
             $category = $ind->category;
             $ind->category()->update(['name' => $request->post('category-request')]);
@@ -480,7 +480,7 @@ class IndServiceRegistrationController extends Controller
 
         // delete category and subcategories
         $ind->workMethods()->detach();
-        $previousRequested = $ind->subCategories('requested');
+        $previousRequested = $ind->subCategories()->onlyPending();
         $ind->subCategories()->detach();
         $previousRequested->delete();
         if (!$isCategoryRequest && $previousCategory->is_confirmed = 0) {
@@ -546,7 +546,7 @@ class IndServiceRegistrationController extends Controller
         $workMethods = [];
         // sub category rates
         if (!$isCategoryRequest) {
-            foreach ($request->post('sub-category-requests') as $subCategoryRate) {
+            foreach ($request->post('sub-category-rates') as $subCategoryRate) {
                 if (array_key_exists('id', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
                         if (array_key_exists('checkbox', $workMethod) && $workMethod['checkbox'] == 'on') {
@@ -561,6 +561,7 @@ class IndServiceRegistrationController extends Controller
                 }
             }
         }
+
         // requested subcategory rates
         if ($isSubCategoryRequest && $request->filled('sub-category-requests')) {
             foreach ($request->post('sub-category-requests') as $index => $subCategoryRate) {

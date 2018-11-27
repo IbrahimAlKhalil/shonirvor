@@ -90,7 +90,7 @@ class Ind extends Model
         return $this->morphMany(Income::class, 'incomeable');
     }
 
-    public function subCategories($status = null)
+    public function subCategories()
     {
         return $this->morphToMany(SubCategory::class, 'sub_categoriable');
     }
