@@ -20,7 +20,8 @@ class UpdateInd extends FormRequest
 
     public function rules()
     {
-        return [
+
+        $rules = [
             'mobile' => 'required|digits:11',
             'referrer' => 'digits:11|different:mobile|exists:users,mobile|nullable',
             'email' => 'nullable|email',
@@ -49,6 +50,18 @@ class UpdateInd extends FormRequest
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        addValidationRules($rules, [
+            'nid' => [$first, 'required|unique:users,nid,' . $user->id],
+            'month' => [$first, 'required|between:1,12'],
+            'year' => [$first, 'required|max:' . (string)(Date('Y') - 18)],
+            'day' => [$first, 'required|between:1,31'],
+            'identities.*' => [$first, 'required|image']
+        ]);
+
+        return $rules;
     }
 
     public function withValidator(Validator $validator)
@@ -63,38 +76,16 @@ class UpdateInd extends FormRequest
             return !is_null($data->village);
         });
 
-        $serviceCategoryIds = array_map(function ($item){
+        $serviceCategoryIds = array_map(function ($item) {
             return $item['category_id'];
         }, Auth::user()->inds()->select('category_id')->get()->toArray());
 
-        $categoryIds = array_map(function ($item){
+        $categoryIds = array_map(function ($item) {
             return $item['id'];
         }, Category::onlyInd()->onlyConfirmed()->select('id')->get()->toArray());
 
         $validator->sometimes('category', ['bail', Rule::notIn($serviceCategoryIds), Rule::in($categoryIds)], function ($data) {
             return $data->category;
-        });
-
-        $user = Auth::user();
-        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
-        $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
-            return $first;
-        });
-
-        $validator->sometimes('month', 'required|between:1,12', function () use (&$first) {
-            return $first;
-        });
-
-        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use (&$first) {
-            return $first;
-        });
-
-        $validator->sometimes('day', 'required|between:1,31', function () use (&$first) {
-            return $first;
-        });
-
-        $validator->sometimes('identities.*', 'required|image', function () use (&$first) {
-            return $first;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();
