@@ -8,7 +8,7 @@
         @foreach($sliders as $slider)
             @php($data = json_decode($slider->data))
             <div class="carousel-item @if($loop->first){{ 'active' }}@endif">
-                <a href="{{ $data->link }}" target="_blank">
+                <a href="{{ $data->link }}">
                     <img class="d-block w-100" src="{{ asset('storage/'.$data->image) }}">
                 </a>
             </div>
