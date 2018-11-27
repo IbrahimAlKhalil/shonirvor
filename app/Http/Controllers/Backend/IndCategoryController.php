@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategory;
 use App\Http\Requests\UpdateCategory;
+use App\Models\Ind;
 use Illuminate\Support\Facades\Storage;
 
 // TODO:: Need to do request validation.
@@ -66,7 +67,10 @@ class IndCategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        if ($category->subCategories->isNotEmpty()) {
+        if (Ind::where('category_id', $category->id)->exists()) {
+            return back()->with('error', $category->name.' ক্যাটাগরিতে সার্ভিস প্রোভাইডার রয়েছে তাই এটি ডিলিট হবে না।');
+        }
+        elseif ($category->subCategories->isNotEmpty()) {
             return back()->with('error', $category->name.' ক্যাটাগরিটির ভিতর সাব-ক্যাটাগরি রয়েছে তাই এটি ডিলিট হবে না।');
         }
         else

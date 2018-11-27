@@ -99,17 +99,19 @@ class OrgMyServiceController extends Controller
         }
 
         $data['new-work-images'] = [];
-        foreach ($request->file('new-work-images') as $image) {
-            array_push($data['new-work-images'], [
-                'file' => $image['file']->store('org/' . $service->id . '/' . 'images')
-            ]);
-        }
-        $count = 0;
-        foreach ($request->post('new-work-images') as $item) {
-            if (isset($data['new-work-images'][$count])) {
-                $data['new-work-images'][$count]['description'] = $item['description'];
+        if ($request->file('new-work-images')) {
+            foreach ($request->file('new-work-images') as $image) {
+                array_push($data['new-work-images'], [
+                    'file' => $image['file']->store('org/' . $service->id . '/' . 'images')
+                ]);
             }
-            $count++;
+            $count = 0;
+            foreach ($request->post('new-work-images') as $item) {
+                if (isset($data['new-work-images'][$count])) {
+                    $data['new-work-images'][$count]['description'] = $item['description'];
+                }
+                $count++;
+            }
         }
 
         DB::beginTransaction();

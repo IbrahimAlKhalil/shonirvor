@@ -3,10 +3,6 @@
 @section('title', $application->serviceEditable->user->name)
 
 @section('webpack')
-    <script src="{{ asset('assets/js/backend/common.bundle.js') }}"></script>
-@endsection
-
-@section('content')
     <style>
         .user-photo {
             width: 100px;
@@ -16,6 +12,10 @@
             background-position: center center;
         }
     </style>
+    <script src="{{ asset('assets/js/backend/common.bundle.js') }}"></script>
+@endsection
+
+@section('content')
     <div class="container d-flex justify-content-center">
         <div class="bg-white mt-4 p-4 rounded row col-9">
             <div class="col-md-12 mb-3">
@@ -217,9 +217,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ asset('storage/' . $image['file']) }}">
-                                                <img src="{{ asset('storage/' . $image['file']) }}"
-                                                     style="max-width: 150px; min-width: 150px;"
-                                                     class="img-fluid img-thumbnail">
+                                                <img src="{{ asset('storage/' . $image['file']) }}" style="max-width: 150px; min-width: 150px;" class="img-fluid img-thumbnail">
                                             </a>
                                         </td>
                                         <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Category;
+use App\Models\Org;
 use App\Models\ServiceType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -71,7 +72,10 @@ class OrgCategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        if ($category->subCategories->isNotEmpty()) {
+        if (Org::where('category_id', $category->id)->exists()) {
+            return back()->with('error', $category->name.' ক্যাটাগরিতে সার্ভিস প্রোভাইডার রয়েছে তাই এটি ডিলিট হবে না।');
+        }
+        elseif ($category->subCategories->isNotEmpty()) {
             return back()->with('error', $category->name.' ক্যাটাগরিটির ভিতর সাব-ক্যাটাগরি রয়েছে তাই এটি ডিলিট হবে না।');
         }
         else
