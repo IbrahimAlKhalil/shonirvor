@@ -457,7 +457,7 @@ class OrgServiceRegistrationController extends Controller
 
         // delete category and subcategories
         DB::table('org_sub_category_rates')->where('org_id', $org->id)->delete();
-        $previousRequested = $org->subCategories('requested');
+        $previousRequested = $org->subCategories();
         $org->subCategories()->detach();
         $previousRequested->delete();
 

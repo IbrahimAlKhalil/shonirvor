@@ -78,7 +78,7 @@ class UpdateInd extends FormRequest
 
         $serviceCategoryIds = array_map(function ($item) {
             return $item['category_id'];
-        }, Auth::user()->inds()->select('category_id')->get()->toArray());
+        }, Auth::user()->inds()->where('id', '<>', request('ind'))->select('category_id')->get()->toArray());
 
         $categoryIds = array_map(function ($item) {
             return $item['id'];
