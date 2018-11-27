@@ -193,7 +193,7 @@
 
                 <div class="row mt-5">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
+                        <p class="h4 border-bottom">সেবার ধরনঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
                             <tr>
@@ -207,7 +207,7 @@
 
                 <div class="row mt-5">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
+                        <p class="h4 border-bottom">সেবাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <thead>
                             <tr>
@@ -239,7 +239,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td><span class="text-muted small">কোন সাব-ক্যাটাগরি নেই</span></td>
+                                    <td><span class="text-muted small">কোন সেবা নেই</span></td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -253,7 +253,7 @@
 
                 <div class="row mt-5">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরির জন্য অনুরোধ করুনঃ</p>
+                        <p class="h4 border-bottom">সেবার জন্য অনুরোধ করুনঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <thead>
                             <tr>
@@ -264,21 +264,6 @@
                             </tr>
                             </thead>
                             <tbody class="text-center" id="sub-category-requests">
-                            <tr>
-                                <td> 1</td>
-                                <td class="text-left">
-                                    <input name="sub-category-requests[0][name]" type="text"
-                                           class="form-control">
-                                </td>
-                                <td><input type="number" class="form-control"
-                                           name="sub-category-requests[0][rate]">
-                                </td>
-                                <td>
-                                        <span class="btn btn-outline-danger btn-sm disabled">
-                                            <i class="fa fa-trash-o"></i> ডিলিট
-                                        </span>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
 

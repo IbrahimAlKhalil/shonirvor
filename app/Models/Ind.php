@@ -92,17 +92,7 @@ class Ind extends Model
 
     public function subCategories($status = null)
     {
-        $result = $this->morphToMany(SubCategory::class, 'sub_categoriable');
-
-        switch ($status) {
-            case 'confirmed':
-                $result = $result->where('is_confirmed', '=', 1);
-                break;
-            case 'requested':
-                $result = $result->where('is_confirmed', '=', 0);
-        }
-
-        return $result;
+        return $this->morphToMany(SubCategory::class, 'sub_categoriable');
     }
 
     public function referredBy()

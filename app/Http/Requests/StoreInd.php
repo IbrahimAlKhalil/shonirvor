@@ -17,7 +17,8 @@ class StoreInd extends FormRequest
 
     public function rules()
     {
-        return [
+
+        $rules = [
             'mobile' => 'required|digits:11',
             'referrer' => 'digits:11|different:mobile|exists:users,mobile|nullable',
             'email' => 'nullable|email',
@@ -46,43 +47,33 @@ class StoreInd extends FormRequest
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
+
+        $user = Auth::user();
+
+        addValidationRules($rules, [
+            'nid' => [!$user->nid, 'required|unique:users,nid'],
+            'month' => [!$user->dob, 'required|between:1,12'],
+            'year' => [!$user->dob, 'required|max:' . (string)(Date('Y') - 18)],
+            'day' => [!$user->dob, 'required|between:1,31'],
+            'identities.*' => [!$user->nid, 'required|image']
+        ]);
+
+        return $rules;
     }
 
     public function withValidator(Validator $validator)
     {
         $validator->sometimes('thana', 'exists:thanas,id', function ($data) {
-            return !is_null($data->thana);
+            return $data->thana;
         });
         $validator->sometimes('union', 'exists:unions,id', function ($data) {
-            return !is_null($data->union);
+            return $data->union;
         });
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
-            return !is_null($data->village);
+            return $data->village;
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
-            return !is_null($data->category);
-        });
-
-
-        $user = Auth::user();
-        $validator->sometimes('nid', 'required|unique:users,nid', function () use (&$user) {
-            return !$user->nid;
-        });
-
-        $validator->sometimes('month', 'required|between:1,12', function () use (&$user) {
-            return !$user->dob;
-        });
-
-        $validator->sometimes('year', 'required|max:' . (string)(Date('Y') - 18), function () use (&$user) {
-            return !$user->dob;
-        });
-
-        $validator->sometimes('day', 'required|between:1,31', function () use (&$user) {
-            return !$user->dob;
-        });
-
-        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
-            return !$user->nid;
+            return $data->category;
         });
 
         $indPackageIds = Package::onlyInd()->pluck('id')->toArray();

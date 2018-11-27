@@ -21,7 +21,7 @@ class StoreOrg extends FormRequest
     public function rules()
     {
 
-        return [
+        $rules = [
             'name' => 'required|min:3',
             'mobile' => 'required|digits:11',
             'referrer' => 'nullable|digits:11|different:mobile|exists:users,mobile',
@@ -49,6 +49,14 @@ class StoreOrg extends FormRequest
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
+
+        $user = Auth::user();
+        addValidationRules($rules, [
+            'nid' => [!$user->nid, 'required|unique:users,nid'],
+            'identities.*' => [!$user->nid, 'required|image']
+        ]);
+
+        return $rules;
     }
 
     public function withValidator(Validator $validator)
@@ -64,15 +72,6 @@ class StoreOrg extends FormRequest
         });
         $validator->sometimes('category', 'exists:categories,id', function ($data) {
             return !is_null($data->category);
-        });
-
-        $user = Auth::user();
-        $validator->sometimes('identities.*', 'required|image', function () use (&$user) {
-            return !$user->nid;
-        });
-
-        $validator->sometimes('nid', 'required|unique:users,nid', function () use (&$user) {
-            return !$user->nid;
         });
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();

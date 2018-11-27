@@ -18,8 +18,7 @@ class UpdateOrg extends FormRequest
 
     public function rules()
     {
-
-        return [
+        $rules = [
             'name' => 'required|min:3',
             'mobile' => 'required|digits:11',
             'referrer' => 'nullable|digits:11|different:mobile|exists:users,mobile',
@@ -45,41 +44,41 @@ class UpdateOrg extends FormRequest
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
         ];
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
+        addValidationRules($rules, [
+            'nid' => [$first, 'required|unique:users,nid,' . $user->id],
+            'identities.*' => [$first, 'required|image']
+        ]);
+
+        return $rules;
     }
 
     public function withValidator(Validator $validator)
     {
         $validator->sometimes('division', 'exists:divisions,id', function ($data) {
-            return !is_null($data->division);
+            return $data->division;
         });
         $validator->sometimes('district', 'exists:districts,id', function ($data) {
-            return !is_null($data->district);
+            return $data->district;
         });
         $validator->sometimes('thana', 'exists:thanas,id', function ($data) {
-            return !is_null($data->thana);
+            return $data->thana;
         });
         $validator->sometimes('union', 'exists:unions,id', function ($data) {
-            return !is_null($data->union);
+            return $data->union;
         });
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
-            return !is_null($data->village);
+            return $data->village;
         });
         $validator->sometimes('category', ['exists:categories,id', Rule::notIn([Auth::user()->orgs()->pluck('id')->toArray()])], function ($data) {
-            return !is_null($data->category);
+            return $data->category;
         });
 
         // TODO: Review image size
         $validator->sometimes('logo', 'image|max:800', function ($data) {
-            return !is_null($data->logo);
-        });
-        $validator->sometimes('identities.*', 'required|image', function () use (&$first) {
-            return $first;
-        });
-
-        $user = Auth::user();
-        $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
-        $validator->sometimes('nid', 'required|integer|unique:users,nid,' . $user->id, function () use (&$first) {
-            return $first;
+            return $data->logo;
         });
 
         $orgPackageIds = Package::onlyOrg()->pluck('id')->toArray();

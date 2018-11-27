@@ -128,6 +128,8 @@ $(document).ready(function () {
             return false;
         }
 
+        console.log(validation.checkForm());
+
         if (stepNumber === 1) {
             let requiredSelectsNotFilled = requiredSelects.toArray().some(select => {
                 return !select.value;

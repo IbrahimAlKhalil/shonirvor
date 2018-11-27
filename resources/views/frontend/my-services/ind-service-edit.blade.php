@@ -185,11 +185,11 @@
 
                 <div class="row mt-4">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস ক্যাটাগরিঃ</p>
+                        <p class="h4 border-bottom">সেবার ধরনঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
                             <tr>
-                                <th scope="row">ক্যাটাগরি</th>
+                                <th scope="row">নাম</th>
                                 <td>{{ $service->category->name }}</td>
                             </tr>
                             </tbody>
@@ -199,7 +199,7 @@
 
                 <div class="row mt-4">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরিঃ</p>
+                        <p class="h4 border-bottom">সেবাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
                             <thead>
                             <tr>
@@ -272,7 +272,7 @@
 
                 <div class="row mt-5">
                     <div class="col-12">
-                        <p class="h4 border-bottom">সার্ভিস সাব-ক্যাটাগরির জন্য অনুরোধ করুনঃ</p>
+                        <p class="h4 border-bottom">সেবার জন্য অনুরোধ করুনঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
                             <thead>
                             <tr>
@@ -285,55 +285,6 @@
                             </tr>
                             </thead>
                             <tbody id="sub-category-requests">
-                            <tr data-repeater-clone="true">
-                                <td>1</td>
-                                <td>
-                                    <input type="text" name="sub-category-requests[0][name]" class="form-control"
-                                           placeholder="সাব-ক্যাটাগরির নাম">
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[0][work-methods][0][rate]"
-                                               class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[0][work-methods][1][rate]"
-                                               class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
-                                        </div>
-                                        <input type="text" name="sub-category-requests[0][work-methods][2][rate]"
-                                               class="form-control">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-center align-content-center">
-                                        <label for="requests-negotiable-0" class="mt-3 checkbox">
-                                            <input type="checkbox" id="requests-negotiable-0" class="mt-2"
-                                                   name="sub-category-requests[0][work-methods][3][rate]"
-                                                   value="negotiable">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>
-                                        <span class="btn btn-outline-danger btn-sm disabled">
-                                            <i class="fa fa-trash-o"></i> ডিলিট
-                                        </span>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
                         <button type="button" class="btn btn-light float-left shadow-sm" id="add-new-req"><i
@@ -370,7 +321,7 @@
                             @forelse($service->workImages as $index => $image)
                                 <tr data-repeater-clone="true">
                                     <td>
-                                        {{ $index }}
+                                        {{ ++$index }}
                                     </td>
                                     <td>
                                         <input type="file"

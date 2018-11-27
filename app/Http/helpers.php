@@ -141,7 +141,7 @@ function orgVisitorCount($orgId)
 function readableDays(int $days)
 {
     $years = floor($days / 365);
-    $months = floor(($days - ($years * 365))/30);
+    $months = floor(($days - ($years * 365)) / 30);
     $remainingDays = ($days - ($years * 365) - ($months * 30));
 
     $result = '';
@@ -175,7 +175,7 @@ function sms($mobile, $message)
         ];
     }
 
-    if (! config('sms.enabled')) {
+    if (!config('sms.enabled')) {
         return [
             'success' => false,
             'status' => 'মেসেজ সার্ভিসটি বন্ধ আছে।'
@@ -186,7 +186,7 @@ function sms($mobile, $message)
         'base_uri' => 'http://portal.smsinbd.com'
     ]);
 
-    $response = $client->request('GET','/smsapi', [
+    $response = $client->request('GET', '/smsapi', [
         'query' => [
             'api_key' => config('sms.api'),
             'type' => 'text',
@@ -224,7 +224,7 @@ function userTotalEarn(User $user)
 
     $totalEarn = 0;
     $user->references->each(function ($reference) use (&$totalEarn, $user, $paymentPackageIds) {
-        if ( ! ($reference->target && $reference->target_start_time && $reference->target_end_time)) {
+        if (!($reference->target && $reference->target_start_time && $reference->target_end_time)) {
             $reference->service->payments()
                 ->whereIn('package_id', $paymentPackageIds)
                 ->where('approved', 1)
@@ -232,7 +232,7 @@ function userTotalEarn(User $user)
                     $fee = $payment->package->properties
                         ->where('name', 'fee')->first()->value;
 
-                    if ( ! $key) {
+                    if (!$key) {
                         $totalEarn += $fee * $reference->onetime_interest / 100;
                     } else {
                         $totalEarn += $fee * $reference->renew_interest / 100;
@@ -250,13 +250,13 @@ function userTotalEarn(User $user)
                         ->where('name', 'fee')->first()->value;
 
                     if ($howManyReferred >= $reference->target) {
-                        if ( ! $key) {
+                        if (!$key) {
                             $totalEarn += $fee * $reference->onetime_interest / 100;
                         } else {
                             $totalEarn += $fee * $reference->renew_interest / 100;
                         }
                     } else {
-                        if ( ! $key) {
+                        if (!$key) {
                             $totalEarn += $fee * $reference->fail_onetime_interest / 100;
                         } else {
                             $totalEarn += $fee * $reference->fail_renew_interest / 100;
@@ -275,7 +275,8 @@ function userTotalEarn(User $user)
  * @param User $user
  * @return Package
  */
-function userReferrerPackage(User $user) {
+function userReferrerPackage(User $user)
+{
 
     if ($user->referPackage()->exists()) {
 
@@ -299,4 +300,22 @@ function userReferrerPackage(User $user) {
     }
 
     return $package;
+}
+
+/**
+ * @param array $arr
+ * @param array $rules
+ */
+function addValidationRules(array &$arr, array $rules)
+{
+    foreach ($rules as $parameter => $rule) {
+        if (!!$rule[0]) {
+            if (isset($arr[$parameter])) {
+                $arr[$parameter] .= '|' . $rule[1];
+                continue;
+            }
+
+            $arr[$parameter] = $rule[1];
+        }
+    }
 }
