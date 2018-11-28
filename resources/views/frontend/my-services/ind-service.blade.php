@@ -274,10 +274,17 @@
                 @endif
                 <div class="row mt-4">
                     <div class="col-12">
-                        <a class="text-white" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
-                           style="text-decoration-line: none">
-                            <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
-                        </a>
+                        @if($service->expire != null)
+                            <a class="text-white" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
+                               style="text-decoration-line: none">
+                                <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
+                            </a>
+                        @else
+                            <a class="text-white" href="{{ route('individual-service-registration.edit', $service->id) }}"
+                               style="text-decoration-line: none">
+                                <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

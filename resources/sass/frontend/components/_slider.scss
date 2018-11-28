@@ -1,4 +1,5 @@
 /**** CUSTOMIZE THE SLIDER ****/
+/* Image resolution: 1000 x 4000 */
 
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
@@ -8,7 +9,7 @@
 
 /* Declare heights because of positioning of img element */
 .carousel-item {
-  height: 22rem;
+  height: 32rem;
   background-color: #777;
 }
 .carousel-item > img {
@@ -16,15 +17,31 @@
   top: 0;
   left: 0;
   min-width: 100%;
-  height: 22rem;
+  height: 32rem;
   object-fit: cover;
+}
+@include media-breakpoint-down(lg) {
+  .carousel-item {
+    height: 25rem;
+  }
+  .carousel-item > img {
+    height: 25rem;
+  }
 }
 @include media-breakpoint-down(md) {
   .carousel-item {
-    height: 12rem;
+    height: 18rem;
   }
   .carousel-item > img {
-    height: 12rem;
+    height: 18rem;
+  }
+}
+@include media-breakpoint-down(sm) {
+  .carousel-item {
+    height: 10rem;
+  }
+  .carousel-item > img {
+    height: 10rem;
   }
 }
 
