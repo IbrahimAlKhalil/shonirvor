@@ -72,7 +72,7 @@ class UpdateOrg extends FormRequest
         $validator->sometimes('village', 'exists:villages,id', function ($data) {
             return $data->village;
         });
-        $validator->sometimes('category', ['exists:categories,id', Rule::notIn([Auth::user()->orgs()->pluck('id')->toArray()])], function ($data) {
+        $validator->sometimes('category', ['exists:categories,id', Rule::notIn(Auth::user()->orgs()->pluck('id')->toArray())], function ($data) {
             return $data->category;
         });
 
