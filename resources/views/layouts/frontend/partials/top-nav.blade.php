@@ -31,7 +31,7 @@
                     </li>
                 @endif
                 <li class="nav-item @if(request()->is('*service*registration*')){{ 'active' }}@endif">
-                    <a class="nav-link" href="{{ route('service-registration-instruction') }}">সার্ভিস রেজিস্ট্রেশান</a>
+                    <a class="nav-link" href="{{ route('service-registration-instruction') }}">সার্ভিস রেজিস্ট্রেশন</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"

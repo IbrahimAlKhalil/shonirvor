@@ -10,7 +10,7 @@ class AdComponentComposer
 {
     public function compose(View $view)
     {
-        $ads = Ad::inRandomOrder()->take(3)->get();
+        $ads = Ad::where('expire', '!=', null)->inRandomOrder()->take(3)->get();
         $view->with(compact('ads'));
     }
 }
