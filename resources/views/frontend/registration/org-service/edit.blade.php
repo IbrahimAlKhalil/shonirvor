@@ -388,12 +388,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
-                                        class="text-danger">*</span></label>
-                            <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                   class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
-                                   data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                        <div class="form-group row mx-5">
+                            <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে)</label>
+                            <div class="col-9">
+                                <input id="trade-license" name="trade-license" type="file" accept="image/*"
+                                       data-image="{{ asset('storage/' . $org->trade_license) }}"
+                                       class="file-picker"
+                                       data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                            </div>
                         </div>
 
                         @if ($first)
@@ -441,7 +443,7 @@
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                        <option value="{{ $package->id }}" {{ selectOpt($selectedPackage, $package->id) }}>{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
                                 </select>
                                 <div class="tab-content mt-2" id="package-descriptions">
@@ -801,8 +803,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
-                            class="text-danger">*</span></label>
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
                        class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
@@ -849,7 +850,7 @@
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)
-                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                        <option value="{{ $package->id }}" {{ selectOpt($selectedPackage, $package->id) }}>{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                     @endforeach
                 </select>
                 <div class="tab-content mt-2" id="mo-package-descriptions">
