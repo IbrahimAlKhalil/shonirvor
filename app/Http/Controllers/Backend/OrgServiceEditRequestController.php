@@ -43,11 +43,11 @@ class OrgServiceEditRequestController extends Controller
     {
         $application = ServiceEdit::where('service_editable_type', 'org')->with('serviceEditable')->findOrFail($id);
 
-        $subCategoryArr = $application->data['sub-categories'];
+        $subCategoryArr = array_key_exists("sub-categories", $application->data) ? $application->data['sub-categories'] : [];
         $subCategoryIds = array_map(function ($item) {
             return $item['id'];
         }, $subCategoryArr);
-        $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get();
+        $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get()->toArray();
 
         $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 

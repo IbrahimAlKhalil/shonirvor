@@ -108,49 +108,51 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mb-3">
-                <div class="rounded row">
-                    <div class="col-md-12 p-0 list-group mt-4">
-                        <table class="table-sm table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">সাব-ক্যাটাগরি</th>
-                                <th scope="col">মূল্য</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @foreach($subCategories as $index => $subCategory)
+            @if($subCategories)
+                <div class="col-md-12 mb-3">
+                    <div class="rounded row">
+                        <div class="col-md-12 p-0 list-group mt-4">
+                            <table class="table-sm table-striped table-hover">
+                                <thead>
                                 <tr>
-                                    <td> {{ en2bnNumber($index+1) }} </td>
-                                    <td>{{ $subCategory['name'] }}</td>
-                                    <td>{{ $subCategory['rate'] }}</td>
+                                    <th scope="col">#</th>
+                                    <th scope="col">সাব-ক্যাটাগরি</th>
+                                    <th scope="col">মূল্য</th>
                                 </tr>
-                            @endforeach
-                            @isset($data['sub-category-requests'])
-                                @foreach($data['sub-category-requests'] as $index => $subCategory)
+                                </thead>
+                                <tbody>
+
+                                @foreach($subCategories as $index => $subCategory)
                                     <tr>
                                         <td> {{ en2bnNumber($index+1) }} </td>
-                                        <td>
-                                            <input type="text" class="form-control"
-                                                   form="approve-form"
-                                                   name="sub-category-requests[{{ $index }}][name]"
-                                                   value="{{ $subCategory['name'] }}">
-                                        </td>
-                                        <td>{{ $subCategory['rate'] }}
-                                            <input type="hidden" class="form-control"
-                                                   form="approve-form"
-                                                   name="sub-category-requests[{{ $index }}][rate]"
-                                                   value="{{ $subCategory['rate'] }}"></td>
+                                        <td>{{ $subCategory['name'] }}</td>
+                                        <td>{{ $subCategory['rate'] }}</td>
                                     </tr>
                                 @endforeach
-                            @endisset
-                            </tbody>
-                        </table>
+                                @isset($data['sub-category-requests'])
+                                    @foreach($data['sub-category-requests'] as $index => $subCategory)
+                                        <tr>
+                                            <td> {{ en2bnNumber($index+1) }} </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                       form="approve-form"
+                                                       name="sub-category-requests[{{ $index }}][name]"
+                                                       value="{{ $subCategory['name'] }}">
+                                            </td>
+                                            <td>{{ $subCategory['rate'] }}
+                                                <input type="hidden" class="form-control"
+                                                       form="approve-form"
+                                                       name="sub-category-requests[{{ $index }}][rate]"
+                                                       value="{{ $subCategory['rate'] }}"></td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="col-md-12 mb-3">
                 <div class="rounded row">

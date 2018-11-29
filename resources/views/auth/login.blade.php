@@ -19,7 +19,7 @@
                         <div class="form-group row">
                             <label for="mobile" class="col-sm-3 col-form-label">মোবাইল নাম্বার<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="number" id="mobile" name="mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="01xxxxxxxxx" value="{{ old('mobile') }}" required>
+                                <input type="number" id="mobile" name="mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="01xxxxxxxxx" value="{{ old('mobile') }}" required autofocus>
                             </div>
                         </div>
                         <div class="form-group row">
