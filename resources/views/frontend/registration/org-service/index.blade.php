@@ -63,6 +63,22 @@
                         </div>
 
                         <div class="form-group row mx-5">
+                            <label for="slug" class="col-3 col-form-label">সার্ভিস লিঙ্ক <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/organization-service/
+                                            </span>
+                                    </div>
+                                    <input type="text" id="slug" name="slug" class="form-control"
+                                           value="{{ oldOrData('slug', time()) }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
                             <label for="referrer" class="col-3 col-form-label">রেফারার (যদি থাকে)</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number" value="{{ old('referrer') }}"
@@ -440,6 +456,20 @@
                             class="text-danger">*</span></label>
                 <input id="mo-mobile" name="mobile" type="number" value="{{ oldOrData('mobile', $user->mobile) }}"
                        class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-slug" class="col-form-label font-weight-bold">সার্ভিস লিঙ্ক <span
+                            class="text-danger">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/organization-service/
+                                            </span>
+                    </div>
+                    <input type="text" id="mo-slug" name="slug" class="form-control"
+                           value="{{ oldOrData('slug', time()) }}">
+                </div>
             </div>
 
             <div class="form-group">

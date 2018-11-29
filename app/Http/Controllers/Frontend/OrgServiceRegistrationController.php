@@ -129,7 +129,7 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->slug = time();
+        $org->slug = $request->post('slug');;
         $org->save();
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
@@ -265,7 +265,7 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($user->identities()->exists()) {
+        if (!$user->identities()->exists()) {
             if ($request->hasFile('identities')) {
                 $identities = [];
                 foreach ($request->file('identities') as $index => $identity) {
@@ -395,6 +395,7 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
+        $org->slug = $request->post('slug');
 
         if ($request->hasFile('trade-license')) {
             // delete old file

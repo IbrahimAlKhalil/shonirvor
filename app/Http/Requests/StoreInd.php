@@ -6,6 +6,7 @@ use App\Models\Package;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StoreInd extends FormRequest
@@ -38,6 +39,7 @@ class StoreInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
+            'slug' => 'required|unique:inds,slug',
             // TODO: Review image size
             'images.*.file' => 'image|max:800',
             'experience-certificate' => 'image|max:800',
@@ -55,7 +57,7 @@ class StoreInd extends FormRequest
             'month' => [!$user->dob, 'required|between:1,12'],
             'year' => [!$user->dob, 'required|max:' . (string)(Date('Y') - 18)],
             'day' => [!$user->dob, 'required|between:1,31'],
-            'identities' => [!$user->identities()->exists(), 'required|image']
+            'identities.*' => [!$user->identities()->exists(), 'required|image']
         ]);
 
         return $rules;
@@ -101,7 +103,10 @@ class StoreInd extends FormRequest
             'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
-            'address.required' => 'ঠিকানা দিতে হবে'
+            'address.required' => 'ঠিকানা দিতে হবে',
+            'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
+            'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে'
         ];
     }
 }
