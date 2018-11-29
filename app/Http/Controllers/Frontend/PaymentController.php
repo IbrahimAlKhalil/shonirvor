@@ -16,7 +16,7 @@ class PaymentController extends Controller
         $this->middleware('provider');
     }
 
-    public function index()
+    public function __invoke()
     {
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],

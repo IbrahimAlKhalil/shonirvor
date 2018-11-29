@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark" style="background-color: #008c73">
     <a class="navbar-brand" href="{{ route('home') }}">
         <img src="{{ asset('assets/images/logo.png') }}" style="width: 35px" alt="Logo">
         {{ config('app.name') }}
@@ -31,7 +31,7 @@
                     </li>
                 @endif
                 <li class="nav-item @if(request()->is('*service*registration*')){{ 'active' }}@endif">
-                    <a class="nav-link" href="{{ route('service-registration-instruction') }}">সার্ভিস রেজিস্ট্রেশান</a>
+                    <a class="nav-link" href="{{ route('service-registration-instruction') }}">সার্ভিস রেজিস্ট্রেশন</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"

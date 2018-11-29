@@ -10,9 +10,7 @@
 @section('content')
     @include('components.success')
     <div class="container-fluid my-5">
-
         <h3 class="text-center mb-5">প্রাতিষ্ঠানিক সেবা নিবন্ধন</h3>
-
         <form method="post" id="registration-form" enctype="multipart/form-data"
               class="d-none d-md-block"
               action="{{ route('organization-service-registration.store') }}">
@@ -636,8 +634,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-logo" class="col-form-label mt-3 font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
-                            class="text-danger">*</span></label>
+                <label for="mo-logo" class="col-form-label mt-3 font-weight-bold">লোগো <span class="text-danger">*</span></label>
                 <input id="mo-logo" name="logo" type="file" accept="image/*"
                        class="file-picker"
                        data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">

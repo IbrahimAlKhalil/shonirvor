@@ -331,4 +331,4 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
 
 }, '');
 
-Route::get('payments', 'Frontend\PaymentController@index')->name('payments');
+Route::get('payments', 'Frontend\PaymentController')->name('payments');
