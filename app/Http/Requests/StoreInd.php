@@ -55,7 +55,7 @@ class StoreInd extends FormRequest
             'month' => [!$user->dob, 'required|between:1,12'],
             'year' => [!$user->dob, 'required|max:' . (string)(Date('Y') - 18)],
             'day' => [!$user->dob, 'required|between:1,31'],
-            'identities.*' => [!$user->nid, 'required|image']
+            'identities' => [!$user->identities()->exists(), 'required|image']
         ]);
 
         return $rules;

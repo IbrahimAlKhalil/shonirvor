@@ -83,7 +83,7 @@ class AreaController extends Controller
         }
 
         if ($id) {
-            return Thana::find($id)->select('id', 'bn_name as name');
+            return Thana::find($id)->select('id', 'bn_name as name')->where('is_pending', 0);
         }
 
 
@@ -98,12 +98,14 @@ class AreaController extends Controller
                     $result = District::find($districtId)
                         ->thanas()
                         ->select('id', 'bn_name as name')
+                        ->where('is_pending', 0)
                         ->paginate($paginate)->all();
                     break;
                 case false:
                     $result = District::find($districtId)
                         ->thanas()
                         ->select('id', 'bn_name as name')
+                        ->where('is_pending', 0)
                         ->get();
             }
             return $result;
@@ -120,10 +122,13 @@ class AreaController extends Controller
                         $result = Division::find($divisionId)
                             ->thanas()
                             ->select('id', 'bn_name as name')
+                            ->where('is_pending', 0)
                             ->paginate($paginate)->all();
                     } else {
-                        $result = Division::find($divisionId)->thanas()
+                        $result = Division::find($divisionId)
+                            ->thanas()
                             ->select('id', 'bn_name as name')
+                            ->where('is_pending', 0)
                             ->get();
                     }
             }
@@ -136,10 +141,10 @@ class AreaController extends Controller
         }
 
         if ($hasPaginate) {
-            return Thana::select('id', 'bn_name as name')->paginate($paginate)->all();
+            return Thana::select('id', 'bn_name as name')->where('is_pending', 0)->paginate($paginate)->all();
         }
 
-        return Thana::select('id', 'bn_name as name')->get();
+        return Thana::select('id', 'bn_name as name')->where('is_pending', 0)->get();
     }
 
 
@@ -153,7 +158,7 @@ class AreaController extends Controller
         }
 
         if ($id) {
-            return Union::find($id)->select('id', 'bn_name as name');
+            return Union::find($id)->select('id', 'bn_name as name')->where('is_pending', 0);
         }
 
 
@@ -170,11 +175,13 @@ class AreaController extends Controller
                     $result = Thana::find($thanaId)
                         ->unions()
                         ->select('id', 'bn_name as name')
+                        ->where('is_pending', 0)
                         ->paginate($paginate);
                     break;
                 case false:
                     $result = Thana::find($thanaId)->unions()
                         ->select('id', 'bn_name as name')
+                        ->where('is_pending', 0)
                         ->get();
             }
             return $result;
@@ -191,9 +198,10 @@ class AreaController extends Controller
                         $result = District::find($districtId)
                             ->unions()
                             ->select('id', 'bn_name as name')
+                            ->where('is_pending', 0)
                             ->paginate($paginate);
                     } else {
-                        $result = District::find($districtId)->unions;
+                        $result = District::find($districtId)->where('is_pending', 0)->unions;
                     }
             }
             return $result;
@@ -209,11 +217,13 @@ class AreaController extends Controller
                         $result = Division::find($divisionId)
                             ->unions()
                             ->select('id', 'bn_name as name')
+                            ->where('is_pending', 0)
                             ->paginate($paginate);
                         break;
                     case false:
                         $result = Division::find($divisionId)->unions()
                             ->select('id', 'bn_name as name')
+                            ->where('is_pending', 0)
                             ->get();
                 }
             }
@@ -230,14 +240,14 @@ class AreaController extends Controller
         }
 
         if ($hasPaginate) {
-            return Union::select('id', 'bn_name as name')->paginate($paginate)->all();
+            return Union::select('id', 'bn_name as name')->where('is_pending', 0)->paginate($paginate)->all();
         }
 
-        return Union::select('id', 'bn_name as name')->get();
+        return Union::select('id', 'bn_name as name')->where('is_pending', 0)->get();
     }
 
     public function villages(Request $request)
     {
-        return Village::select('id', 'bn_name as name')->where('union_id', $request->get('union'))->get();
+        return Village::select('id', 'bn_name as name')->where('is_pending', 0)->where('union_id', $request->get('union'))->get();
     }
 }

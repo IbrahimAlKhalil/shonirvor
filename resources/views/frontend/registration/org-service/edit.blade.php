@@ -388,12 +388,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
-                                        class="text-danger">*</span></label>
-                            <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                   class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
-                                   data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                        <div class="form-group row mx-5">
+                            <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে)</label>
+                            <div class="col-9">
+                                <input id="trade-license" name="trade-license" type="file" accept="image/*"
+                                       data-image="{{ asset('storage/' . $org->trade_license) }}"
+                                       class="file-picker"
+                                       data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
+                            </div>
                         </div>
 
                         @if ($first)
@@ -441,7 +443,7 @@
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                                        <option value="{{ $package->id }}" {{ selectOpt($selectedPackage, $package->id) }}>{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                                     @endforeach
                                 </select>
                                 <div class="tab-content mt-2" id="package-descriptions">
@@ -570,7 +572,7 @@
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
-                <select name="mo-division" id="mo-division"
+                <select name="division" id="mo-division"
                         data-option-loader-url="{{ route('api.districts') }}"
                         data-option-loader-target="#mo-district"
                         data-option-loader-param="division">
@@ -579,7 +581,7 @@
                         <option value="{{ $division->id }}" {{ selectOpt($org->division_id, $division->id) }}>{{ $division->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-district" id="mo-district"
+                <select name="district" id="mo-district"
                         data-placeholder="-- জেলা --"
                         data-option-loader-url="{{ route('api.thanas') }}"
                         data-option-loader-target="#mo-thana"
@@ -589,7 +591,7 @@
                         <option value="{{ $district->id }}" {{ selectOpt($org->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-thana" id="mo-thana"
+                <select name="thana" id="mo-thana"
                         data-placeholder="-- থানা --"
                         data-option-loader-url="{{ route('api.unions') }}"
                         data-option-loader-target="#mo-union"
@@ -600,7 +602,7 @@
                         <option value="{{ $thana->id }}" {{ selectOpt($org->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-union" id="mo-union"
+                <select name="union" id="mo-union"
                         data-placeholder="-- ইউনিয়ন --"
                         data-option-loader-url="{{ route('api.villages') }}"
                         data-option-loader-target="#mo-village"
@@ -611,7 +613,7 @@
                         <option value="{{ $union->id }}" {{ selectOpt($org->union_id, $union->id) }}>{{ $union->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-village" id="mo-village"
+                <select name="village" id="mo-village"
                         data-placeholder="-- এলাকা --"
                         data-option-loader-properties="value=id,text=bn_name">
                     <option value="">-- এলাকা --</option>
@@ -801,24 +803,26 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
-                            class="text-danger">*</span></label>
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
                        class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
             </div>
 
             @if ($first)
-                <div class="form-group">
-                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
+                @if($errors->has('identities'))
+                    @php($err = ((array) $errors->get('identities')))
+                @endif
+                <div class="form-group row mx-5">
+                    <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                         ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                 class="text-danger">*</span></label>
-                    <div class="d-flex">
-                        @foreach($org->user->identities as $identity)
-                            <input id="mo-identities" name="identities[]" type="file" accept="image/*"
+                    <div class="col-9">
+                        @foreach($ind->user->identities as $index => $identity)
+                            <input id="identities" name="identities[]" type="file" accept="image/*"
                                    data-image="{{ asset('storage/' . $identity->path) }}"
                                    class="file-picker"
-                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                                   data-error="@if($errors->has('identities') && isset($err[$index])) {{ $err[$index] }} @endif">
                         @endforeach
                     </div>
                 </div>
@@ -849,7 +853,7 @@
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)
-                        <option value="{{ $package->id }}">{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
+                        <option value="{{ $package->id }}" {{ selectOpt($selectedPackage, $package->id) }}>{{ $package->properties->groupBy('name')['name'][0]->value }}</option>
                     @endforeach
                 </select>
                 <div class="tab-content mt-2" id="mo-package-descriptions">

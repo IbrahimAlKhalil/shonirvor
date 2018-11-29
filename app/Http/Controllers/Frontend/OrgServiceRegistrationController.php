@@ -30,6 +30,9 @@ class OrgServiceRegistrationController extends Controller
     {
         $user = Auth::user();
         $orgs = $user->orgs()->onlyPending();
+        if ($user->inds()->onlyPending()->exists()) {
+            return redirect(route('service-registration-instruction'));
+        }
         if ($orgs->exists()) {
             return redirect(route('organization-service-registration.edit', $orgs->first()->id));
         }
@@ -42,9 +45,10 @@ class OrgServiceRegistrationController extends Controller
         $categories = Category::onlyOrg()->onlyConfirmed()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
+        $identityExists = $user->identities()->exists();
 
         // user didn't make any request for being organizational service provider
-        return view('frontend.registration.org-service.index', compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount'));
+        return view('frontend.registration.org-service.index', compact('classesToAdd', 'orgs', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount', 'identityExists'));
     }
 
     public function store(StoreOrg $request)
@@ -52,7 +56,9 @@ class OrgServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         $user = Auth::user();
-
+        if ($user->inds()->onlyPending()->exists()) {
+            return redirect(route('service-registration-instruction'));
+        }
         // handle category  and sub-category request
 
         $isCategoryRequest = $request->has('no-category') && $request->post('no-category') == 'on';
@@ -60,7 +66,7 @@ class OrgServiceRegistrationController extends Controller
         $category = Category::find($request->post('category'));
         $subCategories = !$isCategoryRequest ? SubCategory::whereIn('id', array_map(function ($item) {
             return $item['id'];
-        }, $request->post('sub-categories')))->get() : null;
+        }, $request->has('sub-categories') ? $request->has('sub-categories') : []))->get() : null;
 
         // Create categories
         if ($isCategoryRequest) {
@@ -178,13 +184,15 @@ class OrgServiceRegistrationController extends Controller
         !$isCategoryRequest && $org->subCategories()->saveMany($subCategories);
 
         $data = [];
-        foreach ($request->post('sub-categories') as $subCategory) {
-            if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
-                array_push($data, [
-                    'org_id' => $org->id,
-                    'sub_category_id' => $subCategory['id'],
-                    'rate' => $subCategory['rate']
-                ]);
+        if ($request->has('sub-categories')) {
+            foreach ($request->post('sub-categories') as $subCategory) {
+                if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
+                    array_push($data, [
+                        'org_id' => $org->id,
+                        'sub_category_id' => $subCategory['id'],
+                        'rate' => $subCategory['rate']
+                    ]);
+                }
             }
         }
 
@@ -257,12 +265,14 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if(!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+        if ($user->identities()->exists()) {
             if ($request->hasFile('identities')) {
                 $identities = [];
-                foreach ($request->file('identities') as $identity) {
+                foreach ($request->file('identities') as $index => $identity) {
+                    if ($index > 1) break;
                     array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
                 }
+                DB::table('identities')->insert($identities);
             }
         }
 
@@ -273,7 +283,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['referredBy.user', 'workImages','division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->find($id);
+        $org = Org::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->findOrFail($id);
 
         if ($org->user_id != Auth::id() || !is_null($org->expire)) {
             return redirect(route('organization-service-registration.index'));
@@ -295,8 +305,9 @@ class OrgServiceRegistrationController extends Controller
         $thanas = $org->district->thanas()->whereIsPending(0)->get();
         $unions = $org->thana->unions()->whereIsPending(0)->get();
         $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
+        $selectedPackage = $org->payments()->select('package_id')->first()->package_id;
 
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first'));
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first', 'selectedPackage'));
     }
 
     public function update(UpdateOrg $request, $id)
@@ -427,8 +438,7 @@ class OrgServiceRegistrationController extends Controller
                 $org->referredBy->fail_renew_interest = null;
             }
             $org->referredBy->save();
-        }
-        elseif ($request->filled('referrer')  && ! $org->referredBy) {
+        } elseif ($request->filled('referrer') && !$org->referredBy) {
 
             $referrer = User::with('referPackage')
                 ->where('mobile', $request->input('referrer'))
@@ -450,8 +460,7 @@ class OrgServiceRegistrationController extends Controller
                 $reference->fail_renew_interest = $referrerPackage['refer_fail_renew_interest'][0]->value;;
             }
             $reference->save();
-        }
-        elseif (! $request->filled('referrer') && $org->referredBy) {
+        } elseif (!$request->filled('referrer') && $org->referredBy) {
             $org->referredBy->delete();
         }
 
@@ -490,13 +499,15 @@ class OrgServiceRegistrationController extends Controller
         }
 
         $data = [];
-        foreach ($request->post('sub-categories') as $subCategory) {
-            if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
-                array_push($data, [
-                    'org_id' => $org->id,
-                    'sub_category_id' => $subCategory['id'],
-                    'rate' => $subCategory['rate']
-                ]);
+        if ($request->has('sub-categories')) {
+            foreach ($request->post('sub-categories') as $subCategory) {
+                if (isset($subCategory['id']) && !is_null($subCategory['id'])) {
+                    array_push($data, [
+                        'org_id' => $org->id,
+                        'sub_category_id' => $subCategory['id'],
+                        'rate' => $subCategory['rate']
+                    ]);
+                }
             }
         }
 
@@ -527,13 +538,15 @@ class OrgServiceRegistrationController extends Controller
         // org additional price
         DB::table('org_additional_prices')->where('org_id', $org->id)->delete();
         $data = [];
-        foreach ($request->post('additional-pricing') as $price) {
-            if (isset($price['name']) && isset($price['info'])) {
-                array_push($data, [
-                    'org_id' => $org->id,
-                    'name' => $price['name'],
-                    'info' => $price['info']
-                ]);
+        if ($request->has('additional-pricing')) {
+            foreach ($request->post('additional-pricing') as $price) {
+                if (isset($price['name']) && isset($price['info'])) {
+                    array_push($data, [
+                        'org_id' => $org->id,
+                        'name' => $price['name'],
+                        'info' => $price['info']
+                    ]);
+                }
             }
         }
 
@@ -589,12 +602,15 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if(!$user->nid) {
+        if (!$user->nid) {
             if ($request->hasFile('identities')) {
                 $identities = [];
-                foreach ($request->file('identities') as $identity) {
+                foreach ($request->file('identities') as $index => $identity) {
+                    if ($index > 1) break;
                     array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
                 }
+
+                DB::table('identities')->insert($identities);
             }
         }
 

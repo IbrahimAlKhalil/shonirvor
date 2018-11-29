@@ -30,6 +30,10 @@ class IndServiceRegistrationController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if ($user->orgs()->onlyPending()->exists()) {
+            return redirect(route('service-registration-instruction'));
+        }
+
         $inds = $user->inds()->onlyPending();
 
         $hasAccount = $user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
@@ -46,8 +50,9 @@ class IndServiceRegistrationController extends Controller
         $categories = Category::onlyInd()->onlyConfirmed()->whereNotIn('id', $categoryIds)->get();
         $divisions = Division::all();
         $classesToAdd = ['active', 'disabled'];
+        $identityExists = $user->identities()->exists();
 
-        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount'));
+        return view('frontend.registration.ind-service.index', compact('classesToAdd', 'inds', 'divisions', 'categories', 'user', 'packages', 'paymentMethods', 'hasAccount', 'identityExists'));
     }
 
     public function store(StoreInd $request)
@@ -58,6 +63,9 @@ class IndServiceRegistrationController extends Controller
         DB::beginTransaction();
 
         $user = Auth::user();
+        if ($user->orgs()->onlyPending()->exists()) {
+            return redirect(route('service-registration-instruction'));
+        }
 
         // handle category  and sub-category request
         // TODO:: Validate that selected sub-categories belong to the selected category
@@ -222,7 +230,7 @@ class IndServiceRegistrationController extends Controller
 
         $workMethods = [];
         // sub category rates
-        if (!$isCategoryRequest) {
+        if (!$isCategoryRequest && $request->has('sub-category-rates')) {
             foreach ($request->post('sub-category-rates') as $subCategoryRate) {
                 if (array_key_exists('id', $subCategoryRate)) {
                     foreach ($subCategoryRate['work-methods'] as $workMethod) {
@@ -300,7 +308,7 @@ class IndServiceRegistrationController extends Controller
         }
 
         // identities
-        if (!($user->inds()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists())) {
+        if (!$user->identities()->exists()) {
             if ($request->hasFile('identities')) {
                 $identities = [];
                 foreach ($request->file('identities') as $identity) {
