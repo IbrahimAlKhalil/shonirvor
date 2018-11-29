@@ -148,7 +148,7 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
-        $ind->slug = time();
+        $ind->slug = $request->post('slug');
         $ind->save();
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
@@ -420,6 +420,7 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
+        $ind->slug = $request->post('slug');
         $ind->save();
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');

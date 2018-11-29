@@ -38,6 +38,7 @@ class StoreOrg extends FormRequest
             'village-request' => 'required_with:no-village',
             'address' => 'required|string',
             'category' => 'required_without:no-category',
+            'slug' => 'required|unique:orgs,slug',
             'category-request' => 'required_with:no-category',
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
@@ -98,7 +99,9 @@ class StoreOrg extends FormRequest
             'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
-            'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
+            'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
+            'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে'
         ];
     }
 }

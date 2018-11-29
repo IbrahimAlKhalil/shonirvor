@@ -38,6 +38,7 @@ class UpdateInd extends FormRequest
             'address' => 'required|string',
             'category' => 'required_without:no-category',
             'category-request' => 'required_with:no-category',
+            'slug' => Rule::unique('inds')->ignore(request('ind')),
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
@@ -114,7 +115,9 @@ class UpdateInd extends FormRequest
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
             'address.required' => 'ঠিকানা দিতে হবে',
-            'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
+            'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
+            'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে'
         ];
     }
 }
