@@ -20,10 +20,10 @@
             <div class="col-lg-8">
                 <div class="row bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom text-center">টপ ক্যাটাগরি</p>
+                        <p class="h4 border-bottom text-center text-white" style="background-color: #215408ab">টপ ক্যাটাগরি</p>
                     </div>
                     <div class="col-lg-6">
-                        <p class="h5 pl-2 service-type-title-left mb-4">ব্যক্তিগত সার্ভিস</p>
+                        <p class="h5 pl-2 text-center mb-4">ব্যক্তিগত সার্ভিস</p>
                         <div class="row border-right">
                             @foreach($indCategories as $category)
                                 <div class="col-4 text-center">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 text-lg-right">
-                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <div class="row border-left">
                             @foreach($orgCategories as $category)
                                 <div class="col-4 text-center">
@@ -56,10 +56,10 @@
                 @if($indTopServices->isNotEmpty() || $orgTopServices->isNotEmpty())
                     <div class="row mt-4 bg-white rounded shadow-sm pt-3">
                         <div class="col-12">
-                            <p class="h4 border-bottom text-center">টপ সার্ভিস প্রভাইডার</p>
+                            <p class="h4 border-bottom text-center text-white" style="background-color: #215408ab">টপ সার্ভিস প্রভাইডার</p>
                         </div>
                         <div class="col-lg-6">
-                            <p class="h5 pl-2 service-type-title-left mb-4">ব্যক্তিগত সার্ভিস</p>
+                            <p class="h5 pl-2 text-center mb-4">ব্যক্তিগত সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($indTopServices as $key => $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
@@ -84,7 +84,7 @@
                             </ul>
                         </div>
                         <div class="col-lg-6 text-lg-right">
-                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 service-type-title-right mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($orgTopServices as $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
