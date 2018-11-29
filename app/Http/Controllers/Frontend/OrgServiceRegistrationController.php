@@ -265,7 +265,7 @@ class OrgServiceRegistrationController extends Controller
         }
 
         // identities
-        if ($user->identities()->exists()) {
+        if (!$user->identities()->exists()) {
             if ($request->hasFile('identities')) {
                 $identities = [];
                 foreach ($request->file('identities') as $index => $identity) {

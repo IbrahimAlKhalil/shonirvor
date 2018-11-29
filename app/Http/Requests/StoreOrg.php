@@ -53,7 +53,7 @@ class StoreOrg extends FormRequest
         $user = Auth::user();
         addValidationRules($rules, [
             'nid' => [!$user->nid, 'required|unique:users,nid'],
-            'identities' => [!$user->identities()->exists(), 'required|image']
+            'identities.*' => [!$user->identities()->exists(), 'required|image']
         ]);
 
         return $rules;
@@ -98,7 +98,7 @@ class StoreOrg extends FormRequest
             'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
-            'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
+            'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
         ];
     }
 }

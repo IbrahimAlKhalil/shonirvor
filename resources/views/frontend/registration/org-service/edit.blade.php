@@ -68,6 +68,22 @@
                         </div>
 
                         <div class="form-group row mx-5">
+                            <label for="slug" class="col-3 col-form-label">সার্ভিস লিঙ্ক <span
+                                        class="text-danger">*</span></label>
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/individual-service/
+                                            </span>
+                                    </div>
+                                    <input type="text" id="slug" name="slug" class="form-control"
+                                           value="{{ oldOrData('slug', $org->slug) }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
                             <label for="referrer" class="col-3 col-form-label">রেফারার</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
@@ -422,12 +438,12 @@
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
+                                                      name="images[{{ $i }}][description]">@isset($org->workImages[$i]){{ $org->workImages[$i]->description }}@endisset</textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                                    accept="image/*"
                                                    class="file-picker mt-3"
-                                                   @isset($ind->workImages[$i])
-                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                                   @isset($org->workImages[$i])
+                                                   data-image="{{ asset('storage/' . $org->workImages[$i]->path) }}"
                                                    @endisset
                                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                                         </div>
@@ -530,6 +546,20 @@
                 <input id="mo-mobile" name="mobile" type="number"
                        value="{{ oldOrData('mobile', $org->mobile) }}"
                        class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mo-slug" class="col-form-label font-weight-bold">সার্ভিস লিঙ্ক <span
+                            class="text-danger">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend d-none d-md-block">
+                                            <span class="input-group-text">
+                                                {{ route('home') }}/organization-service/
+                                            </span>
+                    </div>
+                    <input type="text" id="mo-slug" name="slug" class="form-control"
+                           value="{{ oldOrData('slug', $org->slug) }}">
+                </div>
             </div>
 
             <div class="form-group">
@@ -818,7 +848,7 @@
                         ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                 class="text-danger">*</span></label>
                     <div class="col-9">
-                        @foreach($ind->user->identities as $index => $identity)
+                        @foreach($org->user->identities as $index => $identity)
                             <input id="identities" name="identities[]" type="file" accept="image/*"
                                    data-image="{{ asset('storage/' . $identity->path) }}"
                                    class="file-picker"
@@ -835,12 +865,12 @@
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
                             <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
+                                      name="images[{{ $i }}][description]">@isset($org->workImages[$i]){{ $org->workImages[$i]->description }}@endisset</textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
                                    accept="image/*"
                                    class="file-picker mt-3"
-                                   @isset($ind->workImages[$i])
-                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                   @isset($org->workImages[$i])
+                                   data-image="{{ asset('storage/' . $org->workImages[$i]->path) }}"
                                    @endisset
                                    data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
                         </div>

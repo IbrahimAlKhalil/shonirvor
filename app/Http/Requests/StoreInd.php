@@ -55,7 +55,7 @@ class StoreInd extends FormRequest
             'month' => [!$user->dob, 'required|between:1,12'],
             'year' => [!$user->dob, 'required|max:' . (string)(Date('Y') - 18)],
             'day' => [!$user->dob, 'required|between:1,31'],
-            'identities' => [!$user->identities()->exists(), 'required|image']
+            'identities.*' => [!$user->identities()->exists(), 'required|image']
         ]);
 
         return $rules;
@@ -102,7 +102,7 @@ class StoreInd extends FormRequest
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
             'address.required' => 'ঠিকানা দিতে হবে',
-            'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
+            'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
         ];
     }
 }
