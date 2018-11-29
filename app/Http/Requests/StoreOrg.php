@@ -97,7 +97,8 @@ class StoreOrg extends FormRequest
             'thana-request.required_with' => 'থানার নাম দিতে হবে',
             'union-request.required_with' => 'ইউনিয়নের নাম দিতে হবে',
             'village-request.required_with' => 'গ্রামের নাম দিতে হবে',
-            'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে'
+            'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
+            'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে'
         ];
     }
 }

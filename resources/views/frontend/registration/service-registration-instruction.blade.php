@@ -3,7 +3,7 @@
 @section('title', 'Service Provider Registration')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
