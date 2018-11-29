@@ -47,7 +47,7 @@ class IndServiceEditRequestController extends Controller
             }
         ])->where('service_editable_type', 'ind')->findOrFail($id);
 
-        $subCategoryArr = $application->data['sub-categories'];
+        $subCategoryArr = array_key_exists("sub-categories", $application->data) ? $application->data['sub-categories'] : [];
         $subCategoryIds = array_map(function ($item) {
             return $item['id'];
         }, $subCategoryArr);
@@ -103,6 +103,7 @@ class IndServiceEditRequestController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
+
         $application = ServiceEdit::where('service_editable_type', 'ind')->findOrFail($request->post('application-id'));
         $ind = $application->serviceEditable;
         $data = $application->data;

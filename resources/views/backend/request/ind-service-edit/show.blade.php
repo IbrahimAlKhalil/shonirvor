@@ -82,9 +82,7 @@
                                     <td>
                                         <a href="{{ asset('storage/' . $data['cover-photo']) }}"
                                            target="_blank">
-                                            <img src="{{ asset('storage/' . $data['cover-photo']) }}"
-                                                 style="height: 50px;"
-                                                 class="img-fluid img-thumbnail">
+                                            <img src="{{ asset('storage/' . $data['cover-photo']) }}" style="height: 50px;" class="img-fluid img-thumbnail">
                                         </a>
                                     </td>
                                 </tr>
@@ -94,7 +92,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 mb-3">
+
+            @if($subCategories)
+                <div class="col-md-12 mb-3">
                 <div class="rounded row">
                     <div class="col-md-12 p-0 list-group mt-4">
                         <table class="table-sm table-striped table-hover">
@@ -170,6 +170,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             @if(($data['images'] && count($data['images'])) || ($data['new-work-images'] && count($data['new-work-images'])))
                 <div class="col-md-12 mb-3">
