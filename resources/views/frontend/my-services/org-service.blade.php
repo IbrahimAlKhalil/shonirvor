@@ -125,7 +125,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3"><span class="text-muted small">কোন সার্ভিস নেই</span></td>
+                                    <td colspan="8"><span class="text-muted small">কোন সার্ভিস নেই</span></td>
                                 </tr>
                             @endforelse
                             </tbody>

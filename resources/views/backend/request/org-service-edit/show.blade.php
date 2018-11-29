@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            @if($subCategories)
+            @if($subCategories || isset($data['sub-category-requests']))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">
@@ -154,29 +154,19 @@
                 </div>
             @endif
 
-            <div class="col-md-12 mb-3">
-                <div class="rounded row">
-                    <div class="col-md-12 p-0 list-group mt-4">
-                        <table class="table-sm table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col">নামঃ</th>
-                                <th scope="col">তথ্য</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($data['kaj'] as $index => $kaj)
+            @isset($data['kaj'])
+                <div class="col-md-12 mb-3">
+                    <div class="rounded row">
+                        <div class="col-md-12 p-0 list-group mt-4">
+                            <table class="table-sm table-striped table-hover">
+                                <thead>
                                 <tr>
-                                    <td>
-                                        {{ $kaj['name'] }}
-                                    </td>
-                                    <td>
-                                        {{ $kaj['info'] }}
-                                    </td>
+                                    <th scope="col">নামঃ</th>
+                                    <th scope="col">তথ্য</th>
                                 </tr>
-                            @endforeach
-                            @isset($data['kaj-requests'])
-                                @foreach($data['kaj-requests'] as $index => $kaj)
+                                </thead>
+                                <tbody>
+                                @foreach($data['kaj'] as $index => $kaj)
                                     <tr>
                                         <td>
                                             {{ $kaj['name'] }}
@@ -186,14 +176,26 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            @endisset
-                            </tbody>
-                        </table>
+                                @isset($data['kaj-requests'])
+                                    @foreach($data['kaj-requests'] as $index => $kaj)
+                                        <tr>
+                                            <td>
+                                                {{ $kaj['name'] }}
+                                            </td>
+                                            <td>
+                                                {{ $kaj['info'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endisset
 
-            @if(($data['images'] && count($data['images'])) || ($data['new-work-images'] && count($data['new-work-images'])))
+            @if((isset($data['images']) && count($data['images'])) || (isset($data['new-work-images']) && count($data['new-work-images'])))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">
@@ -232,23 +234,25 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                                @foreach($data['new-work-images'] as $image)
-                                    <tr>
-                                        <td>
-                                            {{ en2bnNumber(++$count) }}
-                                        </td>
-                                        <td>
-                                            <a href="{{ asset('storage/' . $image['file']) }}">
-                                                <img src="{{ asset('storage/' . $image['file']) }}"
-                                                     style="max-width: 150px; min-width: 150px;"
-                                                     class="img-fluid img-thumbnail">
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ $image['description'] }}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @isset($data['new-work-images'])
+                                    @foreach($data['new-work-images'] as $image)
+                                        <tr>
+                                            <td>
+                                                {{ en2bnNumber(++$count) }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ asset('storage/' . $image['file']) }}">
+                                                    <img src="{{ asset('storage/' . $image['file']) }}"
+                                                         style="max-width: 150px; min-width: 150px;"
+                                                         class="img-fluid img-thumbnail">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ $image['description'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
                                 </tbody>
                             </table>
                         </div>

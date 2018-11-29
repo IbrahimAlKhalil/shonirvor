@@ -14,6 +14,7 @@ use App\Models\Village;
 use App\Models\WorkImage;
 use App\Models\WorkMethod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class IndServiceEditRequestController extends Controller
@@ -87,7 +88,11 @@ class IndServiceEditRequestController extends Controller
             }
         }
 
-        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = null;
+
+        if (isset($data['images'])) {
+            $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        }
 
         $user = $application->serviceEditable->user;
         $data = $application->data;
@@ -126,58 +131,73 @@ class IndServiceEditRequestController extends Controller
         $ind->save();
 
         // store sub-category edits
-        foreach ($data['sub-categories'] as $subCategory) {
-            foreach ($subCategory['work-methods'] as $key => $workMethod) {
-                $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subCategory['id'])->where('work_method_id', $key + 1)->first();
-                if (!$method) continue;
-                if ($key == 3) {
-                    if ($workMethod['rate'] != 'negotiable') {
-                        $method->delete();
-                    }
-                    continue;
-                }
+        if (array_key_exists('sub-categories', $data)) {
+            $deletedSubCategoryIds = array_map(function ($item) {
+                return $item['id'];
+            }, $data['sub-categories']);
 
-                $method->rate = $workMethod['rate'];
-                $method->save();
+
+            // Delete ind workmethods
+            IndWorkMethod::where('ind_id', $ind->id)->whereIn('sub_category_id', $deletedSubCategoryIds)->delete();
+
+            // Detach sub categories
+            $ind->subCategories()->whereNotIn('sub_categories.id', $deletedSubCategoryIds)->detach();
+
+            foreach ($data['sub-categories'] as $subCategory) {
+                foreach ($subCategory['work-methods'] as $key => $workMethod) {
+                    $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subCategory['id'])->where('work_method_id', $key + 1)->first();
+                    if (!$method) continue;
+                    if ($key == 3) {
+                        if ($workMethod['rate'] != 'negotiable') {
+                            $method->delete();
+                        }
+                        continue;
+                    }
+
+                    $method->rate = $workMethod['rate'];
+                    $method->save();
+                }
             }
         }
 
         // store sub-category requests
-        foreach ($data['sub-category-requests'] as $datum) {
-            $subCategory = new SubCategory;
-            $subCategory->category_id = $ind->category_id;
-            $subCategory->name = $datum['name'];
-            $subCategory->is_confirmed = 1;
-            $subCategory->save();
+        if(isset($data['sub-category-requests'])) {
+            foreach ($data['sub-category-requests'] as $datum) {
+                $subCategory = new SubCategory;
+                $subCategory->category_id = $ind->category_id;
+                $subCategory->name = $datum['name'];
+                $subCategory->is_confirmed = 1;
+                $subCategory->save();
 
-            $workMethods = [];
-            foreach ($datum['work-methods'] as $index => $workMethod) {
-                if ($index != 3) {
-                    if (!is_null($workMethod['rate'])) {
+                $workMethods = [];
+                foreach ($datum['work-methods'] as $index => $workMethod) {
+                    if ($index != 3) {
+                        if (!is_null($workMethod['rate'])) {
+                            array_push($workMethods, [
+                                'ind_id' => $ind->id,
+                                'sub_category_id' => $subCategory->id,
+                                'work_method_id' => $index + 1,
+                                'rate' => $workMethod['rate']
+                            ]);
+                        }
+
+                        continue;
+                    }
+
+                    if ($workMethod['rate'] == 'negotiable') {
                         array_push($workMethods, [
                             'ind_id' => $ind->id,
                             'sub_category_id' => $subCategory->id,
                             'work_method_id' => $index + 1,
-                            'rate' => $workMethod['rate']
+                            'rate' => 0
                         ]);
                     }
-
-                    continue;
                 }
 
-                if ($workMethod['rate'] == 'negotiable') {
-                    array_push($workMethods, [
-                        'ind_id' => $ind->id,
-                        'sub_category_id' => $subCategory->id,
-                        'work_method_id' => $index + 1,
-                        'rate' => 0
-                    ]);
-                }
+                DB::table('ind_work_method')->insert($workMethods);
+
+                $ind->subCategories()->attach($subCategory);
             }
-
-            DB::table('ind_work_method')->insert($workMethods);
-
-            $ind->subCategories()->attach($subCategory);
         }
 
         if (isset($data['images'])) {

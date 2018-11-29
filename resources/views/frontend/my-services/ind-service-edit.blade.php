@@ -259,7 +259,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-muted small" colspan="6">কোন সাব-ক্যাটাগরি নেই</td>
+                                    <td class="text-muted small" colspan="8">কোন সাব-ক্যাটাগরি নেই</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -344,7 +344,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">কোন ছবি আপলোড করা হয়নি</td>
+                                    <td colspan="8">কোন ছবি আপলোড করা হয়নি</td>
                                 </tr>
                             @endforelse
                             </tbody>

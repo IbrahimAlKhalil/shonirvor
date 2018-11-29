@@ -82,7 +82,8 @@
                                     <td>
                                         <a href="{{ asset('storage/' . $data['cover-photo']) }}"
                                            target="_blank">
-                                            <img src="{{ asset('storage/' . $data['cover-photo']) }}" style="height: 50px;" class="img-fluid img-thumbnail">
+                                            <img src="{{ asset('storage/' . $data['cover-photo']) }}"
+                                                 style="height: 50px;" class="img-fluid img-thumbnail">
                                         </a>
                                     </td>
                                 </tr>
@@ -95,84 +96,85 @@
 
             @if($subCategories)
                 <div class="col-md-12 mb-3">
-                <div class="rounded row">
-                    <div class="col-md-12 p-0 list-group mt-4">
-                        <table class="table-sm table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">সাব-ক্যাটাগরি</th>
-                                @foreach($workMethodNames as $method)
-                                    <th scope="col">{{ $method->name }}</th>
+                    <div class="rounded row">
+                        <div class="col-md-12 p-0 list-group mt-4">
+                            <table class="table-sm table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">সাব-ক্যাটাগরি</th>
+                                    @foreach($workMethodNames as $method)
+                                        <th scope="col">{{ $method->name }}</th>
+                                    @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @php($count = 0)
+                                @foreach($subCategories as $name => $subCategory)
+                                    <tr>
+                                        <td> {{ en2bnNumber(++$count) }} </td>
+                                        <td>{{ $name }}</td>
+                                        @php($methodCount = 0)
+                                        @foreach($subCategory as $methodName => $rate)
+                                            @php($methodCount++)
+                                            @if($methodCount != 4)
+                                                <td>
+                                                    @if($rate)
+                                                        {{ $rate }}
+                                                    @else
+                                                        <i class="fa fa-times"></i>
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td>
+                                                    @if($rate == '')
+                                                        <i class="fa fa-times"></i>
+                                                    @else
+                                                        <i class="fa fa-check"></i>
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
                                 @endforeach
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php($count = 0)
-                            @foreach($subCategories as $name => $subCategory)
-                                <tr>
-                                    <td> {{ en2bnNumber(++$count) }} </td>
-                                    <td>{{ $name }}</td>
-                                    @php($methodCount = 0)
-                                    @foreach($subCategory as $methodName => $rate)
-                                        @php($methodCount++)
-                                        @if($methodCount != 4)
-                                            <td>
-                                                @if($rate)
-                                                    {{ $rate }}
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td>
-                                                @if($rate == '')
-                                                    <i class="fa fa-times"></i>
-                                                @else
-                                                    <i class="fa fa-check"></i>
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                            @php($count = 0)
-                            @foreach($subCategoryRequests as $name => $subCategory)
-                                <tr>
-                                    <td> {{ en2bnNumber(++$count) }} </td>
-                                    <td><input type="text" class="form-control"
-                                               name="sub-category-requests[{{ $count-1 }}]" value="{{ $name }}"></td>
-                                    @php($methodCount = 0)
-                                    @foreach($subCategory as $methodName => $rate)
-                                        @php($methodCount++)
-                                        @if($methodCount != 4)
-                                            <td>
-                                                @if($rate)
-                                                    {{ $rate }}
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td>
-                                                @if($rate == 'negotiable')
-                                                    <i class="fa fa-check"></i>
-                                                @else
-                                                    <i class="fa fa-times"></i>
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                @php($count = 0)
+                                @foreach($subCategoryRequests as $name => $subCategory)
+                                    <tr>
+                                        <td> {{ en2bnNumber(++$count) }} </td>
+                                        <td><input type="text" class="form-control"
+                                                   name="sub-category-requests[{{ $count-1 }}]" value="{{ $name }}">
+                                        </td>
+                                        @php($methodCount = 0)
+                                        @foreach($subCategory as $methodName => $rate)
+                                            @php($methodCount++)
+                                            @if($methodCount != 4)
+                                                <td>
+                                                    @if($rate)
+                                                        {{ $rate }}
+                                                    @else
+                                                        <i class="fa fa-times"></i>
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td>
+                                                    @if($rate == 'negotiable')
+                                                        <i class="fa fa-check"></i>
+                                                    @else
+                                                        <i class="fa fa-times"></i>
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endif
 
-            @if(($data['images'] && count($data['images'])) || ($data['new-work-images'] && count($data['new-work-images'])))
+            @if((isset($data['images']) && count($data['images'])) || (isset($data['new-work-images']) && count($data['new-work-images'])))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">
@@ -211,21 +213,23 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                                @foreach($data['new-work-images'] as $image)
-                                    <tr>
-                                        <td>
-                                            {{ en2bnNumber(++$count) }}
-                                        </td>
-                                        <td>
-                                            <a href="{{ asset('storage/' . $image['file']) }}">
-                                                <img src="{{ asset('storage/' . $image['file']) }}" style="max-width: 150px; min-width: 150px;" class="img-fluid img-thumbnail">
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ $image['description'] }}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @isset($data['new-work-images'])
+                                    @foreach($data['new-work-images'] as $image)
+                                        <tr>
+                                            <td>
+                                                {{ en2bnNumber(++$count) }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ asset('storage/' . $image['file']) }}">
+                                                    <img src="{{ asset('storage/' . $image['file']) }}" style="max-width: 150px; min-width: 150px;" class="img-fluid img-thumbnail">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ $image['description'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
                                 </tbody>
                             </table>
                         </div>

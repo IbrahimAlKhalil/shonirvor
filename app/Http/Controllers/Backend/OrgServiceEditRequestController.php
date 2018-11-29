@@ -49,7 +49,11 @@ class OrgServiceEditRequestController extends Controller
         }, $subCategoryArr);
         $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get()->toArray();
 
-        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = null;
+
+        if (isset($data['images'])) {
+            $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        }
 
         $data = $application->data;
         $division = Division::find($data['division']);
@@ -87,30 +91,34 @@ class OrgServiceEditRequestController extends Controller
         }
         $org->save();
 
-        $subCategoryIds = array_map(function ($item) {
-            return $item['id'];
-        }, $application->data['sub-categories']);
 
-        $org->subCategories()->detach();
-        DB::table('org_sub_category_rates')->whereIn('sub_category_id', $subCategoryIds)->where('org_id', $org->id)->delete();
-
-
+        // Attach/Detach sub categories
         $subCategories = [];
         $subCategoryRates = [];
-        foreach ($data['sub-categories'] as $datum) {
-            array_push($subCategoryRates, [
-                'org_id' => $org->id,
-                'sub_category_id' => $datum['id'],
-                'rate' => $datum['rate']
-            ]);
+        if (isset($data['sub-categories'])) {
+            $subCategoryIds = array_map(function ($item) {
+                return $item['id'];
+            }, $data['sub-categories']);
 
-            array_push($subCategories, [
-                'sub_category_id' => $datum['id'],
-                'sub_categoriable_id' => $org->id,
-                'sub_categoriable_type' => 'org'
-            ]);
+            $org->subCategories()->detach();
+            DB::table('org_sub_category_rates')->whereIn('sub_category_id', $subCategoryIds)->where('org_id', $org->id)->delete();
+
+            foreach ($data['sub-categories'] as $datum) {
+                array_push($subCategoryRates, [
+                    'org_id' => $org->id,
+                    'sub_category_id' => $datum['id'],
+                    'rate' => $datum['rate']
+                ]);
+
+                array_push($subCategories, [
+                    'sub_category_id' => $datum['id'],
+                    'sub_categoriable_id' => $org->id,
+                    'sub_categoriable_type' => 'org'
+                ]);
+            }
         }
 
+        // Store sub-category requests
         if (isset($data['sub-category-requests'])) {
             foreach ($request->post('sub-category-requests') as $datum) {
                 $newSubCategory = new SubCategory;
@@ -136,11 +144,13 @@ class OrgServiceEditRequestController extends Controller
 
         DB::table('org_sub_category_rates')->insert($subCategoryRates);
 
-        foreach ($data['kaj'] as $datum) {
-            DB::table('org_additional_prices')->where('id', $datum['id'])->update([
-                'name' => $datum['name'],
-                'info' => $datum['info'],
-            ]);
+        if (isset($data['kaj'])) {
+            foreach ($data['kaj'] as $datum) {
+                DB::table('org_additional_prices')->where('id', $datum['id'])->update([
+                    'name' => $datum['name'],
+                    'info' => $datum['info'],
+                ]);
+            }
         }
 
         if (isset($data['kaj-requests'])) {

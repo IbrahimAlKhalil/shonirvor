@@ -239,7 +239,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td><span class="text-muted small">কোন সেবা নেই</span></td>
+                                    <td colspan="8"><span class="text-muted small">কোন সেবা নেই</span></td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -364,7 +364,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">কোন ছবি আপলোড করা হয়নি</td>
+                                    <td colspan="8">কোন ছবি আপলোড করা হয়নি</td>
                                 </tr>
                             @endforelse
                             </tbody>
