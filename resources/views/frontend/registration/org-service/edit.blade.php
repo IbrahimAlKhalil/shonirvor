@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠানের বর্ণনা</label>
+                            <label for="description" class="col-3 col-form-label">প্রতিষ্ঠান সম্পর্কে</label>
                             <div class="col-9">
                                   <textarea rows="6" id="description" name="description"
                                             class="form-control">{{ oldOrData('description', $org->description) }}</textarea>
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="referrer" class="col-3 col-form-label">রেফারার</label>
+                            <label for="referrer" class="col-3 col-form-label">রেফারার (যদি থাকে)</label>
                             <div class="col-9">
                                 <input id="referrer" name="referrer" type="number"
                                        value="{{ oldOrData('referrer', $org->referredBy ? $org->referredBy->user->mobile : '') }}"
@@ -93,7 +93,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="email" class="col-3 col-form-label">কাজের ইমেইল</label>
+                            <label for="email" class="col-3 col-form-label">ইমেইল</label>
                             <div class="col-9">
                                 <input id="email" name="email" type="text"
                                        value="{{ oldOrData('email', $org->email) }}"
@@ -133,7 +133,7 @@
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
-                            <label class="col-3 col-form-label">এলাকা <span class="text-danger">*</span></label>
+                            <label class="col-3 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
                             <div class="col-9">
                                 <div class="row">
                                     <div class="col-md">
@@ -236,7 +236,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="address" class="col-3 col-form-label">ঠিকানা <span class="text-danger">*</span></label>
+                            <label for="address" class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span class="text-danger">*</span></label>
                             <div class="col-9">
                     <textarea id="address" rows="8" name="address" required="required"
                               class="form-control">{{ oldOrData('address', $org->address) }}</textarea>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="p-4" id="step-3">
                         <div class="form-group row mx-5">
-                            <label for="category" class="col-3 col-form-label">ক্যাটাগরি <span
+                            <label for="category" class="col-3 col-form-label">প্রতিষ্ঠানের সেবার ধরন <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="category" name="category"
@@ -253,31 +253,31 @@
                                         data-option-loader-target="#sub-categories"
                                         data-option-loader-param="category"
                                         data-option-loader-nodisable="true">
-                                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+                                    <option value="">-- সেবার ধরন নির্বাচন করুন --</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ selectOpt($org->category->id, $category->id) }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
 
-                                <label class="checkbox mt-4">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                                <label class="checkbox mt-4">আমার সেবার ধরন এখানে তালিকাভুক্ত নেই ।
                                     <input type="checkbox" id="no-category" name="no-category"
                                            class="mt-2 no-something" {{ checkBox(!$org->category->is_confirmed) }}>
                                     <span></span>
 
                                     <input type="text" id="category-request" name="category-request"
                                            class="form-control mt-3 mb-4"
-                                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।"
+                                           placeholder="এখানে আপনার সেবার ধরন টাইপ করুন ।"
                                            value="{{ $org->category->name }}">
                                 </label>
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="sub-categories" class="col-3 col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                            <label for="sub-categories" class="col-3 col-form-label">আপনার প্রতিষ্ঠানের সেবার ধরন <span
                                         class="text-danger">*</span></label>
                             <div class="col-9">
                                 <select id="sub-categories"
-                                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                                        data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
                                         data-option-loader-properties="value=id,text=name"
                                         multiple>
                                     @php($subCategoryIds = $orgSubCategories->pluck('id')->toArray())
@@ -309,7 +309,7 @@
                                 </ul>
 
                                 <div class="mt-4 checkbox">
-                                    <label for="no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।</label>
+                                    <label for="no-sub-category">আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই ।</label>
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                            class="mt-2 no-something" {{ checkBox($isNoSubCategory) }}>
                                     <span></span>
@@ -323,7 +323,7 @@
                                                         <input type="text"
                                                                class="form-control col-md-5 sub-category-name"
                                                                name="sub-category-requests[{{ $count }}][name]"
-                                                               placeholder="সাব-ক্যাটাগরির নাম"
+                                                               placeholder="সেবার ধরনের নাম"
                                                                value="{{ $orgSubCategory->name }}">
                                                         <input type="number"
                                                                class="form-control col-md-5 sub-category-rate"
@@ -348,13 +348,11 @@
                                         </li>
                                     </ul>
                                 </div>
-
-
                             </div>
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="more-price" class="col-3 col-form-label">অতিরিক্ত কাজের তথ্য </label>
+                            <label for="more-price" class="col-3 col-form-label">প্রাতিষ্ঠানিক তথ্য</label>
                             <div class="col-9" id="otirikto-kaj">
                                 @foreach($org->additionalPrices as $key => $additionalPrice)
                                     <div class="row border rounded shadow-sm mt-2 position-relative"
@@ -408,7 +406,7 @@
                             <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে)</label>
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
-                                       data-image="{{ asset('storage/' . $org->trade_license) }}"
+                                       @if($org->trade_license)data-image="{{ asset('storage/' . $org->trade_license) }}"@endif
                                        class="file-picker"
                                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
                             </div>
@@ -416,8 +414,7 @@
 
                         @if ($first)
                         <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
                                         class="text-danger">*</span></label>
                             <div class="col-9 d-flex flex-wrap">
                                 @foreach($org->user->identities as $orgex => $identity)
@@ -431,12 +428,12 @@
                         @endif
 
                         <div class="form-group row mx-5">
-                            <label for="images" class="col-3 col-form-label">কাজের ছবি</label>
+                            <label for="images" class="col-3 col-form-label">প্রাতিষ্ঠানিক ছবি</label>
                             <div class="col-9">
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                                            <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
+                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                                       name="images[{{ $i }}][description]">@isset($org->workImages[$i]){{ $org->workImages[$i]->description }}@endisset</textarea>
                                             <input id="images" name="images[{{ $i }}][file]" type="file"
@@ -454,7 +451,7 @@
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
-                            <label for="" class="col-3 col-form-label">প্যাকেজ নির্ধারণ করুন</label>
+                            <label for="" class="col-3 col-form-label">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন প্যাকেজ নির্ধারণ করুন</label>
                             <div class="col-9">
                                 <select name="package" id="package">
                                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
@@ -535,7 +532,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-description" class="col-form-label font-weight-bold">প্রতিষ্ঠানের বর্ণনা</label>
+                <label for="mo-description" class="col-form-label font-weight-bold">প্রতিষ্ঠান সম্পর্কে</label>
                 <textarea rows="6" id="mo-description" name="description"
                           class="form-control">{{ oldOrData('description', $org->description) }}</textarea>
             </div>
@@ -563,14 +560,14 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-referrer" class="col-form-label font-weight-bold">রেফারার</label>
+                <label for="mo-referrer" class="col-form-label font-weight-bold">রেফারার (যদি থাকে)</label>
                 <input id="mo-referrer" name="referrer" type="number"
                        value="{{ oldOrData('referrer', $org->referredBy ? $org->referredBy->user->mobile : '') }}"
                        class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="mo-email" class="col-form-label font-weight-bold">কাজের ইমেইল</label>
+                <label for="mo-email" class="col-form-label font-weight-bold">ইমেইল</label>
                 <input id="mo-email" name="email" type="text"
                        value="{{ oldOrData('email', $org->email) }}"
                        class="form-control">
@@ -601,7 +598,7 @@
             @endif
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">ঠিকানা <span class="text-danger">*</span></label>
                 <select name="division" id="mo-division"
                         data-option-loader-url="{{ route('api.districts') }}"
                         data-option-loader-target="#mo-district"
@@ -684,40 +681,40 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-address" class="col-form-label font-weight-bold">ঠিকানা <span
+                <label for="mo-address" class="col-form-label font-weight-bold">পূর্ণাঙ্গ ঠিকানা <span
                             class="text-danger">*</span></label>
                 <textarea id="mo-address" rows="8" name="address" required="required"
                           class="form-control">{{ oldOrData('address', $org->address) }}</textarea>
             </div>
 
             <div class="form-group">
-                <label for="mo-category" class="col-form-label font-weight-bold">ক্যাটাগরি <span
+                <label for="mo-category" class="col-form-label font-weight-bold">প্রতিষ্ঠানের সেবার ধরন <span
                             class="text-danger">*</span></label>
                 <select id="mo-category" name="category"
                         data-option-loader-url="{{ route('api.sub-categories') }}"
                         data-option-loader-target="#mo-sub-categories"
                         data-option-loader-param="category">
-                    <option value="">-- ক্যাটাগরি নির্বাচন করুন --</option>
+                    <option value="">-- সেবার ধরন নির্বাচন করুন --</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ selectOpt($org->category->id, $category->id) }}>{{ $category->name }}</option>
                     @endforeach
                 </select>
-                <label for="mo-no-category" class="checkbox">আমার ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                <label for="mo-no-category" class="checkbox">আমার সেবার ধরন এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-category" name="no-category"
                            class="mt-2 no-something" {{ checkBox(!$org->category->is_confirmed) }}>
                     <span></span>
                     <input type="text" id="mo-category-request" name="category-request"
                            class="form-control mt-3 mb-4"
-                           placeholder="এখানে আপনার ক্যাটাগরি টাইপ করুন ।"
+                           placeholder="এখানে আপনার সেবার ধরন টাইপ করুন ।"
                            value="{{ $org->category->name }}">
                 </label>
             </div>
 
             <div class="form-group">
-                <label for="mo-sub-categories" class="col-form-label">সার্ভিস সাব-ক্যাটাগরি <span
+                <label for="mo-sub-categories" class="col-form-label">আপনার প্রতিষ্ঠানের সেবার ধরন <span
                             class="text-danger">*</span></label>
                 <select id="mo-sub-categories"
-                        data-placeholder="-- সাব ক্যাটাগরি নির্বাচন করুন --"
+                        data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
                         data-option-loader-properties="value=id,text=name"
                         multiple>
                     @php($subCategoryIds = $orgSubCategories->pluck('id')->toArray())
@@ -748,7 +745,7 @@
                     <li class="repeater-insert-before d-none"></li>
                 </ul>
 
-                <label class="mt-4 checkbox" for="mo-no-sub-category">আমার সাব-ক্যাটাগরি এখানে তালিকাভুক্ত নেই ।
+                <label class="mt-4 checkbox" for="mo-no-sub-category">আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই ।
                     <input type="checkbox" id="mo-no-sub-category" name="no-sub-category"
                            class="mt-2 no-something" {{ checkBox($isNoSubCategory) }}>
                     <span></span>
@@ -764,7 +761,7 @@
                                     <input type="text"
                                            class="form-control col-5 sub-category-name"
                                            name="sub-category-requests[{{ $count }}][name]"
-                                           placeholder="সাব-ক্যাটাগরির নাম"
+                                           placeholder="সেবার ধরনের নাম"
                                            value="{{ $orgSubCategory->name }}">
                                     <input type="number"
                                            class="form-control col-5 sub-category-rate"
@@ -790,7 +787,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label">অতিরিক্ত কাজের তথ্য </label>
+                <label class="col-form-label">প্রাতিষ্ঠানিক তথ্য</label>
                 <div id="mo-otirikto-kaj">
                     @foreach($org->additionalPrices as $key => $additionalPrice)
                         <div class="border rounded shadow-sm mt-2 position-relative"
@@ -835,7 +832,7 @@
             <div class="form-group">
                 <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
-                       class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
+                       class="file-picker" @if($org->trade_license)data-image="{{ asset('storage/' . $org->trade_license) }}"@endif
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
             </div>
 
@@ -844,8 +841,7 @@
                     @php($err = ((array) $errors->get('identities')))
                 @endif
                 <div class="form-group row mx-5">
-                    <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                        ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                    <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ  - এর স্ক্যান কপি <span
                                 class="text-danger">*</span></label>
                     <div class="col-9">
                         @foreach($org->user->identities as $index => $identity)
@@ -859,11 +855,11 @@
             @endif
 
             <div class="form-group">
-                <label for="images" class="font-weight-bold col-form-label">কাজের ছবি</label>
+                <label for="images" class="font-weight-bold col-form-label">প্রাতিষ্ঠানিক ছবি</label>
                 <div class="flex">
                     @for($i=0; $i<4; $i++)
                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                            <label for="images-{{ $i }}-text" class="my-2">বর্ণনা</label>
+                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
                             <textarea id="images-{{ $i }}-text" type="text" class="form-control"
                                       name="images[{{ $i }}][description]">@isset($org->workImages[$i]){{ $org->workImages[$i]->description }}@endisset</textarea>
                             <input id="images" name="images[{{ $i }}][file]" type="file"
@@ -879,7 +875,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">প্যাকেজ নির্ধারণ করুন</label>
+                <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন</label>
                 <select name="package" id="mo-package">
                     <option value="">-- প্যাকেজ নির্ধারণ করুন --</option>
                     @foreach($packages as $package)

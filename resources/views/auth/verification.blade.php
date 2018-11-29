@@ -16,11 +16,6 @@
                         <div class="alert alert-info text-small" role="alert">
                             আপনার {{ en2bnNumber($user->mobile) }} এই নাম্বারে একটি ভেরিফিকেশন কোড পাঠানো হয়েছে।
                         </div>
-                        {{--@if(session()->has('message'))--}}
-                            {{--<div class="alert alert-info text-center rounded">--}}
-                                {{--{!! session()->get('message') !!}--}}
-                            {{--</div>--}}
-                        {{--@endif--}}
                         <form action="{{ route('verification', request()->route('user')) }}" method="post">
                             {{ csrf_field() }}
                             <div class="form-group row">
@@ -28,7 +23,7 @@
                                 <div class="col-sm-8">
                                     <input type="number" id="verification" name="verification"
                                            class="form-control{{ $errors->has('verification') ? ' is-invalid' : '' }}"
-                                           value="{{ old('verification') }}" placeholder="xxxxxx" required>
+                                           value="{{ old('verification') }}" placeholder="xxxxxx" required autofocus>
                                     @include('components.invalid', ['name' => 'verification'])
                                 </div>
                             </div>
