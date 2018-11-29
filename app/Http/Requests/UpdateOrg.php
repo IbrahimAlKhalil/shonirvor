@@ -49,7 +49,7 @@ class UpdateOrg extends FormRequest
         $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
         addValidationRules($rules, [
             'nid' => [$first, 'required|unique:users,nid,' . $user->id],
-            'identities.*' => [$first, 'required|image']
+            'identities' => [$first, 'required|image']
         ]);
 
         return $rules;

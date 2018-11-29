@@ -309,8 +309,7 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে) <span
-                                        class="text-danger">*</span></label>
+                            <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স</label>
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
                                        class="file-picker"
@@ -318,17 +317,20 @@
                             </div>
                         </div>
 
-                        @if (!$hasAccount)
+                        @if (!$identityExists)
+                            @if($errors->has('identities'))
+                                @php($err = ((array) $errors->get('identities')))
+                            @endif
                             <div class="form-group row mx-5">
                                 <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ
                                     - এর স্ক্যান কপি <span class="text-danger">*</span></label>
                                 <div class="col-9 d-flex">
                                     <input id="identities" name="identities[]" type="file" accept="image/*"
                                            class="file-picker"
-                                           data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                                           data-error="@if($errors->has('identities') && isset($err[0])) {{ $err[0] }} @endif">
                                     <input id="identities" name="identities[]" type="file" accept="image/*"
                                            class="file-picker"
-                                           data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                                           data-error="@if($errors->has('identities') && isset($err[1])) {{ $err[1] }} @endif">
                                 </div>
                             </div>
                         @endif
@@ -642,22 +644,24 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে) <span
-                            class="text-danger">*</span></label>
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
                        class="file-picker"
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
             </div>
 
-            @if (!$hasAccount)
+            @if (!$identityExists)
+                @if($errors->has('identities'))
+                    @php($err = ((array) $errors->get('identities')))
+                @endif
                 <div class="form-group">
                     <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম
                         সনদ -এর স্ক্যান কপি <span class="text-danger">*</span></label>
                     <div class="d-flex">
                         <input id="mo-identities" name="identities[]" type="file" accept="image/*" class="file-picker"
-                               data-error="@if($errors->has('identities.0')) {{ $errors->first('identities.0') }} @endif">
+                               data-error="@if($errors->has('identities') && isset($err[0])) {{ $err[0] }} @endif">
                         <input name="identities[]" type="file" accept="image/*" class="file-picker"
-                               data-error="@if($errors->has('identities.1')) {{ $errors->first('identities.1') }} @endif">
+                               data-error="@if($errors->has('identities') && isset($err[1])) {{ $err[1] }} @endif">
                     </div>
                 </div>
             @endif

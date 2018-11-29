@@ -58,7 +58,7 @@ class UpdateInd extends FormRequest
             'month' => [$first, 'required|between:1,12'],
             'year' => [$first, 'required|max:' . (string)(Date('Y') - 18)],
             'day' => [$first, 'required|between:1,31'],
-            'identities.*' => [$first, 'required|image']
+            'identities' => [$first, 'required|image']
         ]);
 
         return $rules;

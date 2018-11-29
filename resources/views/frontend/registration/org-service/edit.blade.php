@@ -572,7 +572,7 @@
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
-                <select name="mo-division" id="mo-division"
+                <select name="division" id="mo-division"
                         data-option-loader-url="{{ route('api.districts') }}"
                         data-option-loader-target="#mo-district"
                         data-option-loader-param="division">
@@ -581,7 +581,7 @@
                         <option value="{{ $division->id }}" {{ selectOpt($org->division_id, $division->id) }}>{{ $division->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-district" id="mo-district"
+                <select name="district" id="mo-district"
                         data-placeholder="-- জেলা --"
                         data-option-loader-url="{{ route('api.thanas') }}"
                         data-option-loader-target="#mo-thana"
@@ -591,7 +591,7 @@
                         <option value="{{ $district->id }}" {{ selectOpt($org->district_id, $district->id) }}>{{ $district->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-thana" id="mo-thana"
+                <select name="thana" id="mo-thana"
                         data-placeholder="-- থানা --"
                         data-option-loader-url="{{ route('api.unions') }}"
                         data-option-loader-target="#mo-union"
@@ -602,7 +602,7 @@
                         <option value="{{ $thana->id }}" {{ selectOpt($org->thana_id, $thana->id) }}>{{ $thana->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-union" id="mo-union"
+                <select name="union" id="mo-union"
                         data-placeholder="-- ইউনিয়ন --"
                         data-option-loader-url="{{ route('api.villages') }}"
                         data-option-loader-target="#mo-village"
@@ -613,7 +613,7 @@
                         <option value="{{ $union->id }}" {{ selectOpt($org->union_id, $union->id) }}>{{ $union->bn_name }}</option>
                     @endforeach
                 </select>
-                <select name="mo-village" id="mo-village"
+                <select name="village" id="mo-village"
                         data-placeholder="-- এলাকা --"
                         data-option-loader-properties="value=id,text=bn_name">
                     <option value="">-- এলাকা --</option>
@@ -810,16 +810,19 @@
             </div>
 
             @if ($first)
-                <div class="form-group">
-                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
+                @if($errors->has('identities'))
+                    @php($err = ((array) $errors->get('identities')))
+                @endif
+                <div class="form-group row mx-5">
+                    <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
                         ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
                                 class="text-danger">*</span></label>
-                    <div class="d-flex">
-                        @foreach($org->user->identities as $identity)
-                            <input id="mo-identities" name="identities[]" type="file" accept="image/*"
+                    <div class="col-9">
+                        @foreach($ind->user->identities as $index => $identity)
+                            <input id="identities" name="identities[]" type="file" accept="image/*"
                                    data-image="{{ asset('storage/' . $identity->path) }}"
                                    class="file-picker"
-                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                                   data-error="@if($errors->has('identities') && isset($err[$index])) {{ $err[$index] }} @endif">
                         @endforeach
                     </div>
                 </div>

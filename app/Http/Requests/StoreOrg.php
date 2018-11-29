@@ -53,7 +53,7 @@ class StoreOrg extends FormRequest
         $user = Auth::user();
         addValidationRules($rules, [
             'nid' => [!$user->nid, 'required|unique:users,nid'],
-            'identities.*' => [!$user->nid, 'required|image']
+            'identities' => [!$user->identities()->exists(), 'required|image']
         ]);
 
         return $rules;

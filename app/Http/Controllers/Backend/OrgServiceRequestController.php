@@ -206,7 +206,7 @@ class OrgServiceRequestController extends Controller
         $application->subCategories()->where('is_confirmed', 0)->delete();
 
         $application->forceDelete();
-        $application->payments->delete();
+        $application->payments()->delete();
         if ($application->referredBy) $application->referredBy->delete();
         $category->is_confirmed == 0 && $category->delete();
         $village->is_pending == 1 && $village->delete();
