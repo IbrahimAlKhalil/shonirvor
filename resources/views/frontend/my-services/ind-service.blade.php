@@ -39,38 +39,38 @@
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
+                            <tr>
+                                <th scope="row">মোবাইল নম্বর</th>
+                                <td>{{ $service->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ইমেইল</th>
+                                <td>{{ $service->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ওয়েবসাইট</th>
+                                <td>{{ $service->website }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ফেসবুক</th>
+                                <td>{{ $service->facebook }}</td>
+                            </tr>
+                            @if($service->user->dob)
                                 <tr>
-                                    <th scope="row">মোবাইল নম্বর</th>
-                                    <td>{{ $service->mobile }}</td>
+                                    <th scope="row">জন্ম তারিখ</th>
+                                    <td>{{ implode('-', array_reverse(explode('-', $service->user->dob))) }}</td>
                                 </tr>
+                            @endif
+                            @if($service->user->qualification)
                                 <tr>
-                                    <th scope="row">ইমেইল</th>
-                                    <td>{{ $service->email }}</td>
+                                    <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
+                                    <td>{{ $service->user->qualification }}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">ওয়েবসাইট</th>
-                                    <td>{{ $service->website }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ফেসবুক</th>
-                                    <td>{{ $service->facebook }}</td>
-                                </tr>
-                                @if($service->user->dob)
-                                    <tr>
-                                        <th scope="row">জন্ম তারিখ</th>
-                                        <td>{{ implode('-', array_reverse(explode('-', $service->user->dob))) }}</td>
-                                    </tr>
-                                @endif
-                                @if($service->user->qualification)
-                                    <tr>
-                                        <th scope="row">যোগ্যতা/অভিজ্ঞতা</th>
-                                        <td>{{ $service->user->qualification }}</td>
-                                    </tr>
-                                @endif
-                                <tr>
-                                    <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                    <td>{{ $service->user->nid }}</td>
-                                </tr>
+                            @endif
+                            <tr>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                <td>{{ $service->user->nid }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -80,26 +80,26 @@
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
                             <tbody>
-                                <tr>
-                                    <th scope="row">জেলা</th>
-                                    <td>{{ $service->district->bn_name}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">থানা</th>
-                                    <td>{{ $service->thana->bn_name}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ইউনিয়ন</th>
-                                    <td>{{ $service->union->bn_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">এলাকা</th>
-                                    <td>{{ $service->village->bn_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ঠিকানা</th>
-                                    <td>{{ $service->address }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $service->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $service->thana->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $service->union->bn_name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">এলাকা</th>
+                                <td>{{ $service->village->bn_name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ঠিকানা</th>
+                                <td>{{ $service->address }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -135,28 +135,35 @@
                                 <tr>
                                     <td> {{ en2bnNumber($index+1) }} </td>
                                     <td>{{ $subCategory->name }}</td>
-                                    @php($methods = $indWorkMethods[$subCategory->id])
-                                    @php($methodIds = $methods->pluck('id')->toArray())
-                                    @foreach($workMethods as $method)
-                                        @if($method->id != 4)
-                                            @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
-                                            <td>
-                                                @if($currentMethod->first())
-                                                    ৳{{ en2bnNumber($currentMethod->first()->pivot->rate) }}
-                                                @else
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td>
-                                                @if(in_array(4, $methodIds))
-                                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                                @else
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                @endif
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                    @if(isset($indWorkMethods[$subCategory->id]))
+                                        @php($methods = $indWorkMethods[$subCategory->id])
+                                        @php($methodIds = $methods->pluck('id')->toArray())
+                                        @foreach($workMethods as $method)
+                                            @if($method->id != 4)
+                                                @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
+                                                <td>
+                                                    @if($currentMethod->first())
+                                                        ৳{{ en2bnNumber($currentMethod->first()->pivot->rate) }}
+                                                    @else
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td>
+                                                    @if(in_array(4, $methodIds))
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    @else
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <td><i class="fa fa-times" aria-hidden="true"></i></td>
+                                        <td><i class="fa fa-times" aria-hidden="true"></i></td>
+                                        <td><i class="fa fa-times" aria-hidden="true"></i></td>
+                                        <td><i class="fa fa-times" aria-hidden="true"></i></td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
@@ -178,7 +185,8 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <a href="{{ asset('storage/' . $service->cv) }}" target="_blank">
-                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}" class="img-fluid img-thumbnail rounded">
+                                            <img src="{{ asset('storage/default/icons/pdf.svg') }}"
+                                                 class="img-fluid img-thumbnail rounded">
                                         </a>
                                     </div>
                                 </div>
@@ -267,7 +275,8 @@
                         <div class="col-12">
                             <a href="{{ route('frontend.applications.individual-top-service.index').'?category='.$service->category_id }}"
                                style="text-decoration-line: none">
-                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন
+                                </button>
                             </a>
                         </div>
                     </div>
@@ -280,7 +289,8 @@
                                 <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
                             </a>
                         @else
-                            <a class="text-white" href="{{ route('individual-service-registration.edit', $service->id) }}"
+                            <a class="text-white"
+                               href="{{ route('individual-service-registration.edit', $service->id) }}"
                                style="text-decoration-line: none">
                                 <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
                             </a>

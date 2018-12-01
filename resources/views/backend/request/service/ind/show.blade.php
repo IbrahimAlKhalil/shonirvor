@@ -291,28 +291,43 @@
                                                        name="confirmed-sub-categories[]">
                                             @endif
                                         </td>
-                                        @php($methods = $indWorkMethods[$subCategory->id])
-                                        @php($methodIds = $methods->pluck('id')->toArray())
-                                        @foreach($workMethods as $method)
-                                            @if($method->id != 4)
-                                                @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
-                                                <td>
-                                                    @if($currentMethod->first())
-                                                        ৳{{ en2bnNumber($currentMethod->first()->pivot->rate) }}
-                                                    @else
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                    @endif
-                                                </td>
-                                            @else
-                                                <td>
-                                                    @if(in_array(4, $methodIds))
-                                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                                    @else
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                    @endif
-                                                </td>
-                                            @endif
-                                        @endforeach
+                                        @if(isset($indWorkMethods[$subCategory->id]))
+                                            @php($methods = $indWorkMethods[$subCategory->id])
+                                            @php($methodIds = $methods->pluck('id')->toArray())
+                                            @foreach($workMethods as $method)
+                                                @if($method->id != 4)
+                                                    @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
+                                                    <td>
+                                                        @if($currentMethod->first())
+                                                            ৳{{ en2bnNumber($currentMethod->first()->pivot->rate) }}
+                                                        @else
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        @endif
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        @if(in_array(4, $methodIds))
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        @else
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <td>
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </td>
+                                            <td>
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </td>
+                                            <td>
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </td>
+                                            <td>
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </td>
+                                        @endif
                                         <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট

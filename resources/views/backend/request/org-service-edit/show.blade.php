@@ -222,7 +222,7 @@
                                                              style="max-width: 150px; min-width: 150px;"
                                                              class="img-fluid img-thumbnail">
                                                     </a>
-                                                @else
+                                                @elseif($workImages)
                                                     <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
                                                         <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
                                                              style="max-width: 150px; min-width: 150px;"
