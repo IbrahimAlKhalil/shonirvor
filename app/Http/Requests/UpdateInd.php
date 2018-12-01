@@ -38,7 +38,10 @@ class UpdateInd extends FormRequest
             'address' => 'required|string',
             'category' => 'required_without:no-category',
             'category-request' => 'required_with:no-category',
-            'slug' => Rule::unique('inds')->ignore(request('ind')),
+            'slug' => [
+                Rule::unique('inds')->ignore(request('ind')),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+            ],
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
@@ -117,7 +120,8 @@ class UpdateInd extends FormRequest
             'address.required' => 'ঠিকানা দিতে হবে',
             'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
-            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে'
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
         ];
     }
 }

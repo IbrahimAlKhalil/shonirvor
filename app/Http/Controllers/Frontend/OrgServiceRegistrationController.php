@@ -619,4 +619,42 @@ class OrgServiceRegistrationController extends Controller
 
         return back()->with('success', 'রিকোয়েস্টটি এডিট হয়েছে!');
     }
+
+    public function destroy(Org $org)
+    {
+
+        DB::beginTransaction();
+
+        $org->load([
+            'category',
+            'thana',
+            'union',
+            'village',
+            'subCategories' => function ($query) {
+                $query->onlyPending();
+            }
+        ]);
+
+        $category = $org->category;
+        $thana = $org->thana;
+        $union = $org->union;
+        $village = $org->village;
+
+        $org->subCategories()->where('is_confirmed', 1)->detach();
+        $org->subCategories()->where('is_confirmed', 0)->delete();
+
+        $org->forceDelete();
+        $org->payments()->delete();
+        if ($org->referredBy) $org->referredBy->delete();
+        $category->is_confirmed == 0 && $category->delete();
+        $village->is_pending == 1 && $village->delete();
+        $union->is_pending == 1 && $union->delete();
+        $thana->is_pending == 1 && $thana->delete();
+
+        // TODO:: Don't forget to delete documents/images
+
+        DB::commit();
+
+        return redirect(route('home'));
+    }
 }

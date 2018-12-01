@@ -209,31 +209,33 @@
                                 </thead>
                                 <tbody>
                                 @php($count = 0)
-                                @foreach($data['images'] as $id => $image)
-                                    <tr>
-                                        <td>
-                                            {{ en2bnNumber(++$count) }}
-                                        </td>
-                                        <td>
-                                            @if(isset($image['file']))
-                                                <a href="{{ asset('storage/' . $image['file']) }}">
-                                                    <img src="{{ asset('storage/' . $image['file']) }}"
-                                                         style="max-width: 150px; min-width: 150px;"
-                                                         class="img-fluid img-thumbnail">
-                                                </a>
-                                            @else
-                                                <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
-                                                    <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
-                                                         style="max-width: 150px; min-width: 150px;"
-                                                         class="img-fluid img-thumbnail">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $image['description'] }}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @isset($data['images'])
+                                    @foreach($data['images'] as $id => $image)
+                                        <tr>
+                                            <td>
+                                                {{ en2bnNumber(++$count) }}
+                                            </td>
+                                            <td>
+                                                @if(isset($image['file']))
+                                                    <a href="{{ asset('storage/' . $image['file']) }}">
+                                                        <img src="{{ asset('storage/' . $image['file']) }}"
+                                                             style="max-width: 150px; min-width: 150px;"
+                                                             class="img-fluid img-thumbnail">
+                                                    </a>
+                                                @else
+                                                    <a href="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}">
+                                                        <img src="{{ asset('storage/' . $workImages->firstWhere('id', $id)->path) }}"
+                                                             style="max-width: 150px; min-width: 150px;"
+                                                             class="img-fluid img-thumbnail">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $image['description'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
                                 @isset($data['new-work-images'])
                                     @foreach($data['new-work-images'] as $image)
                                         <tr>

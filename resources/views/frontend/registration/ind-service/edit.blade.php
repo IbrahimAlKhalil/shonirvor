@@ -20,7 +20,7 @@
             {{ csrf_field() }}
 
             <div id="smartwizard" class="mx-5">
-                <ul>
+                <ul class="position-relative">
                     <li><a href="#step-1">প্রথম ধাপ<br/>
                             <small>সাধারণ তথ্য</small>
                         </a></li>
@@ -36,6 +36,11 @@
                     <li><a href="#step-5">পঞ্চম ধাপ<br/>
                             <small>পেমেন্ট</small>
                         </a></li>
+                    <li class="delete-request">
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#warning">মুছে
+                            ফেলুন
+                        </button>
+                    </li>
                 </ul>
 
                 <div>
@@ -387,7 +392,9 @@
                                                                name="sub-category-requests[{{ $subCategoryCount }}][name]"
                                                                placeholder="আমার সাব-ক্যাটাগরির নাম"
                                                                value="{{ $subCategory->name }}">
-                                                        <input type="hidden" name="sub-category-requests[{{ $subCategoryCount }}][id]" value="{{ $subCategory->id }}">
+                                                        <input type="hidden"
+                                                               name="sub-category-requests[{{ $subCategoryCount }}][id]"
+                                                               value="{{ $subCategory->id }}">
                                                     </div>
                                                     @if(!$loop->first)
                                                         <div class="col-md-3">
@@ -687,7 +694,6 @@
                            value="{{ oldOrData('qualification', $ind->user->qualification) }}">
                 </div>
             @endif
-
             @if($first)
                 <div class="form-group">
                     <label for="mo-nid" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের নম্বর <span
@@ -703,7 +709,6 @@
                 <textarea rows="6" id="mo-description" name="description"
                           class="form-control">{{ oldOrData('description', $ind->description) }}</textarea>
             </div>
-
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">এলাকা <span class="text-danger">*</span></label>
@@ -1026,6 +1031,7 @@
                        class="file-picker"
                        data-error="@if($errors->has('experience-certificate')) {{ $errors->first('experience-certificate') }} @endif">
             </div>
+
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">প্যাকেজ নির্ধারণ করুন</label>
                 <select name="package" id="mo-package">
@@ -1077,11 +1083,30 @@
 
             <div class="form-group row mx-5 mt-5 text-center">
                 <div class="text-center col-12">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#warning">মুছে ফেলুন</button>
                     <button type="submit" class="btn btn-primary">সাবমিট</button>
                 </div>
             </div>
         </form>
     </div>
+
+    <form action="{{ route('individual-service-registration.destroy', $ind->id) }}" method="post" id="delete-request">
+        @csrf
+        @method('delete')
+        <div class="modal fade" id="warning" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        সতটিই কি আপনি এটি মুছে ফেলতে চান?
+                    </div>
+                    <div class="modal-footer border-top-0 justify-content-center row">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">না</button>
+                        <button type="submit" class="btn btn-danger">হ্যাঁ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 @section('script')
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>

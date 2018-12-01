@@ -20,7 +20,7 @@
             {{ csrf_field() }}
 
             <div id="smartwizard" class="mx-5">
-                <ul>
+                <ul class="position-relative">
                     <li><a href="#step-1">প্রথম ধাপ<br/>
                             <small>সাধারণ তথ্য</small>
                         </a></li>
@@ -36,6 +36,11 @@
                     <li><a href="#step-5">পঞ্চম ধাপ<br/>
                             <small>পেমেন্ট</small>
                         </a></li>
+                    <li class="delete-request">
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#warning">মুছে
+                            ফেলুন
+                        </button>
+                    </li>
                 </ul>
 
                 <div>
@@ -415,19 +420,19 @@
                         </div>
 
                         @if ($first)
-                        <div class="form-group row mx-5">
-                            <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
-                                ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
-                                        class="text-danger">*</span></label>
-                            <div class="col-9 d-flex flex-wrap">
-                                @foreach($org->user->identities as $orgex => $identity)
-                                    <input id="identities" name="identities[]" type="file" accept="image/*"
-                                           data-image="{{ asset('storage/' . $identity->path) }}"
-                                           class="file-picker"
-                                           data-error="@if($errors->has('identities.' . $orgex)) {{ $errors->first('identities.' . $orgex) }} @endif">
-                                @endforeach
+                            <div class="form-group row mx-5">
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
+                                    ফটোকপি/পাসপোর্ট/জন্ম সনদ <span
+                                            class="text-danger">*</span></label>
+                                <div class="col-9 d-flex flex-wrap">
+                                    @foreach($org->user->identities as $orgex => $identity)
+                                        <input id="identities" name="identities[]" type="file" accept="image/*"
+                                               data-image="{{ asset('storage/' . $identity->path) }}"
+                                               class="file-picker"
+                                               data-error="@if($errors->has('identities.' . $orgex)) {{ $errors->first('identities.' . $orgex) }} @endif">
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                         <div class="form-group row mx-5">
@@ -833,7 +838,8 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি
+                    থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
                        class="file-picker" data-image="{{ asset('storage/' . $org->trade_license) }}"
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">
@@ -929,12 +935,31 @@
 
             <div class="form-group row mx-5 mt-5 text-center">
                 <div class="text-center col-12">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#warning">মুছে ফেলুন
+                    </button>
                     <button type="submit" class="btn btn-primary">সাবমিট</button>
                 </div>
             </div>
 
         </form>
     </div>
+    <form action="{{ route('organization-service-registration.destroy', $org->id) }}" method="post">
+        @csrf
+        @method('delete')
+        <div class="modal fade" id="warning" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        সতটিই কি আপনি এটি মুছে ফেলতে চান?
+                    </div>
+                    <div class="modal-footer border-top-0 justify-content-center row">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">না</button>
+                        <button type="submit" class="btn btn-danger">হ্যাঁ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 

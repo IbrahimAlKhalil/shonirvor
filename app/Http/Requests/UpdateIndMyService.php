@@ -26,7 +26,10 @@ class UpdateIndMyService extends FormRequest
             'union' => 'required',
             'village' => 'required',
             'address' => 'required|string',
-            'slug' => Rule::unique('inds')->ignore(request('service')),
+            'slug' => [
+                Rule::unique('inds')->ignore(request('ind')),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+            ],
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-reqeusts.*.name' => 'required|min:3',
             // TODO: Subcategory

@@ -33,7 +33,10 @@ class UpdateOrg extends FormRequest
             'thana-request' => 'required_with:no-thana',
             'union-request' => 'required_with:no-union',
             'village-request' => 'required_with:no-village',
-            'slug' => Rule::unique('orgs')->ignore(request('org')),
+            'slug' => [
+                Rule::unique('orgs')->ignore(request('org')),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+            ],
             'address' => 'required|string',
             'category' => 'required_without:no-category',
             'category-request' => 'required_with:no-category',
@@ -108,7 +111,8 @@ class UpdateOrg extends FormRequest
             'category-request.required_with' => 'ক্যাটাগরির নাম দিতে হবে',
             'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
-            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে'
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
         ];
     }
 }

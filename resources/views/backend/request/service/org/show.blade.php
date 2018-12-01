@@ -290,7 +290,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td><span class="text-muted small">কোন সাব-ক্যাটাগরি নেই</span></td>
+                                        <td colspan="8"><span class="text-muted small">কোন সাব-ক্যাটাগরি নেই</span></td>
                                     </tr>
                                 @endforelse
                                 </tbody>

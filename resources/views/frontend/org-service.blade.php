@@ -80,7 +80,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
+                        <p class="h4 border-bottom">প্রাতিষ্ঠানিক ছবিঃ</p>
                         @forelse($provider->workImages->shuffle()->chunk(2) as $workImages)
                             <div class="card-deck py-2">
                                 @foreach($workImages as $image)

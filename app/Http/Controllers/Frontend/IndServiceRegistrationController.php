@@ -674,4 +674,45 @@ class IndServiceRegistrationController extends Controller
 
         return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first', 'selectedPackage'));
     }
+
+    public function destroy(Ind $ind)
+    {
+        if ($ind->user_id != Auth::id() || !is_null($ind->expire)) {
+            return redirect(route('individual-service-registration.index'));
+        }
+
+        DB::beginTransaction();
+
+        $ind->load([
+            'category',
+            'thana',
+            'union',
+            'village',
+            'subCategories' => function ($query) {
+                $query->onlyPending();
+            }
+        ]);
+
+        $category = $ind->category;
+        $thana = $ind->thana;
+        $union = $ind->union;
+        $village = $ind->village;
+
+        $ind->subCategories()->where('is_confirmed', 1)->detach();
+        $ind->subCategories()->where('is_confirmed', 0)->delete();
+
+        $ind->forceDelete();
+        $ind->payments()->delete();
+        if ($ind->referredBy) $ind->referredBy->delete();
+        $category->is_confirmed == 0 && $category->delete();
+        $village->is_pending == 1 && $village->delete();
+        $union->is_pending == 1 && $union->delete();
+        $thana->is_pending == 1 && $thana->delete();
+
+        // TODO:: Don't forget to delete documents/images
+
+        DB::commit();
+
+        return redirect('home');
+    }
 }

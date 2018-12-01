@@ -243,11 +243,11 @@ Route::view('service-provider-registration-instruction', 'frontend.registration.
 
 Route::middleware('auth')->group(function () {
     Route::resource('individual-service-registration', 'Frontend\IndServiceRegistrationController', [
-        'only' => ['index', 'store', 'update', 'edit'],
+        'only' => ['index', 'store', 'update', 'edit', 'destroy'],
         'parameters' => ['individual-service-registration' => 'ind']
     ]);
     Route::resource('organization-service-registration', 'Frontend\OrgServiceRegistrationController', [
-        'only' => ['index', 'store', 'update', 'edit'],
+        'only' => ['index', 'store', 'update', 'edit', 'destroy'],
         'parameters' => ['organization-service-registration' => 'org']
     ]);
 }, '');

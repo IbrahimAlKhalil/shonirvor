@@ -26,7 +26,10 @@ class UpdateOrgMyService extends FormRequest
             'union' => 'required',
             'village' => 'required',
             'address' => 'required|string',
-            'slug' => Rule::unique('inds')->ignore(request('service')),
+            'slug' => [
+                Rule::unique('orgs')->ignore(request('ind')),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+            ],
             'sub-categories.*.id' => 'exists:sub_categories,id',
             // TODO: Subcategory
 //            'sub-categories.*.work-methods.*.rate' => 'nullable|integer',
@@ -55,7 +58,8 @@ class UpdateOrgMyService extends FormRequest
             'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'address.required' => 'ঠিকানা দিতে হবে',
-            'slug.unique' => 'দুঃখিত! এই লিংকটি কেউ নিয়ে নিয়েছে ।'
+            'slug.unique' => 'দুঃখিত! এই লিংকটি কেউ নিয়ে নিয়েছে ।',
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
         ];
     }
 }
