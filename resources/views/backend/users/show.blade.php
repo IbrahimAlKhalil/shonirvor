@@ -13,6 +13,32 @@
         <div class="row">
             <div class="col-md-9">
                 <h2>{{ $user->name }}</h2>
+                <table class="table mt-4 bg-white">
+                    <tr>
+                        <th>ছবি</th>
+                        <td><img src="{{ asset('storage/'.$user->photo) }}" class="w-25"></td>
+                    </tr>
+                    <tr>
+                        <th>মোবাইল</th>
+                        <td>{{ $user->mobile }}</td>
+                    </tr>
+                    <tr>
+                        <th>জাতীয় পরিচয়পত্র</th>
+                        <td>{{ $user->nid }}</td>
+                    </tr>
+                    <tr>
+                        <th>জন্মতারিখ</th>
+                        <td>{{ $user->dob }}</td>
+                    </tr>
+                    <tr>
+                        <th>শিক্ষাগত যোগ্যতা</th>
+                        <td>{{ $user->qualification }}</td>
+                    </tr>
+                    <tr>
+                        <th>ঠিকানা</th>
+                        <td>{{ $user->address }}</td>
+                    </tr>
+                </table>
             </div>
             <div class="col-md-3">
                 <div class="row">

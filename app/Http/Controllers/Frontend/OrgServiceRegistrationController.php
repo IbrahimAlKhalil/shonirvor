@@ -281,35 +281,6 @@ class OrgServiceRegistrationController extends Controller
         return redirect(route('organization-service-registration.edit', $org->id))->with('success', 'ধন্যবাদ! আপনার অনুরোধটি সাবমিট হয়েছে। যত তাড়াতাড়ি সম্ভব আমরা অনুরোধটি পর্যালোচনা করব, তাই সঙ্গে থাকুন!');
     }
 
-    public function edit($id)
-    {
-        $org = Org::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->findOrFail($id);
-
-        if ($org->user_id != Auth::id() || !is_null($org->expire)) {
-            return redirect(route('organization-service-registration.index'));
-        }
-
-        $categories = Category::onlyOrg()->onlyConfirmed()->get();
-        $subCategories = SubCategory::where('is_confirmed', 1)->whereCategoryId($org->category_id)->get();
-        $orgSubCategories = $org->subCategoryRates;
-        $isNoSubCategory = $orgSubCategories->filter(function ($sub) {
-            return $sub['is_confirmed'] == 0;
-        })->count();
-
-        $user = Auth::user();
-        $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
-        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
-        $paymentMethods = PaymentMethod::all();
-        $divisions = Division::all();
-        $districts = District::whereDivisionId($org->division_id)->get();
-        $thanas = $org->district->thanas()->whereIsPending(0)->get();
-        $unions = $org->thana->unions()->whereIsPending(0)->get();
-        $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
-        $selectedPackage = $org->payments()->select('package_id')->first()->package_id;
-
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first', 'selectedPackage'));
-    }
-
     public function update(UpdateOrg $request, $id)
     {
         $user = Auth::user();
@@ -618,6 +589,35 @@ class OrgServiceRegistrationController extends Controller
         DB::commit();
 
         return back()->with('success', 'রিকোয়েস্টটি এডিট হয়েছে!');
+    }
+
+    public function edit($id)
+    {
+        $org = Org::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->findOrFail($id);
+
+        if ($org->user_id != Auth::id() || !is_null($org->expire)) {
+            return redirect(route('organization-service-registration.index'));
+        }
+
+        $categories = Category::onlyOrg()->onlyConfirmed()->get();
+        $subCategories = SubCategory::where('is_confirmed', 1)->whereCategoryId($org->category_id)->get();
+        $orgSubCategories = $org->subCategoryRates;
+        $isNoSubCategory = $orgSubCategories->filter(function ($sub) {
+            return $sub['is_confirmed'] == 0;
+        })->count();
+
+        $user = Auth::user();
+        $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
+        $paymentMethods = PaymentMethod::all();
+        $divisions = Division::all();
+        $districts = District::whereDivisionId($org->division_id)->get();
+        $thanas = $org->district->thanas()->whereIsPending(0)->get();
+        $unions = $org->thana->unions()->whereIsPending(0)->get();
+        $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
+        $selectedPackage = $org->payments()->select('package_id')->first()->package_id;
+
+        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first', 'selectedPackage', 'user'));
     }
 
     public function destroy(Org $org)
