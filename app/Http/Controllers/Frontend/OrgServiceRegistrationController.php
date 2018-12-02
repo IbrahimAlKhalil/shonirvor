@@ -66,7 +66,7 @@ class OrgServiceRegistrationController extends Controller
         $category = Category::find($request->post('category'));
         $subCategories = !$isCategoryRequest ? SubCategory::whereIn('id', array_map(function ($item) {
             return $item['id'];
-        }, $request->has('sub-categories') ? $request->has('sub-categories') : []))->get() : null;
+        }, $request->has('sub-categories') ? $request->get('sub-categories') : []))->get() : null;
 
         // Create categories
         if ($isCategoryRequest) {
