@@ -223,34 +223,64 @@
                                                value="{{ $subCategory->id }}">
                                         {{ $subCategory->name }}
                                     </td>
-                                    @php($methods = $indWorkMethods[$subCategory->id])
-                                    @php($methodIds = $methods->pluck('id')->toArray())
-                                    @foreach($workMethods as $c => $method)
-                                        @if($method->id != 4)
-                                            @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
-                                            <td>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">৳</span>
-                                                    </div>
-                                                    <input type="number"
-                                                           name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
-                                                           class="form-control"
-                                                           value="@if($currentMethod->first()){{ $currentMethod->first()->pivot->rate }}@endif">
-                                                </div>
-                                        @else
-                                            <td>
-                                                <div class="d-flex justify-content-center align-content-center">
-                                                    <label for="negotiable-{{ $index }}" class="mt-3 checkbox">
-                                                        <input type="checkbox" id="negotiable-{{ $index }}" class="mt-2"
+                                    @if(isset($indWorkMethods[$subCategory->id]))
+                                        @php($methods = $indWorkMethods[$subCategory->id])
+                                        @php($methodIds = $methods->pluck('id')->toArray())
+                                        @foreach($workMethods as $c => $method)
+                                            @if($method->id != 4)
+                                                @php($currentMethod = $methods->filter(function($item)use($method){return $item->id == $method->id;}))
+                                                <td>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">৳</span>
+                                                        </div>
+                                                        <input type="number"
                                                                name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
-                                                               value="negotiable" {{ checkBox(in_array(4, $methodIds)) }}>
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        @endif
-                                    @endforeach
+                                                               class="form-control"
+                                                               value="@if($currentMethod->first()){{ $currentMethod->first()->pivot->rate }}@endif">
+                                                    </div>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <div class="d-flex justify-content-center align-content-center">
+                                                        <label for="negotiable-{{ $index }}" class="mt-3 checkbox">
+                                                            <input type="checkbox" id="negotiable-{{ $index }}"
+                                                                   class="mt-2"
+                                                                   name="sub-categories[{{ $index }}][work-methods][{{ $c }}][rate]"
+                                                                   value="negotiable" {{ checkBox(in_array(4, $methodIds)) }}>
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        @for($i = 1; $i < 5; $i++)
+                                            @if($i != 4)
+                                                <td>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">৳</span>
+                                                        </div>
+                                                        <input type="number"
+                                                               name="sub-categories[{{ $index }}][work-methods][{{ $i }}][rate]"
+                                                               class="form-control">
+                                                    </div>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <div class="d-flex justify-content-center align-content-center">
+                                                        <label for="negotiable-{{ $index }}" class="mt-3 checkbox">
+                                                            <input type="checkbox" id="negotiable-{{ $index }}"
+                                                                   class="mt-2"
+                                                                   name="sub-categories[{{ $index }}][work-methods][{{ $i }}][rate]">
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        @endfor
+                                    @endif
                                     <td>
                                         <span class="btn btn-outline-danger btn-sm delete-sub-category">
                                             <i class="fa fa-trash-o"></i> ডিলিট
