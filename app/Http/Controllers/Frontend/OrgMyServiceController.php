@@ -89,7 +89,7 @@ class OrgMyServiceController extends Controller
                 };
             }
 
-            if ($request->hasFile('work-images')) {
+            if ($request->file('work-images')) {
                 foreach ($request->file('work-images') as $id => $image) {
                     if (isset($image['file']) && !is_null($image['file'])) {
                         $images[$id]['file'] = $image['file']->store('org/' . $service->id . '/' . 'images');

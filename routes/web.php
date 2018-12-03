@@ -238,7 +238,6 @@ Route::namespace('Backend')->group(function () {
 
 }, '');
 
-/*** Ibrahim ***/
 Route::view('service-provider-registration-instruction', 'frontend.registration.service-registration-instruction')->name('service-registration-instruction');
 
 Route::middleware('auth')->group(function () {

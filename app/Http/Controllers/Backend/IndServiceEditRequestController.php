@@ -88,11 +88,7 @@ class IndServiceEditRequestController extends Controller
             }
         }
 
-        $workImages = null;
-
-        if (isset($data['images'])) {
-            $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
-        }
+        $workImages = $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 
         $user = $application->serviceEditable->user;
         $data = $application->data;

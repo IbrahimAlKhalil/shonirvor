@@ -49,11 +49,8 @@ class OrgServiceEditRequestController extends Controller
         }, $subCategoryArr);
         $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get()->toArray();
 
-        $workImages = null;
 
-        if (isset($data['images'])) {
-            $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
-        }
+        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
 
         $data = $application->data;
         $division = Division::find($data['division']);
