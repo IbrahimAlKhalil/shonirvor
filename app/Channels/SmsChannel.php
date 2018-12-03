@@ -11,17 +11,15 @@ class SmsChannel
     {
         $message = $notification->toSms($notifiable);
 
-        if (! config('sms.enabled')) {
-            dump($message);
-            dump('মেসেজ সার্ভিসটি আপাদত বন্ধ আছে।');
-            return;
+        if (!config('sms.enabled')) {
+            return response('Sorry something unexpected happened in our server');
         }
 
         $client = new Client([
             'base_uri' => 'http://portal.smsinbd.com'
         ]);
 
-        $client->request('GET','/smsapi',[
+        $client->request('GET', '/smsapi', [
             'query' => [
                 'api_key' => config('sms.api'),
                 'type' => 'text',

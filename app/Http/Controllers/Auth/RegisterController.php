@@ -55,11 +55,12 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
+        $userId = $user->id;
         Auth::logout();
 
-        $user->notify(new Sms('Verification code of AreaSheba: '.$user->verification_token));
+        $user->notify(new Sms('Verification code of AreaSheba: ' . $user->verification_token));
 
-        $this->redirectTo = route('verification', $user->id);
+        $this->redirectTo = route('verification', $userId);
     }
 
     public function verificationForm($user)

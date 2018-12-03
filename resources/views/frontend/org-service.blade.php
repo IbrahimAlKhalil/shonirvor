@@ -35,14 +35,14 @@
                             <div class="card-header h5 text-center">প্রাতিষ্ঠানিক তথ্য</div>
                             <div class="card-body">
                                 @foreach($provider->subCategoryRates->shuffle() as $subCategory)
-                                    <p class="border-bottom font-italic">{{ $subCategory->name }}</p>
+                                    <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
                                     @if($subCategory->pivot->rate)
                                         <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }}
                                             টাকা</p>
                                     @endif
                                 @endforeach
                                 @foreach($provider->additionalPrices->shuffle() as $additionalPrice)
-                                    <p class="border-bottom font-italic">{{ $additionalPrice->name }}</p>
+                                    <p class="border-bottom font-italic font-weight-bold text-primary">{{ $additionalPrice->name }}</p>
                                     <p class="sub-cat-price">{{ $additionalPrice->info }}</p>
                                 @endforeach
                             </div>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ফিডব্যাকঃ</p>
+                        <p class="h4 border-bottom">কমেন্ট সমূহঃ</p>
                         <div class="row">
                             <div class="col-12">
                                 @if($canFeedback)
@@ -136,7 +136,7 @@
                                                 </div>
                                             </div>
                                         @empty
-                                            <p>কোন মতামত নেই</p>
+                                            <p>কোন কমেন্ট নেই</p>
                                         @endforelse
                                     </div>
                                 </div>
@@ -157,14 +157,14 @@
             size: 'sm',
             showClear: false,
             starCaptions: {
-                1: 'এক তারা',
-                2: 'দুই তারা',
-                3: 'তিন তারা',
-                4: 'চার তারা',
-                5: 'পাঁচ তারা'
+                1: 'এক স্টার',
+                2: 'দুই স্টার',
+                3: 'তিন স্টার',
+                4: 'চার স্টার',
+                5: 'পাঁচ স্টার'
             },
             clearButtonTitle: 'মুছে ফেলুন',
-            clearCaption: 'কোন তারা নেই',
+            clearCaption: 'কোন স্টার নেই',
             filledStar: '<i class="fa fa-star"></i>',
             emptyStar: '<i class="fa fa-star-o"></i>',
             clearButton: '<i class="fa fa-lg fa-minus-circle"></i>',

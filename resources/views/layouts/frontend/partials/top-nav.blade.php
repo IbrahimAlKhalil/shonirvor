@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #008c73">
     <a class="navbar-brand" href="{{ route('home') }}">
         <img src="{{ asset('assets/images/logo.png') }}" style="width: 35px" alt="Logo">
-        {{ config('app.name') }}
+        <span class="font-weight-bold">{{ config('app.name') }}</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">

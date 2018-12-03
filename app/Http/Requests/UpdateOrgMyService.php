@@ -27,7 +27,7 @@ class UpdateOrgMyService extends FormRequest
             'village' => 'required',
             'address' => 'required|string',
             'slug' => [
-                Rule::unique('orgs')->ignore(request('ind')),
+                Rule::unique('orgs')->ignore(request('org')),
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
             ],
             'sub-categories.*.id' => 'exists:sub_categories,id',

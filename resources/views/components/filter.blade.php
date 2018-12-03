@@ -156,7 +156,7 @@
                 </div>
             </div>
             <div class="m-auto px-4 text-center text-lg-left">
-                <button type="submit" class="btn btn-info">সার্ভিস সার্চ করুন</button>
+                <button type="submit" class="btn btn-info heading-color">সার্ভিস সার্চ করুন</button>
             </div>
         </div>
     </form>

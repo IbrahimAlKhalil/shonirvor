@@ -20,17 +20,18 @@
             <div class="col-lg-8">
                 <div class="row bg-white rounded shadow-sm pt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom text-center text-white" style="background-color: #215408ab">টপ ক্যাটাগরি</p>
+                        <p class="h4 border-bottom text-center text-white font-weight-bold heading-color p-2 rounded shadow-sm">
+                            টপ ক্যাটাগরি</p>
                     </div>
                     <div class="col-lg-6">
-                        <p class="h5 pl-2 text-center mb-4">ব্যক্তিগত সার্ভিস</p>
+                        <p class="h5 pl-2 text-center mb-4 font-weight-bold">ব্যক্তিগত সার্ভিস</p>
                         <div class="row border-right">
                             @foreach($indCategories as $category)
                                 <div class="col-4 text-center">
-                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
+                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="c-icon">
                                     <p>
                                         <a href="{{ route('frontend.filter').'?category='.$category->id }}">
-                                            {{ $category->name }} ({{ $category->ind_services_count }})
+                                            <span class="small-text">{{ $category->name }} ({{ $category->ind_services_count }})</span>
                                         </a>
                                     </p>
                                 </div>
@@ -38,14 +39,14 @@
                         </div>
                     </div>
                     <div class="col-lg-6 text-lg-right">
-                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                        <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4 font-weight-bold">প্রাতিষ্ঠানিক সার্ভিস</p>
                         <div class="row border-left">
                             @foreach($orgCategories as $category)
                                 <div class="col-4 text-center">
-                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="w-50">
+                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="c-icon">
                                     <p>
                                         <a href="{{ route('frontend.filter').'?category='.$category->id }}">
-                                            {{ $category->name }} ({{ $category->org_services_count }})
+                                            <span class="small-text">{{ $category->name }} ({{ $category->org_services_count }})</span>
                                         </a>
                                     </p>
                                 </div>
@@ -56,14 +57,16 @@
                 @if($indTopServices->isNotEmpty() || $orgTopServices->isNotEmpty())
                     <div class="row mt-4 bg-white rounded shadow-sm pt-3">
                         <div class="col-12">
-                            <p class="h4 border-bottom text-center text-white" style="background-color: #215408ab">টপ সার্ভিস প্রভাইডার</p>
+                            <p class="h4 border-bottom text-center text-white bg-info shadow-sm rounded heading-color">
+                                টপ সার্ভিস প্রভাইডার</p>
                         </div>
                         <div class="col-lg-6">
-                            <p class="h5 pl-2 text-center mb-4">ব্যক্তিগত সার্ভিস</p>
+                            <p class="h5 pl-2 text-center mb-4 font-weight-bold heading-color">ব্যক্তিগত সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($indTopServices as $key => $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
-                                        <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$service->user->photo) }}">
+                                        <img class="mr-3 w-25 shadow-sm"
+                                             src="{{ asset('storage/'.$service->user->photo) }}">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
                                                 <a href="{{ route('frontend.ind-service.show', $service->slug) }}">{{ $service->user->name }}</a>
@@ -76,7 +79,8 @@
                                             <p class="mb-0">
                                                 <span class="fa fa-phone"></span> {{ $service->mobile }}
                                                 <br>
-                                                <span class="fa fa-map-marker"></span> {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }}
+                                                <span class="fa fa-map-marker"></span> {{ $service->union->name }}
+                                                , {{ $service->thana->name }}, {{ $service->district->name }}
                                             </p>
                                         </div>
                                     </li>
@@ -84,15 +88,18 @@
                             </ul>
                         </div>
                         <div class="col-lg-6 text-lg-right">
-                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4">প্রাতিষ্ঠানিক সার্ভিস</p>
+                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4 heading-color font-weight-bold">
+                                প্রাতিষ্ঠানিক সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($orgTopServices as $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
-                                        <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
+                                        <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none"
+                                             src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
                                                 <a href="{{ route('frontend.org-service.show', $service->slug) }}">{{ $service->name }}</a>
-                                                <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}" class="invisible">
+                                                <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
+                                                       class="invisible">
                                             </p>
                                             <p>
                                                 <i>{{ $service->category->name }}</i>
@@ -105,11 +112,13 @@
                                                 <br>
 
                                                 <span class="fa fa-map-marker d-inline-block d-lg-none"></span>
-                                                {{ $service->union->name }}, {{ $service->thana->name }}, {{ $service->district->name }}
+                                                {{ $service->union->name }}, {{ $service->thana->name }}
+                                                , {{ $service->district->name }}
                                                 <span class="fa fa-map-marker d-none d-lg-inline-block"></span>
                                             </p>
                                         </div>
-                                        <img class="ml-3 w-25 shadow-sm d-none d-lg-inline-block" src="{{ asset('storage/'.$service->logo) }}" alt="logo">
+                                        <img class="ml-3 w-25 shadow-sm d-none d-lg-inline-block"
+                                             src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                     </li>
                                 @endforeach
                             </ul>

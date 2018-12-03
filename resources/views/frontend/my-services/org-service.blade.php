@@ -166,7 +166,7 @@
 
                 <div class="row mt-4">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ছবিঃ</p>
+                        <p class="h4 border-bottom">প্রাতিষ্ঠানিক ছবিঃ</p>
                         <div class="row">
                             <div class="col-12">
                                 @forelse($service->workImages->chunk(2) as $chunk)

@@ -35,7 +35,7 @@
                             <div class="card-header h5 text-center">কর্ম যোগ্যতা সমূহ</div>
                             <div class="card-body">
                                 @foreach($provider->subCategories->shuffle() as $subCategory)
-                                    <p class="border-bottom font-italic">{{ $subCategory->name }}</p>
+                                    <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
                                     @foreach($subCategory->workMethods->sortBy('id') as $workMethod)
                                         @if($workMethod->id != 4)
                                             <p>{{ $workMethod->name }}ঃ {{ en2bnNumber($workMethod->pivot->rate) }} টাকা</p>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
-                        <p class="h4 border-bottom">কাজের ফিডব্যাকঃ</p>
+                        <p class="h4 border-bottom">কমেন্ট সমূহঃ</p>
                         <div class="row">
                             <div class="col-12">
                                 @if($canFeedback)
@@ -130,7 +130,7 @@
                                                 </div>
                                             </div>
                                         @empty
-                                            <p>কোন মতামত নেই</p>
+                                            <p>কোন কমেন্ট নেই</p>
                                         @endforelse
                                     </div>
                                 </div>
@@ -151,13 +151,13 @@
             size: 'sm',
             showClear: false,
             starCaptions: {
-                1: 'এক তারা',
-                2: 'দুই তারা',
-                3: 'তিন তারা',
-                4: 'চার তারা',
-                5: 'পাঁচ তারা'
+                1: 'এক স্টার',
+                2: 'দুই স্টার',
+                3: 'তিন স্টার',
+                4: 'চার স্টার',
+                5: 'পাঁচ স্টার'
             },
-            clearCaption: 'কোন তারা নেই',
+            clearCaption: 'কোন স্টার নেই',
             filledStar: '<i class="fa fa-star"></i>',
             emptyStar: '<i class="fa fa-star-o"></i>',
             clearButton: '<i class="fa fa-lg fa-minus-circle"></i>'
