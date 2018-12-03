@@ -54,8 +54,10 @@ class IndMyServiceController extends Controller
         return view('frontend.my-services.ind-service-edit', compact('service', 'navs', 'workMethods', 'indWorkMethods', 'divisions', 'districts', 'thanas', 'villages', 'unions'));
     }
 
-    public function update(Ind $service, UpdateIndMyService $request)
+    public function update(UpdateIndMyService $request, $id)
     {
+        $service = Ind::onlyApproved()->findOrFail($id);
+
         $data = $request->only([
             'mobile',
             'email',

@@ -10,11 +10,12 @@ class UpdateIndMyService extends FormRequest
 {
     public function authorize()
     {
-        return request()->service->user_id == Auth::id();
+        return true;
     }
 
     public function rules()
     {
+        $id = $this->route('service');
         return [
             'mobile' => 'required|digits:11',
             'email' => 'nullable|email',
@@ -27,7 +28,7 @@ class UpdateIndMyService extends FormRequest
             'village' => 'required',
             'address' => 'required|string',
             'slug' => [
-                Rule::unique('inds')->ignore(request('ind')),
+                Rule::unique('inds')->ignore($id),
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
             ],
             'sub-categories.*.id' => 'exists:sub_categories,id',

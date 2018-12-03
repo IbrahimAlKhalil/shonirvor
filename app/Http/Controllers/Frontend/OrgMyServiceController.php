@@ -30,8 +30,7 @@ class OrgMyServiceController extends Controller
 
     public function edit($id)
     {
-        $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
-            ->onlyApproved()->where('user_id', Auth::id())->findOrFail($id);
+        $service = Org::onlyApproved()->findOrFail($id);
 
         $navs = $this->navs();
 
@@ -44,8 +43,11 @@ class OrgMyServiceController extends Controller
         return view('frontend.my-services.org-service-edit', compact('service', 'navs', 'divisions', 'districts', 'thanas', 'villages', 'unions'));
     }
 
-    public function update(Org $service, UpdateOrgMyService $request)
+    public function update(UpdateOrgMyService $request, $id)
     {
+        $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
+            ->onlyApproved()->findOrFail($id);
+
         $data = $request->only([
             'mobile',
             'email',
