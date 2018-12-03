@@ -82,4 +82,11 @@ class UserController extends Controller
 
         return back()->with('success', 'রেফারার পেমেন্ট হিসাবভুক্ত হয়েছে।');
     }
+
+    public function destroy(User $user)
+    {
+        // TODO: Delete photos/documents
+        $user->delete();
+        return redirect('dashboard')->with('success', 'ইউজারটি সফলভাবে মুছে ফেলা হয়েছে');
+    }
 }

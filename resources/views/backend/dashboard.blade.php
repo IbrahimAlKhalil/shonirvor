@@ -6,6 +6,7 @@
     <script src="{{ asset('assets/js/backend/dashboard.bundle.js') }}"></script>
 @endsection
 
+@include('components.success')
 @section('content')
     <div class="container my-5">
         <div class="row">
@@ -14,13 +15,13 @@
             </div>
         </div>
         <div class="row justify-content-around mt-3">
-            <div class="col-3">
+            <div class="col-md-6">
                 <div class="card text-center">
                     <div class="card-header">মোট ইউজার</div>
                     <div class="card-body">{{ en2bnNumber($userCount) }} জন</div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-md-6">
                 <div class="card text-center">
                     <div class="card-header">SMS  বাকি আছে</div>
                     <div class="card-body">{{ en2bnNumber($smsBalance) }} টাকার</div>
@@ -32,7 +33,7 @@
                 <div class="card text-center">
                     <div class="card-header">সার্ভিস পরিসংখ্যান</div>
                     <div class="card-body">
-                        <table class="table">
+                        <table class="table table-responsive-lg">
                             <thead>
                                 <tr>
                                     <th class="border-0"></th>

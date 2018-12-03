@@ -163,7 +163,7 @@ Route::namespace('Backend')->group(function () {
             Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
             Route::put('user/pay-referrer/{user}', 'UserController@payReferrer')->name('user.pay-referrer');
             Route::resource('users', 'UserController', [
-                'only' => ['index', 'show']
+                'only' => ['index', 'show', 'destroy']
             ]);
 
             Route::prefix('packages')->name('package.')->group(function () {
