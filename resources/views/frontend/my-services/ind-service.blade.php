@@ -284,10 +284,31 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         @if($service->expire != null)
-                            <a class="text-white" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
-                               style="text-decoration-line: none">
-                                <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
-                            </a>
+                            @if(!$editExists)
+                                <a class="text-white" href="{{ route('frontend.my-service.ind.edit', $service->id) }}"
+                                   style="text-decoration-line: none">
+                                    <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
+                                </a>
+                            @else
+                                <div class="modal fade" id="warning" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body text-center">
+                                                আপনার একটি এডিট প্রক্রিয়াধীন রয়েছে। এডমিন আপনার পূর্বের আবেদনটি
+                                                গ্রহণ করলে পুনরায় আবেদন করতে পারবেন।
+                                            </div>
+                                            <div class="modal-footer border-top-0 row justify-content-center">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info btn-block" data-toggle="modal"
+                                        data-target="#warning">সার্ভিসটি এডিট করুন
+                                </button>
+                            @endif
                         @else
                             <a class="text-white"
                                href="{{ route('individual-service-registration.edit', $service->id) }}"

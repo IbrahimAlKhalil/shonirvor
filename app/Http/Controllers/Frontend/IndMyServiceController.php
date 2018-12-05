@@ -8,16 +8,18 @@ use App\Models\ServiceEdit;
 use App\Models\Village;
 use App\Models\Division;
 use App\Models\WorkMethod;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class IndMyServiceController extends Controller
 {
+    private $editExists;
+
     public function __construct()
     {
         $this->middleware('provider');
+        $this->editExists = ServiceEdit::where('service_editable_type', 'ind')->where('service_editable_id', request('service'))->exists();
     }
 
     public function show($id)
@@ -28,12 +30,17 @@ class IndMyServiceController extends Controller
         $navs = $this->navs();
         $workMethods = WorkMethod::all();
         $indWorkMethods = $service->workMethods->groupBy('pivot.sub_category_id');
+        $editExists = $this->editExists;
 
-        return view('frontend.my-services.ind-service', compact('service', 'navs', 'workMethods', 'indWorkMethods'));
+        return view('frontend.my-services.ind-service', compact('service', 'navs', 'workMethods', 'indWorkMethods', 'editExists'));
     }
 
     public function edit($id)
     {
+        if ($this->editExists) {
+            abort(404, 'You have already an edit request pending');
+        }
+
         $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
             ->onlyApproved()->where('user_id', Auth::id())->findOrFail($id);
 
@@ -56,6 +63,10 @@ class IndMyServiceController extends Controller
 
     public function update(UpdateIndMyService $request, $id)
     {
+        if ($this->editExists) {
+            abort(404, 'You have already an edit request pending');
+        }
+
         $service = Ind::onlyApproved()->findOrFail($id);
 
         $data = $request->only([

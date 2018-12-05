@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class OrgMyServiceController extends Controller
 {
+    private $editExists;
+
     public function __construct()
     {
         $this->middleware('provider');
+        $this->editExists = ServiceEdit::where('service_editable_type', 'org')->where('service_editable_id', request('service'))->exists();
     }
 
     public function show($id)
@@ -24,12 +27,17 @@ class OrgMyServiceController extends Controller
             ->withTrashed()->where('user_id', Auth::id())->findOrFail($id);
 
         $navs = $this->navs();
+        $editExists = $this->editExists;
 
-        return view('frontend.my-services.org-service', compact('service', 'navs'));
+        return view('frontend.my-services.org-service', compact('service', 'navs', 'editExists'));
     }
 
     public function edit($id)
     {
+        if ($this->editExists) {
+            abort(404, 'You have already an edit request pending');
+        }
+
         $service = Org::onlyApproved()->findOrFail($id);
 
         $navs = $this->navs();
@@ -45,6 +53,10 @@ class OrgMyServiceController extends Controller
 
     public function update(UpdateOrgMyService $request, $id)
     {
+        if ($this->editExists) {
+            abort(404, 'You have already an edit request pending');
+        }
+
         $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
             ->onlyApproved()->findOrFail($id);
 
