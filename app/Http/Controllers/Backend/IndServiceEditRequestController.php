@@ -109,6 +109,7 @@ class IndServiceEditRequestController extends Controller
         $ind = $application->serviceEditable;
         $data = $application->data;
 
+        $ind->description = $data['description'];
         $ind->mobile = $data['mobile'];
         $ind->email = $data['email'];
         $ind->facebook = $data['facebook'];

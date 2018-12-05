@@ -70,6 +70,7 @@ class OrgServiceEditRequestController extends Controller
         $org = $application->serviceEditable;
         $data = $application->data;
 
+        $org->description = $data['description'];
         $org->mobile = $data['mobile'];
         $org->email = $data['email'];
         $org->facebook = $data['facebook'];

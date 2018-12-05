@@ -38,7 +38,9 @@ class OrgMyServiceController extends Controller
             abort(404, 'You have already an edit request pending');
         }
 
-        $service = Org::onlyApproved()->findOrFail($id);
+        $service = Org::with([
+            'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'subCategoryRates', 'slug'
+        ])->onlyApproved()->findOrFail($id);
 
         $navs = $this->navs();
 
@@ -57,10 +59,11 @@ class OrgMyServiceController extends Controller
             abort(404, 'You have already an edit request pending');
         }
 
-        $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices')
+        $service = Org::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'additionalPrices', 'slug')
             ->onlyApproved()->findOrFail($id);
 
         $data = $request->only([
+            'description',
             'mobile',
             'email',
             'website',

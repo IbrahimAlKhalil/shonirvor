@@ -148,8 +148,16 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
-        $ind->slug = $request->post('slug');
         $ind->save();
+
+        // Slug
+
+        $ind->slug()->create([
+            'sluggable_id' => $ind->id,
+            'name' => $request->post('slug'),
+            'sluggable_type' => 'ind'
+        ]);
+
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
@@ -285,10 +293,14 @@ class IndServiceRegistrationController extends Controller
 
         // work images
         if ($request->file('images')) {
+            $count = 0;
             $files = $request->file('images');
             $images = [];
-
             foreach ($files as $image) {
+                if ($count >= 4) break;
+
+                $count++;
+
                 array_push($images, [
                     'path' => $image['file']->store('ind/' . $ind->id . '/' . 'images'),
                     'work_imagable_type' => 'ind',
@@ -420,8 +432,13 @@ class IndServiceRegistrationController extends Controller
         $ind->website = $request->post('website');
         $ind->facebook = $request->post('facebook');
         $ind->address = $request->post('address');
-        $ind->slug = $request->post('slug');
         $ind->save();
+
+        // Slug
+        $ind->slug()->update([
+            'name' => $request->post('slug')
+        ]);
+
         if ($request->hasFile('experience-certificate')) {
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
@@ -644,9 +661,9 @@ class IndServiceRegistrationController extends Controller
         return back()->with('success', 'রিকোয়েস্টটি এডিট হয়েছে!');
     }
 
-    public function edit(Ind $ind)
+    public function edit($id)
     {
-        $ind->load(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments']);
+        $ind = Ind::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'user.identities', 'payments', 'slug'])->findOrFail($id);
 
         // TODO:: Move this validation to a requests class
 
@@ -713,6 +730,6 @@ class IndServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return redirect('home');
+        return redirect('/');
     }
 }

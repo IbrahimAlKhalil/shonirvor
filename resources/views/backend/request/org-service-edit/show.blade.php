@@ -37,6 +37,10 @@
                         <table class="table-sm table-striped table-hover">
                             <tbody>
                             <tr>
+                                <th scope="row">বর্ণনাঃ</th>
+                                <td>{{ $data['description']  }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">মোবাইলঃ</th>
                                 <td>{{ $data['mobile']  }}</td>
                             </tr>
@@ -126,7 +130,7 @@
                                     <tr>
                                         <td> {{ en2bnNumber($index+1) }} </td>
                                         <td>{{ $subCategory['name'] }}</td>
-                                        <td>{{ $subCategory['rate'] }}</td>
+                                        <td>@isset($subCategory['rate']){{ $subCategory['rate'] }}@endisset</td>
                                     </tr>
                                 @endforeach
                                 @isset($data['sub-category-requests'])

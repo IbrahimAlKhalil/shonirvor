@@ -38,7 +38,7 @@ class StoreOrg extends FormRequest
             'village-request' => 'required_with:no-village',
             'address' => 'required|string',
             'category' => 'required_without:no-category',
-            'slug' => 'required|unique:orgs,slug|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+            'slug' => 'required|min:5|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
             'category-request' => 'required_with:no-category',
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
@@ -102,7 +102,9 @@ class StoreOrg extends FormRequest
             'identities.*.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
-            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
+            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }
 }

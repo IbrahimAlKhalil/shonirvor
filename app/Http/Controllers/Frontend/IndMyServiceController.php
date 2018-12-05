@@ -24,7 +24,7 @@ class IndMyServiceController extends Controller
 
     public function show($id)
     {
-        $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
+        $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'slug')
             ->withTrashed()->where('user_id', Auth::id())->findOrFail($id);
 
         $navs = $this->navs();
@@ -41,7 +41,7 @@ class IndMyServiceController extends Controller
             abort(404, 'You have already an edit request pending');
         }
 
-        $service = Ind::with('district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods')
+        $service = Ind::with('division', 'district', 'thana', 'union', 'village', 'category', 'subCategories', 'workMethods', 'slug')
             ->onlyApproved()->where('user_id', Auth::id())->findOrFail($id);
 
         if (!$service) {
@@ -70,6 +70,7 @@ class IndMyServiceController extends Controller
         $service = Ind::onlyApproved()->findOrFail($id);
 
         $data = $request->only([
+            'description',
             'mobile',
             'email',
             'website',

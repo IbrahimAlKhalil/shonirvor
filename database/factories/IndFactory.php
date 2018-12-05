@@ -32,7 +32,6 @@ $factory->define(Ind::class, function (Faker $faker) {
         'status' => $faker->paragraph(rand(4, 15)),
         'expire' => rand(0, 1) ? $faker->dateTimeBetween('-3 years', '3 years') : null,
         'top_expire' => rand(0, 1) ? $faker->dateTimeBetween('-3 years', '3 years') : null,
-        'slug' => $faker->slug(rand(1, 6)),
         'is_available' => rand(0, 1),
         'deleted_at' => rand(0, 1) ? $faker->dateTime : null
     ];

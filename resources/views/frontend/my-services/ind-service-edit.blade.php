@@ -31,7 +31,7 @@
                     <div class="col-12">
                         <label class="h4 border-bottom" for="description">বর্ণনাঃ</label>
                         <p class="pt-3 text-justify">
-                            <textarea name="" id="description" rows="5"
+                            <textarea name="description" id="description" rows="5"
                                       class="w-100 form-control rounded">{{ $service->description }}</textarea>
                         </p>
                     </div>
@@ -69,11 +69,11 @@
                                     <div class="input-group">
                                         <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/individual-service/
+                                                {{ route('home') }}/
                                             </span>
                                         </div>
                                         <input type="text" id="service-link" name="slug" class="form-control"
-                                               value="{{ $service->slug }}">
+                                               value="{{ $service->slug->name }}">
                                     </div>
                                 </td>
                             </tr>

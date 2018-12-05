@@ -37,6 +37,10 @@
                         <table class="table-sm table-striped table-hover">
                             <tbody>
                             <tr>
+                                <th scope="row">বর্ণনা</th>
+                                <td>{{ $data['description'] }}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row">মোবাইলঃ</th>
                                 <td>{{ $data['mobile']  }}</td>
                             </tr>
@@ -221,7 +225,9 @@
                                             </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $image['file']) }}">
-                                                    <img src="{{ asset('storage/' . $image['file']) }}" style="max-width: 150px; min-width: 150px;" class="img-fluid img-thumbnail">
+                                                    <img src="{{ asset('storage/' . $image['file']) }}"
+                                                         style="max-width: 150px; min-width: 150px;"
+                                                         class="img-fluid img-thumbnail">
                                                 </a>
                                             </td>
                                             <td>

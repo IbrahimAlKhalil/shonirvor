@@ -79,11 +79,11 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/individual-service/
+                                                {{ route('home') }}/
                                             </span>
                                     </div>
                                     <input type="text" id="slug" name="slug" class="form-control"
-                                           value="{{ oldOrData('slug', $org->slug) }}">
+                                           value="{{ oldOrData('slug', $org->slug->name) }}">
                                 </div>
                             </div>
                         </div>
@@ -559,11 +559,11 @@
                 <div class="input-group">
                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/organization-service/
+                                                {{ route('home') }}/
                                             </span>
                     </div>
                     <input type="text" id="mo-slug" name="slug" class="form-control"
-                           value="{{ oldOrData('slug', $org->slug) }}">
+                           value="{{ oldOrData('slug', $org->slug->name) }}">
                 </div>
             </div>
 

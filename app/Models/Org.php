@@ -117,6 +117,11 @@ class Org extends Model
         return $this->morphMany(Income::class, 'incomeable');
     }
 
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'sluggable');
+    }
+
 
     /******************/
     /***** Scopes *****/

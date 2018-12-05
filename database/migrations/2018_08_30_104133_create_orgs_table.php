@@ -30,7 +30,6 @@ class CreateOrgsTable extends Migration
             $table->string('cover_photo')->default('default/cover/cover.jpg');
             $table->dateTime('expire')->nullable();
             $table->dateTime('top_expire')->nullable();
-            $table->string('slug')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

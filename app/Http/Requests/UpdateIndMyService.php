@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Slug;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UpdateIndMyService extends FormRequest
@@ -28,8 +28,11 @@ class UpdateIndMyService extends FormRequest
             'village' => 'required',
             'address' => 'required|string',
             'slug' => [
-                Rule::unique('inds')->ignore($id),
-                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+                Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'ind')->where('sluggable_id', $id)->select('id')->first()->id),
+                'required',
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+                'min:5',
+                'max:191'
             ],
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-reqeusts.*.name' => 'required|min:3',
@@ -57,7 +60,11 @@ class UpdateIndMyService extends FormRequest
             'website.url' => 'ওয়েবসাইটের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'facebook.url' => 'ফেসবুকের লিঙ্কে ভুল আছে, দয়া করে চেক করুন',
             'address.required' => 'ঠিকানা দিতে হবে',
-            'slug.unique' => 'দুঃখিত! এই লিংকটি কেউ নিয়ে নিয়েছে ।'
+            'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
+            'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
+            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }
 }

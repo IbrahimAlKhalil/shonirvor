@@ -71,6 +71,10 @@
                                 <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
                                 <td>{{ $service->user->nid }}</td>
                             </tr>
+                            <tr>
+                                <th scope="row">লিঙ্ক</th>
+                                <td>{{ route('home') . '/' . $service->slug->name }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

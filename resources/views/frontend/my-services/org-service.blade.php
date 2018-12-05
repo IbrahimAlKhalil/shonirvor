@@ -39,26 +39,30 @@
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100">
                             <tbody>
-                                <tr>
-                                    <th scope="row">মোবাইল নম্বর</th>
-                                    <td>{{ $service->mobile }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ইমেইল</th>
-                                    <td>{{ $service->email }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ওয়েবসাইট</th>
-                                    <td>{{ $service->website }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ফেসবুক</th>
-                                    <td>{{ $service->facebook }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
-                                    <td>{{ $service->user->nid }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">মোবাইল নম্বর</th>
+                                <td>{{ $service->mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ইমেইল</th>
+                                <td>{{ $service->email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ওয়েবসাইট</th>
+                                <td>{{ $service->website }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ফেসবুক</th>
+                                <td>{{ $service->facebook }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">জাতীয় পরিচয়পত্রের নম্বর</th>
+                                <td>{{ $service->user->nid }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">লিঙ্ক</th>
+                                <td>{{ route('home') . '/' . $service->slug->name }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -68,26 +72,26 @@
                         <p class="h4 border-bottom">ঠিকানাঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 th-w-15">
                             <tbody>
-                                <tr>
-                                    <th scope="row">জেলা</th>
-                                    <td>{{ $service->district->bn_name}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">থানা</th>
-                                    <td>{{ $service->thana->bn_name}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ইউনিয়ন</th>
-                                    <td>{{ $service->union->bn_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">এলাকা</th>
-                                    <td>{{ $service->village->bn_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ঠিকানা</th>
-                                    <td>{{ $service->address }}</td>
-                                </tr>
+                            <tr>
+                                <th scope="row">জেলা</th>
+                                <td>{{ $service->district->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">থানা</th>
+                                <td>{{ $service->thana->bn_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ইউনিয়ন</th>
+                                <td>{{ $service->union->bn_name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">এলাকা</th>
+                                <td>{{ $service->village->bn_name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ঠিকানা</th>
+                                <td>{{ $service->address }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -207,7 +211,8 @@
                         <div class="col-12">
                             <a href="{{ route('frontend.applications.organization-top-service.index').'?service='.$service->id }}"
                                style="text-decoration-line: none">
-                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন</button>
+                                <button type="button" class="btn btn-info btn-block">টপ সার্ভিসের জন্য আবেদন করুন
+                                </button>
                             </a>
                         </div>
                     </div>
@@ -241,7 +246,8 @@
                                 </button>
                             @endif
                         @else
-                            <a class="text-white" href="{{ route('organization-service-registration.edit', $service->id) }}"
+                            <a class="text-white"
+                               href="{{ route('organization-service-registration.edit', $service->id) }}"
                                style="text-decoration-line: none">
                                 <button type="button" class="btn btn-info btn-block">সার্ভিসটি এডিট করুন</button>
                             </a>

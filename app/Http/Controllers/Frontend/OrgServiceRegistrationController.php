@@ -129,7 +129,6 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->slug = $request->post('slug');;
         $org->save();
         if ($request->hasFile('trade-license')) {
             $org->trade_license = $request->file('trade-license')->store('org/' . $org->id . '/' . 'docs');
@@ -138,6 +137,14 @@ class OrgServiceRegistrationController extends Controller
             $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
         $org->save();
+
+        // Slug
+
+        $org->slug()->create([
+            'sluggable_id' => $org->id,
+            'sluggable_type' => 'org',
+            'name' => $request->post('slug'),
+        ]);
 
         // Create reference
         if ($request->filled('referrer')) {
@@ -243,13 +250,17 @@ class OrgServiceRegistrationController extends Controller
 
         // work images
         if ($request->file('images')) {
+            $count = 0;
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
 
             foreach ($files as $image) {
+                if($count >= 4) break;
+                $count++;
                 array_push($images, [
                     'path' => $image['file']->store('org/' . $org->id . '/' . 'images'),
+                    'work_imagable_type' => 'org',
+                    'work_imagable_id' => $org->id,
                 ]);
             }
 
@@ -261,15 +272,15 @@ class OrgServiceRegistrationController extends Controller
                 }
             }
 
-            $org->workImages()->createMany($images);
+            DB::table('work_images')->insert($images);
         }
 
         // identities
         if (!$user->identities()->exists()) {
             if ($request->hasFile('identities')) {
                 $identities = [];
-                foreach ($request->file('identities') as $index => $identity) {
-                    if ($index > 1) break;
+                foreach ($request->file('identities') as $orgex => $identity) {
+                    if ($orgex > 1) break;
                     array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
                 }
                 DB::table('identities')->insert($identities);
@@ -366,7 +377,9 @@ class OrgServiceRegistrationController extends Controller
         $org->website = $request->post('website');
         $org->facebook = $request->post('facebook');
         $org->address = $request->post('address');
-        $org->slug = $request->post('slug');
+        $org->slug()->update([
+            'name' => $request->post('slug')
+        ]);
 
         if ($request->hasFile('trade-license')) {
             // delete old file
@@ -552,10 +565,9 @@ class OrgServiceRegistrationController extends Controller
 
         // work images
         if ($request->file('images')) {
+            // TODO: Delete previous images
             $files = $request->file('images');
             $images = [];
-            // TODO:: Validation
-
             foreach ($files as $image) {
                 array_push($images, [
                     'path' => $image['file']->store('org/' . $org->id . '/' . 'images'),
@@ -577,8 +589,8 @@ class OrgServiceRegistrationController extends Controller
         if (!$user->nid) {
             if ($request->hasFile('identities')) {
                 $identities = [];
-                foreach ($request->file('identities') as $index => $identity) {
-                    if ($index > 1) break;
+                foreach ($request->file('identities') as $orgex => $identity) {
+                    if ($orgex > 1) break;
                     array_push($identities, ['path' => $identity->store('user-photos/' . $user->id), 'user_id' => $user->id]);
                 }
 
@@ -593,7 +605,7 @@ class OrgServiceRegistrationController extends Controller
 
     public function edit($id)
     {
-        $org = Org::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities'])->findOrFail($id);
+        $org = Org::with(['referredBy.user', 'workImages', 'division', 'district', 'thana', 'union', 'subCategoryRates', 'user.identities', 'slug'])->findOrFail($id);
 
         if ($org->user_id != Auth::id() || !is_null($org->expire)) {
             return redirect(route('organization-service-registration.index'));
@@ -655,6 +667,6 @@ class OrgServiceRegistrationController extends Controller
 
         DB::commit();
 
-        return redirect(route('home'));
+        return redirect('/');
     }
 }

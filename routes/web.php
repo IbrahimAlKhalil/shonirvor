@@ -35,9 +35,6 @@ Route::namespace('Frontend')->group(function () {
     Route::post('profile/payment-receive-method/{profile}', 'ProfileController@paymentReceiveMethod')->name('profile.payment-receive-method');
     Route::resource('profile', 'ProfileController', ['only' => ['index', 'edit', 'update']]);
 
-    Route::post('individual-feedback', 'IndServiceController@feedbackStore')->name('ind-feedback.store');
-    Route::post('organization-feedback', 'OrgServiceController@feedbackStore')->name('org-feedback.store');
-
     Route::name('frontend.')->group(function () {
 
         Route::get('filter', 'FilterController')->name('filter');
@@ -331,3 +328,6 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
 }, '');
 
 Route::get('payments', 'Frontend\PaymentController')->name('payments');
+
+Route::get('/{slug}', 'Frontend\ServiceController@show')->where(['slug', '/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/']);
+Route::post('/{slug}/feedback', 'Frontend\ServiceController@feedbackStore')->name('feedback.store');

@@ -60,11 +60,11 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/individual-service/
+                                                {{ route('home') }}/
                                             </span>
                                     </div>
                                     <input type="text" id="slug" name="slug" class="form-control"
-                                           value="{{ oldOrData('slug', $ind->slug) }}">
+                                           value="{{ oldOrData('slug', $ind->slug->name) }}">
                                 </div>
                             </div>
                         </div>
@@ -171,7 +171,8 @@
                     </div>
                     <div class="p-4" id="step-2">
                         <div class="form-group row mx-5">
-                            <label class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span class="text-danger">*</span></label>
+                            <label class="col-3 col-form-label">পূর্ণাঙ্গ ঠিকানা <span
+                                        class="text-danger">*</span></label>
                             <div class="col-9">
                                 <div class="row">
                                     <div class="col-md">
@@ -466,7 +467,8 @@
                                 @php($err = ((array) $errors->get('identities')))
                             @endif
                             <div class="form-group row mx-5">
-                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
+                                <label for="identities" class="col-3 col-form-label">জাতীয় পরিচয়পত্রের
+                                    ফটোকপি/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি <span
                                             class="text-danger">*</span></label>
                                 <div class="col-9">
                                     @foreach($user->identities as $index => $identity)
@@ -485,16 +487,28 @@
                                 <div class="flex">
                                     @for($i=0; $i<4; $i++)
                                         <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                                            <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
-                                            <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*"
-                                                   class="file-picker mt-3"
-                                                   @isset($ind->workImages[$i])
-                                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
-                                                   @endisset
-                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                                            @if(isset($ind->workImages[$i]))
+                                                {{-- Old images --}}
+                                                @php($id = $ind->workImages[$i]->id)
+                                                <label for="o-images-{{ $id }}-text" class="my-2">ছবির বর্ণনা</label>
+                                                <textarea id="o-images-{{ $id }}-text" type="text" class="form-control"
+                                                          name="o-images[{{ $id }}][description]">{{ $ind->workImages[$i]->description }}</textarea>
+                                                <input name="o-images[{{ $id }}][file]" type="file"
+                                                       accept="image/*"
+                                                       class="file-picker mt-3"
+                                                       @isset($ind->workImages[$i])
+                                                       data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                                       @endisset
+                                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                                            @else
+                                                <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
+                                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
+                                                          name="images[{{ $i }}][description]"></textarea>
+                                                <input name="images[{{ $i }}][file]" type="file"
+                                                       accept="image/*"
+                                                       class="file-picker mt-3">
+                                            @endif
+
                                         </div>
                                     @endfor
                                 </div>
@@ -514,7 +528,8 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি থাকে)</label>
+                            <label for="experience-certificate" class="col-3 col-form-label">অভিজ্ঞতার সনদ (যদি
+                                থাকে)</label>
                             <div class="col-9">
                                 <input id="experience-certificate" name="experience-certificate" type="file"
                                        accept="image/*"
@@ -614,11 +629,11 @@
                 <div class="input-group">
                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/individual-service/
+                                                {{ route('home') }}/
                                             </span>
                     </div>
                     <input type="text" id="mo-slug" name="slug" class="form-control"
-                           value="{{ oldOrData('slug', $ind->slug) }}">
+                           value="{{ oldOrData('slug', $ind->slug->name) }}">
                 </div>
             </div>
 
@@ -972,7 +987,8 @@
                     @php($err = ((array) $errors->get('identities')))
                 @endif
                 <div class="form-group">
-                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের ফটোকপি/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি<span
+                    <label for="mo-identities" class="col-form-label font-weight-bold">জাতীয় পরিচয়পত্রের
+                        ফটোকপি/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি<span
                                 class="text-danger">*</span></label>
                     <div class="d-flex">
                         @foreach($user->identities as $identity)
@@ -989,18 +1005,32 @@
                 <label for="images" class="col-form-label font-weight-bold">সেবা প্রদানের ছবি সমূহ</label>
                 <div class="flex">
                     @for($i=0; $i<4; $i++)
-                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
-                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                            <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                      name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
-                            <input id="images" name="images[{{ $i }}][file]" type="file"
-                                   accept="image/*"
-                                   class="file-picker mt-3"
-                                   @isset($ind->workImages[$i])
-                                   data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
-                                   @endisset
-                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
-                        </div>
+                        @if(isset($ind->workImages[$i]))
+                            @php($id = $ind->workImages[$i]->id)
+                            <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
+                                <label for="m-o-images-{{ $id }}-text" class="my-2">ছবির বর্ণনা</label>
+                                <textarea id="m-o-images-{{ $id }}-text" type="text" class="form-control"
+                                          name="o-images[{{ $id }}][description]">{{ $ind->workImages[$i]->description }}</textarea>
+                                <input name="o-images[{{ $id }}][file]" type="file"
+                                       accept="image/*"
+                                       class="file-picker mt-3"
+                                       data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                            </div>
+                        @else
+                            <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded">
+                                <label for="m-images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
+                                <textarea id="m-images-{{ $i }}-text" type="text" class="form-control"
+                                          name="images[{{ $i }}][description]">@isset($ind->workImages[$i]){{ $ind->workImages[$i]->description }}@endisset</textarea>
+                                <input name="images[{{ $i }}][file]" type="file"
+                                       accept="image/*"
+                                       class="file-picker mt-3"
+                                       @isset($ind->workImages[$i])
+                                       data-image="{{ asset('storage/' . $ind->workImages[$i]->path) }}"
+                                       @endisset
+                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
+                            </div>
+                        @endif
                     @endfor
                 </div>
             </div>
@@ -1016,7 +1046,8 @@
             </div>
 
             <div class="form-group">
-                <label for="experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি থাকে)</label>
+                <label for="experience-certificate" class="col-form-label font-weight-bold">অভিজ্ঞতার সনদ (যদি
+                    থাকে)</label>
                 <input id="experience-certificate" name="experience-certificate" type="file"
                        @if($ind->experience_certificate)
                        data-image="{{ asset('storage/' . $ind->experience_certificate) }}"
@@ -1077,7 +1108,8 @@
 
             <div class="form-group row mx-5 mt-5 text-center">
                 <div class="text-center col-12">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#warning">মুছে ফেলুন</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#warning">মুছে ফেলুন
+                    </button>
                     <button type="submit" class="btn btn-primary">সাবমিট</button>
                 </div>
             </div>

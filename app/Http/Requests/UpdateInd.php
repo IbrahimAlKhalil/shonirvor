@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Category;
 use App\Models\Package;
+use App\Models\Slug;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,10 @@ class UpdateInd extends FormRequest
             'category' => 'required_without:no-category',
             'category-request' => 'required_with:no-category',
             'slug' => [
-                Rule::unique('inds')->ignore(request('ind')),
-                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+                Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'ind')->where('sluggable_id', request('ind'))->select('id')->first()->id),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+                'min:5',
+                'max:191'
             ],
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
@@ -62,7 +65,7 @@ class UpdateInd extends FormRequest
             'month' => [$first, 'required|between:1,12'],
             'year' => [$first, 'required|max:' . (string)(Date('Y') - 18)],
             'day' => [$first, 'required|between:1,31'],
-            'identities' => [$first, 'required|image']
+            'identities' => [$first, 'nullable|image']
         ]);
 
         return $rules;
@@ -121,7 +124,9 @@ class UpdateInd extends FormRequest
             'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
-            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
+            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }
 }

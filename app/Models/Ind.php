@@ -101,6 +101,11 @@ class Ind extends Model
             ->where('service_type_id', 1);
     }
 
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'sluggable');
+    }
+
 
     /******************/
     /***** Scopes *****/

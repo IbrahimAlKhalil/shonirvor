@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Package;
+use App\Models\Slug;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,10 @@ class UpdateOrg extends FormRequest
             'union-request' => 'required_with:no-union',
             'village-request' => 'required_with:no-village',
             'slug' => [
-                Rule::unique('orgs')->ignore(request('org')),
-                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/'
+                Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'org')->where('sluggable_id', request('org'))->select('id')->first()->id),
+                'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+                'min:5',
+                'max:191'
             ],
             'address' => 'required|string',
             'category' => 'required_without:no-category',
@@ -53,7 +56,7 @@ class UpdateOrg extends FormRequest
         $first = !$user->inds()->onlyApproved()->exists() || !$user->orgs()->onlyApproved()->exists();
         addValidationRules($rules, [
             'nid' => [$first, 'required|unique:users,nid,' . $user->id],
-            'identities' => [$first, 'required|image']
+            'identities' => [$first, 'nullable|image']
         ]);
 
         return $rules;
@@ -112,7 +115,9 @@ class UpdateOrg extends FormRequest
             'identities.required' => 'জাতীয় পরিচয়পত্র/পাসপোর্ট/জন্ম সনদ - এর স্ক্যান কপি দিতে হবে',
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
-            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়'
+            'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
+            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }
 }
