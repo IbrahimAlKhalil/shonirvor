@@ -144,6 +144,17 @@ class IndMyServiceController extends Controller
         return redirect(route('frontend.my-service.ind.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
     }
 
+    public function destroy(Ind $service)
+    {
+        DB::beginTransaction();
+        // TODO: Delete files
+        // TODO: Delete pending things such as edit request, renew request etc.
+        $service->forceDelete();
+        DB::commit();
+
+        return redirect(route('profile.index'))->with('success', 'একাউন্টটি সফলভাবে মুছে ফেলা হয়েছে');
+    }
+
     private function navs()
     {
         $navs = [];

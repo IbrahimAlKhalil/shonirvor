@@ -33,8 +33,8 @@ class HomeController extends Controller
 
         $indTopServices = Ind::onlyTop()
             ->onlyApproved()
-            ->select('inds.id', 'mobile', 'inds.user_id', 'slug', 'category_id', 'district_id', 'thana_id', 'union_id')
-            ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
+            ->select('inds.id', 'mobile', 'inds.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['user:id,name,photo', 'category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name', 'slug'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->take(10)
@@ -42,8 +42,8 @@ class HomeController extends Controller
 
         $orgTopServices = Org::onlyTop()
             ->onlyApproved()
-            ->select('orgs.id', 'name', 'mobile', 'logo', 'orgs.user_id', 'slug', 'category_id', 'district_id', 'thana_id', 'union_id')
-            ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name'])
+            ->select('orgs.id', 'name', 'mobile', 'logo', 'orgs.user_id', 'category_id', 'district_id', 'thana_id', 'union_id')
+            ->with(['category:id,name', 'district:id,bn_name as name', 'thana:id,bn_name as name', 'union:id,bn_name as name', 'slug'])
             ->withFeedbacksAvg()
             ->inRandomOrder()
             ->take(10)

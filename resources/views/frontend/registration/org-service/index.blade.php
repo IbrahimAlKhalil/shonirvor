@@ -69,7 +69,7 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/organization-service/
+                                                {{ route('home') }}/
                                             </span>
                                     </div>
                                     <input type="text" id="slug" name="slug" class="form-control"
@@ -225,7 +225,8 @@
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
-                                <label for="no-category" class="checkbox mt-4">আমার প্রতিষ্ঠানের ধরন এখানে তালিকাভুক্ত নেই ।
+                                <label for="no-category" class="checkbox mt-4">আমার প্রতিষ্ঠানের ধরন এখানে তালিকাভুক্ত
+                                    নেই ।
                                     <input type="checkbox" id="no-category" class="mt-2 no-something"
                                            name="no-category">
                                     <span></span>
@@ -253,7 +254,8 @@
 
 
                                 <div class="mt-4 checkbox">
-                                    <label for="no-sub-category">আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই ।</label>
+                                    <label for="no-sub-category">আমার প্রতিষ্ঠানের সেবার ধরন এখানে তালিকাভুক্ত নেই
+                                        ।</label>
                                     <input type="checkbox" id="no-sub-category" name="no-sub-category"
                                            class="mt-2 no-something">
                                     <span></span>
@@ -272,7 +274,8 @@
                                         </li>
                                         <li class="repeater-insert-before d-none"></li>
                                         <li class="list-group-item border-0">
-                                            <button type="button" id="add-new-sub" class="btn btn-light float-left shadow-sm">
+                                            <button type="button" id="add-new-sub"
+                                                    class="btn btn-light float-left shadow-sm">
                                                 <i class="fa fa-plus"></i> আরও
                                             </button>
                                         </li>
@@ -287,7 +290,8 @@
                                 <div class="row border rounded shadow-sm mt-2 position-relative"
                                      data-repeater-clone="true">
                                     <div class="form-group  col-md-12 row mt-3">
-                                        <label for="addtional-pricing-name" class="col-3 col-form-label">সেবার নামঃ </label>
+                                        <label for="addtional-pricing-name" class="col-3 col-form-label">সেবার
+                                            নামঃ </label>
                                         <div class="col-9">
                                             <input id="addtional-pricing-name" type="text"
                                                    name="additional-pricing[0][name]"
@@ -603,7 +607,8 @@
             </div>
 
             <div class="form-group">
-                <label class="col-form-label font-weight-bold">আপনার প্রতিষ্ঠানের সেবার ধরন <span class="text-danger">*</span></label>
+                <label class="col-form-label font-weight-bold">আপনার প্রতিষ্ঠানের সেবার ধরন <span
+                            class="text-danger">*</span></label>
                 <select id="mo-sub-categories"
                         data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
                         data-option-loader-properties="value=id,text=name"
@@ -664,14 +669,16 @@
             </div>
 
             <div class="form-group">
-                <label for="mo-logo" class="col-form-label mt-3 font-weight-bold">লোগো <span class="text-danger">*</span></label>
+                <label for="mo-logo" class="col-form-label mt-3 font-weight-bold">লোগো <span
+                            class="text-danger">*</span></label>
                 <input id="mo-logo" name="logo" type="file" accept="image/*"
                        class="file-picker"
                        data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
             </div>
 
             <div class="form-group">
-                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি থাকে)</label>
+                <label for="mo-trade-license" class="font-weight-bold col-form-label d-block">ট্রেড লাইসেন্স (যদি
+                    থাকে)</label>
                 <input id="mo-trade-license" name="trade-license" type="file" accept="image/*"
                        class="file-picker"
                        data-error="@if($errors->has('trade-license')) {{ $errors->first('trade-license') }} @endif">

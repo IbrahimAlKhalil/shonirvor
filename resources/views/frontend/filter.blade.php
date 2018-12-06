@@ -20,11 +20,13 @@
                         <div class="col-lg-6">
                             <ul class="list-unstyled">
                                 <li class="media mt-3 p-2 service-card-shadow">
-                                    <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}" alt="Generic placeholder image">
+                                    <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}"
+                                         alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('frontend.'.$provider->type.'-service.show', $provider->slug) }}">{{ $provider->name }}</a>
-                                            <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}" class="invisible">
+                                            <a href="{{ route('home') . '/' . $provider->slug->name }}">{{ $provider->name }}</a>
+                                            <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}"
+                                                   class="invisible">
                                         </p>
                                         <p>
                                             <i>{{ $provider->category_name }}</i>
@@ -32,7 +34,8 @@
                                         <p class="mb-0">
                                             <span class="fa fa-phone"></span> {{ $provider->mobile }}
                                             <br>
-                                            <span class="fa fa-map-marker"></span> {{ $provider->union_name }}, {{ $provider->thana_name }}, {{ $provider->district_name }}
+                                            <span class="fa fa-map-marker"></span> {{ $provider->union_name }}
+                                            , {{ $provider->thana_name }}, {{ $provider->district_name }}
                                         </p>
                                     </div>
                                 </li>

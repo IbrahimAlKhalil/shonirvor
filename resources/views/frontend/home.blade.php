@@ -69,7 +69,7 @@
                                              src="{{ asset('storage/'.$service->user->photo) }}">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
-                                                <a href="{{ route('frontend.ind-service.show', $service->slug) }}">{{ $service->user->name }}</a>
+                                                <a href="{{ route('home') . '/' . $service->slug->name }}">{{ $service->user->name }}</a>
                                                 <input id="topIndStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
                                                        class="invisible">
                                             </p>
@@ -97,7 +97,7 @@
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
-                                                <a href="{{ route('frontend.org-service.show', $service->slug) }}">{{ $service->name }}</a>
+                                                <a href="{{ route('home') . '/' . $service->slug->name }}">{{ $service->name }}</a>
                                                 <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
                                                        class="invisible">
                                             </p>

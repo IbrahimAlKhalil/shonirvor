@@ -254,6 +254,34 @@
                         @endif
                     </div>
                 </div>
+
+                @if($service->deleted_at == null && $service->expire != null)
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <form action="{{ route('frontend.my-service.org.destroy', $service->id) }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <div class="modal fade" id="confirm-deletion" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body text-center">
+                                                সতটিই কি আপনি এটি মুছে ফেলতে চান?
+                                            </div>
+                                            <div class="modal-footer border-top-0 justify-content-center row">
+                                                <button type="button" class="btn btn-success" data-dismiss="modal">না
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">হ্যাঁ</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <button type="button" data-toggle="modal" data-target="#confirm-deletion"
+                                    class="btn btn-danger btn-block">একউন্টটি মুছে দিন
+                            </button>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

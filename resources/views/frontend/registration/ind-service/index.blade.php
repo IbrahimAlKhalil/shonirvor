@@ -56,7 +56,7 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend d-none d-md-block">
                                             <span class="input-group-text">
-                                                {{ route('home') }}/individual-service/
+                                                {{ route('home') }}/
                                             </span>
                                     </div>
                                     <input type="text" id="slug" name="slug" class="form-control"

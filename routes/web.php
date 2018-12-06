@@ -19,6 +19,7 @@ Route::post('verification/{user}', 'Auth\RegisterController@verification');
 Route::prefix('command')->group(function () {
 
     Route::get('storage-link', 'CommandController@storage');
+    Route::get('migrate-database', 'CommandController@migrateDatabase');
 
 }, '');
 
@@ -85,13 +86,13 @@ Route::namespace('Frontend')->group(function () {
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
             Route::resource('individual-service', 'IndMyServiceController', [
-                'only' => ['show', 'edit', 'update'],
+                'only' => ['show', 'edit', 'update', 'destroy'],
                 'parameters' => ['individual-service' => 'service'],
                 'names' => 'ind'
             ]);
 
             Route::resource('organization-service', 'OrgMyServiceController', [
-                'only' => ['show', 'edit', 'update'],
+                'only' => ['show', 'edit', 'update', 'destroy'],
                 'parameters' => ['organization-service' => 'service'],
                 'names' => 'org'
             ]);
