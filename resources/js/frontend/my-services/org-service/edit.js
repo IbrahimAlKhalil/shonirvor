@@ -109,16 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 !dontRepeat && repeater.repeat();
             });
         }));
-
-        document.querySelectorAll('.delete-sub-category').forEach(button => {
-            button.addEventListener('click', () => {
-                if (confirm('আপনি কি নিশ্চিত যে আপনি এটি মুছে দিতে চান?')) {
-                    $(button).closest('tr').hide(500, function () {
-                        $(this).remove();
-                    });
-                }
-            });
-        });
     })();
 
 

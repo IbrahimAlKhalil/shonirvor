@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\IndWorkMethod;
 use App\Models\ServiceEdit;
+use App\Models\Slug;
 use App\Models\SubCategory;
 use App\Models\Thana;
 use App\Models\Union;
@@ -88,7 +89,7 @@ class IndServiceEditRequestController extends Controller
             }
         }
 
-        $workImages = $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys(isset($application->data['images']) ? $application->data['images'] : []))->get();
 
         $user = $application->serviceEditable->user;
         $data = $application->data;
@@ -119,46 +120,60 @@ class IndServiceEditRequestController extends Controller
         $ind->district_id = $data['district'];
         $ind->thana_id = $data['thana'];
         $ind->village_id = $data['village'];
-        if (isset($data['slug'])) {
-            $ind->slug = $data['slug'];
-        }
         if (isset($data['cover-photo'])) {
             $ind->cover_photo = $data['cover-photo'];
         }
         $ind->save();
 
+        $slug = $ind->slug;
+        if ($data['slug'] != $slug->name) {
+            $slug->name = $data['slug'];
+            $slug->save();
+        }
+
+
         // store sub-category edits
         if (array_key_exists('sub-categories', $data)) {
-            $deletedSubCategoryIds = array_map(function ($item) {
-                return $item['id'];
-            }, $data['sub-categories']);
+//            $subCategoryIds = array_map(function ($item) {
+//                return $item['id'];
+//            }, $data['sub-categories']);
 
 
             // Delete ind workmethods
-            IndWorkMethod::where('ind_id', $ind->id)->whereIn('sub_category_id', $deletedSubCategoryIds)->delete();
+            IndWorkMethod::where('ind_id', $ind->id)->delete();
 
             // Detach sub categories
-            $ind->subCategories()->whereNotIn('sub_categories.id', $deletedSubCategoryIds)->detach();
+            $ind->subCategories()->detach();
+
+            $subCategoriables = [];
 
             foreach ($data['sub-categories'] as $subCategory) {
-                foreach ($subCategory['work-methods'] as $key => $workMethod) {
-                    $method = IndWorkMethod::where('ind_id', $ind->id)->where('sub_category_id', $subCategory['id'])->where('work_method_id', $key + 1)->first();
-                    if (!$method) continue;
-                    if ($key == 3) {
-                        if ($workMethod['rate'] != 'negotiable') {
-                            $method->delete();
-                        }
-                        continue;
-                    }
+                array_push($subCategoriables, [
+                    'sub_category_id' => $subCategory['id'],
+                    'sub_categoriable_id' => $ind->id,
+                    'sub_categoriable_type' => 'ind'
+                ]);
 
-                    $method->rate = $workMethod['rate'];
-                    $method->save();
+                $indWorkMethods = [];
+                foreach ($subCategory['work-methods'] as $key => $workMethod) {
+                    if (3 == $key && $workMethod['rate'] != 'negotiable') continue;
+
+                    array_push($indWorkMethods, [
+                        'ind_id' => $ind->id,
+                        'work_method_id' => $key + 1,
+                        'sub_category_id' => $subCategory['id'],
+                        'rate' => $workMethod['rate']
+                    ]);
                 }
+
+                DB::table('ind_work_method')->insert($indWorkMethods);
             }
+
+            DB::table('sub_categoriables')->insert($subCategoriables);
         }
 
         // store sub-category requests
-        if(isset($data['sub-category-requests'])) {
+        if (isset($data['sub-category-requests'])) {
             foreach ($data['sub-category-requests'] as $datum) {
                 $subCategory = new SubCategory;
                 $subCategory->category_id = $ind->category_id;

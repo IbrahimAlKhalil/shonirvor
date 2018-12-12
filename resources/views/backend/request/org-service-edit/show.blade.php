@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            @if($subCategories || isset($data['sub-category-requests']))
+            @if($data['sub-categories'] || isset($data['sub-category-requests']))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">
@@ -126,11 +126,11 @@
                                 </thead>
                                 <tbody>
 
-                                @foreach($subCategories as $index => $subCategory)
+                                @foreach($data['sub-categories'] as $index => $subCategory)
                                     <tr>
                                         <td> {{ en2bnNumber($index+1) }} </td>
-                                        <td>{{ $subCategory['name'] }}</td>
-                                        <td>@isset($subCategory['rate']){{ $subCategory['rate'] }}@endisset</td>
+                                        <td>{{ $subCategories->firstWhere('id', $subCategory['id'])->name }}</td>
+                                        <td>{{ $subCategory['rate'] }}</td>
                                     </tr>
                                 @endforeach
                                 @isset($data['sub-category-requests'])

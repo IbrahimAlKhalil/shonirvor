@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $user = User::with('referPackage.package.properties', 'references', 'paymentReceiveMethod')
             ->find(Auth::id());
 
-        $references = $user->references->filter(function ($value) {
+        $references = $user->references()->get()->filter(function ($value) {
             return $value->service->expire != null;
         });
 

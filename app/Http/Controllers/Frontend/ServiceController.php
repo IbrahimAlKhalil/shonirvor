@@ -36,7 +36,8 @@ class ServiceController extends Controller
                 $query->where('ind_id', $slug->sluggable_id);
             },
             'workImages',
-            'feedbacks'
+            'feedbacks',
+            'slug'
         ])->findOrFail($slug->sluggable_id);
 
         if (is_null($provider->expire)) abort(404, 'This service request is in pending.');
@@ -100,7 +101,8 @@ class ServiceController extends Controller
             },
             'additionalPrices',
             'workImages',
-            'feedbacks'
+            'feedbacks',
+            'slug',
         ])->findOrFail($slug->sluggable_id);
 
         if (is_null($provider->expire)) abort(404, 'This service request is in pending.');

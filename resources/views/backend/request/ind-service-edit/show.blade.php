@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            @if($subCategories)
+            @if($subCategories || $subCategoryRequests)
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">

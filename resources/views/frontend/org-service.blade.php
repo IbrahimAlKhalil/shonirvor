@@ -26,6 +26,21 @@
                   <i class="fa-stack-1x">{{ en2bnNumber( round($provider->feedbacks_avg, 1) ) }}</i>
                 </span>
             </div>
+            <div class="col-md-12 my-2">
+                <div class="text-center">
+                    @if($provider->facebook)
+                        <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}"
+                           target="_blank"> ফেসবুক</a>
+                    @endif
+                    @if($provider->website)
+                        <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}"
+                           target="_blank"> ওয়েবসাইট</a>
+                    @endif
+                    <a class="btn btn-warning my-2" href="tel:{{ $provider->mobile }}">
+                        <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-4 mb-3 order-lg-last">
@@ -34,14 +49,14 @@
                         <div class="card">
                             <div class="card-header h5 text-center">প্রাতিষ্ঠানিক তথ্য</div>
                             <div class="card-body">
-                                @foreach($provider->subCategoryRates->shuffle() as $subCategory)
+                                @foreach($provider->subCategoryRates as $subCategory)
                                     <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
                                     @if($subCategory->pivot->rate)
                                         <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }}
                                             টাকা</p>
                                     @endif
                                 @endforeach
-                                @foreach($provider->additionalPrices->shuffle() as $additionalPrice)
+                                @foreach($provider->additionalPrices as $additionalPrice)
                                     <p class="border-bottom font-italic font-weight-bold text-primary">{{ $additionalPrice->name }}</p>
                                     <p class="sub-cat-price">{{ $additionalPrice->info }}</p>
                                 @endforeach
@@ -51,25 +66,10 @@
                 </div>
             </div>
             <div class="col-lg-8 px-lg-5">
-                <div class="row my-2">
-                    <div class="col-12 text-center">
-                        @if($provider->facebook)
-                            <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}"
-                               target="_blank"> ফেসবুক</a>
-                        @endif
-                        @if($provider->website)
-                            <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}"
-                               target="_blank"> ওয়েবসাইট</a>
-                        @endif
-                        <a class="btn btn-warning my-2" href="tel:{{ $provider->mobile }}">
-                            <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
-                        </a>
-                    </div>
-                </div>
                 <div class="row mt-4">
                     <div class="col-12">
                         <p class="h4 border-bottom">প্রতিষ্ঠান সম্পর্কেঃ</p>
-                        <p class="pt-3 text-justify">{{ $provider->description }}</p>
+                        <p class="pt-3 text-justify service-description">{{ $provider->description }}</p>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -106,7 +106,8 @@
                                 @if($canFeedback)
                                     <div class="row">
                                         <div class="col-12">
-                                            <form action="{{ route('feedback.store') }}" method="post">
+                                            <form action="{{ route('feedback.store', $provider->slug->name) }}"
+                                                  method="post">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="type" value="org">
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">

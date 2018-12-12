@@ -85,7 +85,7 @@ class IndMyServiceController extends Controller
             'thana',
             'union',
             'village',
-            'service-link',
+            'slug',
             'address',
             'sub-categories',
             'sub-category-requests'

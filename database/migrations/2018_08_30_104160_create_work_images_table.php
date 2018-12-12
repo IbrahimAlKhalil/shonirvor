@@ -11,7 +11,7 @@ class CreateWorkImagesTable extends Migration
         Schema::create('work_images', function (Blueprint $table) {
             $table->increments('id');
             $table->string('path');
-            $table->string('description')->nullable();
+            $table->mediumText('description')->nullable();
             $table->morphs('work_imagable');
             $table->timestamps();
         });

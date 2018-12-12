@@ -47,10 +47,10 @@ class OrgServiceEditRequestController extends Controller
         $subCategoryIds = array_map(function ($item) {
             return $item['id'];
         }, $subCategoryArr);
-        $subCategories = SubCategory::onlyConfirmed()->select('name')->whereIn('id', $subCategoryIds)->get()->toArray();
+        $subCategories = SubCategory::onlyConfirmed()->select('name', 'id')->whereIn('id', $subCategoryIds)->get();
 
 
-        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys($application->data['images']))->get();
+        $workImages = WorkImage::select('id', 'path')->whereIn('id', array_keys(isset($application->data['images']) ? $application->data['images'] : []))->get();
 
         $data = $application->data;
         $division = Division::find($data['division']);
@@ -80,26 +80,28 @@ class OrgServiceEditRequestController extends Controller
         $org->district_id = $data['district'];
         $org->thana_id = $data['thana'];
         $org->village_id = $data['village'];
-        $org->slug = $data['slug'];
         if (isset($data['logo'])) {
-            $org->cover_photo = $data['logo'];
+            $org->logo = $data['logo'];
         }
         if (isset($data['cover-photo'])) {
             $org->cover_photo = $data['cover-photo'];
         }
         $org->save();
+        $org->slug()->update([
+            'name' => $data['slug']
+        ]);
 
 
         // Attach/Detach sub categories
         $subCategories = [];
         $subCategoryRates = [];
         if (isset($data['sub-categories'])) {
-            $subCategoryIds = array_map(function ($item) {
-                return $item['id'];
-            }, $data['sub-categories']);
+//            $subCategoryIds = array_map(function ($item) {
+//                return $item['id'];
+//            }, $data['sub-categories']);
 
             $org->subCategories()->detach();
-            DB::table('org_sub_category_rates')->whereIn('sub_category_id', $subCategoryIds)->where('org_id', $org->id)->delete();
+            DB::table('org_sub_category_rates')->where('org_id', $org->id)->delete();
 
             foreach ($data['sub-categories'] as $datum) {
                 array_push($subCategoryRates, [
@@ -143,6 +145,7 @@ class OrgServiceEditRequestController extends Controller
         DB::table('org_sub_category_rates')->insert($subCategoryRates);
 
         if (isset($data['kaj'])) {
+            $org->additionalPrices()->delete();
             foreach ($data['kaj'] as $datum) {
                 DB::table('org_additional_prices')->where('id', $datum['id'])->update([
                     'name' => $datum['name'],
