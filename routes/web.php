@@ -20,6 +20,8 @@ Route::prefix('command')->group(function () {
 
     Route::get('storage-link', 'CommandController@storage');
     Route::get('migrate-database', 'CommandController@migrateDatabase');
+    Route::get('config-cache', 'CommandController@configCache');
+    Route::get('route-cache', 'CommandController@routeCache');
 
 }, '');
 

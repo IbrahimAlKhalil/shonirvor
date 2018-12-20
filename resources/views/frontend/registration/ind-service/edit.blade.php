@@ -462,6 +462,20 @@
                         </div>
                     </div>
                     <div class="p-4" id="step-4">
+
+                        <div class="form-group row mx-5">
+                            <label for="cover-photo" class="col-3 col-form-label">কভার ছবি</label>
+                            <div class="col-9">
+                                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
+                                       @if($ind->cover_photo)
+                                       data-image="{{ asset('storage/default/icons/pdf.svg') }}"
+                                       @endif
+                                       class="file-picker"
+                                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
+                            </div>
+                        </div>
+
+
                         @if ($first)
                             @if($errors->has('identities'))
                                 @php($err = ((array) $errors->get('identities')))
@@ -980,6 +994,16 @@
                                 class="fa fa-plus"></i> আরও
                     </button>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cover-photo" class="col-form-label font-weight-bold">কভার ছবি</label>
+                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
+                       @if($ind->cover_photo)
+                       data-image="{{ asset('storage/' . $ind->cover_photo) }}"
+                       @endif
+                       class="file-picker"
+                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
             </div>
 
             @if ($first)

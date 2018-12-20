@@ -408,6 +408,18 @@
                         </div>
 
                         <div class="form-group row mx-5">
+                            <label for="cover-photo" class="col-3 col-form-label">কভার ছবি</label>
+                            <div class="col-9">
+                                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
+                                       @if($org->cover_photo)
+                                       data-image="{{ asset('storage/default/icons/pdf.svg') }}"
+                                       @endif
+                                       class="file-picker"
+                                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mx-5">
                             <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স (যদি থাকে)</label>
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
@@ -835,6 +847,16 @@
                 <input id="mo-logo" name="logo" type="file" accept="image/*"
                        class="file-picker" data-image="{{ asset('storage/' . $org->logo) }}"
                        data-error="@if($errors->has('logo')) {{ $errors->first('logo') }} @endif">
+            </div>
+
+            <div class="form-group">
+                <label for="cover-photo" class="col-form-label font-weight-bold">কভার ছবি</label>
+                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
+                       @if($org->cover_photo)
+                       data-image="{{ asset('storage/' . $org->cover_photo) }}"
+                       @endif
+                       class="file-picker"
+                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
             </div>
 
             <div class="form-group">

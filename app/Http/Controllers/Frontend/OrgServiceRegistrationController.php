@@ -136,6 +136,9 @@ class OrgServiceRegistrationController extends Controller
         if ($request->hasFile('logo')) {
             $org->logo = $request->file('logo')->store('org/' . $org->id);
         }
+        if ($request->hasFile('cover-photo')) {
+            $org->cover_photo = $request->file('cover-photo')->store('org/' . $org->id);
+        }
         $org->save();
 
         // Slug
@@ -255,7 +258,7 @@ class OrgServiceRegistrationController extends Controller
             $images = [];
 
             foreach ($files as $image) {
-                if($count >= 4) break;
+                if ($count >= 4) break;
                 $count++;
                 array_push($images, [
                     'path' => $image['file']->store('org/' . $org->id . '/' . 'images'),
@@ -265,10 +268,9 @@ class OrgServiceRegistrationController extends Controller
             }
 
             foreach ($request->post('images') as $key => $image) {
-                if (array_key_exists('description', $image) && !is_null($image['description'])) {
-                    if (isset($images[$key])) {
-                        $images[$key]['description'] = $image['description'];
-                    }
+                if (isset($images[$key])) {
+                    $description = isset($image['description']) ? $image : null;
+                    $images[$key]['description'] = $description;
                 }
             }
 
@@ -390,6 +392,11 @@ class OrgServiceRegistrationController extends Controller
             // delete old file
             Storage::delete($org->logo);
             $org->logo = $request->file('logo')->store('org/' . $org->id);
+        }
+        if ($request->hasFile('cover-photo')) {
+            // delete old file
+            Storage::delete($org->cover_photo);
+            $org->cover_photo = $request->file('cover-photo')->store('org/' . $org->id);
         }
         $org->save();
 

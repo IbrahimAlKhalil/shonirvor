@@ -37,7 +37,7 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>
-                        <table class="table table-striped table-bordered table-hover table-sm w-100">
+                        <table class="table table-striped table-bordered table-hover table-sm w-100 table-responsive">
                             <tbody>
                             <tr>
                                 <th scope="row">মোবাইল নম্বর</th>

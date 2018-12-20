@@ -165,6 +165,10 @@ class IndServiceRegistrationController extends Controller
         if ($request->hasFile('cv')) {
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
+
+        if ($request->hasFile('cover-photo')) {
+            $ind->cover_photo = $request->file('cover-photo')->store('ind/' . $ind->id . '/' . 'docs');
+        }
         $ind->save();
 
         // Create reference
@@ -446,6 +450,9 @@ class IndServiceRegistrationController extends Controller
         if ($request->hasFile('cv')) {
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
+        if ($request->hasFile('cover-photo')) {
+            $ind->cover_photo = $request->file('cover-photo')->store('ind/' . $ind->id . '/' . 'docs');
+        }
         $ind->save();
 
         // Create reference
@@ -634,10 +641,9 @@ class IndServiceRegistrationController extends Controller
             }
 
             foreach ($request->post('images') as $key => $image) {
-                if (array_key_exists('description', $image) && !is_null($image['description'])) {
-                    if (isset($images[$key])) {
-                        $images[$key]['description'] = $image['description'];
-                    }
+                if (isset($images[$key])) {
+                    $description = isset($image['description']) ? $image : null;
+                    $images[$key]['description'] = $description;
                 }
             }
 

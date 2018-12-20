@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            @if($data['sub-categories'] || isset($data['sub-category-requests']))
+            @if(isset($data['sub-categories']) || isset($data['sub-category-requests']))
                 <div class="col-md-12 mb-3">
                     <div class="rounded row">
                         <div class="col-md-12 p-0 list-group mt-4">

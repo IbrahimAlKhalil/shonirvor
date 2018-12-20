@@ -43,23 +43,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 mb-3 order-lg-last">
+            <div class="col-lg-4 mb-3" id="org-descr">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header h5 text-center">প্রাতিষ্ঠানিক তথ্য</div>
+                            <div class="card-header h5 text-center">প্রতিষ্ঠান সম্পর্কে</div>
                             <div class="card-body">
-                                @foreach($provider->subCategoryRates as $subCategory)
-                                    <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
-                                    @if($subCategory->pivot->rate)
-                                        <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }}
-                                            টাকা</p>
-                                    @endif
-                                @endforeach
-                                @foreach($provider->additionalPrices as $additionalPrice)
-                                    <p class="border-bottom font-italic font-weight-bold text-primary">{{ $additionalPrice->name }}</p>
-                                    <p class="sub-cat-price">{{ $additionalPrice->info }}</p>
-                                @endforeach
+                                <p class="pt-3 text-justify service-description">{{ $provider->description }}</p>
                             </div>
                         </div>
                     </div>
@@ -68,8 +58,20 @@
             <div class="col-lg-8 px-lg-5">
                 <div class="row mt-4">
                     <div class="col-12">
-                        <p class="h4 border-bottom">প্রতিষ্ঠান সম্পর্কেঃ</p>
-                        <p class="pt-3 text-justify service-description">{{ $provider->description }}</p>
+                        <p class="h4 border-bottom">প্রাতিষ্ঠানিক তথ্য</p>
+                        <div>
+                            @foreach($provider->subCategoryRates as $subCategory)
+                                <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
+                                @if($subCategory->pivot->rate)
+                                    <p class="sub-cat-price">{{ en2bnNumber( (int) $subCategory->pivot->rate ) }}
+                                        টাকা</p>
+                                @endif
+                            @endforeach
+                            @foreach($provider->additionalPrices as $additionalPrice)
+                                <p class="border-bottom font-italic font-weight-bold text-primary">{{ $additionalPrice->name }}</p>
+                                <p class="sub-cat-price service-description">{{ $additionalPrice->info }}</p>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-3">

@@ -58,3 +58,13 @@ img.pp {
     width: 40%;
   }
 }
+
+.service-description {
+  white-space: pre-line;
+}
+
+#org-descr {
+  @media all and (min-width: 992px) {
+    order: 1;
+  }
+}
