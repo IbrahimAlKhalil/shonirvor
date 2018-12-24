@@ -462,7 +462,7 @@
                                 </select>
                                 <div class="tab-content mt-2" id="package-descriptions">
                                     @foreach($packages as $package)
-                                        <div class="tab-pane fade" id="package-dscr-{{ $package->id }}">
+                                        <div class="tab-pane fade text-primary" id="package-dscr-{{ $package->id }}">
                                             {{ $package->properties->groupBy('name')['description'][0]->value }}
                                         </div>
                                     @endforeach
@@ -885,7 +885,7 @@
                 </select>
                 <div class="tab-content mt-2" id="mo-package-descriptions">
                     @foreach($packages as $package)
-                        <div class="tab-pane fade" id="mo-package-dscr-{{ $package->id }}">
+                        <div class="tab-pane fade text-primary" id="mo-package-dscr-{{ $package->id }}">
                             {{ $package->properties->groupBy('name')['description'][0]->value }}
                         </div>
                     @endforeach
@@ -942,7 +942,7 @@
                 next: "পরবর্তী ধাপ",
                 previous: "আগের ধাপ"
             },
-            useURLhash: false,
+            useURLhash: true,
             autoAdjustHeight: false
         });
 

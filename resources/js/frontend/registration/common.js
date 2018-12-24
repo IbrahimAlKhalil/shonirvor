@@ -176,17 +176,33 @@ $(document).ready(function () {
                 next.removeClass('invisible');
             }
         });
+    window.selectizes = [];
 
-    function savePackage(prefix) {
+    function savePaymentMethod(prefix) {
+        let selectize = $(`#${prefix}payment-method`)[0].selectize;
 
-        $(`#${prefix}payment-method`)[0].selectize.on('change', value => {
+        selectize.on('change', function (value) {
             localStorage.setItem('paymentMethod', value);
-            $(`#${prefix}payment-method-accountId`).find('span').addClass('d-none');
-            $(`#${prefix}payment-method-id-${value}`).removeClass('d-none')
+            $(`#${prefix}payment-method-accountId span`).addClass('d-none');
+            $(`#${prefix}payment-method-id-${value}`).removeClass('d-none');
         });
-        document.querySelector(`#${prefix}payment-method`).selectize.setValue(localStorage.paymentMethod);
+        selectize.setValue(localStorage.paymentMethod);
     }
 
+    function savePackage(prefix) {
+        let selectize = $(`#${prefix}package`)[0].selectize;
+
+        selectize.on('change', function (value) {
+            localStorage.setItem('package', value);
+            $(`#${prefix}package-descriptions div`).removeClass('active show');
+            $(`#${prefix}package-dscr-${value}`).addClass('active show');
+        });
+
+        selectize.setValue(localStorage.paymentMethod);
+    }
+
+    savePaymentMethod('mo-');
+    savePaymentMethod('');
     savePackage('mo-');
     savePackage('');
 
