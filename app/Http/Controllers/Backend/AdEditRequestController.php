@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\AdEdit;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdEditRequestController extends Controller
 {
@@ -52,6 +53,7 @@ class AdEditRequestController extends Controller
     {
         // TODO: Delete Image
         $adEdit->delete();
+        Storage::delete($adEdit->image);
         return redirect()->back()->with('success', 'বিজ্ঞাপন এডিট আবেদনটি ডিলিট করা হয়েছে');
     }
 }

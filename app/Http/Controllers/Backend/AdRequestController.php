@@ -6,6 +6,7 @@ use App\Models\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdRequestController extends Controller
 {
@@ -89,6 +90,7 @@ class AdRequestController extends Controller
 
         // TODO: Delete Image
         $application->delete();
+        Storage::delete($application->image);
 
         DB::commit();
 

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class IndServiceRegistrationController extends Controller
 {
@@ -444,13 +445,16 @@ class IndServiceRegistrationController extends Controller
         ]);
 
         if ($request->hasFile('experience-certificate')) {
+            Storage::delete($ind->experience_certificate);
             $ind->experience_certificate = $request->file('experience-certificate')->store('ind/' . $ind->id . '/' . 'docs');
         }
 
         if ($request->hasFile('cv')) {
+            Storage::delete($ind->cv);
             $ind->cv = $request->file('cv')->store('ind/' . $ind->id . '/' . 'docs');
         }
         if ($request->hasFile('cover-photo')) {
+            Storage::delete($ind->cover_photo);
             $ind->cover_photo = $request->file('cover-photo')->store('ind/' . $ind->id . '/' . 'docs');
         }
         $ind->save();
@@ -632,6 +636,13 @@ class IndServiceRegistrationController extends Controller
         // work images
         if ($request->file('images')) {
             // TODO: Delete previous images
+            $oldImages = $ind->workImages;
+            $ind->workImages()->delete();
+
+            foreach ($oldImages as $oldImage) {
+                Storage::delete($oldImage->path);
+            }
+
             $files = $request->file('images');
             $images = [];
             foreach ($files as $image) {
@@ -733,6 +744,8 @@ class IndServiceRegistrationController extends Controller
         $thana->is_pending == 1 && $thana->delete();
 
         // TODO:: Don't forget to delete documents/images
+
+        deleteIndDocs($ind);
 
         DB::commit();
 

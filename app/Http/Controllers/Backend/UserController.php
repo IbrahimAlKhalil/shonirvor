@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\UserReferPackage;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -86,7 +87,17 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         // TODO: Delete photos/documents
+        $identities = $user->identities;
         $user->delete();
+
+        if ($user->photo != 'default/user-photo/person.jpg') {
+            Storage::delete();
+        }
+
+        foreach ($identities as $identity) {
+            Storage::delete($identity->path);
+        }
+
         return redirect('dashboard')->with('success', 'ইউজারটি সফলভাবে মুছে ফেলা হয়েছে');
     }
 }

@@ -221,6 +221,8 @@ class IndServiceRequestController extends Controller
 
         // TODO:: Don't forget to delete documents/images
 
+        deleteIndDocs($application);
+
         DB::commit();
 
         return redirect(route('backend.request.ind-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');

@@ -298,17 +298,17 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     ]);
 
     // TODO:: This routes must be marged with "Frontend my-services"
-    Route::name('profile.backend.')->prefix('profile')->group(function () {
-        Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
-        Route::resource('individual-service', 'IndProfileController', ['only' => [
-            'show', 'destroy', 'update', 'edit', 'updatePending'],
-            'parameters' => ['individual-service' => 'provider']
-        ]);
-        Route::resource('organization-service', 'OrgProfileController', [
-            'only' => ['show', 'destroy', 'update', 'edit'],
-            'parameters' => ['organization-service' => 'provider']
-        ]);
-    }, '');
+//    Route::name('profile.backend.')->prefix('profile')->group(function () {
+//        Route::post('individual-service/status', 'IndProfileController@updateStatus')->name('individual-service.update-status');
+//        Route::resource('individual-service', 'IndProfileController', ['only' => [
+//            'show', 'destroy', 'update', 'edit', 'updatePending'],
+//            'parameters' => ['individual-service' => 'provider']
+//        ]);
+//        Route::resource('organization-service', 'OrgProfileController', [
+//            'only' => ['show', 'destroy', 'update', 'edit'],
+//            'parameters' => ['organization-service' => 'provider']
+//        ]);
+//    }, '');
 
 //    Route::resource('individual-service-edit', 'IndServiceEditController', [
 //        'only' => ['index', 'show', 'store', 'destroy'],

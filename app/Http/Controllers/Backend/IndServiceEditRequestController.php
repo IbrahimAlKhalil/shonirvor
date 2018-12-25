@@ -17,6 +17,7 @@ use App\Models\WorkMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class IndServiceEditRequestController extends Controller
 {
@@ -245,11 +246,32 @@ class IndServiceEditRequestController extends Controller
     public function destroy($id)
     {
         $application = ServiceEdit::where('service_editable_type', 'ind')->findOrFail($id);
+        $data = $application->data;
         DB::beginTransaction();
 
         // TODO:: Don't forget to delete documents/images
 
         $application->delete();
+
+        if (isset($data['cover-photo'])) {
+            Storage::delete($data['cover-photo']);
+        }
+
+        if (isset($data['images'])) {
+            foreach ($data['images'] as $image) {
+                if (isset($image['file'])) {
+                    Storage::delete($image->file);
+                }
+            }
+        }
+
+        if(isset($data['new-work-images'])) {
+            foreach ($data['new-work-images'] as $image) {
+                if (isset($image['file'])) {
+                    Storage::delete($image->file);
+                }
+            }
+        }
 
         DB::commit();
 

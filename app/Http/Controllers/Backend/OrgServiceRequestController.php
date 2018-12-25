@@ -215,6 +215,8 @@ class OrgServiceRequestController extends Controller
 
         // TODO:: Don't forget to delete documents/images
 
+        deleteOrgDocs($application);
+
         DB::commit();
 
         return redirect(route('backend.request.org-service-request.index'))->with('success', 'অনুরোধটি সফলভাবে মুছে ফেলা হয়েছে!');

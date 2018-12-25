@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\Ind;
+use App\Models\Org;
 use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\Package;
 use App\Models\ContentType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Check if form old data exist
@@ -316,6 +319,64 @@ function addValidationRules(array &$arr, array $rules)
             }
 
             $arr[$parameter] = $rule[1];
+        }
+    }
+}
+
+
+/**
+ * @param Ind $ind
+ */
+
+function deleteIndDocs(Ind $ind)
+{
+    if ($ind->experience_certificate) {
+        Storage::delete($ind->experience_certificate);
+    }
+
+    if ($ind->cv) {
+        Storage::delete($ind->cv);
+    }
+
+    if ($ind->cover_photo) {
+        Storage::delete($ind->cover_photo);
+    }
+
+    foreach ($ind->workImages as $image) {
+        Storage::delete($image->path);
+    }
+
+    $user = $ind->user;
+    if ($user->inds()->count() == 0) {
+        foreach ($ind->user->identities as $identity) {
+            Storage::delete($identity->path);
+        }
+    }
+}
+
+/**
+ * @param Org $org
+ */
+function deleteOrgDocs(Org $org)
+{
+    if ($org->trade_license) {
+        Storage::delete($org->trade_license);
+    }
+    if ($org->logo) {
+        Storage::delete($org->logo);
+    }
+    if ($org->cover_photo) {
+        Storage::delete($org->cover_photo);
+    }
+
+    foreach ($org->workImages as $image) {
+        Storage::delete($image->path);
+    }
+
+    $user = $org->user;
+    if ($user->inds()->count() == 0) {
+        foreach ($org->user->identities as $identity) {
+            Storage::delete($identity->path);
         }
     }
 }

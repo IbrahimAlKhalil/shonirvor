@@ -151,6 +151,9 @@ class OrgMyServiceController extends Controller
         $service->slug()->delete();
 
         $service->forceDelete();
+
+        deleteOrgDocs($service);
+
         DB::commit();
 
         return redirect(route('profile.index'))->with('success', 'একাউন্টটি সফলভাবে মুছে ফেলা হয়েছে');

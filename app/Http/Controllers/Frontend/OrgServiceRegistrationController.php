@@ -672,6 +672,8 @@ class OrgServiceRegistrationController extends Controller
 
         // TODO:: Don't forget to delete documents/images
 
+        deleteOrgDocs($org);
+
         DB::commit();
 
         return redirect('/');
