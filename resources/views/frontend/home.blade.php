@@ -57,11 +57,11 @@
                 @if($indTopServices->isNotEmpty() || $orgTopServices->isNotEmpty())
                     <div class="row mt-4 bg-white rounded shadow-sm pt-3">
                         <div class="col-12">
-                            <p class="h4 border-bottom text-center text-white bg-info shadow-sm rounded heading-color">
+                            <p class="h4 border-bottom text-center text-white font-weight-bold heading-color p-2 rounded shadow-sm">
                                 টপ সার্ভিস প্রভাইডার</p>
                         </div>
                         <div class="col-lg-6">
-                            <p class="h5 pl-2 text-center mb-4 font-weight-bold heading-color">ব্যক্তিগত সার্ভিস</p>
+                            <p class="h5 pl-2 text-center mb-4 font-weight-bold">ব্যক্তিগত সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($indTopServices as $key => $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
@@ -88,10 +88,10 @@
                             </ul>
                         </div>
                         <div class="col-lg-6 text-lg-right">
-                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4 heading-color font-weight-bold">
+                            <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4 font-weight-bold">
                                 প্রাতিষ্ঠানিক সার্ভিস</p>
                             <ul class="list-unstyled">
-                                @foreach($orgTopServices as $service)
+                                @foreach($orgTopServices as $key => $service)
                                     <li class="media mt-3 p-2 service-card-shadow">
                                         <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none"
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">

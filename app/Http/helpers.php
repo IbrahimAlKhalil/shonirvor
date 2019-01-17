@@ -342,7 +342,14 @@ function deleteIndDocs(Ind $ind)
         Storage::delete($ind->cover_photo);
     }
 
-    foreach ($ind->workImages as $image) {
+    $workImages = $ind->workImages;
+    $ind->workImages()->delete();
+    $ind->workMethods()->detach();
+    $ind->subCategories()->where('is_confirmed', 1)->detach();
+    $ind->subCategories()->where('is_confirmed', 0)->delete();
+    $ind->slug()->delete();
+
+    foreach ($workImages as $image) {
         Storage::delete($image->path);
     }
 
@@ -369,7 +376,14 @@ function deleteOrgDocs(Org $org)
         Storage::delete($org->cover_photo);
     }
 
-    foreach ($org->workImages as $image) {
+    $workImages = $org->workImages;
+    $org->workImages()->delete();
+    $org->subCategoryRates()->detach();
+    $org->subCategories()->where('is_confirmed', 1)->detach();
+    $org->subCategories()->where('is_confirmed', 0)->delete();
+    $org->slug()->detach();
+
+    foreach ($workImages as $image) {
         Storage::delete($image->path);
     }
 

@@ -208,9 +208,6 @@ class IndServiceRequestController extends Controller
         $union = $application->union;
         $village = $application->village;
 
-        $application->subCategories()->where('is_confirmed', 1)->detach();
-        $application->subCategories()->where('is_confirmed', 0)->delete();
-
         $application->forceDelete();
         $application->payments()->delete();
         if ($application->referredBy) $application->referredBy->delete();

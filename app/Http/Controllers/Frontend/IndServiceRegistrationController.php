@@ -732,9 +732,6 @@ class IndServiceRegistrationController extends Controller
         $union = $ind->union;
         $village = $ind->village;
 
-        $ind->subCategories()->where('is_confirmed', 1)->detach();
-        $ind->subCategories()->where('is_confirmed', 0)->delete();
-
         $ind->forceDelete();
         $ind->payments()->delete();
         if ($ind->referredBy) $ind->referredBy->delete();

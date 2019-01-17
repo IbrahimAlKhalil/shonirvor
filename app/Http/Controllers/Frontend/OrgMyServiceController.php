@@ -148,7 +148,6 @@ class OrgMyServiceController extends Controller
         DB::beginTransaction();
         // TODO: Delete files
         // TODO: Delete pending things such as edit request, renew request etc.
-        $service->slug()->delete();
 
         $service->forceDelete();
 

@@ -468,7 +468,7 @@
                             <div class="col-9">
                                 <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
                                        @if($ind->cover_photo)
-                                       data-image="{{ asset('storage/default/icons/pdf.svg') }}"
+                                       data-image="{{ asset('storage/' . $ind->cover_photo) }}"
                                        @endif
                                        class="file-picker"
                                        data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
@@ -534,7 +534,7 @@
                             <div class="col-9">
                                 <input id="cv" name="cv" type="file" accept="application/pdf"
                                        @if($ind->cv)
-                                       data-image="{{ asset('storage/' . $ind->cv) }}"
+                                       data-image="{{ asset('storage/default/icons/pdf.svg') }}"
                                        @endif
                                        class="file-picker"
                                        data-error="@if($errors->has('cv')) {{ $errors->first('cv') }} @endif">

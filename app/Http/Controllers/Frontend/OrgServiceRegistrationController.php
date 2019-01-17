@@ -659,9 +659,6 @@ class OrgServiceRegistrationController extends Controller
         $union = $org->union;
         $village = $org->village;
 
-        $org->subCategories()->where('is_confirmed', 1)->detach();
-        $org->subCategories()->where('is_confirmed', 0)->delete();
-
         $org->forceDelete();
         $org->payments()->delete();
         if ($org->referredBy) $org->referredBy->delete();
