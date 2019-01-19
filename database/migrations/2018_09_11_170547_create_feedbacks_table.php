@@ -14,7 +14,7 @@ class CreateFeedbacksTable extends Migration
             $table->unsignedInteger('feedbackable_id');
             $table->string('feedbackable_type');
             $table->integer('star');
-            $table->mediumText('say');
+            $table->mediumText('say')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

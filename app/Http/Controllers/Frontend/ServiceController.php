@@ -8,6 +8,7 @@ use App\Models\Ind;
 use App\Models\Org;
 use App\Models\Slug;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -169,5 +170,22 @@ class ServiceController extends Controller
         $feedback->save();
 
         return back()->with('success', 'মতামত দেওয়ার জন্য ধন্যবাদ ।');
+    }
+
+    public function deleteFeedback(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:feedbacks'
+        ]);
+
+        $feedback = Feedback::find($request->id);
+
+        if (Auth::id() != $feedback->user_id) {
+            return back('422');
+        }
+
+        $feedback->delete();
+
+        return back()->with('success', 'আপনার মন্তব্যটি সফলভাবে মুছে ফেলা হয়েছে ।');
     }
 }

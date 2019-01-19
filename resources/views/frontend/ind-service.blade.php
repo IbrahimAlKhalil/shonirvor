@@ -85,7 +85,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom">কর্ম যোগ্যতার ছবি ও বর্ণনাঃ</p>
-                        @forelse($provider->workImages->shuffle()->chunk(2) as $workImages)
+                        @forelse($provider->workImages->chunk(2) as $workImages)
                             <div class="card-deck py-2">
                                 @foreach($workImages as $image)
                                     <div class="card shadow-sm">
@@ -104,6 +104,11 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
+                        <form class="d-none" id="feedback-delete-form" action="{{ route('feedback.delete') }}"
+                              method="post">
+                            @method('delete')
+                            @csrf
+                        </form>
                         <p class="h4 border-bottom">কমেন্ট সমূহঃ</p>
                         <div class="row">
                             <div class="col-12">
@@ -117,7 +122,7 @@
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
                                                 <input id="storeStar" type="number" name="star" required>
                                                 <textarea name="say" class="form-control" rows="3"
-                                                          placeholder="আপনার মতামত দিন..." required></textarea>
+                                                          placeholder="আপনার মতামত দিন..."></textarea>
                                                 <div class="my-2 text-center">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
@@ -140,6 +145,14 @@
                                                     <p class="mb-0 font-weight-bold">{{ $feedback->user->name }}</p>
                                                     <p>{{ $feedback->say }}</p>
                                                 </div>
+                                                @if($feedback->user_id == \Illuminate\Support\Facades\Auth::id())
+                                                    <div class="col-md-12">
+                                                        <button type="submit" name="id" value="{{ $feedback->id }}"
+                                                                form="feedback-delete-form"
+                                                                class="btn btn-primary">Delete Comment
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @empty
                                             <p>কোন কমেন্ট নেই</p>
@@ -183,6 +196,15 @@
             showCaption: false,
             showCaptionAsTitle: false,
             displayOnly: true
+        });
+
+        $('#feedback-delete-form').submit(function (evt) {
+            var $confirm = confirm('আপনি কি নিশ্চিত মন্তব্যটি মুছে ফেলতে চান?');
+            if (!$confirm) {
+                return false;
+            }
+
+            return true;
         });
     </script>
 @endsection

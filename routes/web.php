@@ -334,3 +334,4 @@ Route::get('payments', 'Frontend\PaymentController')->name('payments');
 
 Route::get('/{slug}', 'Frontend\ServiceController@show')->where(['slug', '/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/']);
 Route::post('/{slug}/feedback', 'Frontend\ServiceController@feedbackStore')->name('feedback.store');
+Route::delete('_WfdsfOGFYDTUIOJFdf', 'Frontend\ServiceController@deleteFeedback')->name('feedback.delete');
