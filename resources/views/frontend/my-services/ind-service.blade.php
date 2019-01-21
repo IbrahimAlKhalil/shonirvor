@@ -274,6 +274,11 @@
                         @include('components.visitor-conuter', ['visitor' => indVisitorCount($service->id)])
                     </div>
                 </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @include('components.current-status', ['isAvailable' => $service->is_available, 'action' => route('frontend.my-service.ind.update-status', $service->id), 'message' => $service->status])
+                    </div>
+                </div>
                 @if($service->deleted_at == null && $service->expire != null)
                     <div class="row mt-4">
                         <div class="col-12">

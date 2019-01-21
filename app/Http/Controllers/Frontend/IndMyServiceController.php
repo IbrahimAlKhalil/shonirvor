@@ -8,6 +8,7 @@ use App\Models\ServiceEdit;
 use App\Models\Village;
 use App\Models\Division;
 use App\Models\WorkMethod;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -142,6 +143,21 @@ class IndMyServiceController extends Controller
         DB::commit();
 
         return redirect(route('frontend.my-service.ind.show', $service->id))->with('success', 'আপনার আবেদনটি জমা হয়েছে। শীঘ্রয় এডমিন, আবেদনটি রিভিউ করবেন।');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'is-available' => 'required|in:yes,no',
+            'message' => 'required|string'
+        ]);
+
+        Ind::findOrFail($id)->update([
+            'status' => $request->post('message'),
+            'is_available' => $request->post('is-available') != 'no'
+        ]);
+
+        return back()->with('success', 'আপনার বর্তমান অবস্থা সফলভাবে পরিবর্তন করা হয়েছে ।');
     }
 
     public function destroy(Ind $service)

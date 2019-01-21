@@ -19,7 +19,7 @@
                     @forelse($providers as $key => $provider)
                         <div class="col-lg-6">
                             <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 service-card-shadow">
+                                <li class="media mt-3 p-2 service-card-shadow position-relative">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}"
                                          alt="Generic placeholder image">
                                     <div class="media-body">
@@ -37,6 +37,13 @@
                                             <span class="fa fa-map-marker"></span> {{ $provider->union_name }}
                                             , {{ $provider->thana_name }}, {{ $provider->district_name }}
                                         </p>
+
+                                        @if(class_basename($provider) == 'Ind' && !$provider->is_available)
+                                            <p class="status">{{ $provider->status }}</p>
+                                            <div class="corner inactive"></div>
+                                        @else
+                                            <div class="corner"></div>
+                                        @endif
                                     </div>
                                 </li>
                             </ul>

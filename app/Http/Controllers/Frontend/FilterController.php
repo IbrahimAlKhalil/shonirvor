@@ -365,6 +365,8 @@ class FilterController extends Controller
                 ->addSelect([
                     'inds.id',
                     'inds.user_id',
+                    'inds.status',
+                    'inds.is_available',
                     'users.name',
                     'users.photo',
                     'inds.mobile',

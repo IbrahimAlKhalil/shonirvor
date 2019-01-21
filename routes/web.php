@@ -42,8 +42,8 @@ Route::namespace('Frontend')->group(function () {
 
         Route::get('filter', 'FilterController')->name('filter');
 
-        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
-        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
+//        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
+//        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
 
         Route::prefix('applications')->name('applications.')->group(function () {
 
@@ -87,6 +87,7 @@ Route::namespace('Frontend')->group(function () {
 
         Route::prefix('my-services')->name('my-service.')->group(function () {
 
+            Route::post('individual-service/{id}/update-status', 'IndMyServiceController@updateStatus')->name('ind.update-status');
             Route::resource('individual-service', 'IndMyServiceController', [
                 'only' => ['show', 'edit', 'update', 'destroy'],
                 'parameters' => ['individual-service' => 'service'],

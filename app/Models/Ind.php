@@ -24,6 +24,7 @@ class Ind extends Model
     use SoftDeletes;
 
     protected $dates = ['expire', 'top_expire', 'deleted_at'];
+    protected $fillable = ['is_available', 'status'];
 
 
     /*********************/

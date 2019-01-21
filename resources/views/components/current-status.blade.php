@@ -4,7 +4,6 @@
         <div class="form-group">
             <form action="{{ $action }}" method="post">
                 {{ csrf_field() }}
-                <input type="hidden" value="{{ $id }}" name="id">
                 <p>স্ট্যাটাস</p>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-success {{ isActive($isAvailable) }}">

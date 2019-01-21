@@ -82,6 +82,12 @@
                                                 <span class="fa fa-map-marker"></span> {{ $service->union->name }}
                                                 , {{ $service->thana->name }}, {{ $service->district->name }}
                                             </p>
+                                            @if(!$service->is_available)
+                                                <p class="status">{{ $service->status }}</p>
+                                                <div class="corner inactive"></div>
+                                            @else
+                                                <div class="corner"></div>
+                                            @endif
                                         </div>
                                     </li>
                                 @endforeach
@@ -92,7 +98,7 @@
                                 প্রাতিষ্ঠানিক সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($orgTopServices as $key => $service)
-                                    <li class="media mt-3 p-2 service-card-shadow">
+                                    <li class="media mt-3 p-2 service-card-shadow position-relative">
                                         <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none"
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                         <div class="media-body">
@@ -119,6 +125,7 @@
                                         </div>
                                         <img class="ml-3 w-25 shadow-sm d-none d-lg-inline-block"
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">
+                                        <div class="corner"></div>
                                     </li>
                                 @endforeach
                             </ul>

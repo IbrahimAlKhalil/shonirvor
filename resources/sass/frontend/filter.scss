@@ -2,10 +2,34 @@
 
 @import "components/filter";
 
+$active: #008c73;
+$inactive: #ec2b46;
+
 .service-card-shadow {
   box-shadow: 0 0 0.5rem 1px rgba(0, 0, 0, 0.15) !important;
 }
 
 .selectize-dropdown {
   font-size: 14px;
+}
+
+.status {
+  color: $inactive;
+  margin-top: 25px;
+}
+
+.corner {
+  border: 30px solid transparent;
+  border-top: 15px solid $active;
+  border-right: 15px solid $active;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+
+  &.inactive {
+    border-top: 15px solid $inactive;
+    border-right: 15px solid $inactive;
+  }
+
 }
