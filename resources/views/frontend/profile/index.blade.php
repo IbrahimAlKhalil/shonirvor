@@ -12,7 +12,8 @@
         <div class="row justify-content-center">
             <div class="col-lg-3 text-center">
                 <h3>{{ $user->name }}</h3>
-                <img src="{{ asset('storage/'.$user->photo) }}" class="img-responsive img-thumbnail" alt="Profile Picture">
+                <img src="{{ asset('storage/'.$user->photo) }}" class="img-responsive img-thumbnail"
+                     alt="Profile Picture">
             </div>
             <div class="col-lg-6">
                 <h3 class="invisible">{{ $user->name }}</h3>
@@ -23,14 +24,14 @@
                         </a>
                     </caption>
                     <tbody>
-                        <tr>
-                            <th>মোবাইল নাম্বার</th>
-                            <td>{{ $user->mobile }}</td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <th>ঠিকানা</th>
-                            <td>{{ $user->address }}</td>
-                        </tr>
+                    <tr>
+                        <th>মোবাইল নাম্বার</th>
+                        <td>{{ $user->mobile }}</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <th>ঠিকানা</th>
+                        <td>{{ $user->address }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -64,16 +65,24 @@
                             @csrf
                             <div class="form-group">
                                 <label for="payment-receive-type" class="pl-1">ধরনঃ</label>
-                                <select name="type" id="payment-receive-type" class="form-control{{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                <select name="type" id="payment-receive-type"
+                                        class="form-control{{ $errors->has('type') ? ' is-invalid' : '' }}">
                                     <option value="">-- একাউন্টের ধরন নির্বাচন করুন --</option>
-                                    <option value="bkash" @if(oldOrData('type', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->type : '') == 'bkash'){{ 'selected' }}@endif>বিকাশ (পারসোনাল)</option>
-                                    <option value="rocket" @if(oldOrData('type', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->type : '') == 'rocket'){{ 'selected' }}@endif>রকেট (পারসোনাল)</option>
+                                    <option value="bkash" @if(oldOrData('type', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->type : '') == 'bkash'){{ 'selected' }}@endif>
+                                        বিকাশ (পারসোনাল)
+                                    </option>
+                                    <option value="rocket" @if(oldOrData('type', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->type : '') == 'rocket'){{ 'selected' }}@endif>
+                                        রকেট (পারসোনাল)
+                                    </option>
                                 </select>
                                 @include('components.invalid', ['name' => 'type'])
                             </div>
                             <div class="form-group">
                                 <label for="payment-receive-number" class="pl-1">মোবাইলঃ</label>
-                                <input type="text" name="number" id="payment-receive-number" class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}" placeholder="01xxxxxxxxx" value="{{ oldOrData('munber', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->number : '') }}">
+                                <input type="text" name="number" id="payment-receive-number"
+                                       class="form-control{{ $errors->has('number') ? ' is-invalid' : '' }}"
+                                       placeholder="01xxxxxxxxx"
+                                       value="{{ oldOrData('munber', $user->paymentReceiveMethod ? $user->paymentReceiveMethod->number : '') }}">
                                 @include('components.invalid', ['name' => 'number'])
                             </div>
                             <button type="submit" class="btn btn-info d-block mx-auto">আপডেট</button>
@@ -131,34 +140,46 @@
             <div class="col-lg-8 h5 text-center pt-4">
                 <div class="card-columns">
                     @foreach($references as $reference)
-                        @php($serviceType = (new ReflectionClass($reference->service))->getShortName())
-                        <div class="card">
-                            @if($serviceType == 'Ind')
-                                <img class="card-img-top" src="{{ asset('storage/'.$reference->service->user->photo) }}">
-                            @else
-                                <img class="card-img-top" src="{{ asset('storage/'.$reference->service->logo) }}">
-                            @endif
-                            <div class="card-body">
+                        @if(!is_null($reference->service))
+                            @php($serviceType = class_basename($reference->service))
+                            <div class="card">
                                 @if($serviceType == 'Ind')
-                                    @if($reference->service->deleted_at == null)
-                                        <a class="h4 card-title text-truncate d-block" href="{{ route('frontend.ind-service.show', $reference->service->slug) }}">{{ $reference->service->user->name }}</a>
-                                    @else
-                                        <p class="h4 card-title text-truncate">{{ $reference->service->user->name }}</p>
-                                    @endif
+                                    <img class="card-img-top"
+                                         src="{{ asset('storage/'.$reference->service->user->photo) }}">
                                 @else
-                                    @if($reference->service->deleted_at == null)
-                                        <a class="h4 card-title text-truncate d-block" href="{{ route('frontend.org-service.show', $reference->service->slug) }}">{{ $reference->service->name }}</a>
-                                    @else
-                                        <p class="h4 card-title text-truncate">{{ $reference->service->name }}</p>
-                                    @endif
+                                    <img class="card-img-top" src="{{ asset('storage/'.$reference->service->logo) }}">
                                 @endif
-                                <p class="card-text"><i>{{ $reference->service->category->name }}</i></p>
+                                <div class="card-body">
+                                    @if($serviceType == 'Ind')
+                                        @if($reference->service->deleted_at == null)
+                                            <a class="h4 card-title text-truncate d-block"
+                                               href="{{ route('frontend.ind-service.show', $reference->service->slug) }}">{{ $reference->service->user->name }}</a>
+                                        @else
+                                            <p class="h4 card-title text-truncate">{{ $reference->service->user->name }}</p>
+                                        @endif
+                                    @else
+                                        @if($reference->service->deleted_at == null)
+                                            <a class="h4 card-title text-truncate d-block"
+                                               href="{{ route('frontend.org-service.show', $reference->service->slug) }}">{{ $reference->service->name }}</a>
+                                        @else
+                                            <p class="h4 card-title text-truncate">{{ $reference->service->name }}</p>
+                                        @endif
+                                    @endif
+                                    <p class="card-text"><i>{{ $reference->service->category->name }}</i></p>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="card">
+                                <div class="card-body">
+                                    হয়তো অ্যাকাউন্টটি মুছে ফেলা হয়েছে বা নিষিদ্ধ করা হয়েছে ।
+                                </div>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
                 @if($references->isEmpty())
-                    <p>আপনি এখনো কাউকে রেফার করেন নি এবং কোন উপার্জন করেন নি। আমাদের ওয়েবসাইটের এফিলিয়েট প্রোগ্রামের মাদ্ধমে আপনি অর্থ উপার্জন করতে পারেন।</p>
+                    <p>আপনি এখনো কাউকে রেফার করেন নি এবং কোন উপার্জন করেন নি। আমাদের ওয়েবসাইটের এফিলিয়েট প্রোগ্রামের
+                        মাদ্ধমে আপনি অর্থ উপার্জন করতে পারেন।</p>
                 @endif
             </div>
         </div>

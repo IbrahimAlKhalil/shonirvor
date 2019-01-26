@@ -20,14 +20,18 @@
                 </li>
                 @endrole
                 <li class="nav-item @if(request()->is('profile')){{ 'active' }}@endif">
-                    <a class="nav-link" href="{{ route('profile.index') }}">প্রোফাইল</a>
+                    <a class="nav-link" href="{{ route('profile.index') }}">
+                        প্রোফাইল @if($userUnread) <span class="badge badge-danger">{{ $userUnreadCount }}</span> @endif
+                    </a>
                 </li>
                 @if($myServiceLink)
                     <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
                         <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>
                     </li>
                     <li class="nav-item @if(request()->is('my-services*')){{ 'active' }}@endif">
-                        <a class="nav-link" href="{{ $myServiceLink }}">সার্ভিস সমূহ</a>
+                        <a class="nav-link" href="{{ $myServiceLink }}">
+                            সার্ভিস সমূহ
+                        </a>
                     </li>
                 @endif
                 <li class="nav-item @if(request()->is('*service*registration*')){{ 'active' }}@endif">

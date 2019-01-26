@@ -107,7 +107,7 @@
                         <form class="d-none" id="feedback-delete-form" action="{{ route('feedback.delete') }}"
                               method="post">
                             @method('delete')
-                            @csrf
+                            @csrf()
                         </form>
                         <p class="h4 border-bottom">কমেন্ট সমূহঃ</p>
                         <div class="row">
@@ -198,7 +198,7 @@
             displayOnly: true
         });
 
-        $('#feedback-delete-form').submit(function (evt) {
+        $('#feedback-delete-form').submit(function () {
             var $confirm = confirm('আপনি কি নিশ্চিত মন্তব্যটি মুছে ফেলতে চান?');
             if (!$confirm) {
                 return false;

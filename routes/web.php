@@ -42,8 +42,8 @@ Route::namespace('Frontend')->group(function () {
 
         Route::get('filter', 'FilterController')->name('filter');
 
-//        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
-//        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
+        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
+        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
 
         Route::prefix('applications')->name('applications.')->group(function () {
 

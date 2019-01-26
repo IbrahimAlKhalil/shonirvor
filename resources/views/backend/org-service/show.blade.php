@@ -143,7 +143,7 @@
                         @include('components.visitor-conuter', ['visitor' => indVisitorCount($org->id)])
                     </div>
                 </div>
-                <div class="row mt-4">
+                {{--<div class="row mt-4">
                     <div class="col-12">
                         <button type="button" href="javascript:" class="btn w-100 @if($org->is_top){{ 'btn-success' }}@else{{ 'btn-info' }}@endif" data-toggle="modal" data-target="#isTopModal">টপ সার্ভিস</button>
                         <!-- Modal -->
@@ -173,7 +173,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>

@@ -10,20 +10,32 @@ class FrontendTopNavComposer
     public function compose(View $view)
     {
         $myServiceLink = '';
+        $userUnread = null;
+        $userUnreadCount = 0;
+        $user = Auth::user();
 
-        if (Auth::user())
-            if (Auth::user()->inds()->withTrashed()->exists()) {
+        if ($user) {
+            if ($user->inds()->withTrashed()->exists()) {
 
-                $indId = Auth::user()->inds()->withTrashed()->first()->id;
+                $indId = $user->inds()->withTrashed()->first()->id;
                 $myServiceLink = route('frontend.my-service.ind.show', $indId);
 
-            } elseif (Auth::user()->orgs()->withTrashed()->exists()) {
+            } elseif ($user->orgs()->withTrashed()->exists()) {
 
-                $orgId = Auth::user()->orgs()->withTrashed()->first()->id;
+                $orgId = $user->orgs()->withTrashed()->first()->id;
                 $myServiceLink = route('frontend.my-service.org.show', $orgId);
 
             }
 
-        $view->with(compact('myServiceLink'));
+
+            $unreadNotifications = $user->unreadNotifications();
+
+            if ($unreadNotifications->exists()) {
+                $userUnread = true;
+                $userUnreadCount = $unreadNotifications->count();
+            }
+        }
+
+        $view->with(compact('myServiceLink', 'userUnread', 'userUnreadCount'));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use App\Models\Thana;
 use App\Models\Union;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Ind extends Model
 {
     use SoftDeletes;
+    use Notifiable;
 
     protected $dates = ['expire', 'top_expire', 'deleted_at'];
     protected $fillable = ['is_available', 'status'];

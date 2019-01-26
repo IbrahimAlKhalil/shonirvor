@@ -6,3 +6,28 @@
 .selectize-dropdown, .selectize-input, .selectize-input input {
   font-size: 14px;
 }
+
+$active: #008c73;
+$inactive: #ec2b46;
+
+
+.status {
+  color: $inactive;
+  margin-top: 25px;
+}
+
+.corner {
+  border: 30px solid transparent;
+  border-top: 15px solid $active;
+  border-right: 15px solid $active;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+
+  &.inactive {
+    border-top: 15px solid $inactive;
+    border-right: 15px solid $inactive;
+  }
+
+}

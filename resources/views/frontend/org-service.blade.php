@@ -100,6 +100,11 @@
                         @endforelse
                     </div>
                 </div>
+                <form class="d-none" id="feedback-delete-form" action="{{ route('feedback.delete') }}"
+                      method="post">
+                    @method('delete')
+                    @csrf()
+                </form>
                 <div class="row mt-3">
                     <div class="col-12">
                         <p class="h4 border-bottom">কমেন্ট সমূহঃ</p>
@@ -115,7 +120,7 @@
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
                                                 <input id="storeStar" type="number" name="star" required>
                                                 <textarea name="say" class="form-control" rows="3"
-                                                          placeholder="আপনার মতামত দিন..." required></textarea>
+                                                          placeholder="আপনার মতামত দিন..."></textarea>
                                                 <div class="my-2 text-center">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
@@ -138,6 +143,14 @@
                                                     <p class="mb-0 font-weight-bold">{{ $feedback->user->name }}</p>
                                                     <p>{{ $feedback->say }}</p>
                                                 </div>
+                                                @if($feedback->user_id == $user->id || $user->hasRole('admin'))
+                                                    <div class="col-md-12">
+                                                        <button type="submit" name="id" value="{{ $feedback->id }}"
+                                                                form="feedback-delete-form"
+                                                                class="btn btn-primary">Delete Comment
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @empty
                                             <p>কোন কমেন্ট নেই</p>
@@ -173,6 +186,7 @@
             emptyStar: '<i class="fa fa-star-o"></i>',
             clearButton: '<i class="fa fa-lg fa-minus-circle"></i>',
         });
+
         $('[id^="showStar"]').rating({
             step: 1,
             size: 'xm',
@@ -182,6 +196,15 @@
             showCaption: false,
             showCaptionAsTitle: false,
             displayOnly: true
+        });
+
+        $('#feedback-delete-form').submit(function () {
+            var $confirm = confirm('আপনি কি নিশ্চিত মন্তব্যটি মুছে ফেলতে চান?');
+            if (!$confirm) {
+                return false;
+            }
+
+            return true;
         });
     </script>
 @endsection

@@ -26,7 +26,7 @@ class ProfileController extends Controller
             ->find(Auth::id());
 
         $references = $user->references()->get()->filter(function ($value) {
-            return $value->service->expire != null;
+            return is_null($value->service) || !is_null($value->service->expire);
         });
 
         $totalEarn = userTotalEarn($user);
@@ -35,7 +35,9 @@ class ProfileController extends Controller
 
         $referPackage = userReferrerPackage($user)->properties->groupBy('name');
 
-        $notifications = Auth::user()->notifications()->take(10)->get();
+        $user->unreadNotifications->markAsRead();
+
+        $notifications = $user->notifications()->take(10)->get();
 
         return view('frontend.profile.index', compact('user', 'totalEarn', 'payable', 'referPackage', 'references', 'notifications'));
     }

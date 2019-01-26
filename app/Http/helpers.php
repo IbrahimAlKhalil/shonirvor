@@ -227,6 +227,12 @@ function userTotalEarn(User $user)
 
     $totalEarn = 0;
     $user->references->each(function ($reference) use (&$totalEarn, $user, $paymentPackageIds) {
+
+        if (is_null($reference->service)) {
+            $totalEarn += 0;
+            return;
+        }
+
         if (!($reference->target && $reference->target_start_time && $reference->target_end_time)) {
             $reference->service->payments()
                 ->whereIn('package_id', $paymentPackageIds)
@@ -381,7 +387,7 @@ function deleteOrgDocs(Org $org)
     $org->subCategoryRates()->detach();
     $org->subCategories()->where('is_confirmed', 1)->detach();
     $org->subCategories()->where('is_confirmed', 0)->delete();
-    $org->slug()->detach();
+    $org->slug()->delete();
 
     foreach ($workImages as $image) {
         Storage::delete($image->path);

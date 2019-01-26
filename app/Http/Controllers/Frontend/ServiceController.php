@@ -105,6 +105,7 @@ class ServiceController extends Controller
             'feedbacks',
             'slug',
         ])->findOrFail($slug->sluggable_id);
+        $user = Auth::user();
 
         if (is_null($provider->expire)) abort(404, 'This service request is in pending.');
 
@@ -156,7 +157,7 @@ class ServiceController extends Controller
             $canFeedback = false;
         }
 
-        return view('frontend.org-service', compact('provider', 'avgFeedbackColor', 'canFeedback'));
+        return view('frontend.org-service', compact('provider', 'avgFeedbackColor', 'canFeedback', 'user'));
     }
 
     public function feedbackStore(StoreIndFeedback $request)
@@ -180,12 +181,11 @@ class ServiceController extends Controller
 
         $feedback = Feedback::find($request->id);
 
-        if (Auth::id() != $feedback->user_id) {
-            return back('422');
+        if (Auth::id() == $feedback->user_id || Auth::user()->hasRole('admin')) {
+            $feedback->delete();
+            return back()->with('success', 'আপনার মন্তব্যটি সফলভাবে মুছে ফেলা হয়েছে ।');
         }
 
-        $feedback->delete();
-
-        return back()->with('success', 'আপনার মন্তব্যটি সফলভাবে মুছে ফেলা হয়েছে ।');
+        return back('422');
     }
 }
