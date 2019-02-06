@@ -8,10 +8,13 @@ class IndsTableSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
-        factory(Ind::class, 200)->make()->each(function ($ind) use ($faker) {
-            $ind->slug()->make([
-                'name' => $faker->slug(rand(1, 6)),
+        $faker = Faker::create()->unique();
+        factory(Ind::class, 200)->create()->each(function ($ind) use ($faker) {
+            static $count = 0;
+            $c = ++$count;
+
+            $ind->slug()->create([
+                'name' => "ind-$c-" . $faker->slug(rand(1, 6)),
             ]);
         });
     }

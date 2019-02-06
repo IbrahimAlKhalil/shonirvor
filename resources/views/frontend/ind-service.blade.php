@@ -115,10 +115,9 @@
                                 @if($canFeedback)
                                     <div class="row">
                                         <div class="col-12">
-                                            <form action="{{ route('feedback.store', $provider->slug->name) }}"
+                                            <form action="{{ route('indFeedback.store') }}"
                                                   method="post">
                                                 {{ csrf_field() }}
-                                                <input type="hidden" name="type" value="ind">
                                                 <input type="hidden" name="feedbackable_id" value="{{ $provider->id }}">
                                                 <input id="storeStar" type="number" name="star" required>
                                                 <textarea name="say" class="form-control" rows="3"

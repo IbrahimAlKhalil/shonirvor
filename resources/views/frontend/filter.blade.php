@@ -39,7 +39,7 @@
                                         </p>
 
                                         @if(class_basename($provider) == 'Ind' && !$provider->is_available)
-                                            <p class="status">{{ $provider->status }}</p>
+                                            <p class="status font-weight-bold">{{ $provider->status }}</p>
                                             <div class="corner inactive"></div>
                                         @else
                                             <div class="corner"></div>

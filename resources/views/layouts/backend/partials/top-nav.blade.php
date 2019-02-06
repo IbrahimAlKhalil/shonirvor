@@ -16,11 +16,12 @@
             <li class="nav-item @if(request()->is('dashboard/users*')){{ 'active' }}@endif">
                 <a class="nav-link" href="{{ route('backend.users.index') }}">ইউজার</a>
             </li>
-            <li class="nav-item @if(request()->is('dashboard/individual-service*') || request()->is('dashboard/organization-service*')){{ 'active' }}@endif">
-                <a class="nav-link" href="{{ route('individual-service.index') }}">সার্ভিস</a>
+            <li class="nav-item @if(request()->is('dashboard/service-providers*')){{ 'active' }}@endif">
+                <a class="nav-link" href="{{ route('service-filter') }}">সার্ভিস</a>
             </li>
             <li class="nav-item dropdown @if(request()->is('dashboard/requests/*')){{ 'active' }}@endif">
-                <a class="nav-link dropdown-toggle" href="javascript:" id="packageDropdown" role="button" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="javascript:" id="packageDropdown" role="button"
+                   data-toggle="dropdown">
                     রিকোয়েস্ট
                 </a>
                 <div class="dropdown-menu" aria-labelledby="packageDropdown">
@@ -37,7 +38,8 @@
                 <a class="nav-link" href="{{ route('individual-category.index') }}">ক্যাটাগরি</a>
             </li>
             <li class="nav-item dropdown @if(request()->is('dashboard/packages/*')){{ 'active' }}@endif">
-                <a class="nav-link dropdown-toggle" href="javascript:" id="packageDropdown" role="button" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="javascript:" id="packageDropdown" role="button"
+                   data-toggle="dropdown">
                     প্যাকেজ
                 </a>
                 <div class="dropdown-menu" aria-labelledby="packageDropdown">

@@ -16,13 +16,6 @@ class orgServiceController extends Controller
         $this->middleware('role:admin');
     }
 
-    public function index()
-    {
-        $orgs = Org::paginate(15);
-        $navs = $this->navs();
-        return view('backend.org-service.index', compact('orgs', 'navs'));
-    }
-
     public function show(Org $org)
     {
         $navs = $this->navs();
@@ -63,20 +56,6 @@ class orgServiceController extends Controller
         return abort('404');
     }
 
-    public function showDisabledAccounts()
-    {
-        $orgs = Org::onlyApproved()->onlyTrashed()->paginate(15);
-        $navs = $this->navs();
-        return view('backend.org-service.all-disabled', compact('orgs', 'navs'));
-    }
-
-    public function showDisabled($id)
-    {
-        $org = Org::withTrashed()->find($id);
-        $navs = $this->navs();
-        return view('backend.org-service.one-disabled', compact('org', 'navs'));
-    }
-
     public function activate(Request $request)
     {
         Org::onlyTrashed()->find($request->post('id'))->restore();
@@ -101,7 +80,7 @@ class orgServiceController extends Controller
     private function navs()
     {
         return [
-            ['url' => route('organization-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
+            ['url' => route('service-filter'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('organization-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
         ];
     }

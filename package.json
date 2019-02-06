@@ -18,6 +18,9 @@
         "smartwizard": "^4.3.1",
         "sortablejs": "^1.7.0",
         "style-loader": "^0.23.1",
+        "vue": "^2.5.22",
+        "vue-loader": "^15.6.2",
+        "vue-template-compiler": "^2.5.22",
         "webpack": "^4.20.2",
         "webpack-cli": "^3.1.2"
     },

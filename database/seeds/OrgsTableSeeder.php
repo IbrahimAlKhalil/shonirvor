@@ -8,11 +8,16 @@ class OrgsTableSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
-        factory(Org::class, 200)->make()->each(function ($org) use($faker) {
-            $org->slug()->make([
-                'name' => $faker->slug(rand(1, 6)),
+        $faker = Faker::create()->unique();
+        factory(Org::class, 200)->create()->each(function ($org) use ($faker) {
+            static $count = 0;
+            $c = ++$count;
+
+            $org->slug()->create([
+                'name' => "org-$c-" . $faker->slug(rand(1, 6)),
             ]);
-        });;
+        });
+
+
     }
 }

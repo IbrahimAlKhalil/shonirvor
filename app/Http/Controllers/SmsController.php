@@ -9,7 +9,7 @@ class SmsController extends Controller
 {
     public function send(User $user, Request $request)
     {
-        $response = sms($user->mobile, $request->input('message'));
+        $response = sms($user->mobile, urldecode($request->input('message')));
 
         if ($response['success']) {
             return back()->with('success', $response['status']);

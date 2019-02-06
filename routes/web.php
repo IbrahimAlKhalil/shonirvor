@@ -41,9 +41,9 @@ Route::namespace('Frontend')->group(function () {
     Route::name('frontend.')->group(function () {
 
         Route::get('filter', 'FilterController')->name('filter');
-
-        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
-        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
+//
+//        Route::get('individual-service/{provider}', 'IndServiceController@show')->name('ind-service.show');
+//        Route::get('organization-service/{provider}', 'OrgServiceController@show')->name('org-service.show');
 
         Route::prefix('applications')->name('applications.')->group(function () {
 
@@ -272,13 +272,16 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     Route::post('organization-service/activate', 'OrgServiceController@activate')->name('organization-service.activate');
 
     Route::resource('individual-service', 'IndServiceController', [
-        'only' => ['index', 'show', 'destroy'],
+        'only' => ['show', 'destroy'],
         'parameters' => ['individual-service' => 'ind']
     ]);
     Route::resource('organization-service', 'OrgServiceController', [
-        'only' => ['index', 'show', 'destroy'],
+        'only' => ['show', 'destroy'],
         'parameters' => ['organization-service' => 'org']
     ]);
+
+    Route::get('service-providers', 'FilterController@index')->name('service-filter');
+    Route::post('service-filter', 'FilterController@getData')->name('service-filter-data');
 
     Route::resource('individual-category', 'IndCategoryController', [
         'only' => ['index', 'show', 'destroy', 'store', 'update'],
@@ -334,5 +337,6 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
 Route::get('payments', 'Frontend\PaymentController')->name('payments');
 
 Route::get('/{slug}', 'Frontend\ServiceController@show')->where(['slug', '/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/']);
-Route::post('/{slug}/feedback', 'Frontend\ServiceController@feedbackStore')->name('feedback.store');
+Route::post('/indFeedback', 'Frontend\ServiceController@IndFeedbackStore')->name('indFeedback.store');
+Route::post('/orgFeedback', 'Frontend\ServiceController@OrgFeedbackStore')->name('orgFeedback.store');
 Route::delete('_WfdsfOGFYDTUIOJFdf', 'Frontend\ServiceController@deleteFeedback')->name('feedback.delete');

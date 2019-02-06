@@ -192,7 +192,7 @@ function sms($mobile, $message)
     $response = $client->request('GET', '/smsapi', [
         'query' => [
             'api_key' => config('sms.api'),
-            'type' => 'text',
+            'type' => 'unicode',
             'contacts' => $mobile,
             'senderid' => config('sms.senderid'),
             'msg' => $message,

@@ -26,7 +26,7 @@ class AreaController extends Controller
             return Division::find($id);
         }
 
-        return Division::all();
+        return Division::select('id', 'bn_name')->get();
     }
 
     public function districts(Request $request)

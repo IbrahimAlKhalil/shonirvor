@@ -1,3 +1,4 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const path = require('path');
 const CopyWebpack = require('copy-webpack-plugin');
 
@@ -26,6 +27,7 @@ module.exports = {
         'backend/area/option-loader': './resources/js/backend/area/option-loader.js',
         'backend/request/ad-edit/index': './resources/js/backend/request/index.js',
         'backend/common': './resources/js/backend/common.js',
+        'backend/service-filter': './resources/js/backend/service-filter.js',
 
         'errors/404': './resources/js/errors/404.js'
     },
@@ -33,8 +35,18 @@ module.exports = {
         path: path.resolve(__dirname, "public/assets/js"),
         filename: '[name].bundle.js'
     },
+    resolve: {
+        extensions: ['.js', '.scss', '.css'],
+        alias: {
+            vue: 'vue/dist/vue.js'
+        }
+    },
     module: {
         rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
             {
                 test: /\.css$/,
                 use: [
@@ -78,6 +90,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new VueLoaderPlugin(),
         new CopyWebpack([
             {from: './resources/js/backend/contents/skins', to: 'backend/contents/skins'}
         ])

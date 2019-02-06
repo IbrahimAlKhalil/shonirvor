@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Requests\StoreIndFeedback;
+use App\Http\Requests\StoreOrg;
+use App\Http\Requests\StoreOrgFeedback;
 use App\Models\Feedback;
 use App\Models\Ind;
 use App\Models\Org;
@@ -160,12 +162,25 @@ class ServiceController extends Controller
         return view('frontend.org-service', compact('provider', 'avgFeedbackColor', 'canFeedback', 'user'));
     }
 
-    public function feedbackStore(StoreIndFeedback $request)
+    public function indFeedbackStore(StoreIndFeedback $request)
     {
         $feedback = new Feedback();
         $feedback->user_id = Auth::id();
         $feedback->feedbackable_id = $request->post('feedbackable_id');
-        $feedback->feedbackable_type = $request->post('type');
+        $feedback->feedbackable_type = 'ind';
+        $feedback->star = $request->post('star');
+        $feedback->say = $request->post('say');
+        $feedback->save();
+
+        return back()->with('success', 'মতামত দেওয়ার জন্য ধন্যবাদ ।');
+    }
+
+    public function OrgFeedbackStore(StoreOrgFeedback $request)
+    {
+        $feedback = new Feedback();
+        $feedback->user_id = Auth::id();
+        $feedback->feedbackable_id = $request->post('feedbackable_id');
+        $feedback->feedbackable_type = 'org';
         $feedback->star = $request->post('star');
         $feedback->say = $request->post('say');
         $feedback->save();

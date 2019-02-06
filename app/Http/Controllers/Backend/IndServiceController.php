@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Division;
 use App\Models\Ind;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,14 +14,6 @@ class indServiceController extends Controller
     public function __construct()
     {
         $this->middleware('role:admin');
-    }
-
-    public function index()
-    {
-        $inds = Ind::onlyApproved()->paginate(15);
-        $navs = $this->navs();
-
-        return view('backend.ind-service.index', compact('inds', 'navs'));
     }
 
     public function show(Ind $ind)
@@ -87,8 +80,7 @@ class indServiceController extends Controller
 
         if ($ind->is_top) {
             $message = 'এই সার্ভিসকে এখন টপ সার্ভিসে রাখা হয়েছে।';
-        }
-        else {
+        } else {
             $message = 'এই সার্ভিসকে এখন টপ সার্ভিস থেকে সরিয়ে ফেলা হয়েছে।';
         }
 
@@ -98,7 +90,7 @@ class indServiceController extends Controller
     private function navs()
     {
         return [
-            ['url' => route('individual-service.index'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
+            ['url' => route('service-filter'), 'text' => 'সকল সার্ভিস প্রভাইডার'],
             ['url' => route('individual-service.disabled'), 'text' => 'বাতিল সার্ভিস প্রভাইডার'],
         ];
     }

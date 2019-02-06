@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     (function () {
         let container = document.getElementById('sub-category-requests');
-        console.log(container);
+
         let repeater = new Repeater(container, function () {
             let count = this.count;
             let length = container.children.length + 1;
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <tr>
                                 <td>${length}</td>
                                 <td>
-                                    <input type="text" name="sub-category-requests[${count}][name]" class="form-control" placeholder="সাব-ক্যাটাগরির নাম">
+                                    <input type="text" name="sub-category-requests[${count}][name]" class="form-control" placeholder="সাব-ক্যাটাগরির নাম" required>
                                 </td>
                                 <td>
                                     <div class="input-group">
@@ -216,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.getElementById('add-new-req').addEventListener('click', function () {
+            $('#update-form').removeAttr('novalidate');
             repeater.repeat();
         });
     })();

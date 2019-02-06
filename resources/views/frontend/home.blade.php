@@ -64,7 +64,7 @@
                             <p class="h5 pl-2 text-center mb-4 font-weight-bold">ব্যক্তিগত সার্ভিস</p>
                             <ul class="list-unstyled">
                                 @foreach($indTopServices as $key => $service)
-                                    <li class="media mt-3 p-2 service-card-shadow">
+                                    <li class="media mt-3 p-2 service-card-shadow position-relative">
                                         <img class="mr-3 w-25 shadow-sm"
                                              src="{{ asset('storage/'.$service->user->photo) }}">
                                         <div class="media-body">
@@ -83,7 +83,7 @@
                                                 , {{ $service->thana->name }}, {{ $service->district->name }}
                                             </p>
                                             @if(!$service->is_available)
-                                                <p class="status">{{ $service->status }}</p>
+                                                <p class="status font-weight-bold">{{ $service->status }}</p>
                                                 <div class="corner inactive"></div>
                                             @else
                                                 <div class="corner"></div>
