@@ -116,23 +116,108 @@
         </div>
 
         <div id="service-providers">
+
+            <div class="container-fluid my-3">
+                <div class="row">
+                    <div class="card col-md-4">
+                        <form class="card-body">
+                            <h3 class="card-title text-center"><label for="message">Send SMS</label></h3>
+                            <textarea id="message" name="message" cols="30" rows="10" class="form-control"></textarea>
+                            <div class="text-center mt-2">
+                                <button class="btn btn-primary" type="submit">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="my-2 row">
             <span class="col-md-12">
-                @{{ 'Showing Result ' + pagination.per_page + ' of ' + pagination.total }}
+                @{{ 'Total Result ' + pagination.total }}
             </span>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card bg-white">
-                        <div class="card-body">
+                    <div class="card bg-white mb-2">
+                        <form class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select id="ind-package" class="form-control col-md-12"
+                                            v-model="filters.indPackages.selected">
+                                        <option v-for="package in filters.indPackages.data" :value="package.id">@{{
+                                            package.name }}
+                                        </option>
+                                    </select>
+                                </div>
 
-                        </div>
+                                <div class="col-md-2">
+                                    <select id="org-package" class="form-control col-md-12"
+                                            v-model="filters.orgPackages.selected">
+                                        <option v-for="package in filters.orgPackages.data" :value="package.id">@{{
+                                            package.name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <select id="top-or-normal" class="form-control col-md-12"
+                                            v-model="filters.topOrNormal.selected">
+                                        <option v-for="(text, value) in filters.topOrNormal.data" :value="value">
+                                            @{{ text }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <select id="status" class="form-control col-md-12"
+                                            v-model="filters.statuses.selected">
+                                        <option v-for="(text, value) in filters.statuses.data" :value="value">
+                                            @{{ text }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select id="approved" class="form-control col-md-12"
+                                            v-model="filters.pendingOrApproved.selected">
+                                        <option v-for="(text, value) in filters.pendingOrApproved.data" :value="value">
+                                            @{{ text }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <label class="input-group" for="start">
+                                        <span class="input-group-prepend input-group-text">Expiry</span>
+                                        <input class="form-control col" type="date" id="start"
+                                               v-model="filters.expiry.start">
+                                        <input class="form-control col" type="date" id="end"
+                                               v-model="filters.expiry.end">
+                                    </label>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button @click="filter" class="btn btn-primary">
+                                        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+                                    </button>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button type="reset" class="btn btn-primary">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <table class="table table-striped table-bordered table-hover table-sm text-center bg-white table-responsive-md">
                         <thead>
                         <tr>
-                            <th scope="col">@</th>
+                            <th scope="col"><a href="#" @click.prevent="checkAll">@</a></th>
                             <th scope="col">#</th>
                             <th scope="col">Photo</th>
                             <th scope="col">Name</th>
@@ -140,14 +225,16 @@
                             <th scope="col">Service Expiry</th>
                             <th scope="col">Mobile</th>
                             <th scope="col">Top Service</th>
+                            <th scope="col">Service Package</th>
                             <th scope="col">Service Type</th>
+                            <th scope="col">Approved</th>
                             <th scope="col">Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <template v-if="services.length">
-                            <tr v-for="(service, index) in services" :key="service.id+service.type">
-                                <td><input type="checkbox"></td>
+                        <template v-if="filtered.length">
+                            <tr v-for="(service, index) in filtered" :key="service.id+service.type">
+                                <td><input type="checkbox" v-model="service.checked"></td>
                                 <td>@{{ ++index }}</td>
                                 <td>
                                     <img class="service-photo"
@@ -157,15 +244,22 @@
                                 <td><a target="_blank" :href="getServiceUrl(service.id, service.type)">@{{ service.name
                                         }}</a></td>
                                 <td>@{{ service.category_name }}</td>
-                                <td>@{{ service.expire }}</td>
+                                <td>@{{ service.expire?service.expire:'n/a' }}</td>
                                 <td>@{{ service.mobile }}</td>
                                 <td>
                                     <span class="badge badge-success" v-if="service.top_expire">Yes</span>
                                     <span class="badge badge-danger" v-else>No</span>
                                 </td>
                                 <td>
+                                    @{{ getPackageName(service) }}
+                                </td>
+                                <td>
                                     <span class="badge badge-primary" v-if="service.type==='ind'">Ind</span>
                                     <span class="badge badge-info" v-else>Org</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-danger" v-if="!service.expire">No</span>
+                                    <span class="badge badge-success" v-else>Yes</span>
                                 </td>
                                 <td>
                                     <span class="badge badge-danger" v-if="service.deleted_at">Disabled</span>
@@ -195,6 +289,11 @@
             asset: '{{ asset('storage/') }}',
             individual: '{{ route('individual-service.show', '') }}',
             organization: '{{ route('organization-service.show', '') }}'
+        };
+
+        var saharaData = {
+            indPackages: JSON.parse('{!! json_encode($indPackages) !!}'),
+            orgPackages: JSON.parse('{!! json_encode($orgPackages) !!}')
         };
     </script>
     <script src="{{ asset('assets/js/backend/service-filter.bundle.js') }}"></script>

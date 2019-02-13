@@ -7,10 +7,10 @@ use App\Models\Ind;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\SubCategory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Illuminate\Support\Facades\DB;
 
 class FilterController extends Controller
 {
@@ -98,7 +98,28 @@ class FilterController extends Controller
     public function index()
     {
         $divisions = Division::all();
-        return view('backend.service-providers', compact('divisions'));
+
+        $indPackages = DB::select($this->packageNameQuery(1));
+        $orgPackages = DB::select($this->packageNameQuery(2));
+
+        return view('backend.service-providers', compact('divisions', 'indPackages', 'orgPackages'));
+    }
+
+    private function packageNameQuery(int $typeId)
+    {
+        return "
+        select `values`.value as name, packages.id
+        from packages
+              join package_types on packages.package_type_id = package_types.id
+              join package_values `values` on packages.id = `values`.package_id
+              join package_properties properties on `values`.package_property_id = properties.id
+        where package_type_id = $typeId
+          and properties.name = 'name';
+        ";
+    }
+
+    public function sendSms() {
+
     }
 
     public function getData()
@@ -374,18 +395,16 @@ class FilterController extends Controller
                 ->join('districts', 'inds.district_id', 'districts.id')
                 ->join('thanas', 'inds.thana_id', 'thanas.id')
                 ->join('unions', 'inds.union_id', 'unions.id')
-                /*->with([
+                ->with([
                     'payments' => function ($query) {
-                        $query
-                            ->select('incomes.package_id')
-                            ->join('packages', function ($join) {
-                                $join->on('packages.id', 'incomes.package_id')->where('packages.package_type_id', 2);
-                            })
+                        $query->join('packages', function ($join) {
+                            $join->on('packages.id', 'incomes.package_id')->where('packages.package_type_id', 2);
+                        })
                             ->with('package.properties')
                             ->latest('incomes.updated_at')
                             ->first();
                     }
-                ])*/
+                ])
                 ->addSelect([
                     'inds.id',
                     'inds.user_id',
@@ -413,19 +432,17 @@ class FilterController extends Controller
                 ->join('districts', 'orgs.district_id', 'districts.id')
                 ->join('thanas', 'orgs.thana_id', 'thanas.id')
                 ->join('unions', 'orgs.union_id', 'unions.id')
-                /*->with([
+                ->with([
                     'payments' => function ($query) {
                         $query
-
                             ->join('packages', function ($join) {
                                 $join->on('packages.id', 'incomes.package_id')->where('packages.package_type_id', 2);
                             })
-                            ->select('incomes.package_id', 'incomes.approved')
                             ->with('package.properties')
                             ->latest('incomes.updated_at')
                             ->first();
                     }
-                ])*/
+                ])
                 ->addSelect([
                     'orgs.id',
                     'orgs.user_id',
