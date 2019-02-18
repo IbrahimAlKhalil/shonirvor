@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Division;
 use App\Models\Ind;
+use App\Models\MessageTemplate;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -37,56 +38,56 @@ class FilterController extends Controller
         $this->paginatorPath = route('frontend.filter') . '?';
 
         if ($request->filled('page')) {
-            $this->page = $request->get('page');
+            $this->page = $request->post('page');
         }
 
         if ($request->filled('type')) {
-            $this->type = $request->get('type');
+            $this->type = $request->post('type');
             $this->paginatorPath .= '&type=' . $this->type;
         }
 
         if ($request->filled('division')) {
-            $this->divisionId = $request->get('division');
+            $this->divisionId = $request->post('division');
             $this->paginatorPath .= '&division=' . $this->divisionId;
         }
 
         if ($request->filled('district')) {
-            $this->districtId = $request->get('district');
+            $this->districtId = $request->post('district');
             $this->paginatorPath .= '&district=' . $this->districtId;
         }
 
         if ($request->filled('thana')) {
-            $this->thanaId = $request->get('thana');
+            $this->thanaId = $request->post('thana');
             $this->paginatorPath .= '&thana=' . $this->thanaId;
         }
 
         if ($request->filled('union')) {
-            $this->unionId = $request->get('union');
+            $this->unionId = $request->post('union');
             $this->paginatorPath .= '&union=' . $this->unionId;
         }
 
         if ($request->filled('village')) {
-            $this->villageId = $request->get('village');
+            $this->villageId = $request->post('village');
             $this->paginatorPath .= '&village=' . $this->villageId;
         }
 
         if ($request->filled('category')) {
-            $this->categoryId = $request->get('category');
+            $this->categoryId = $request->post('category');
             $this->paginatorPath .= '&category=' . $this->categoryId;
         }
 
         if ($request->filled('sub-category')) {
-            $this->subCategoryId = $request->get('sub-category');
+            $this->subCategoryId = $request->post('sub-category');
             $this->paginatorPath .= '&sub-category=' . $this->subCategoryId;
         }
 
         if ($request->filled('method')) {
-            $this->methodId = $request->get('method');
+            $this->methodId = $request->post('method');
             $this->paginatorPath .= '&price=' . $this->methodId;
         }
 
         if ($request->filled('price')) {
-            $this->price = $request->get('price');
+            $this->price = $request->post('price');
             $this->paginatorPath .= '&price=' . $this->price;
         }
 
@@ -101,8 +102,9 @@ class FilterController extends Controller
 
         $indPackages = DB::select($this->packageNameQuery(1));
         $orgPackages = DB::select($this->packageNameQuery(2));
+        $smsTemplates = MessageTemplate::select('id', 'name', 'message')->get();
 
-        return view('backend.service-providers', compact('divisions', 'indPackages', 'orgPackages'));
+        return view('backend.service-providers', compact('divisions', 'indPackages', 'orgPackages', 'smsTemplates'));
     }
 
     private function packageNameQuery(int $typeId)
@@ -118,8 +120,9 @@ class FilterController extends Controller
         ";
     }
 
-    public function sendSms() {
-
+    public function sendSms(Request $request)
+    {
+        return $request->all();
     }
 
     public function getData()

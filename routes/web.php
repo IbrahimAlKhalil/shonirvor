@@ -281,7 +281,9 @@ Route::namespace('Backend')->prefix('dashboard')->group(function () {
     ]);
 
     Route::get('service-providers', 'FilterController@index')->name('service-filter');
-    Route::post('service-filter', 'FilterController@getData')->name('service-filter-data');
+    Route::post('service-filter', 'FilterController@getData')->name('service-filter.get-data');
+    Route::post('service-providers/send-sms', 'FilterController@sendSms')->name('service-filter.send-sms');
+    Route::resource('message-templates', 'MessageTemplateController', ['only' => ['store', 'update', 'destroy']]);
 
     Route::resource('individual-category', 'IndCategoryController', [
         'only' => ['index', 'show', 'destroy', 'store', 'update'],

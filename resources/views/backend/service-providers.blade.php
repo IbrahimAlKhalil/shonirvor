@@ -12,7 +12,7 @@
         <div class="row mt-4 mx-auto" id="filters">
             <div class="card col">
                 <div class="card-body">
-                    <form class="row" action="{{ route('service-filter-data') }}" id="filter-form" method="get">
+                    <form class="row" action="{{ route('service-filter.get-data') }}" id="filter-form" method="get">
                         @csrf
                         <div class="col-md-2">
                             <select name="type" id="service-type"
@@ -106,8 +106,8 @@
 
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-primary" type="submit"><i class="fa fa-search"
-                                                                             aria-hidden="true"></i> Search
+                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"
+                                                                               aria-hidden="true"></i> Search
                             </button>
                         </div>
                     </form>
@@ -116,21 +116,182 @@
         </div>
 
         <div id="service-providers">
+            <div v-for="notification in notifications"
+                 :class="'alert text-center rounded-0 my-2' + (notification.success?' alert-success':' alert-danger')">
+                @{{ notification.message }}
+            </div>
 
             <div class="container-fluid my-3">
                 <div class="row">
-                    <div class="card col-md-4">
-                        <form class="card-body">
-                            <h3 class="card-title text-center"><label for="message">Send SMS</label></h3>
-                            <textarea id="message" name="message" cols="30" rows="10" class="form-control"></textarea>
-                            <div class="text-center mt-2">
-                                <button class="btn btn-primary" type="submit">Send</button>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title text-center">
+                                    <label for="message">Send SMS</label>
+                                </h3>
                             </div>
-                        </form>
+
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <div class="custom-control custom-radio d-inline-block">
+                                        <input type="radio" v-model="message.language" class="custom-control-input"
+                                               name="lang" id="bn" value="bn">
+                                        <label for="bn" class="custom-control-label">Bengali</label>
+                                    </div>
+
+                                    <div class="custom-control custom-radio d-inline-block">
+                                        <input type="radio" v-model="message.language" class="custom-control-input"
+                                               name="lang" id="en" value="en">
+                                        <label for="en" class="custom-control-label">English</label>
+                                    </div>
+                                </div>
+
+                                <div class="my-2">
+                                    <button v-for="template in message.templates"
+                                            class="btn btn-sm btn-outline-secondary m-1"
+                                            @click="message.sms = template.message">@{{ template.name }}
+                                    </button>
+                                </div>
+
+                                <textarea id="message" cols="30" rows="6"
+                                          class="form-control" v-model="message.sms">
+                                </textarea>
+
+                                <p class="text-muted mt-1">
+                                    <span class="float-left">
+                                        @{{ message.sms.length }}/@{{ message.language === 'bn'?70:160 }}
+                                    </span>
+                                    <span class="float-right">
+                                        SMS Count: @{{ Math.ceil(message.sms.length/(message.language === 'bn'?70:160)) }}
+                                    </span>
+                                </p>
+
+                            </div>
+
+                            <div class="card-footer text-center">
+                                <button class="btn btn-secondary" type="button" @click.prevent="sendSms">
+                                    <i class="fa fa-paper-plane"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title text-center">
+                                    <label for="notification">Send Notification</label>
+                                </h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="my-2">
+                                    <button v-for="template in message.templates"
+                                            class="btn btn-sm btn-outline-secondary m-1"
+                                            @click="message.notification = template.message">@{{ template.name }}
+                                    </button>
+                                </div>
+
+                                <textarea id="notification" cols="30" rows="6"
+                                          class="form-control" v-model="message.notification">
+                                </textarea>
+                            </div>
+
+                            <div class="card-footer text-center">
+                                <button class="btn btn-secondary" type="button" @click.prevent="sendSms">
+                                    <i class="fa fa-paper-plane"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title text-center">
+                                    <label for="notification">Templates</label>
+                                </h3>
+                            </div>
+
+                            <div class="card-body p-0 message-templates">
+                                <table class="table table-striped table-bordered table-hover table-sm text-center bg-white table-responsive-md">
+                                    <thead>
+                                    <tr>
+                                        <th><a href="#" @click.prevent="checkAllTemplates">@</a></th>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr v-for="(template, index) in message.templates">
+                                        <td><input type="checkbox" v-model="template.checked"></td>
+                                        <td>@{{ index+1 }}</td>
+                                        <td><a href="#template-modal"
+                                               @click="showMessage(template)"
+                                               data-toggle="modal">@{{ template.name }}</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="modal fade" id="template-modal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title">
+                                                    @{{ templateModalTitle }}
+                                                </h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span v-if="templateModal.type === 'show'">@{{ templateModal.message }}</span>
+                                                <form v-else-if="templateModal.type === 'add'"
+                                                      @submit.prevent="addTemplate" action=""
+                                                      id="add-template-form">
+                                                    <div class="form-group row">
+                                                        <label for="template-name" class="col-md-4">Name</label>
+                                                        <input type="text" name="name" class="form-control col-md-6"
+                                                               id="template-name">
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="template-message" class="col-md-4">Message</label>
+                                                        <textarea type="text" name="message"
+                                                                  class="form-control col-md-6"
+                                                                  id="template-message">
+                                                        </textarea>
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button type="submit" class="btn btn-secondary">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer text-center">
+                                <div class="btn-group">
+                                    <button class="btn btn-secondary btn-sm" type="button">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" type="button">
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#template-modal"
+                                            @click="showAddTemplateModal">
+                                        <i class="fa fa-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="my-2 row">
             <span class="col-md-12">
@@ -141,7 +302,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card bg-white mb-2">
-                        <form class="card-body">
+                        <form class="card-body" @submit.prevent="filter">
                             <div class="row">
                                 <div class="col-md-3">
                                     <select id="ind-package" class="form-control col-md-12"
@@ -190,6 +351,15 @@
                             </div>
 
                             <div class="row mt-4">
+                                <div class="col-md-3">
+                                    <select id="expired" class="form-control col-md-12"
+                                            v-model="filters.expiry.selected">
+                                        <option v-for="(text, value) in filters.expiry.data" :value="value">
+                                            @{{ text }}
+                                        </option>
+                                    </select>
+                                </div>
+
                                 <div class="col-md-4">
                                     <label class="input-group" for="start">
                                         <span class="input-group-prepend input-group-text">Expiry</span>
@@ -201,14 +371,14 @@
                                 </div>
 
                                 <div class="col-md-1">
-                                    <button @click="filter" class="btn btn-primary">
-                                        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+                                    <button class="btn btn-secondary" type="submit">
+                                        <i class="fa fa-filter"></i> Filter
                                     </button>
                                 </div>
 
                                 <div class="col-md-1">
-                                    <button type="reset" class="btn btn-primary">
-                                        <i class="fa fa-trash" aria-hidden="true"></i> Reset
+                                    <button type="reset" class="btn btn-secondary">
+                                        <i class="fa fa-trash"></i> Reset
                                     </button>
                                 </div>
                             </div>
@@ -279,6 +449,25 @@
                     </table>
                 </div>
             </div>
+
+            <div class="row">
+                <nav class="mx-auto">
+                    <ul class="pagination">
+                        <li class="page-item" v-if="pagination.current_page > 1">
+                            <button class="page-link" @click="changePage(pagination.current_page - 1)">Previous</button>
+                        </li>
+                        <li :class="'page-item' + (pagination.current_page == page?' active':'')"
+                            v-for="page in paginated">
+                            <button name="page" class="page-link" @click="changePage(page)">
+                                @{{ page }}
+                            </button>
+                        </li>
+                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                            <button class="page-link" @click="changePage(pagination.current_page + 1)">Next</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 @endsection
@@ -288,13 +477,22 @@
         var saharaRoutes = {
             asset: '{{ asset('storage/') }}',
             individual: '{{ route('individual-service.show', '') }}',
-            organization: '{{ route('organization-service.show', '') }}'
+            organization: '{{ route('organization-service.show', '') }}',
+            sendSms: '{{ route('service-filter.send-sms') }}',
+            messageTemplate: '{{ route('message-templates.store') }}'
         };
 
         var saharaData = {
             indPackages: JSON.parse('{!! json_encode($indPackages) !!}'),
-            orgPackages: JSON.parse('{!! json_encode($orgPackages) !!}')
+            orgPackages: JSON.parse('{!! json_encode($orgPackages) !!}'),
+            csrf: '{{ csrf_token() }}',
+            messageTemplates: JSON.parse('{!! json_encode($smsTemplates) !!}').map(function (template) {
+                template.checked = false;
+                return template;
+            }),
         };
+
+        var today = new Date('{{ date('Y-m-d H:i:s') }}').getTime();
     </script>
     <script src="{{ asset('assets/js/backend/service-filter.bundle.js') }}"></script>
 @endsection

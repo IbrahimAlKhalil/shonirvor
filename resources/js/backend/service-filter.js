@@ -15,13 +15,9 @@ const vm = new Vue({
         pagination: {
             data: []
         },
-        filtered: [],
-        routes: {
-            asset: window.saharaRoutes.asset,
-            individual: window.saharaRoutes.individual,
-            organization: window.saharaRoutes.organization
-        },
 
+        filtered: [],
+        routes: window.saharaRoutes,
         filters: {
             indPackages: {
                 selected: 0,
@@ -63,8 +59,31 @@ const vm = new Vue({
             expiry: {
                 start: '',
                 end: '',
-                within: 'none'
-            }
+                within: 'none',
+                selected: 'all',
+                data: {
+                    all: '-- Expired Or Non Expired --',
+                    expired: 'Expired',
+                    notExpired: 'Not Expired'
+                }
+            },
+
+            paged: 1
+        },
+
+        notifications: [],
+
+        message: {
+            sms: '',
+            notification: '',
+            language: 'bn',
+            templates: window.saharaData.messageTemplates
+        },
+
+        templateModal: {
+            title: '',
+            message: '',
+            type: 'show'
         }
     },
     methods: {
@@ -103,8 +122,9 @@ const vm = new Vue({
             const approved = this.filters.pendingOrApproved.selected;
             const indPackage = this.filters.indPackages.selected;
             const orgPackage = this.filters.orgPackages.selected;
-            const start = this.filters.expiry.start;
-            const end = this.filters.expiry.end;
+            const expired = this.filters.expiry.selected;
+            const startValue = this.filters.expiry.start;
+            const endValue = this.filters.expiry.end;
 
             let filtered;
 
@@ -161,49 +181,161 @@ const vm = new Vue({
                 });
             }
 
-            if (start && end) {
-                filtered = filtered.filter(service => {
-                    const st = new Date(start);
-                    const en = new Date('en');
+            switch (expired) {
+                case 'expired':
+                    filtered = filtered.filter(service => {
+                        if (!service.expire) {
+                            return false;
+                        }
 
-                    return true;
-                });
-            } else if (start && !end) {
-                filtered = filtered.filter(service => {
-                    const st = new Date(start);
-                    const en = new Date('en');
+                        const expire = new Date(service.expire).getTime();
 
-                    return true;
+                        return expire < window.today;
+                    });
+                    break;
+                case 'notExpired':
+                    filtered = filtered.filter(service => {
+                        if (!service.expire) {
+                            return false;
+                        }
+
+                        const expire = new Date(service.expire).getTime();
+
+                        return expire > window.today;
+                    });
+            }
+
+            if (startValue && endValue) {
+                filtered = filtered.filter(service => {
+                    if (!service.expire) {
+                        return false;
+                    }
+
+                    const expireTime = new Date(service.expire).getTime();
+                    const startTime = new Date(startValue).getTime();
+                    const endTime = new Date(endValue).getTime();
+
+                    return expireTime > startTime && expireTime < endTime;
                 });
             }
 
             this.filtered = filtered;
         },
-        checkAll() {
-            this.filtered.forEach(service => {
-                service.checked = !service.checked;
+        checkAllServices() {
+            this.filtered.forEach(item => {
+                item.checked = !item.checked;
             });
+        },
+        checkAllTemplates() {
+            this.message.templates.forEach(item => {
+                item.checked = !item.checked;
+            });
+        },
+        changePage(paged) {
+            fetchData(paged);
+        },
+        showMessage(template) {
+            this.templateModal.type = 'show';
+            this.templateModal.title = template.name;
+            this.templateModal.message = template.message;
+        },
+        showAddTemplateModal() {
+            this.templateModal.type = 'add';
+        },
+        addTemplate() {
+            const formData = new FormData(document.getElementById('add-template-form'));
+            formData.append('_token', window.saharaData.csrf);
+
+            fetch(this.routes.messageTemplate, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json().then(data => {
+                this.notify(data.message, data.success);
+                this.message.templates.push({
+                    name: formData.get('name'),
+                    message: formData.get('message')
+                });
+            })).catch(() => {
+                this.notify('Sorry Couldn\'t create template', false);
+            });
+        },
+        sendSms() {
+            const userIds = this.filtered
+                .filter(service => service.checked)
+                .map(service => service.user_id);
+
+            const request = new XMLHttpRequest();
+
+            request.open('POST', this.routes.sendSms);
+
+            const body = new FormData();
+            body.append('users', userIds);
+            body.append('_token', window.saharaData.csrf);
+            body.append('message', this.sms.message);
+
+            request.onload = () => {
+                console.log(JSON.parse(request.responseText));
+            };
+
+            request.send(body);
+        },
+        notify(message, success) {
+            const id = Date.now() + '-' + Math.random();
+
+            this.notifications.push({
+                id: id,
+                message: message,
+                success: success
+            });
+
+            setTimeout(() => {
+                this.notifications.some((notification, index) => {
+                    if (notification.id !== id) {
+                        return false;
+                    }
+
+                    this.notifications.splice(index, 1);
+
+                    return true;
+                });
+            }, 10000);
+        }
+    },
+    computed: {
+        paginated() {
+            if (this.loading) {
+                return 0;
+            }
+
+            return Math.ceil(this.pagination.total / this.pagination.per_page);
+        },
+        templateModalTitle() {
+            return this.templateModal.type === 'add' ? 'Add New Template' : this.templateModal.title;
         }
     },
     created() {
-        fetchData();
+        fetchData(1);
     }
 });
 
 
 form.addEventListener('submit', function (event) {
     event.preventDefault();
-    fetchData();
+    fetchData(vm.filters.paged);
 });
 
-function fetchData() {
+function fetchData(paged) {
     if (vm) {
         vm.loading = true;
     }
 
+    const formData = new FormData(form);
+
+    formData.append('page', paged);
+
     const fetchOption = {
         method: 'POST',
-        body: new FormData(form)
+        body: formData
     };
 
     fetch(form.action, fetchOption).then(response => response.json().then(pagination => {
