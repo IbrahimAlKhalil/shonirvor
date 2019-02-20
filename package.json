@@ -10,6 +10,8 @@
         "copy-webpack-plugin": "^4.5.2",
         "css-loader": "^1.0.0",
         "file-loader": "^2.0.0",
+        "izitoast": "^1.4.0",
+        "laravel-echo": "^1.5.3",
         "node-sass": "^4.9.3",
         "popper.js": "^1.14.4",
         "postcss-loader": "^3.0.0",

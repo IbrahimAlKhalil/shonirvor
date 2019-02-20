@@ -116,14 +116,32 @@
         </div>
 
         <div id="service-providers">
-            <div v-for="notification in notifications"
-                 :class="'alert text-center rounded-0 my-2' + (notification.success?' alert-success':' alert-danger')">
-                @{{ notification.message }}
+
+            <div class="card my-2">
+                <div class="card-body">
+                    <p class="text-muted">Please Wait, Sending Notification...</p>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card my-2">
+                <div class="card-body">
+                    <p class="text-muted">Please Wait, Sending SMS...</p>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-secondary progress-bar-animated"
+                             style="width: 75%">3/100
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="container-fluid my-3">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-lg-4 my-2 pl-lg-0">
                         <div class="card h-100">
                             <div class="card-header">
                                 <h3 class="card-title text-center">
@@ -175,8 +193,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
+                    <div class="col-lg-4 my-2">
                         <div class="card h-100">
                             <div class="card-header">
                                 <h3 class="card-title text-center">
@@ -198,14 +215,13 @@
                             </div>
 
                             <div class="card-footer text-center">
-                                <button class="btn btn-secondary" type="button" @click.prevent="sendSms">
+                                <button class="btn btn-secondary" type="button" @click.prevent="sendNotification">
                                     <i class="fa fa-paper-plane"></i> Send
                                 </button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
+                    <div class="col-lg-4 my-2 pr-lg-0">
                         <div class="card h-100">
                             <div class="card-header">
                                 <h3 class="card-title text-center">
@@ -223,8 +239,11 @@
                                     </tr>
                                     </thead>
 
-                                    <tbody>
-                                    <tr v-for="(template, index) in message.templates">
+                                    <tbody is="transition-group" name="list">
+                                    <tr v-if="!message.templates.length" key="no-template">
+                                        <td colspan="4">No Templates Found</td>
+                                    </tr>
+                                    <tr v-else v-for="(template, index) in message.templates" :key="template.id">
                                         <td><input type="checkbox" v-model="template.checked"></td>
                                         <td>@{{ index+1 }}</td>
                                         <td><a href="#template-modal"
@@ -241,6 +260,9 @@
                                                 <h6 class="modal-title">
                                                     @{{ templateModalTitle }}
                                                 </h6>
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span>&times;</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body">
                                                 <span v-if="templateModal.type === 'show'">@{{ templateModal.message }}</span>
@@ -265,6 +287,28 @@
                                                         <button type="submit" class="btn btn-secondary">Save</button>
                                                     </div>
                                                 </form>
+                                                <form v-else @submit.prevent="editTemplate" action=""
+                                                      id="edit-template-form">
+                                                    <input type="hidden" name="id" v-model="templateModal.template.id">
+                                                    <div class="form-group row">
+                                                        <label for="template-name" class="col-md-4">Name</label>
+                                                        <input type="text" name="name" class="form-control col-md-6"
+                                                               id="template-name" v-model="templateModal.template.name">
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="template-message" class="col-md-4">Message</label>
+                                                        <textarea type="text" name="message"
+                                                                  class="form-control col-md-6"
+                                                                  id="template-message"
+                                                                  v-model="templateModal.template.message">
+                                                        </textarea>
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button type="submit" class="btn btn-secondary">Save</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -273,10 +317,11 @@
 
                             <div class="card-footer text-center">
                                 <div class="btn-group">
-                                    <button class="btn btn-secondary btn-sm" type="button">
+                                    <button class="btn btn-secondary btn-sm" type="button" @click="deleteTemplate">
                                         <i class="fa fa-trash"></i> Delete
                                     </button>
-                                    <button class="btn btn-secondary btn-sm" type="button">
+                                    <button class="btn btn-secondary btn-sm" type="button"
+                                            @click="showEditTemplateModal">
                                         <i class="fa fa-pencil"></i> Edit
                                     </button>
                                     <button class="btn btn-secondary btn-sm"
@@ -387,7 +432,7 @@
                     <table class="table table-striped table-bordered table-hover table-sm text-center bg-white table-responsive-md">
                         <thead>
                         <tr>
-                            <th scope="col"><a href="#" @click.prevent="checkAll">@</a></th>
+                            <th scope="col"><a href="#" @click.prevent="checkAllServices">@</a></th>
                             <th scope="col">#</th>
                             <th scope="col">Photo</th>
                             <th scope="col">Name</th>
@@ -401,7 +446,7 @@
                             <th scope="col">Status</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody is="transition-group" name="list">
                         <template v-if="filtered.length">
                             <tr v-for="(service, index) in filtered" :key="service.id+service.type">
                                 <td><input type="checkbox" v-model="service.checked"></td>
@@ -438,11 +483,11 @@
                             </tr>
                         </template>
                         <template v-else-if="!loading && !pagination.data.length">
-                            <tr>
+                            <tr key="no-service">
                                 <td colspan="10" class="text-center">কোন সেবা প্রদানকারী পাওয়া যায় নি।</td>
                             </tr>
                         </template>
-                        <tr v-show="loading">
+                        <tr v-show="loading" key="loading">
                             <td colspan="10" class="text-center">Loading...</td>
                         </tr>
                         </tbody>
@@ -450,19 +495,19 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" v-if="pagination.per_page < pagination.total">
                 <nav class="mx-auto">
-                    <ul class="pagination">
-                        <li class="page-item" v-if="pagination.current_page > 1">
+                    <ul class="pagination" is="transition-group" name="list">
+                        <li class="page-item" v-if="pagination.current_page > 1" key="previous">
                             <button class="page-link" @click="changePage(pagination.current_page - 1)">Previous</button>
                         </li>
                         <li :class="'page-item' + (pagination.current_page == page?' active':'')"
-                            v-for="page in paginated">
+                            v-for="page in paginated" :key="'p'+page">
                             <button name="page" class="page-link" @click="changePage(page)">
                                 @{{ page }}
                             </button>
                         </li>
-                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                        <li class="page-item" v-if="pagination.current_page < pagination.last_page" key="next">
                             <button class="page-link" @click="changePage(pagination.current_page + 1)">Next</button>
                         </li>
                     </ul>
@@ -479,7 +524,11 @@
             individual: '{{ route('individual-service.show', '') }}',
             organization: '{{ route('organization-service.show', '') }}',
             sendSms: '{{ route('service-filter.send-sms') }}',
-            messageTemplate: '{{ route('message-templates.store') }}'
+            sendNotification: '{{ route('service-filter.send-notification') }}',
+            messageTemplate: {
+                store: '{{ route('message-templates.store') }}',
+                destroy: '{{ route('message-templates.destroy') }}'
+            }
         };
 
         var saharaData = {

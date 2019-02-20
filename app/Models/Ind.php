@@ -4,12 +4,8 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
-use App\Models\Thana;
-use App\Models\Union;
 use \Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\District;
-use App\Models\Division;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 

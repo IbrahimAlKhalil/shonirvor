@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Query\Builder;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Org extends Model
 {
     use SoftDeletes;
+    use Notifiable;
 
     protected $dates = ['expire', 'top_expire', 'deleted_at'];
 
@@ -142,7 +144,8 @@ class Org extends Model
         return $query->whereNotNull('top_expire');
     }
 
-    public function scopeOnlyExpired($query) {
+    public function scopeOnlyExpired($query)
+    {
         $query->where('expire', '<', now());
     }
 

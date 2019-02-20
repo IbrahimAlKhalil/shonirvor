@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Events\NotificationSent;
+use App\Events\SmsSent;
+use App\Jobs\SendNotification;
 use App\Models\Division;
 use App\Models\Ind;
 use App\Models\MessageTemplate;
 use App\Models\Org;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
@@ -122,8 +127,69 @@ class FilterController extends Controller
 
     public function sendSms(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|string',
+            'message' => 'required|string'
+        ]);
+
+        $ids = explode(',', $request->post('ids'));
+
+        if (!User::whereIn('id', $ids)->exists()) {
+            return [];
+        }
+
+        $message = $request->post('message');
+        $count = 0;
+
+        User::all()->chunk(30)->each(function ($users) use ($message, $count) {
+            foreach ($users as $user) {
+                $response = sms($user->mobile, urldecode($message));
+
+                if ($response['success']) {
+                    event(new SmsSent(++$count, true));
+                } else {
+                    event(new SmsSent(++$count, false));
+                }
+            }
+        });
+
+        return $ids;
+    }
+
+    public function sendNotification(Request $request)
+    {
+        $request->validate([
+            'services.*.id' => 'required',
+            'services.*.type' => 'required',
+            'message' => 'required|string'
+        ]);
+
+        $message = $request->post('message');
+
+        $indIds = $this->getIds($request->post('services'), 'ind');
+        $orgIds = $this->getIds($request->post('services'), 'org');
+
+        if (!(Ind::withTrashed()->whereIn('id', $indIds)->exists()) || !(Org::withTrashed()->whereIn('id', $orgIds)->exists())) {
+            return abort(422);
+        }
+
+        $this->dispatch(new SendNotification($indIds, $orgIds, $message));
+
         return $request->all();
     }
+
+    public function getIds($services, $type)
+    {
+        $ids = [];
+        foreach (array_filter($services, function ($service) use ($type) {
+            return $service['type'] == $type;
+        }) as $service) {
+            array_push($ids, $service['id']);
+        }
+
+        return $ids;
+    }
+
 
     public function getData()
     {

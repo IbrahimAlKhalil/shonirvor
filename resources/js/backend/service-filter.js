@@ -1,6 +1,9 @@
 import '../modules/selectize-option-loader-plugin';
 import '../../sass/backend/filter/index.scss';
+import 'izitoast/dist/css/iziToast.min.css';
+import iziToast from 'izitoast';
 import Vue from "vue";
+import Echo from 'laravel-echo';
 
 $('#filters select').selectize({
     plugins: ['option-loader']
@@ -15,7 +18,6 @@ const vm = new Vue({
         pagination: {
             data: []
         },
-
         filtered: [],
         routes: window.saharaRoutes,
         filters: {
@@ -70,20 +72,17 @@ const vm = new Vue({
 
             paged: 1
         },
-
-        notifications: [],
-
         message: {
             sms: '',
             notification: '',
             language: 'bn',
             templates: window.saharaData.messageTemplates
         },
-
         templateModal: {
             title: '',
             message: '',
-            type: 'show'
+            type: 'show',
+            template: null
         }
     },
     methods: {
@@ -243,62 +242,178 @@ const vm = new Vue({
             this.templateModal.type = 'add';
         },
         addTemplate() {
+            $('#template-modal').modal('hide');
             const formData = new FormData(document.getElementById('add-template-form'));
             formData.append('_token', window.saharaData.csrf);
 
-            fetch(this.routes.messageTemplate, {
+            fetch(this.routes.messageTemplate.store, {
                 method: 'POST',
                 body: formData
             }).then(response => response.json().then(data => {
                 this.notify(data.message, data.success);
                 this.message.templates.push({
+                    id: data.id,
                     name: formData.get('name'),
-                    message: formData.get('message')
+                    message: formData.get('message'),
+                    checked: false
                 });
             })).catch(() => {
                 this.notify('Sorry Couldn\'t create template', false);
             });
         },
+        deleteTemplate() {
+            const toBeDeleted = this.message.templates.filter(template => {
+                return template.checked;
+            });
+
+            if (!toBeDeleted.length) {
+                return;
+            }
+
+            this.confirm(`${toBeDeleted.length} template${toBeDeleted.length > 1 ? 's' : ''} will be deleted!`)
+                .then(confirm => {
+                    if (!confirm) {
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('_token', window.saharaData.csrf);
+                    formData.append('ids', toBeDeleted.map(template => template.id));
+
+                    fetch(this.routes.messageTemplate.destroy, {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.json().then(data => {
+                        this.message.templates = this.message.templates.filter(template => {
+                            return !template.checked;
+                        });
+                        this.notify(data.message, data.success);
+                    })).catch(() => {
+                        this.notify('Sorry Couldn\'t delete the templates', false);
+                    });
+                });
+        },
+        showEditTemplateModal() {
+            let checked = this.message.templates.some(template => {
+                if (!template.checked) {
+                    return false;
+                }
+
+                this.templateModal.template = template;
+                return true;
+            });
+
+            if (!checked) {
+                return;
+            }
+
+            this.templateModal.type = 'edit';
+            $('#template-modal').modal('show');
+        },
+        editTemplate() {
+            $('#template-modal').modal('hide');
+            const formData = new FormData(document.getElementById('edit-template-form'));
+            formData.append('_token', window.saharaData.csrf);
+            formData.append('_method', 'PUT');
+
+            fetch(`${this.routes.messageTemplate.store}/${this.templateModal.template.id}`, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json().then(data => {
+                this.notify(data.message, data.success);
+            })).catch(() => {
+                this.notify('Sorry Couldn\'t update the template', false);
+            });
+        },
         sendSms() {
-            const userIds = this.filtered
+            const ids = this.filtered
                 .filter(service => service.checked)
                 .map(service => service.user_id);
 
-            const request = new XMLHttpRequest();
+            if (!ids.length) {
+                return;
+            }
 
-            request.open('POST', this.routes.sendSms);
 
             const body = new FormData();
-            body.append('users', userIds);
+            body.append('ids', ids.toString());
+            body.append('message', this.message.sms);
             body.append('_token', window.saharaData.csrf);
-            body.append('message', this.sms.message);
 
-            request.onload = () => {
-                console.log(JSON.parse(request.responseText));
-            };
-
-            request.send(body);
+            fetch(this.routes.sendSms, {
+                method: 'POST',
+                body: body
+            }).then(response => response.text().then(data => {
+                console.log(data);
+            })).catch(() => this.notify('Sorry couldn\'t send sms!', false));
         },
-        notify(message, success) {
-            const id = Date.now() + '-' + Math.random();
+        sendNotification() {
+            const services = this.filtered.filter(service => service.checked);
 
-            this.notifications.push({
-                id: id,
-                message: message,
-                success: success
+            if (!services.length) {
+                return;
+            }
+
+
+            const body = new FormData();
+
+            services.forEach((service, index) => {
+                body.append(`services[${index}][id]`, service.id);
+                body.append(`services[${index}][type]`, service.type);
             });
 
-            setTimeout(() => {
-                this.notifications.some((notification, index) => {
-                    if (notification.id !== id) {
-                        return false;
+            body.append('message', this.message.notification);
+            body.append('_token', window.saharaData.csrf);
+
+            fetch(this.routes.sendNotification, {
+                method: 'POST',
+                body: body
+            }).then(response => response.text().then(data => {
+                console.log(data);
+            })).catch(() => this.notify('Sorry couldn\'t send notification!', false));
+        },
+        notify(message, success) {
+            const options = {
+                title: success ? 'Success' : 'Error',
+                message: message,
+                progressBar: false,
+                position: 'topLeft'
+            };
+
+            success ? iziToast.success(options) : iziToast.error(options);
+        },
+        confirm(message, _default, title, noText, yesText,) {
+            return new Promise(resolve => {
+
+                iziToast.question({
+                    timeout: 20000,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    title: title ? title : 'Confirm',
+                    message: message,
+                    position: 'center',
+                    buttons: [
+                        [`<button>${yesText ? yesText : 'Ok'}</button>`, function (instance, toast) {
+
+                            instance.hide({transitionOut: 'fadeOut'}, toast, 'ok');
+
+                        }, true],
+                        [`<button><b>${noText ? noText : 'Cancel'}</b></button>`, function (instance, toast) {
+
+                            instance.hide({transitionOut: 'fadeOut'}, toast, 'cancel');
+
+                        }],
+                    ],
+                    onClosing: function (instance, toast, closedBy) {
+                        if (closedBy === 'timeout') {
+                            resolve(_default === 'ok');
+                        }
+
+                        resolve(closedBy === 'ok');
                     }
-
-                    this.notifications.splice(index, 1);
-
-                    return true;
                 });
-            }, 10000);
+            });
         }
     },
     computed: {
@@ -317,6 +432,8 @@ const vm = new Vue({
         fetchData(1);
     }
 });
+
+window.Echo = Echo;
 
 
 form.addEventListener('submit', function (event) {
