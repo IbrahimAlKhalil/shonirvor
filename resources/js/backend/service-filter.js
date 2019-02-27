@@ -3,7 +3,14 @@ import '../../sass/backend/filter/index.scss';
 import 'izitoast/dist/css/iziToast.min.css';
 import iziToast from 'izitoast';
 import Vue from "vue";
-import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('5a3bf510cd645f292be8', {
+    cluster: 'ap2',
+    forceTLS: true
+});
+const channel = pusher.subscribe('service-filter');
+
 
 $('#filters select').selectize({
     plugins: ['option-loader']
@@ -83,7 +90,10 @@ const vm = new Vue({
             message: '',
             type: 'show',
             template: null
-        }
+        },
+        progresses: [],
+        sendingNotification: false,
+        sendingSms: false
     },
     methods: {
         getImage(image) {
@@ -328,24 +338,48 @@ const vm = new Vue({
         sendSms() {
             const ids = this.filtered
                 .filter(service => service.checked)
-                .map(service => service.user_id);
+                .map(service => service.user_id)
+                .filter((id, index, self) => self.indexOf(id) === index);
 
             if (!ids.length) {
                 return;
             }
 
+            this.sendingSms = true;
 
             const body = new FormData();
             body.append('ids', ids.toString());
             body.append('message', this.message.sms);
             body.append('_token', window.saharaData.csrf);
 
-            fetch(this.routes.sendSms, {
-                method: 'POST',
-                body: body
-            }).then(response => response.text().then(data => {
-                console.log(data);
-            })).catch(() => this.notify('Sorry couldn\'t send sms!', false));
+            const progress = {
+                total: ids.length,
+                done: 0,
+                message: 'Please Wait, Sending SMS...'
+            };
+
+            this.progresses.push(progress);
+
+            channel.bind('SmsSent', (data) => {
+                if (data.count === ids.length) {
+                    channel.unbind('SmsSent');
+                    this.progresses.splice(this.progresses.indexOf(progress), 1);
+                    this.notify('SMS sent successfully!', true);
+                    this.sendingSms = false;
+                }
+                progress.done = data.count;
+            });
+
+            const request = new XMLHttpRequest;
+            request.open('POST', this.routes.sendSms);
+
+            request.onerror = () => {
+                this.notify('Sorry couldn\'t send SMS!', false);
+                channel.unbind('SmsSent');
+                this.sendingSms = false;
+            };
+
+            request.send(body);
         },
         sendNotification() {
             const services = this.filtered.filter(service => service.checked);
@@ -353,7 +387,7 @@ const vm = new Vue({
             if (!services.length) {
                 return;
             }
-
+            this.sendingNotification = true;
 
             const body = new FormData();
 
@@ -365,12 +399,34 @@ const vm = new Vue({
             body.append('message', this.message.notification);
             body.append('_token', window.saharaData.csrf);
 
-            fetch(this.routes.sendNotification, {
-                method: 'POST',
-                body: body
-            }).then(response => response.text().then(data => {
-                console.log(data);
-            })).catch(() => this.notify('Sorry couldn\'t send notification!', false));
+            const progress = {
+                total: services.length,
+                done: 0,
+                message: 'Please Wait, Sending Notification...'
+            };
+
+            this.progresses.push(progress);
+
+            channel.bind('NotificationSent', (data) => {
+                if (data.count === services.length) {
+                    channel.unbind('NotificationSent');
+                    this.progresses.splice(this.progresses.indexOf(progress), 1);
+                    this.notify('Notification sent successfully!', true);
+                    this.sendingNotification = false;
+                }
+                progress.done = data.count;
+            });
+
+            const request = new XMLHttpRequest;
+            request.open('POST', this.routes.sendNotification);
+
+            request.onerror = () => {
+                this.notify('Sorry couldn\'t send notification!', false);
+                channel.unbind('NotificationSent');
+                this.sendingNotification = false;
+            };
+
+            request.send(body);
         },
         notify(message, success) {
             const options = {
@@ -432,8 +488,6 @@ const vm = new Vue({
         fetchData(1);
     }
 });
-
-window.Echo = Echo;
 
 
 form.addEventListener('submit', function (event) {

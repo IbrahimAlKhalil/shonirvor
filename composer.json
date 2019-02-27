@@ -10,9 +10,10 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
+        "proengsoft/laravel-jsvalidation": ">2.1.0",
+        "pusher/pusher-php-server": "~3.0",
         "sandofvega/bdgeocode": "^2.0",
-        "zizaco/entrust": "dev-master",
-        "proengsoft/laravel-jsvalidation": ">2.1.0"
+        "zizaco/entrust": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

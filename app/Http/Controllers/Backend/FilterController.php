@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Events\NotificationSent;
 use App\Events\SmsSent;
 use App\Jobs\SendNotification;
+use App\Jobs\SendSms;
 use App\Models\Division;
 use App\Models\Ind;
 use App\Models\MessageTemplate;
@@ -135,25 +136,13 @@ class FilterController extends Controller
         $ids = explode(',', $request->post('ids'));
 
         if (!User::whereIn('id', $ids)->exists()) {
-            return [];
+            return abort(422);
         }
 
         $message = $request->post('message');
-        $count = 0;
+        $this->dispatchNow(new SendSms(array_unique($ids), $message));
 
-        User::all()->chunk(30)->each(function ($users) use ($message, $count) {
-            foreach ($users as $user) {
-                $response = sms($user->mobile, urldecode($message));
-
-                if ($response['success']) {
-                    event(new SmsSent(++$count, true));
-                } else {
-                    event(new SmsSent(++$count, false));
-                }
-            }
-        });
-
-        return $ids;
+        return '...';
     }
 
     public function sendNotification(Request $request)
@@ -173,9 +162,9 @@ class FilterController extends Controller
             return abort(422);
         }
 
-        $this->dispatch(new SendNotification($indIds, $orgIds, $message));
+        $this->dispatchNow(new SendNotification($indIds, $orgIds, $message));
 
-        return $request->all();
+        return '...';
     }
 
     public function getIds($services, $type)

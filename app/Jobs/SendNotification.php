@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Notification as Notify;
 
 class SendNotification implements ShouldQueue
 {
@@ -38,16 +39,9 @@ class SendNotification implements ShouldQueue
     {
         static $count = 0;
 
-        $model::withTrashed()->get()->whereIn('id', $ids)->chunk(100)->each(function ($services) use (&$count) {
-            foreach ($services as $service) {
-                try {
-                    $service->notify(new Notification($this->message));
-                    event(new NotificationSent(++$count, true));
-                } catch (\Exception $exception) {
-                    event(new NotificationSent(++$count, false));
-                }
-            }
-
+        $model::withTrashed()->whereIn('id', $ids)->chunk(100, function ($services) use (&$count) {
+            Notify::send($services, new Notification($this->message));
+            event(new NotificationSent($count += count($services), true));
         });
     }
 }

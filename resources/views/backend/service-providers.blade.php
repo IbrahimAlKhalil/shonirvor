@@ -117,23 +117,16 @@
 
         <div id="service-providers">
 
-            <div class="card my-2">
-                <div class="card-body">
-                    <p class="text-muted">Please Wait, Sending Notification...</p>
+            <div is="transition-group" name="list">
+                <div class="card my-2" v-for="(progress, index) in progresses" :key="'k' + index">
+                    <div class="card-body">
+                        <p class="text-muted">@{{ progress.message }}</p>
 
-                    <div class="progress">
-                        <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated" style="width: 100%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card my-2">
-                <div class="card-body">
-                    <p class="text-muted">Please Wait, Sending SMS...</p>
-
-                    <div class="progress">
-                        <div class="progress-bar bg-secondary progress-bar-animated"
-                             style="width: 75%">3/100
+                        <div class="progress">
+                            <div class="progress-bar bg-secondary progress-bar-animated"
+                                 :style="{width: progress.done/(progress.total/100) + '%'}">@{{ progress.done }}/@{{
+                                progress.total }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,7 +180,7 @@
                             </div>
 
                             <div class="card-footer text-center">
-                                <button class="btn btn-secondary" type="button" @click.prevent="sendSms">
+                                <button :disabled="sendingSms" class="btn btn-secondary" type="button" @click.prevent="sendSms">
                                     <i class="fa fa-paper-plane"></i> Send
                                 </button>
                             </div>
@@ -215,7 +208,8 @@
                             </div>
 
                             <div class="card-footer text-center">
-                                <button class="btn btn-secondary" type="button" @click.prevent="sendNotification">
+                                <button class="btn btn-secondary" type="button" @click.prevent="sendNotification"
+                                        :disabled="sendingNotification">
                                     <i class="fa fa-paper-plane"></i> Send
                                 </button>
                             </div>
