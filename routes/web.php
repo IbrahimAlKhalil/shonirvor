@@ -250,6 +250,12 @@ Route::middleware('auth')->group(function () {
         'only' => ['index', 'store', 'update', 'edit', 'destroy'],
         'parameters' => ['organization-service-registration' => 'org']
     ]);
+
+
+    Route::middleware('throttle:60,15')->group(function () {
+        Route::resource('chat', 'Frontend\ConversationController', ['only' => ['index', 'destroy']]);
+    });
+
 }, '');
 
 

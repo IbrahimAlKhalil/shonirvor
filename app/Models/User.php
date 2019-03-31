@@ -91,4 +91,17 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserPaymentReceiveMethod::class);
     }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    public function sentChatMessages() {
+        return $this->morphMany(ChatMessage::class, 'fromable');
+    }
+
+    public function receivedChatMessages() {
+        return $this->morphMany(ChatMessage::class, 'toable');
+    }
 }

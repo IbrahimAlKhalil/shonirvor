@@ -105,6 +105,13 @@ class Ind extends Model
         return $this->morphOne(Slug::class, 'sluggable');
     }
 
+    public function sentChatMessages() {
+        return $this->morphMany(ChatMessage::class, 'fromable');
+    }
+
+    public function receivedChatMessages() {
+        return $this->morphMany(ChatMessage::class, 'toable');
+    }
 
     /******************/
     /***** Scopes *****/

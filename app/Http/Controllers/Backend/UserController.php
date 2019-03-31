@@ -88,6 +88,9 @@ class UserController extends Controller
     {
         // TODO: Delete photos/documents
         $identities = $user->identities;
+
+        $user->feedbacks()->delete();
+
         $user->delete();
 
         if ($user->photo != 'default/user-photo/person.jpg') {

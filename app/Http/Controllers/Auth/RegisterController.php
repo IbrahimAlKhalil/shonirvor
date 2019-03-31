@@ -18,7 +18,7 @@ class RegisterController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest');
+//        $this->middleware('guest');
     }
 
     protected function validator(array $data)
@@ -45,21 +45,28 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'mobile' => $data['mobile'],
-            'verification_token' => rand(100000, 999999),
-            'password' => bcrypt($data['password'])
-        ]);
+        $user = new User;
+        $user->name = $data['name'];
+        $user->mobile = $data['mobile'];
+        $user->verification_token = rand(100000, 999999);
+        $user->password = bcrypt($data['password']);
+        $user->save();
+
+        return $user;
     }
 
-    protected function registered(Request $request, $user)
+    public function register(Request $request)
     {
-        $userId = $user->id;
+        $data = $request->all();
 
-        /*$user->notify(new Sms('Verification code of AreaSheba: ' . $user->verification_token));*/
+        $this->validator($data)->validate();
+        $user = $this->create($data);
+        $id = $user->id;
+        $token = $user->verification_token;
 
-        $this->redirectTo = route('verification', $userId);
+        $user->notify(new Sms("The verification code from AreaSheba is: $token"));
+
+        return redirect(route('verification', $id));
     }
 
     public function verificationForm($user)

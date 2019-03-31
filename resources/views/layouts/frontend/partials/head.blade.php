@@ -24,10 +24,11 @@
     <title>@yield('title') - {{ config('app.name') }}</title>
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
-    <script src="{{ asset('assets/plugins/jquery/dist/jquery.min.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+
+    @php($jquery = isset($noJquery) && !$noJquery?true:!isset($noJquery))
+    @if($jquery)
+        <script src="{{ asset('assets/plugins/jquery/dist/jquery.min.js') }}"></script>
+    @endif
     @yield('webpack')
 </head>
 <body>

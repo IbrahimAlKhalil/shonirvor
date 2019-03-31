@@ -4,9 +4,10 @@ namespace App\Notifications;
 
 use App\Channels\SmsChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class Sms extends Notification
+class Sms extends Notification implements ShouldQueue
 {
     use Queueable;
 

@@ -3,7 +3,7 @@
 @section('title', 'রেজিস্ট্রেশান')
 
 @section('webpack')
-    <script src="{{ asset('assets/js/frontend/home.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/frontend/common.bundle.js') }}"></script>
 @endsection
 
 @section('content')
@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-header">রেজিস্ট্রেশান</div>
                     <div class="card-body">
-                        <form action="{{ route('register') }}" method="post">
+                        <form action="{{ route('register') }}" method="post" autocomplete="off">
                             {{ csrf_field() }}
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label">নাম<span class="text-danger">*</span></label>

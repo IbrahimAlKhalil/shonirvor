@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  background: url('../../../resources/images/frontend-bg-pattern.png') fixed;
+}
+
+::-webkit-scrollbar {
+  background: #e1e1e1;
+  width: 9px;
+  border-radius: 10px;
+  border: 2px solid #d0d0d0;
+  padding: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b9b9b9;
+  border-radius: 10px;
+  border: 2px solid #d0d0d0;
+
+  &:hover {
+    background: #3c7bff;
+  }
+}

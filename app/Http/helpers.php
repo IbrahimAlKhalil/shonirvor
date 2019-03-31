@@ -189,7 +189,7 @@ function sms($mobile, $message)
         'base_uri' => 'http://portal.smsinbd.com'
     ]);
 
-    $response = $client->request('GET', '/smsapi', [
+    $response = $client->get('/smsapi', [
         'query' => [
             'api_key' => config('sms.api'),
             'type' => 'unicode',

@@ -15,6 +15,137 @@ function clearSelectize(selectize) {
     selectize.disable();
 }
 
+function text(input) {
+    // this = inputMap item
+
+    return `
+       <dl>
+           <dt class="d-inline text-capitalize">${this.name}:</dt>
+           <dd class="d-inline ml-2">${input.value ? input.value : 'n/a'}</dd>
+       </dl>`;
+}
+
+
+function partialSelect(input, form) {
+    let str = $(input).find(':selected').text();
+
+    this.selects.forEach(select => {
+        const val = $(form).find(`[name="${select}"] :selected`).text();
+        if (!val) {
+            return;
+        }
+        str += `${str ? this.delimiter : ''}${val}`;
+    });
+
+    return `
+       <dl>
+           <dt class="d-inline text-capitalize">${this.name}:</dt>
+           <dd class="d-inline ml-2">${str}</dd>
+       </dl>`;
+}
+
+
+function select(input) {
+    return `
+       <dl>
+           <dt class="d-inline text-capitalize">${this.name}:</dt>
+           <dd class="d-inline ml-2">${$(input).find(':selected').text()}</dd>
+       </dl>`;
+}
+
+
+const inputMap = {
+    mobile: {
+        name: 'মোবাইল নাম্বার',
+        method: text
+    },
+
+    slug: {
+        name: 'সার্ভিস লিঙ্ক',
+        method: text
+    },
+
+    description: {
+        name: 'নিজের সম্পর্কে',
+        method: text
+    },
+
+    referrer: {
+        name: 'রেফারার',
+        method: text
+    },
+
+    email: {
+        name: 'ইমেইল',
+        method: text
+    },
+
+    website: {
+        name: 'ওয়েবসাইট',
+        method: text
+    },
+
+    facebook: {
+        name: 'ফেসবুক',
+        method: text
+    },
+
+    qualification: {
+        name: 'শিক্ষাগত যোগ্যতা',
+        method: text
+    },
+
+    nid: {
+        name: 'জাতীয় পরিচয়পত্রের নম্বর',
+        method: text
+    },
+
+    address: {
+        name: 'পূর্ণাঙ্গ ঠিকানা',
+        method: text
+    },
+
+    from: {
+        name: 'যে নাম্বার থেকে পাঠানো হয়েছে',
+        method: text
+    },
+
+    'transaction-id': {
+        name: 'Transaction ID',
+        method: text
+    },
+
+    day: {
+        name: 'জন্ম তারিখ',
+        selects: ['month', 'year'],
+        delimiter: ' ',
+        method: partialSelect
+    },
+
+    'package': {
+        name: 'প্যাকেজ',
+        method: select
+    },
+
+    'payment-method': {
+        name: 'পেমেন্ট এর মাধ্যম',
+        method: select
+    },
+
+    village: {
+        name: 'ঠিকানা',
+        selects: ['village', 'union', 'thana', 'district', 'division'],
+        delimiter: ', ',
+        method: partialSelect
+    },
+
+    category: {
+        name: 'সেবার ধরন',
+        method: select
+    }
+};
+
+
 $(document).ready(function () {
 
 
@@ -26,17 +157,54 @@ $(document).ready(function () {
     });
 
     let form = document.getElementById('registration-form');
+    let moForm = document.getElementById('mo-registration-form');
     let validation = $(form).validate();
     let requiredSelects = $('#division, #district');
     let prev = $('.sw-btn-prev');
     let next = $('.sw-btn-next');
 
-    form.addEventListener('submit', function (evt) {
+    const modal = $('#verify-data');
+    const dataContainer = modal.find('.modal-body');
+
+    $('#submit-btn').on('click', function () {
         let $package = $('#package');
         if (!$package.val()) {
             $package.next().find('.selectize-input').addClass('border-danger');
-            evt.preventDefault();
+            return;
         }
+
+        dataContainer.empty();
+        $('#data-correct').attr('form', 'registration-form');
+
+        const elements = form.elements;
+
+        [...elements].forEach(element => {
+            if (element.name in inputMap)
+                dataContainer.append(inputMap[element.name].method(element, form));
+        });
+
+        modal.modal('show');
+    });
+
+
+    $('#mo-submit-btn').on('click', function () {
+        let $package = $('#mo-package');
+        if (!$package.val()) {
+            $package.next().find('.selectize-input').addClass('border-danger');
+            return;
+        }
+
+        dataContainer.empty();
+        $('#data-correct').attr('form', 'mo-registration-form');
+
+        const elements = moForm.elements;
+
+        [...elements].forEach(element => {
+            if (element.name in inputMap)
+                dataContainer.append(inputMap[element.name].method(element, moForm));
+        });
+
+        modal.modal('show');
     });
 
     prev.addClass('invisible');

@@ -40,6 +40,9 @@ class IndSubCategoryController extends Controller
 
     public function destroy(SubCategory $subCategory)
     {
+
+        $subCategory->inds()->detach();
+
         $subCategory->delete();
 
         return back()->with('success', $subCategory->name.' সাব-ক্যাটাগরিটি ডিলিট হয়েছে।');

@@ -362,8 +362,7 @@
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-md-8">
-                                                        <label class="checkbox" for="req-work-method-4-0">চুক্তি
-                                                            ভিত্তিক
+                                                        <label class="checkbox" for="req-work-method-4-0">চুক্তি ভিত্তিক
                                                             <input type="checkbox" id="req-work-method-4-0"
                                                                    name="sub-category-requests[0][work-methods][3][checkbox]">
                                                             <span></span>
@@ -508,7 +507,7 @@
 
                         <div class="form-group row mx-5 mt-5 text-center">
                             <div class="text-center col-12">
-                                <button type="submit" class="btn btn-primary w-25">সাবমিট</button>
+                                <button id="submit-btn" type="button" class="btn btn-primary w-25">সাবমিট</button>
                             </div>
                         </div>
 
@@ -924,10 +923,30 @@
 
             <div class="form-group row mt-5 text-center">
                 <div class="text-center col-12">
-                    <button type="submit" class="btn btn-primary">সাবমিট</button>
+                    <button id="mo-submit-btn" type="button" class="btn btn-primary">সাবমিট</button>
                 </div>
             </div>
         </form>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="verify-data">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">অনুগ্রহ করে আপনার প্রদত্ত তথ্য যাচাই করুন</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="data-correct">ঠিক আছে</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ঠিক নেই</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 

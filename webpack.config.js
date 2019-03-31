@@ -18,6 +18,7 @@ module.exports = {
         'frontend/profile/edit': './resources/js/frontend/profile/edit.js',
         'frontend/my-services/ind-service/edit': './resources/js/frontend/my-services/ind-service/edit.js',
         'frontend/my-services/org-service/edit': './resources/js/frontend/my-services/org-service/edit.js',
+        'frontend/chat': './resources/js/frontend/chat/index.js',
 
         'backend/dashboard': './resources/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/js/backend/contents/registration-instruction.js',
@@ -36,7 +37,7 @@ module.exports = {
         filename: '[name].bundle.js'
     },
     resolve: {
-        extensions: ['.js', '.scss', '.css'],
+        extensions: ['.js', '.scss', '.css', '.vue'],
         alias: {
             vue: 'vue/dist/vue.js'
         }
@@ -50,7 +51,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
+                    'vue-style-loader',
                     'css-loader',
                     'postcss-loader'
                 ]
@@ -58,7 +59,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    'style-loader',
+                    'vue-style-loader',
                     'css-loader',
                     'postcss-loader',
                     'sass-loader'

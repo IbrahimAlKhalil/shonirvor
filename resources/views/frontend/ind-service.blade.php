@@ -28,6 +28,8 @@
             </div>
             <div class="col-md-12">
                 <div class="text-center">
+                    <a class="btn btn-primary fa fa-comments text-white my-2" href="{{ route('chat.index') }}"
+                       target="_blank"> চ্যাট</a>
                     @if($provider->facebook)
                         <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}"
                            target="_blank"> ফেসবুক</a>

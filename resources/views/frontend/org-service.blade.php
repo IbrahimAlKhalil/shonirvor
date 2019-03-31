@@ -142,7 +142,7 @@
                                                     <p class="mb-0 font-weight-bold">{{ $feedback->user->name }}</p>
                                                     <p>{{ $feedback->say }}</p>
                                                 </div>
-                                                @if($feedback->user_id == $user->id || $user->hasRole('admin'))
+                                                @if(!is_null($user) && ($feedback->user_id == $user->id || $user->hasRole('admin')) )
                                                     <div class="col-md-12">
                                                         <button type="submit" name="id" value="{{ $feedback->id }}"
                                                                 form="feedback-delete-form"

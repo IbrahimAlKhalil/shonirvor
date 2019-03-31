@@ -140,7 +140,7 @@ class FilterController extends Controller
         }
 
         $message = $request->post('message');
-        $this->dispatchNow(new SendSms(array_unique($ids), $message));
+        $this->dispatch(new SendSms(array_unique($ids), $message));
 
         return '...';
     }
@@ -162,7 +162,7 @@ class FilterController extends Controller
             return abort(422);
         }
 
-        $this->dispatchNow(new SendNotification($indIds, $orgIds, $message));
+        $this->dispatch(new SendNotification($indIds, $orgIds, $message));
 
         return '...';
     }
