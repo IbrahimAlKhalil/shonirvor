@@ -706,7 +706,15 @@ class IndServiceRegistrationController extends Controller
         $paymentMethods = PaymentMethod::all();
         $selectedPackage = $ind->payments()->select('package_id')->first()->package_id;
 
-        return view('frontend.registration.ind-service.edit', compact('ind', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'workMethods', 'indWorkMethods', 'indSubCategories', 'pendingSubCategories', 'user', 'canEditNid', 'packages', 'paymentMethods', 'paymentMethods', 'first', 'selectedPackage'));
+        return view('frontend.registration.ind-service.edit', [
+            'ind' => $ind, 'categories' => $categories, 'subCategories' => $subCategories,
+            'divisions' => $divisions, 'districts' => $districts, 'thanas' => $thanas,
+            'unions' => $unions, 'villages' => $villages, 'workMethods' => $workMethods,
+            'indWorkMethods' => $indWorkMethods, 'indSubCategories' => $indSubCategories,
+            'pendingSubCategories' => $pendingSubCategories, 'user' => $user,
+            'packages' => $packages, 'paymentMethods' => $paymentMethods,
+            'first' => $first, 'selectedPackage' => $selectedPackage
+        ]);
     }
 
     public function destroy(Ind $ind)

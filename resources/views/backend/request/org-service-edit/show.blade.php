@@ -126,13 +126,15 @@
                                 </thead>
                                 <tbody>
 
-                                @foreach($data['sub-categories'] as $index => $subCategory)
-                                    <tr>
-                                        <td> {{ en2bnNumber($index+1) }} </td>
-                                        <td>{{ $subCategories->firstWhere('id', $subCategory['id'])->name }}</td>
-                                        <td>{{ $subCategory['rate'] }}</td>
-                                    </tr>
-                                @endforeach
+                                @isset($data['sub-categories'])
+                                    @foreach($data['sub-categories'] as $index => $subCategory)
+                                        <tr>
+                                            <td> {{ en2bnNumber($index+1) }} </td>
+                                            <td>{{ $subCategories->firstWhere('id', $subCategory['id'])->name }}</td>
+                                            <td>{{ $subCategory['rate'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
                                 @isset($data['sub-category-requests'])
                                     @foreach($data['sub-category-requests'] as $index => $subCategory)
                                         <tr>

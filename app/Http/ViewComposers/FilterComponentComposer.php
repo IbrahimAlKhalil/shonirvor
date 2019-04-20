@@ -18,6 +18,11 @@ class FilterComponentComposer
     public function compose(View $view)
     {
         $divisions = Division::select('id', 'bn_name as name')->get();
+        $districts = [];
+        $thanas = [];
+        $unions = [];
+        $villages = [];
+        $subCategories = [];
 
         if (request()->filled('division')) {
 

@@ -68,7 +68,7 @@ class IndServiceRequestController extends Controller
         $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
         $freePackageId = $application->payments->first()->package_id;
 
-        return view('backend.request.service.ind.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'payments', 'packages', 'freePackageId'));
+        return view('backend.request.service.ind.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'workMethods', 'indWorkMethods', 'packages', 'freePackageId'));
     }
 
     public function update(Request $request, Ind $application)

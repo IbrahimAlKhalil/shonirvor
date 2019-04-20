@@ -13,22 +13,27 @@
 </template>
 
 <style lang="scss">
-    .scroll-wrapper {
-        height: calc(100% - 302px);
-    }
+    @import "../var";
 
     .user-wrapper {
         height: 100%;
-        overflow-y: auto;
+
+        @media screen and (min-width: $md) {
+            margin-top: 45px;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            &:hover {
+                &::-webkit-scrollbar {
+                    display: block;
+                }
+            }
+        }
 
         .list-group {
             margin: 0 !important;
-        }
-
-        &:hover {
-            &::-webkit-scrollbar-thumb {
-                background: #3c7bff;
-            }
         }
 
         .user {
@@ -41,6 +46,18 @@
                 height: 40px;
                 border-radius: 50%;
             }
+        }
+    }
+
+
+    @media screen and (min-width: $md) {
+        .scroll-wrapper {
+            height: calc(100% - 302px);
+        }
+
+        .user-wrapper {
+            overflow-y: auto;
+            margin-top: 0;
         }
     }
 </style>

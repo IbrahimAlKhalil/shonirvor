@@ -63,7 +63,7 @@ class OrgServiceRequestController extends Controller
         $categories = !$application->category->is_confirmed ? Category::onlyInd()->onlyConfirmed()->get() : [];
         $freePackageId = $application->payments->first()->package_id;
 
-        return view('backend.request.service.org.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'payments', 'packages', 'freePackageId'));
+        return view('backend.request.service.org.show', compact('application', 'thanas', 'unions', 'villages', 'categories', 'packages', 'freePackageId'));
     }
 
     public function update(Request $request, Org $application)

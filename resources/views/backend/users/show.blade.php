@@ -94,7 +94,8 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button class="btn btn-danger w-100" data-toggle="modal" data-target="#warning">ডিলিট করুন</button>
+                        <button class="btn btn-danger w-100" data-toggle="modal" data-target="#warning">ডিলিট করুন
+                        </button>
                         <form action="{{ route('backend.users.destroy', $user->id) }}" method="post">
                             @csrf
                             @method('delete')
@@ -225,15 +226,17 @@
                                                 @endif
                                             </p>
                                         @else
-                                            <p class="text-center">
-                                                @if($reference->service->deleted_at == null)
-                                                    <a href="{{ route('organization-service.show', $reference->service->id) }}"
-                                                       target="_blank">{{ $reference->service->name }}</a>
-                                                @else
-                                                    <a href="{{ route('organization-service.show-disabled', $reference->service->id) }}"
-                                                       target="_blank">{{ $reference->service->name }}</a>
-                                                @endif
-                                            </p>
+                                            @isset($reference->service)
+                                                <p class="text-center">
+                                                    @if($reference->service->deleted_at == null)
+                                                        <a href="{{ route('organization-service.show', $reference->service->id) }}"
+                                                           target="_blank">{{ $reference->service->name }}</a>
+                                                    @else
+                                                        <a href="{{ route('organization-service.show-disabled', $reference->service->id) }}"
+                                                           target="_blank">{{ $reference->service->name }}</a>
+                                                    @endif
+                                                </p>
+                                            @endisset
                                         @endif
                                     @endforeach
                                 @else

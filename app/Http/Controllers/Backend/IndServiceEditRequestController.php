@@ -176,6 +176,9 @@ class IndServiceEditRequestController extends Controller
         // store sub-category requests
         if (isset($data['sub-category-requests'])) {
             foreach ($data['sub-category-requests'] as $datum) {
+                if (!isset($datum['name'])) {
+                    continue;
+                }
                 $subCategory = new SubCategory;
                 $subCategory->category_id = $ind->category_id;
                 $subCategory->name = $datum['name'];
@@ -265,7 +268,7 @@ class IndServiceEditRequestController extends Controller
             }
         }
 
-        if(isset($data['new-work-images'])) {
+        if (isset($data['new-work-images'])) {
             foreach ($data['new-work-images'] as $image) {
                 if (isset($image['file'])) {
                     Storage::delete($image->file);

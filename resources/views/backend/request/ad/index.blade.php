@@ -31,15 +31,17 @@
                     </thead>
                     <tbody>
                     @php($iteration = $applications->perPage() * $applications->currentPage() - $applications->perPage())
-                    @forelse($applications  as $application)
-                        <tr>
-                            <td>{{ en2bnNumber(++$iteration) }}</td>
-                            <td>
-                                <a href="{{ route('backend.request.ad.show', $application->id) }}"
-                                   target="_blank">{{ $application->incomeable->user->name }}</a>
-                            </td>
-                            <td>{{ $application->package->properties->first()->value }}</td>
-                        </tr>
+                    @forelse($applications as $application)
+                        @isset($application->incomeable)
+                            <tr>
+                                <td>{{ en2bnNumber(++$iteration) }}</td>
+                                <td>
+                                    <a href="{{ route('backend.request.ad.show', $application->id) }}"
+                                       target="_blank">{{ $application->incomeable->user->name }}</a>
+                                </td>
+                                <td>{{ $application->package->properties->first()->value }}</td>
+                            </tr>
+                        @endisset
                     @empty
                         <tr>
                             <td colspan="6">

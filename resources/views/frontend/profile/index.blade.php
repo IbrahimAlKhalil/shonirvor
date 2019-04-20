@@ -153,14 +153,14 @@
                                     @if($serviceType == 'Ind')
                                         @if($reference->service->deleted_at == null)
                                             <a class="h4 card-title text-truncate d-block"
-                                               href="{{ route('frontend.ind-service.show', $reference->service->slug) }}">{{ $reference->service->user->name }}</a>
+                                               href="{{ route('home') . '/' . $reference->service->slug->name }}">{{ $reference->service->user->name }}</a>
                                         @else
                                             <p class="h4 card-title text-truncate">{{ $reference->service->user->name }}</p>
                                         @endif
                                     @else
                                         @if($reference->service->deleted_at == null)
                                             <a class="h4 card-title text-truncate d-block"
-                                               href="{{ route('frontend.org-service.show', $reference->service->slug) }}">{{ $reference->service->name }}</a>
+                                               href="{{ route('home') . '/' . $reference->service->slug->name }}">{{ $reference->service->name }}</a>
                                         @else
                                             <p class="h4 card-title text-truncate">{{ $reference->service->name }}</p>
                                         @endif

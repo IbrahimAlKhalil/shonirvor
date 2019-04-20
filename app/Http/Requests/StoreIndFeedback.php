@@ -19,9 +19,9 @@ class StoreIndFeedback extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|in:ind,org',
             'star' => 'required',
-            'feedbackable_id' => 'required|exists:' . request()->post('type') . 's,id'
+            'say' => 'string|nullable',
+            'feedbackable_id' => 'required|exists:inds,id'
         ];
     }
 }

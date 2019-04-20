@@ -636,7 +636,7 @@ class OrgServiceRegistrationController extends Controller
         $villages = Village::whereUnionId($org->union->id)->whereIsPending(0)->get();
         $selectedPackage = $org->payments()->select('package_id')->first()->package_id;
 
-        return view('frontend.registration.org-service.edit', compact('org', 'workMethods', 'categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first', 'selectedPackage', 'user'));
+        return view('frontend.registration.org-service.edit', compact('org','categories', 'subCategories', 'divisions', 'districts', 'thanas', 'unions', 'villages', 'orgSubCategories', 'isNoSubCategory', 'packages', 'paymentMethods', 'first', 'selectedPackage', 'user'));
     }
 
     public function destroy(Org $org)
