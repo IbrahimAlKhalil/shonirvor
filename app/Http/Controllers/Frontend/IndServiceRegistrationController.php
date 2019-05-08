@@ -43,7 +43,12 @@ class IndServiceRegistrationController extends Controller
             return redirect(route('individual-service-registration.edit', $inds->first()->id));
         }
 
-        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        });
         $paymentMethods = PaymentMethod::all();
 
         $categoryIds = $user->inds()->pluck('id')->toArray();
@@ -702,7 +707,13 @@ class IndServiceRegistrationController extends Controller
         $villages = Village::whereUnionId($ind->union->id)->whereIsPending(0)->get();
         $indWorkMethods = $ind->workMethods->groupBy('pivot.sub_category_id');
         $workMethods = WorkMethod::all();
-        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 1)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        });
+
         $paymentMethods = PaymentMethod::all();
         $selectedPackage = $ind->payments()->select('package_id')->first()->package_id;
 

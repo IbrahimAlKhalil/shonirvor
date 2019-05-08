@@ -36,41 +36,34 @@
                             </p>
                         </div>
 
-                        @if($application->payments->first()->package_id != $freePackageId)
-                            @php($payment = $application->payments->first())
-                            <div class="col-12 mt-4">
-                                <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
-                                <table class="table table-striped table-bordered table-hover table-sm w-100">
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row"><label for="package">প্যাকেজের নামঃ</label></th>
-                                        <td>
-                                            <input type="hidden" value="{{ $payment->id }}" name="payment">
-                                            <select name="package" id="package">
-                                                @foreach($packages as $package)
-                                                    @php($properties = $package->properties->groupBy('name'))
-                                                    <option value="{{ $package->id }}" {{ selectOpt($package->id, $payment->package->id) }}>{{ $properties['name'][0]->value }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">পেমেন্ট এর মাধ্যম</th>
-                                        <td>{{ $payment->paymentMethod->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"> Transaction ID:</th>
-                                        <td>{{ $payment->transactionId }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @else
-                            @php($payment = $application->payments->first())
-                            <input type="hidden" value="{{ $payment->package_id }}"
-                                   name="package">
-                            <input type="hidden" value="{{ $payment->id }}" name="payment">
-                        @endif
+                        @php($payment = $application->payments->first())
+                        <div class="col-12 mt-4">
+                            <p class="h4 border-bottom">প্যাকেজ এবং টাকা প্রদানের অবস্থাঃ</p>
+                            <table class="table table-striped table-bordered table-hover table-sm w-100">
+                                <tbody>
+                                <tr>
+                                    <th scope="row"><label for="package">প্যাকেজের নামঃ</label></th>
+                                    <td>
+                                        <input type="hidden" value="{{ $payment->id }}" name="payment">
+                                        <select name="package" id="package">
+                                            @foreach($packages as $package)
+                                                @php($properties = $package->properties->groupBy('name'))
+                                                <option value="{{ $package->id }}" {{ selectOpt($package->id, $payment->package->id) }}>{{ $properties['name'][0]->value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">পেমেন্ট এর মাধ্যম</th>
+                                    <td>{{ $payment->paymentMethod?$payment->paymentMethod->name:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"> Transaction ID:</th>
+                                    <td>{{ $payment->transactionId }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <div class="col-12 mt-4">
                             <p class="h4 border-bottom">সাধারণ তথ্যঃ</p>

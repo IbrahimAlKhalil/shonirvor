@@ -6,6 +6,7 @@ use App\Models\Package;
 use App\Models\PackageValue;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class OrgServicePackageController extends Controller
@@ -20,7 +21,12 @@ class OrgServicePackageController extends Controller
     public function index()
     {
 
-        $packages = Package::with('properties')->where('package_type_id', $this->packageTypeId)->paginate(10);
+        $packages = new Paginator(Package::with('properties')->where('package_type_id', $this->packageTypeId)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        }), 10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],

@@ -39,12 +39,12 @@ class StoreInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'slug' => 'required|min:5|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+            'slug' => 'required|min:3|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
             // TODO: Review image size
-            'images.*.file' => 'image|max:800',
-            'experience-certificate' => 'image|max:800',
+            'images.*.file' => 'image|max:15000',
+            'experience-certificate' => 'image|max:15000',
             // TODO: Review pdf size
-            'cv' => 'mimes:pdf|max:800',
+            'cv' => 'mimes:pdf|max:15000',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'

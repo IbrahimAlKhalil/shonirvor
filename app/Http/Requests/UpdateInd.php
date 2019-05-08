@@ -42,17 +42,17 @@ class UpdateInd extends FormRequest
             'slug' => [
                 Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'ind')->where('sluggable_id', request('ind'))->select('id')->first()->id),
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
-                'min:5',
+                'min:3',
                 'max:191'
             ],
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             // TODO: Review image size
-            'images.*.file' => 'image|max:800',
-            'experience-certificate' => 'image|max:800',
+            'images.*.file' => 'image|max:15000',
+            'experience-certificate' => 'image|max:15000',
             // TODO: Review pdf size
-            'cv' => 'mimes:pdf|max:1024',
+            'cv' => 'mimes:pdf|max:15000',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'

@@ -97,7 +97,7 @@ const vm = new Vue({
     },
     methods: {
         getImage(image) {
-            return `${this.routes.asset}/${image}`;
+            return image ? `${this.routes.asset}/${image}` : window.saharaData.noImage;
         },
         getServiceUrl(id, type) {
             return (type === 'ind' ? this.routes.individual : this.routes.organization) + '/' + id;

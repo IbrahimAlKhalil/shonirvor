@@ -31,8 +31,8 @@
                     <a class="btn btn-primary fa fa-comments text-white my-2" href="{{ route('chat.index') }}"
                        target="_blank"> চ্যাট</a>
                     @if($provider->facebook)
-                        <a class="btn btn-primary fa fa-facebook text-white my-2" href="{{ $provider->facebook }}"
-                           target="_blank"> ফেসবুক</a>
+                        <a class="btn btn-primary fa fa-facebook text-white my-2 facebook-link"
+                           target="_blank" href="{{ $provider->facebook }}"> ফেসবুক</a>
                     @endif
                     @if($provider->website)
                         <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}"

@@ -29,5 +29,7 @@
         "webpack": "^4.29.6",
         "webpack-cli": "^3.3.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "custom-protocol-detection-blockstack": "^1.1.4"
+    }
 }

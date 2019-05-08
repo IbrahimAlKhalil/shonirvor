@@ -38,7 +38,12 @@ class OrgServiceRegistrationController extends Controller
         }
 
         $hasAccount = $user->orgs()->onlyApproved()->exists() || $user->orgs()->onlyApproved()->exists();
-        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        });
         $paymentMethods = PaymentMethod::all();
         $categoryIds = $user->orgs()->pluck('id')->toArray();
 
@@ -57,7 +62,7 @@ class OrgServiceRegistrationController extends Controller
 
         $user = Auth::user();
         if ($user->inds()->onlyPending()->exists()) {
-            return redirect(route('service-registration-instruction'));
+            return redirect(route('service-registration-instruction', 'You have already a pending request'));
         }
         // handle category  and sub-category request
 
@@ -301,7 +306,7 @@ class OrgServiceRegistrationController extends Controller
 
         // TODO:: Move this validation to a requests class
         if ($org->user_id != Auth::id()) {
-            return redirect(route('organization-service-registration.index'));
+            return redirect(route('organization-service-registration.index', 'This is not your service'));
         }
 
         DB::beginTransaction();
@@ -627,7 +632,12 @@ class OrgServiceRegistrationController extends Controller
 
         $user = Auth::user();
         $first = !$user->inds()->onlyApproved()->exists() && !$user->orgs()->onlyApproved()->exists();
-        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get();
+        $packages = Package::with('properties')->select('id')->where('package_type_id', 2)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        });
         $paymentMethods = PaymentMethod::all();
         $divisions = Division::all();
         $districts = District::whereDivisionId($org->division_id)->get();

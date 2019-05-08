@@ -38,14 +38,14 @@ class StoreOrg extends FormRequest
             'village-request' => 'required_with:no-village',
             'address' => 'required|string',
             'category' => 'required_without:no-category',
-            'slug' => 'required|min:5|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+            'slug' => 'required|min:3|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
             'category-request' => 'required_with:no-category',
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
             // TODO: Review image size
-            'images.*.file' => 'image|max:800',
-            'logo' => 'image|max:800',
+            'images.*.file' => 'image',
+            'logo' => 'image',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'

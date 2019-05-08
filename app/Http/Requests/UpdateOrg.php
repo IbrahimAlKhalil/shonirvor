@@ -37,7 +37,7 @@ class UpdateOrg extends FormRequest
             'slug' => [
                 Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'org')->where('sluggable_id', request('org'))->select('id')->first()->id),
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
-                'min:5',
+                'min:3',
                 'max:191'
             ],
             'address' => 'required|string',
@@ -46,7 +46,7 @@ class UpdateOrg extends FormRequest
             'sub-categories.*.id' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'images.*.file' => 'image|max:800',
+            'images.*.file' => 'image|nullable',
             'package' => 'required|exists:packages,id',
             'from' => 'required_with:transactionId',
             'payment-method' => 'required_with:transactionId'
@@ -84,7 +84,7 @@ class UpdateOrg extends FormRequest
         });
 
         // TODO: Review image size
-        $validator->sometimes('logo', 'image|max:800', function ($data) {
+        $validator->sometimes('logo', 'image', function ($data) {
             return $data->logo;
         });
 

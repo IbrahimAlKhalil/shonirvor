@@ -1,5 +1,5 @@
 <div class="filter-root bg-white rounded py-3">
-    <form action="{{ route('frontend.filter') }}">
+    <form action="{{ route('frontend.filter') }}#service-providers">
         <div class="d-lg-flex">
             <div class="flex-grow-1">
                 <div class="d-lg-flex px-4 px-lg-0">

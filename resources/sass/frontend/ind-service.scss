@@ -35,6 +35,10 @@ img.pp {
 
 }
 
+.fb-protocol {
+  display: none;
+}
+
 @include media-breakpoint-down(md) {
   .profile-headline > h1 {
     font-weight: 700;
@@ -52,6 +56,14 @@ img.pp {
     min-height: 180px;
     max-height: 180px;
     width: 40%;
+  }
+
+  .fb-protocol {
+    display: inline-block;
+  }
+
+  .http-protocol {
+    display: none;
   }
 }
 

@@ -180,7 +180,8 @@
                             </div>
 
                             <div class="card-footer text-center">
-                                <button :disabled="sendingSms" class="btn btn-secondary" type="button" @click.prevent="sendSms">
+                                <button :disabled="sendingSms" class="btn btn-secondary" type="button"
+                                        @click.prevent="sendSms">
                                     <i class="fa fa-paper-plane"></i> Send
                                 </button>
                             </div>
@@ -450,8 +451,13 @@
                                          :src="getImage(service.photo)"
                                          :alt="service.name">
                                 </td>
-                                <td><a target="_blank" :href="getServiceUrl(service.id, service.type)">@{{ service.name
-                                        }}</a></td>
+                                <td>
+                                    <a v-if="!service.deleted_at" target="_blank"
+                                       :href="getServiceUrl(service.id, service.type)">@{{ service.name }}</a>
+                                    <template v-else>
+                                        @{{ service.name }}
+                                    </template>
+                                </td>
                                 <td>@{{ service.category_name }}</td>
                                 <td>@{{ service.expire?service.expire:'n/a' }}</td>
                                 <td>@{{ service.mobile }}</td>
@@ -528,6 +534,7 @@
         var saharaData = {
             indPackages: JSON.parse('{!! json_encode($indPackages) !!}'),
             orgPackages: JSON.parse('{!! json_encode($orgPackages) !!}'),
+            noImage: '{{ asset('storage/default/icons/no-image.svg') }}',
             csrf: '{{ csrf_token() }}',
             messageTemplates: JSON.parse('{!! json_encode($smsTemplates) !!}').map(function (template) {
                 template.checked = false;

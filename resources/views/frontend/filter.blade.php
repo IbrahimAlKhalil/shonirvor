@@ -14,17 +14,18 @@
             </div>
         </div>
         <div class="row pt-4 justify-content-center">
-            <div class="col-lg-8 bg-white rounded shadow-sm">
+            <div class="col-lg-8 bg-white rounded shadow-sm" id="service-providers">
                 <div class="row">
                     @forelse($providers as $key => $provider)
                         <div class="col-lg-6">
-                            <ul class="list-unstyled">
-                                <li class="media mt-3 p-2 service-card-shadow position-relative">
+                            <div class="list-unstyled">
+                                <a href="{{ route('home') . '/' . $provider->slug->name }}"
+                                   class="media mt-3 p-2 service-card-shadow position-relative">
                                     <img class="mr-3 w-25 shadow-sm" src="{{ asset('storage/'.$provider->photo) }}"
                                          alt="Generic placeholder image">
                                     <div class="media-body">
                                         <p class="mt-0 h5">
-                                            <a href="{{ route('home') . '/' . $provider->slug->name }}">{{ $provider->name }}</a>
+                                            <span>{{ $provider->name }}</span>
                                             <input id="star{{ $key }}" value="{{ $provider->feedbacks_avg }}"
                                                    class="invisible">
                                         </p>
@@ -45,8 +46,8 @@
                                             <div class="corner"></div>
                                         @endif
                                     </div>
-                                </li>
-                            </ul>
+                                </a>
+                            </div>
                         </div>
                     @empty
                         <div class="col-12 pt-5">

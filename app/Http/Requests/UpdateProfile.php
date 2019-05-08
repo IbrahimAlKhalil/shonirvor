@@ -18,8 +18,8 @@ class UpdateProfile extends FormRequest
             'name' => 'required',
             'mobile' => 'required|unique:users,mobile,' . Auth::id(),
             'password' => 'confirmed',
-            'old-password' => 'nullable|required_with:password|old_password:users,1',
-            'photo' => 'nullable|image|max:800'
+            'old-password' => 'nullable|required_with:password|old_password:users,' . Auth::id(),
+            'photo' => 'nullable|image|max:15000'
         ];
     }
 

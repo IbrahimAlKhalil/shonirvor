@@ -28,9 +28,10 @@
                         <div class="row border-right">
                             @foreach($indCategories as $category)
                                 <div class="col-4 text-center">
-                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="c-icon">
                                     <p>
-                                        <a href="{{ route('frontend.filter').'?category='.$category->id }}">
+                                        <a href="{{ route('frontend.filter').'?category='.$category->id }}#service-providers">
+                                            <div><img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid"
+                                                      class="c-icon"></div>
                                             <span class="small-text">{{ $category->name }} ({{ $category->ind_services_count }})</span>
                                         </a>
                                     </p>
@@ -43,9 +44,10 @@
                         <div class="row border-left">
                             @foreach($orgCategories as $category)
                                 <div class="col-4 text-center">
-                                    <img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid" class="c-icon">
                                     <p>
-                                        <a href="{{ route('frontend.filter').'?category='.$category->id }}">
+                                        <a href="{{ route('frontend.filter').'?category='.$category->id }}#service-providers">
+                                            <div><img src="{{ asset('storage/'.$category->image) }}" alt="img-fluid"
+                                                      class="c-icon"></div>
                                             <span class="small-text">{{ $category->name }} ({{ $category->org_services_count }})</span>
                                         </a>
                                     </p>
@@ -62,14 +64,15 @@
                         </div>
                         <div class="col-lg-6">
                             <p class="h5 pl-2 text-center mb-4 font-weight-bold">ব্যক্তিগত সার্ভিস</p>
-                            <ul class="list-unstyled">
+                            <div class="list-unstyled">
                                 @foreach($indTopServices as $key => $service)
-                                    <li class="media mt-3 p-2 service-card-shadow position-relative">
+                                    <a href="{{ route('home') . '/' . $service->slug->name }}"
+                                       class="media mt-3 p-2 service-card-shadow position-relative">
                                         <img class="mr-3 w-25 shadow-sm"
                                              src="{{ asset('storage/'.$service->user->photo) }}">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
-                                                <a href="{{ route('home') . '/' . $service->slug->name }}">{{ $service->user->name }}</a>
+                                                <span>{{ $service->user->name }}</span>
                                                 <input id="topIndStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
                                                        class="invisible">
                                             </p>
@@ -89,21 +92,22 @@
                                                 <div class="corner"></div>
                                             @endif
                                         </div>
-                                    </li>
+                                    </a>
                                 @endforeach
-                            </ul>
+                            </div>
                         </div>
                         <div class="col-lg-6 text-lg-right">
                             <p class="h5 pl-2 pl-lg-0 pr-lg-2 text-center mb-4 font-weight-bold">
                                 প্রাতিষ্ঠানিক সার্ভিস</p>
-                            <ul class="list-unstyled">
+                            <div class="list-unstyled">
                                 @foreach($orgTopServices as $key => $service)
-                                    <li class="media mt-3 p-2 service-card-shadow position-relative">
+                                    <a href="{{ route('home') . '/' . $service->slug->name }}"
+                                       class="media mt-3 p-2 service-card-shadow position-relative">
                                         <img class="mr-3 w-25 shadow-sm d-inline-block d-lg-none"
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                         <div class="media-body">
                                             <p class="mt-0 h5">
-                                                <a href="{{ route('home') . '/' . $service->slug->name }}">{{ $service->name }}</a>
+                                                <span>{{ $service->name }}</span>
                                                 <input id="topOrgStar{{ $key }}" value="{{ $service->feedbacks_avg }}"
                                                        class="invisible">
                                             </p>
@@ -126,9 +130,9 @@
                                         <img class="ml-3 w-25 shadow-sm d-none d-lg-inline-block"
                                              src="{{ asset('storage/'.$service->logo) }}" alt="logo">
                                         <div class="corner"></div>
-                                    </li>
+                                    </a>
                                 @endforeach
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 @endif
