@@ -452,11 +452,8 @@
                                          :alt="service.name">
                                 </td>
                                 <td>
-                                    <a v-if="!service.deleted_at" target="_blank"
-                                       :href="getServiceUrl(service.id, service.type)">@{{ service.name }}</a>
-                                    <template v-else>
-                                        @{{ service.name }}
-                                    </template>
+                                    <a target="_blank"
+                                       :href="getServiceUrl(service)">@{{ service.name }}</a>
                                 </td>
                                 <td>@{{ service.category_name }}</td>
                                 <td>@{{ service.expire?service.expire:'n/a' }}</td>

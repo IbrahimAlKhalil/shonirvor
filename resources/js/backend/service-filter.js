@@ -99,8 +99,8 @@ const vm = new Vue({
         getImage(image) {
             return image ? `${this.routes.asset}/${image}` : window.saharaData.noImage;
         },
-        getServiceUrl(id, type) {
-            return (type === 'ind' ? this.routes.individual : this.routes.organization) + '/' + id;
+        getServiceUrl(service) {
+            return (service.type === 'ind' ? this.routes.individual : this.routes.organization) + '/' + (service.deleted_at ? 'disabled/' : '') + service.id;
         },
         getPackageName(service) {
             if (!service.payments.length) {

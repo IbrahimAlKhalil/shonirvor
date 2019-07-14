@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $path = base_path();
+        /*$path = base_path();
         $schedule->call(function() use($path) {
             if (file_exists($path . '/queue.pid')) {
                 $pid = file_get_contents($path . '/queue.pid');
@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
                 $number = exec($command);
                 file_put_contents($path . '/queue.pid', $number);
             }
-        })->name('monitor_queue_listener')->everyFiveMinutes();
+        })->name('monitor_queue_listener')->everyFiveMinutes();*/
 
     }
 

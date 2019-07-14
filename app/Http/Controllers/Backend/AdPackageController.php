@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Package;
 use App\Models\PackageValue;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -26,9 +27,21 @@ class AdPackageController extends Controller
 
     public function index()
     {
-        $packages = Package::with('properties')
-            ->where('package_type_id', $this->packageTypeId)
-            ->paginate(10);
+        $packages = new Paginator(Package::with('properties')
+            ->where('package_type_id', $this->packageTypeId)->get()->sort(function ($a, $b) {
+                $aProperties = $a->properties->groupBy('name');
+                $bProperties = $b->properties->groupBy('name');
+
+                return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+            }), 10);
+
+        $deleted = new Paginator(Package::onlyTrashed()->with('properties')
+            ->where('package_type_id', $this->packageTypeId)->get()->sort(function ($a, $b) {
+                $aProperties = $a->properties->groupBy('name');
+                $bProperties = $b->properties->groupBy('name');
+
+                return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+            }), 10);
 
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
@@ -39,7 +52,7 @@ class AdPackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'বিজ্ঞাপন প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.ad.index', compact('packages', 'navs'));
+        return view('backend.packages.ad.index', compact('packages', 'deleted', 'navs'));
     }
 
     public function store(Request $request)
@@ -89,5 +102,16 @@ class AdPackageController extends Controller
         $package->delete();
 
         return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে।');
+    }
+
+    public function restore(Request $request)
+    {
+        $request->validate([
+            'package' => 'required'
+        ]);
+
+        Package::withTrashed()->findOrFail($request->post('package'))->restore();
+
+        return back()->with('success', 'প্যাকেজটি পুনরায় চালু হয়েছে।');
     }
 }

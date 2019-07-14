@@ -171,7 +171,10 @@ class OrgServiceEditRequestController extends Controller
         if (isset($data['images'])) {
             foreach ($data['images'] as $id => $datum) {
                 $image = WorkImage::find($id);
-                $image->description = $datum['description'];
+                if (isset($datum['description'])) {
+                    $image->description = $datum['description'];
+                }
+
                 if (isset($datum['file'])) {
                     $image->path = $datum['file'];
                 }
@@ -225,7 +228,7 @@ class OrgServiceEditRequestController extends Controller
             }
         }
 
-        if(isset($data['new-work-images'])) {
+        if (isset($data['new-work-images'])) {
             foreach ($data['new-work-images'] as $image) {
                 if (isset($image['file'])) {
                     Storage::delete($image->file);

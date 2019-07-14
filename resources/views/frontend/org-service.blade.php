@@ -28,6 +28,11 @@
             </div>
             <div class="col-md-12 my-2">
                 <div class="text-center">
+                    @auth()
+                        <a class="btn btn-primary fa fa-comments text-white my-2"
+                           href="{{ route('chat.index') }}?target={{$provider->id}}&target-type=org&account={{auth()->user()->id}}&account-type=user"
+                           target="_blank"> চ্যাট</a>
+                    @endauth
                     @if($provider->facebook)
                         <a class="btn btn-primary fa fa-facebook text-white my-2 facebook-link"
                            target="_blank" href="{{ $provider->facebook }}"> ফেসবুক</a>

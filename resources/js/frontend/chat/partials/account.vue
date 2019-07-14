@@ -1,9 +1,8 @@
 <template>
     <div class="account">
         <div class="p-2 info">
-            <img class="profile-pic mx-auto d-block" :src="profilePic"
-                 alt="">
-            <p class="text-center mt-3 text-light name">Ibrahim Al Khalil</p>
+            <img class="profile-pic mx-auto d-block" :src="account.photo" :alt="account.name">
+            <p class="text-center mt-3 text-light name">{{account.name}}</p>
         </div>
         <div class="text-center p-2 change-account">
             <a href="#" @click="accountModal = !accountModal">
@@ -16,28 +15,41 @@
             </a>
         </div>
 
-
-        <b-modal v-model="accountModal" title="Change Account" centered scrollable>
-            <b-form-select v-model="accountSelected" :options="accounts"></b-form-select>
+        <b-modal v-model="accountModal" title="Change Account" centered scrollable @ok="changeAccount">
+            <b-form-select v-model="accountSelected" :options="options"></b-form-select>
         </b-modal>
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
+
     export default {
         data() {
-            return {
-                profilePic: window.profilePic,
-                accountModal: false,
+            const state = this.$store.state
 
-                accountSelected: null,
-                accounts: [
-                    {value: null, text: 'Please select an account'},
-                    {value: 'a', text: 'This is First option'},
-                    {value: 'b', text: 'Selected Option'},
-                    {value: {C: '3PO'}, text: 'This is an option with object value'},
-                    {value: 'd', text: 'This one is disabled', disabled: true}
-                ]
+            const options = state.accounts.map(account => {
+                return {
+                    value: account,
+                    text: account.name
+                }
+            })
+
+            return {
+                accountModal: false,
+                accountSelected: state.account,
+                options
+            }
+        },
+
+        computed: mapState({
+            account: 'account',
+            accounts: 'accounts'
+        }),
+
+        methods: {
+            changeAccount() {
+                this.$store.commit('setAccount', this.accountSelected)
             }
         }
     }
@@ -79,8 +91,10 @@
 
     .profile-pic {
         height: 100%;
-        border-radius: 50%;
+        border-radius: 8px;
         box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        background: #fff;
+        padding: 10px;
 
         @media screen and (min-width: $md) {
             width: 150px;

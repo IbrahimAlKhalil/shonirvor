@@ -1,50 +1,64 @@
 <template>
-    <section class="flex-grow-1">
-        <header>
-            <b-dropdown variant="link" size="lg" no-caret>
-                <template slot="button-content">
-                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                </template>
+    <section class="flex-grow-1 position-relative">
+        <template v-if="messages">
+            <header>
+                <b-dropdown variant="link" size="lg" no-caret>
+                    <template slot="button-content">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </template>
 
-                <b-dropdown-item href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Conversation
-                </b-dropdown-item>
-            </b-dropdown>
-        </header>
+                    <b-dropdown-item href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Conversation
+                    </b-dropdown-item>
+                </b-dropdown>
+            </header>
 
-        <div>
-            <message>
-                This is a test message sage This is a test message This is a test message This is a test messagesage This is a test message This is a test message This is a test message
-            </message>
-            <message type="incoming">
-                This is a test message This is a test mesThis is a test message
-            </message>
+            <div>
+                <message v-for="(message, index) in messages" :key="index">
+                    This is a test message sage This is a test message This is a test message This is a test messagesage
+                    This is a test message This is a test message This is a test message
+                </message>
+            </div>
 
-            <message type="incoming">
-                This is a test a test mesThis is a test message message This ismessage This is
-            </message>
-
-            <message>
-                This is a test message sage This is a test message This is a test message This is a test messagesage This is a test message This is a test message This is a test message
-            </message>
-
-            <message type="incoming">
-                This is a test a test mesThis is a test message message This ismessage This is
-            </message>
-
-            <message>
-                This is a test message sage This is a test message This is a test message This is a test messagesage This is a test message This is a test message This is a test message
-            </message>
+            <message-input/>
+        </template>
+        <p v-else-if="messages === null" class="text-center fa-2x font-weight-bold mt-5">No conversations</p>
+        <div v-else class="spinner">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-
-        <message-input/>
     </section>
 </template>
 
 <script>
-    import message from './message';
-    import messageInput from './message-input';
+    import message from './message'
+    import messageInput from './message-input'
+    import {mapState} from 'vuex'
 
     export default {
+        computed: {
+            ...mapState({
+                account: 'account'
+            }),
+            messages() {
+                if (this.account.conversationSelected === false) {
+                    // Not loaded
+                    return false
+                }
+
+                if (this.account.conversationSelected === null) {
+                    // No conversation
+                    return null
+                }
+
+                if (this.account.conversationSelected.messages === null) {
+                    // Messages are not loaded
+                    return false
+                }
+
+                return this.account.conversationSelected.messages
+            }
+        },
         components: {message, messageInput}
     }
 </script>
@@ -57,11 +71,13 @@
         display: none;
 
         @media all and (min-width: $md) {
-            display: block;
+            display: flex;
+            flex-wrap: wrap;
         }
     }
 
     header {
+        width: 100%;
         height: 40px;
         position: sticky;
         top: 0;

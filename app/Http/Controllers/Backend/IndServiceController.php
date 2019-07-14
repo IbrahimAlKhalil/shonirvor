@@ -23,8 +23,9 @@ class indServiceController extends Controller
         return view('backend.ind-service.show', compact('ind', 'navs'));
     }
 
-    public function destroy(Request $request, Ind $ind)
+    public function destroy(Request $request, $id)
     {
+        $ind = Ind::withTrashed()->findOrFail($id);
 
         if ($request->post('type') == 'deactivate' || $request->post('type') == 'remove') {
             switch ($request->post('type')) {
@@ -38,13 +39,13 @@ class indServiceController extends Controller
                     // TODO:: Delete images/docs after deleting account
                     $user = $ind->user;
 
-                    if (!$user->inds('approved')->count() <= 1) {
+                    if (!$user->inds()->where('expire', '<>', null)->count() <= 1) {
                         $user->roles()->detach('ind');
                     }
 
                     $ind->forceDelete();
                     $msg = 'Account Removed Successfully!';
-                    $route = route('individual-service.index');
+                    $route = route('service-filter');
             }
 
             return redirect($route)->with('success', $msg);

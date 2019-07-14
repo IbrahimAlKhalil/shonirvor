@@ -38,7 +38,7 @@
                             <tbody>
                             <tr>
                                 <th scope="row">বর্ণনাঃ</th>
-                                <td>{{ $data['description']  }}</td>
+                                <td>@isset($data['description']) {{$data['description']}} @endisset</td>
                             </tr>
                             <tr>
                                 <th scope="row">মোবাইলঃ</th>
@@ -237,7 +237,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ $image['description'] }}
+                                                @isset($image['description']) {{ $image['description'] }} @endisset
                                             </td>
                                         </tr>
                                     @endforeach

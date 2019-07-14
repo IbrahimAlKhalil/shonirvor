@@ -44,21 +44,8 @@ class User extends Authenticatable
      * @param $status string
      * @return object|null
      */
-    public function orgs($status = null)
+    public function orgs()
     {
-        $result = null;
-
-        if ($status) {
-            switch ($status) {
-                case 'pending':
-                    return $this->hasMany(Org::class)->where('is_pending', '=', 1);
-                    break;
-                case 'approved':
-                    return $this->hasMany(Org::class)->where('is_pending', '=', 0);
-                    break;
-            }
-        }
-
         return $this->hasMany(Org::class);
     }
 
@@ -97,11 +84,13 @@ class User extends Authenticatable
         return $this->hasMany(Feedback::class);
     }
 
-    public function sentChatMessages() {
+    public function sentChatMessages()
+    {
         return $this->morphMany(ChatMessage::class, 'fromable');
     }
 
-    public function receivedChatMessages() {
+    public function receivedChatMessages()
+    {
         return $this->morphMany(ChatMessage::class, 'toable');
     }
 }

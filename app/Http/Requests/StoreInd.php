@@ -39,7 +39,7 @@ class StoreInd extends FormRequest
             'sub-categories.*' => 'exists:sub_categories,id',
             'sub-category-requests.*.name' => 'required_with:no-sub-category',
             'images.*.description' => 'string|min:10|nullable',
-            'slug' => 'required|min:3|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
+            'slug' => 'required|min:2|max:191|unique:slugs,name|regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
             // TODO: Review image size
             'images.*.file' => 'image|max:15000',
             'experience-certificate' => 'image|max:15000',
@@ -108,7 +108,7 @@ class StoreInd extends FormRequest
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
             'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
-            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.min' => 'লিঙ্ক ২ অক্ষরের কম হতে পারবে না',
             'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }

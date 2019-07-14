@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Jobs\SendToken;
 use App\Models\User;
 use App\Notifications\Sms;
 use Illuminate\Http\Request;
@@ -62,9 +63,8 @@ class RegisterController extends Controller
         $this->validator($data)->validate();
         $user = $this->create($data);
         $id = $user->id;
-        $token = $user->verification_token;
 
-        $user->notify(new Sms("The verification code from AreaSheba is: $token"));
+        $this->dispatch(new SendToken($user->mobile, $user->verification_token));
 
         return redirect(route('verification', $id));
     }

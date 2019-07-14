@@ -42,7 +42,7 @@ class UpdateInd extends FormRequest
             'slug' => [
                 Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'ind')->where('sluggable_id', request('ind'))->select('id')->first()->id),
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
-                'min:3',
+                'min:2',
                 'max:191'
             ],
             'sub-categories.*' => 'exists:sub_categories,id',
@@ -125,7 +125,7 @@ class UpdateInd extends FormRequest
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
             'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
-            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.min' => 'লিঙ্ক ২ অক্ষরের কম হতে পারবে না',
             'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }

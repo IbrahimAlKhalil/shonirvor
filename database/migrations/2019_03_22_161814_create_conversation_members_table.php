@@ -17,8 +17,7 @@ class CreateConversationMembersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('conversation_id');
             $table->morphs('memberable');
-            $table->unsignedInteger('unread');
-            $table->dateTime('last_seen');
+            $table->dateTime('last_seen')->nullable();
             $table->timestamps();
 
             $table->foreign('conversation_id')

@@ -28,6 +28,13 @@ class IndServicePackageController extends Controller
             return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
         }), 10);
 
+        $deleted = new Paginator(Package::onlyTrashed()->with('properties')->where('package_type_id', $this->packageTypeId)->get()->sort(function ($a, $b) {
+            $aProperties = $a->properties->groupBy('name');
+            $bProperties = $b->properties->groupBy('name');
+
+            return $aProperties['duration'][0]->value > $bProperties['duration'][0]->value;
+        }), 10);
+
         $navs = [
             ['url' => route('backend.package.ind-service.index'), 'text' => 'ব্যাক্তিগত সার্ভিস প্যাকেজসমূহ'],
             ['url' => route('backend.package.org-service.index'), 'text' => 'প্রাতিষ্ঠানিক সার্ভিস প্যাকেজসমূহ'],
@@ -37,7 +44,7 @@ class IndServicePackageController extends Controller
             ['url' => route('backend.package.ad.index'), 'text' => 'বিজ্ঞাপন প্যাকেজসমূহ']
         ];
 
-        return view('backend.packages.service.ind-service', compact('navs', 'packages'));
+        return view('backend.packages.service.ind-service', compact('navs', 'packages', 'deleted'));
     }
 
     public function store(Request $request)
@@ -89,5 +96,16 @@ class IndServicePackageController extends Controller
     {
         $package->delete();
         return back()->with('success', 'প্যাকেজ ডিলিট হয়েছে!');
+    }
+
+    public function restore(Request $request)
+    {
+        $request->validate([
+            'package' => 'required'
+        ]);
+
+        Package::withTrashed()->findOrFail($request->post('package'))->restore();
+
+        return back()->with('success', 'প্যাকেজটি পুনরায় চালু হয়েছে।');
     }
 }

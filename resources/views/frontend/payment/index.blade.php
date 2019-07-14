@@ -45,7 +45,7 @@
                                     @php($serviceType = (new ReflectionClass($service))->getShortName())
                                     @php($payment = $service->payments->sortBy('approved')->first())
                                     @php($prefix = $serviceType == 'Ind'?'individual':'organization')
-                                    @php($top = in_array($payment->package->package_type_id, [3, 4])?'top-':'' )
+                                    @php($top = (is_null($payment->package)?'':in_array($payment->package->package_type_id, [3, 4]))?'top-':'' )
                                     <tr>
                                         <th scope="row">{{ en2bnNumber($count++) }}</th>
                                         <td>

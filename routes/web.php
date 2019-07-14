@@ -172,28 +172,37 @@ Route::namespace('Backend')->group(function () {
                 Route::resource('ind-service', 'IndServicePackageController', [
                     'parameters' => ['ind-service' => 'package']
                 ]);
+                Route::post('ind-service/restore', 'IndServicePackageController@restore')->name('ind-service.restore');
+
                 Route::resource('org-service', 'OrgServicePackageController', [
                     'parameters' => ['org-service' => 'package']
                 ]);
+                Route::post('org-service/restore', 'OrgServicePackageController@restore')->name('org-service.restore');
 
                 Route::resource('ind-top-service', 'IndTopServiceController', [
                     'only' => ['index', 'store', 'update', 'destroy'],
                     'parameters' => ['ind-top-service' => 'package']
                 ]);
+                Route::post('ind-top-service/restore', 'IndTopServiceController@restore')->name('ind-top-service.restore');
+
+
                 Route::resource('org-top-service', 'OrgTopServiceController', [
                     'only' => ['index', 'store', 'update', 'destroy'],
                     'parameters' => ['ind-top-service' => 'package']
                 ]);
+                Route::post('org-top-service/restore', 'OrgTopServiceController@restore')->name('org-top-service.restore');
 
                 Route::resource('referrer', 'ReferrerPackageController', [
                     'only' => ['index', 'store', 'update', 'destroy'],
                     'parameters' => ['referrer' => 'package']
                 ]);
+                Route::post('referrer/restore', 'ReferrerPackageController@restore')->name('referrer.restore');
 
                 Route::resource('ad', 'AdPackageController', [
                     'only' => ['index', 'store', 'update', 'destroy'],
                     'parameters' => ['ad' => 'package']
                 ]);
+                Route::post('ad/restore', 'AdPackageController@restore')->name('ad.restore');
 
             }, '');
 
@@ -253,7 +262,12 @@ Route::middleware('auth')->group(function () {
 
 
     Route::middleware('throttle:60,15')->group(function () {
-        Route::resource('chat', 'Frontend\ConversationController', ['only' => ['index', 'destroy']]);
+        Route::resource('chat', 'Frontend\ConversationController', ['only' => ['index', 'destroy', 'store']]);
+        Route::get('chat/get-accounts', 'Frontend\ConversationController@getAccounts')->name('chat.getAccounts');
+        Route::get('chat/get-conversations', 'Frontend\ConversationController@getConversations')->name('chat.getConversations');
+        Route::resource('chat-messages', 'Frontend\ChatMessageController', ['only' => ['destroy', 'store']]);
+        Route::post('chat-messages/get-messages', 'Frontend\ChatMessageController@getMessages')->name('chat-messages.getMessages');
+
     });
 
 }, '');

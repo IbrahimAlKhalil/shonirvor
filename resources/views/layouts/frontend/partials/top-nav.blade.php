@@ -24,6 +24,11 @@
                         প্রোফাইল @if($userUnread) <span class="badge badge-danger">{{ $userUnreadCount }}</span> @endif
                     </a>
                 </li>
+                @auth()
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('chat.index') }}">চ্যাট</a>
+                    </li>
+                @endauth
                 @if($myServiceLink)
                     <li class="nav-item @if(request()->is('payments')){{ 'active' }}@endif">
                         <a class="nav-link" href="{{ route('payments') }}">পেমেন্ট</a>

@@ -31,7 +31,7 @@ class UpdateIndMyService extends FormRequest
                 Rule::unique('slugs', 'name')->ignore(Slug::where('sluggable_type', 'ind')->where('sluggable_id', $id)->select('id')->first()->id),
                 'required',
                 'regex:/^[A-Za-z0-9]+(?:[_\-\.]*)?(?:\w+)$/',
-                'min:5',
+                'min:2',
                 'max:191'
             ],
             'sub-categories.*.id' => 'exists:sub_categories,id',
@@ -63,7 +63,7 @@ class UpdateIndMyService extends FormRequest
             'slug.required' => 'সার্ভিস লিঙ্ক দিতে হবে',
             'slug.unique' => 'এই লিঙ্কটি অন্য কেউ ব্যাবহার করছে',
             'slug.regex' => 'লিঙ্ক ফরমেটটি সঠিক নয়',
-            'slug.min' => 'লিঙ্ক ৫ অক্ষরের কম হতে পারবে না',
+            'slug.min' => 'লিঙ্ক ২ অক্ষরের কম হতে পারবে না',
             'slug.max' => 'লিঙ্ক ১৯১ অক্ষরের বেশি হতে পারবে না'
         ];
     }
