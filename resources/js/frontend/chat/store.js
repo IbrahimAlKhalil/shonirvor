@@ -87,6 +87,7 @@ const store = new Vuex.Store({
             })
         },
         loadMessages(state, {account, conversation}) {
+            conversation.page = conversation.page + 1
 
             fetch(window.routes.getMessages, {
                 method: 'post',
@@ -94,10 +95,76 @@ const store = new Vuex.Store({
                     id: account.id,
                     type: account.type,
                     cid: conversation.id,
+                    _token: window.csrf,
+                    page: conversation.page
+                })
+            }).then(response => response.json().then(archives => {
+                if (!conversation.archives) {
+                    conversation.archives = {}
+                }
+
+                console.log(conversation)
+
+                const regx = /\d{4,}-\d\d-\d\d/gim
+                const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ]
+
+                archives.forEach(message => {
+                    const extracted = message.at.match(regx)[0]
+                    let key
+
+                    if (window.dates.today.match(regx)[0] === extracted) {
+                        key = 'Today'
+                    } else if (window.dates.yesterday.match(regx)[0] === extracted) {
+                        key = 'Yesterday'
+                    } else {
+                        const date = new Date(extracted)
+                        key = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                    }
+
+                    if (!conversation.archives.hasOwnProperty(key)) {
+                        Vue.set(conversation.archives, key, [])
+                    }
+
+                    conversation.archives[key].push(message)
+                })
+
+                Vue.prototype.$nextTick(() => {
+                    const elm = document.getElementById('chat-section')
+                    elm.scrollTop = elm.scrollHeight
+                })
+            }))
+        },
+        sendMessage(state, {account, conversation, message}) {
+            if (!conversation.archives.hasOwnProperty('Today')) {
+                Vue.set(conversation.archives, 'Today', [])
+            }
+
+            const msg = {
+                id: null,
+                at: null,
+                mid: conversation.mid,
+                msg: message,
+                sent: false
+            }
+
+            conversation.archives['Today'].push(msg)
+
+            fetch(window.routes.send, {
+                method: 'post',
+                body: objectToFormData({
+                    id: account.id,
+                    type: account.type,
+                    cid: conversation.id,
+                    mid: conversation.mid,
+                    txt: message,
                     _token: window.csrf
                 })
-            }).then(response => response.json().then(messages => {
-                conversation.messages = messages
+            }).then(response => response.json().then(data => {
+                msg.id = data.id
+                msg.at = data.at.date
+                msg.sent = true
             }))
         }
     }
@@ -110,7 +177,7 @@ store.watch(({account}) => account, (account) => {
 
     fetch(`${window.routes.getConversations}?id=${account.id}&type=${account.type}`).then(response => response.json().then(conversations => {
         conversations.forEach(conversation => {
-            conversation.messages = null
+            conversation.archives = null
             conversation.active = false
             conversation.page = 0
         })

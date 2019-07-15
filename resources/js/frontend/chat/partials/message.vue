@@ -1,12 +1,19 @@
 <template>
     <div :class="classList">
         <div class="img">
-            <img :src="profilePic" alt="Ibrahim Al Khalil" class="profile-pic">
+            <img :src="pic" alt="Ibrahim Al Khalil" class="profile-pic">
         </div>
 
         <div class="message">
-            <div class="date">7 Feb 2019</div>
-            <div class="text"><slot/></div>
+            <div v-if="item.sent !== false" class="date">{{formatDate(item.at)}}</div>
+            <div class="text">
+                {{item.msg}}
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center ml-1">
+            <i v-if="item.sent === false" class="fa fa-spinner" aria-hidden="true"></i>
+            <i v-else class="fa fa-check" aria-hidden="true"></i>
         </div>
     </div>
 </template>
@@ -14,32 +21,49 @@
 <script>
     export default {
         props: {
-            type: {
-                type: String,
-                required: false,
-                default: 'outgoing'
+            item: {
+                type: Object,
+                required: true
             }
         },
-        data() {
-            return {
-                profilePic: window.profilePic
+
+        methods: {
+            formatDate(str) {
+                const date = new Date(str)
+
+                let hours = date.getHours()
+                let minutes = date.getMinutes()
+                const ampm = hours >= 12 ? 'pm' : 'am'
+                hours = hours % 12
+                hours = hours ? hours : 12
+                minutes = minutes < 10 ? '0' + minutes : minutes
+
+                return hours + ':' + minutes + ' ' + ampm
             }
         },
+
         computed: {
             classList() {
+                const {conversationSelected} = this.$store.state.account
+                const out = conversationSelected.mid === this.item.mid
+
                 return {
                     wrapper: true,
-                    incoming: this.$props.type === 'incoming',
-                    outgoing: this.$props.type === 'outgoing'
-                };
+                    in: !out,
+                    out: out
+                }
+            },
+
+            pic() {
+                return this.$store.state.account.photo
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    $bgIncoming: #00aeff;
-    $bgOutgoing: #e79fff;
+    $bgIn: #00aeff;
+    $bgOut: #e79fff;
 
     .profile-pic {
         height: 36px;
@@ -71,7 +95,7 @@
 
     }
 
-    .incoming {
+    .in {
         .img {
             order: 1;
         }
@@ -82,12 +106,12 @@
         }
 
         .text {
-            background: $bgIncoming;
+            background: $bgIn;
 
             &:after {
                 right: -18px;
                 transform: rotate(155deg);
-                border-right: 15px solid $bgIncoming;
+                border-right: 15px solid $bgIn;
             }
         }
 
@@ -96,19 +120,32 @@
         }
     }
 
-    .outgoing {
+    .out {
         .message {
             margin-left: 20px;
         }
 
         .text {
-            background: $bgOutgoing;
+            background: $bgOut;
 
             &:after {
                 left: -18px;
-                border-right: 15px solid $bgOutgoing;
+                border-right: 15px solid $bgOut;
                 transform: rotate(20deg);
             }
         }
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg)
+        }
+        to {
+            transform: rotate(360deg)
+        }
+    }
+
+    .fa-spinner {
+        animation: rotate 700ms linear infinite;
     }
 </style>

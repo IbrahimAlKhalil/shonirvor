@@ -70,5 +70,11 @@ class ProductionSeeder extends Seeder
             ['package_id' => $orgPackage->id, 'package_property_id' => 3, 'value' => 7],
             ['package_id' => $orgPackage->id, 'package_property_id' => 4, 'value' => 0]
         ]);
+
+        // Message types
+        DB::table('chat_message_types')->insert([
+            ['name' => 'text'],
+            ['name' => 'image']
+        ]);
     }
 }

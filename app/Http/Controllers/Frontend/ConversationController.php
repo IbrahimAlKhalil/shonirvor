@@ -76,14 +76,14 @@ class ConversationController extends Controller
         $id = $request->input('id');
 
         $conversations = DB::table('conversation_members')
-            ->select('id', 'conversation_id')
+            ->select('id', 'conversation_id as cid')
             ->where('memberable_type', $type)
             ->where('memberable_id', $id)
             ->paginate()
             ->items();
 
         $conversationsIds = array_map(function ($conversation) {
-            return $conversation->conversation_id;
+            return $conversation->cid;
         }, $conversations);
 
         $ids = array_map(function ($conversation) {
@@ -91,7 +91,7 @@ class ConversationController extends Controller
         }, $conversations);
 
         $members = DB::table('conversation_members')
-            ->select('id', 'conversation_id', 'last_seen', 'memberable_type', 'memberable_id')
+            ->select('id', 'conversation_id as cid', 'last_seen', 'memberable_type', 'memberable_id')
             ->whereIn('conversation_id', $conversationsIds)
             ->whereNotIn('id', $ids)
             ->get();
@@ -133,11 +133,17 @@ class ConversationController extends Controller
         $data['org']['rows'] = Org::whereIn('id', $data['org']['ids'])->select('id', 'name', 'logo as photo')->get();
 
 
-        return array_map(function ($member) use ($data) {
+        return array_map(function ($member) use ($data, $conversations) {
             $row = $data[$member->memberable_type]['rows']->where('id', $member->memberable_id)->first();
+            $cid = $member->cid;
+
+            $mid = array_first($conversations, function ($value) use ($cid) {
+                return $value->cid == $cid;
+            })->id;
 
             return [
-                'id' => $member->conversation_id,
+                'id' => $cid,
+                'mid' => $mid,
                 'member' => [
                     'id' => $member->id,
                     'userId' => $member->memberable_id,
@@ -203,6 +209,7 @@ class ConversationController extends Controller
             ->where('me.memberable_type', '=', $type)
             ->where('members.memberable_id', '=', $target)
             ->where('members.memberable_type', '=', $targetType)
+            ->limit(1)
             ->exists();
 
         if ($conversationExists) {

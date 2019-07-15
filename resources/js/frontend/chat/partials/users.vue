@@ -34,6 +34,8 @@
                 $store.commit('deActivateConversation', $store.state.account.conversationSelected)
                 $store.commit('setConversation', {account: $store.state.account, conversation})
                 $store.dispatch('loadMessages', {account: $store.state.account, conversation})
+
+                this.$nextTick(this.$scrollToBottom)
             }
         }
     }

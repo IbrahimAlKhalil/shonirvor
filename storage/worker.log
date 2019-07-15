@@ -1162,3 +1162,371 @@ In RouteAction.php line 89:
       /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
 
   Please use the argument -v to see more details.
+
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  Please use the argument -v to see more details.
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+  Please use the argument -v to see more details.
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-07-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.

@@ -13,8 +13,9 @@
                 <input type="file" accept="image/*" class="d-none" multiple @input="showImages($event)">
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
             </label>
-            <textarea class="form-control" rows="2" placeholder="এখানে লিখুন..."></textarea>
-            <i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
+            <textarea v-model="message" class="form-control" rows="2" placeholder="এখানে লিখুন..."
+                      @keydown.enter.prevent.exact="send"></textarea>
+            <i class="fa fa-paper-plane send-icon" aria-hidden="true" @click="send"></i>
         </div>
     </div>
 </template>
@@ -23,7 +24,8 @@
     export default {
         data() {
             return {
-                images: []
+                images: [],
+                message: ''
             }
         },
         methods: {
@@ -40,6 +42,21 @@
 
             removeImage(index) {
                 this.images.splice(index, 1)
+            },
+
+            send() {
+                const {$store} = this
+                const {state} = $store
+
+                $store.dispatch('sendMessage', {
+                    account: state.account,
+                    conversation: state.account.conversationSelected,
+                    message: this.message
+                })
+
+                this.message = ''
+
+                this.$nextTick(this.$strollToBottom)
             }
         }
     }
@@ -47,10 +64,8 @@
 
 <style lang="scss" scoped>
     .wrapper {
-        width: 100%;
         position: sticky;
         bottom: 10px;
-        align-self: flex-end;
     }
 
     .message-box {

@@ -8,7 +8,6 @@
 @section('content')
     <main class="d-flex"></main>
     <script>
-        var profilePic = '{{ asset('storage/default/user-photo/person.jpg') }}'
         var routes = {
             getAccounts: '{{route('chat.getAccounts')}}',
             getConversations: '{{route('chat.getConversations')}}',
@@ -18,5 +17,10 @@
         }
 
         var csrf = '{{csrf_token()}}'
+
+        var dates = {
+            today: '{{\Carbon\Carbon::today()}}',
+            yesterday: '{{\Carbon\Carbon::yesterday()}}'
+        }
     </script>
 @endsection

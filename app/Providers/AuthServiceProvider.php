@@ -37,6 +37,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('get-conversations', 'App\Policies\ChatPolicy@getConversations');
         Gate::define('store-conversation', 'App\Policies\ChatPolicy@createConversation');
         Gate::define('get-messages', 'App\Policies\ChatPolicy@getMessages');
-
+        Gate::define('send-message', 'App\Policies\ChatPolicy@sendMessage');
     }
 }

@@ -68,6 +68,27 @@ class ChatPolicy
             ->where('memberable_type', $type)
             ->where('memberable_id', $id)
             ->where('conversation_id', $request->input('cid'))
+            ->limit(1)
+            ->exists();
+    }
+
+    public function sendMessage(User $user, Request $request)
+    {
+        $type = $request->input('type');
+        $id = $request->input('id');
+
+        // Authorize
+
+        if (!$this->authorize($user, $id, $type)) {
+            return false;
+        }
+
+        return ConversationMember::query()
+            ->where('id', $request->input('mid'))
+            ->where('memberable_type', $type)
+            ->where('memberable_id', $id)
+            ->where('conversation_id', $request->input('cid'))
+            ->limit(1)
             ->exists();
     }
 
