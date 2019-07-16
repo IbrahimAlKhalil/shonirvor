@@ -2,8 +2,24 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import parseQuery from './modules/parse-query'
 import {objectToFormData} from './modules/object-to-form-data'
+import Echo from 'laravel-echo'
+import Pusher from 'pusher-js'
+
+window.Pusher = Pusher
+
+const echo = new Echo({
+    broadcaster: 'pusher',
+    key: '5a3bf510cd645f292be8',
+    cluster: 'ap2',
+    encrypted: true
+})
 
 Vue.use(Vuex)
+
+export function scrollToBottom() {
+    const elm = document.getElementById('chat-section')
+    elm.scrollTop = elm.scrollHeight
+}
 
 const store = new Vuex.Store({
     state: {
@@ -52,6 +68,22 @@ const store = new Vuex.Store({
 
         setConversations(state, {account, conversations}) {
             account.conversations = conversations
+
+            conversations.forEach(conversation => {
+                echo.private(`c-${conversation.id}-${conversation.member.id}`)
+                    .listen('.m', e => {
+                        if (!conversation.archives) {
+                            Vue.set(conversation, 'archives', {})
+                        }
+
+                        if (!conversation.archives.hasOwnProperty('Today')) {
+                            Vue.set(conversation.archives, 'Today', [])
+                        }
+
+                        conversation.archives['Today'].push(e.msg)
+                        Vue.nextTick(scrollToBottom)
+                    })
+            })
         },
 
         setConversation(state, {account, conversation}) {
@@ -70,7 +102,7 @@ const store = new Vuex.Store({
             return new Promise(resolve => {
 
                 fetch(window.routes.addConversation, {
-                    method: 'post',
+                    method: 'POST',
                     body: objectToFormData({
                         id: account.id,
                         type: account.type,
@@ -87,23 +119,12 @@ const store = new Vuex.Store({
             })
         },
         loadMessages(state, {account, conversation}) {
-            conversation.page = conversation.page + 1
+            conversation.page = (conversation.page || 0) + 1
 
-            fetch(window.routes.getMessages, {
-                method: 'post',
-                body: objectToFormData({
-                    id: account.id,
-                    type: account.type,
-                    cid: conversation.id,
-                    _token: window.csrf,
-                    page: conversation.page
-                })
-            }).then(response => response.json().then(archives => {
+            fetch(`${window.routes.getMessages}?id=${account.id}&type=${account.type}&cid=${conversation.id}&page=${conversation.page}`).then(response => response.json().then(archives => {
                 if (!conversation.archives) {
-                    conversation.archives = {}
+                    Vue.set(conversation, 'archives', {})
                 }
-
-                console.log(conversation)
 
                 const regx = /\d{4,}-\d\d-\d\d/gim
                 const months = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -127,16 +148,13 @@ const store = new Vuex.Store({
                         Vue.set(conversation.archives, key, [])
                     }
 
-                    conversation.archives[key].push(message)
+                    conversation.archives[key].unshift(message)
                 })
 
-                Vue.prototype.$nextTick(() => {
-                    const elm = document.getElementById('chat-section')
-                    elm.scrollTop = elm.scrollHeight
-                })
+                Vue.prototype.$nextTick(scrollToBottom)
             }))
         },
-        sendMessage(state, {account, conversation, message}) {
+        sendMessage(state, {conversation, message}) {
             if (!conversation.archives.hasOwnProperty('Today')) {
                 Vue.set(conversation.archives, 'Today', [])
             }
@@ -152,18 +170,15 @@ const store = new Vuex.Store({
             conversation.archives['Today'].push(msg)
 
             fetch(window.routes.send, {
-                method: 'post',
+                method: 'POST',
                 body: objectToFormData({
-                    id: account.id,
-                    type: account.type,
-                    cid: conversation.id,
                     mid: conversation.mid,
                     txt: message,
                     _token: window.csrf
                 })
             }).then(response => response.json().then(data => {
                 msg.id = data.id
-                msg.at = data.at.date
+                msg.at = data.at
                 msg.sent = true
             }))
         }

@@ -265,9 +265,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('chat', 'Frontend\ConversationController', ['only' => ['index', 'destroy', 'store']]);
         Route::get('chat/get-accounts', 'Frontend\ConversationController@getAccounts')->name('chat.getAccounts');
         Route::get('chat/get-conversations', 'Frontend\ConversationController@getConversations')->name('chat.getConversations');
-        Route::resource('chat-messages', 'Frontend\ChatMessageController', ['only' => ['destroy', 'store']]);
-        Route::post('chat-messages/get-messages', 'Frontend\ChatMessageController@getMessages')->name('chat-messages.getMessages');
 
+        Route::resource('chat-messages', 'Frontend\ChatMessageController', ['only' => ['index', 'store', 'destroy']]);
     });
 
 }, '');

@@ -6,16 +6,13 @@ import './index.scss'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
-import store from './store'
+import store, {scrollToBottom} from './store'
 import index from './index.vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 
-Vue.prototype.$strollToBottom = () => {
-    const elm = document.getElementById('chat-section')
-    elm.scrollTop = elm.scrollHeight
-}
+Vue.prototype.$strollToBottom = scrollToBottom
 
 document.addEventListener('DOMContentLoaded', function () {
     const vm = new Vue({

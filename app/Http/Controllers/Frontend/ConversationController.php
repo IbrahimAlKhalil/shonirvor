@@ -9,6 +9,7 @@ use App\Models\Org;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -63,20 +64,16 @@ class ConversationController extends Controller
 
         // Validate request
         $request->validate([
-            'type' => 'required|in:ind,org,user',
-            'id' => 'required|integer'
+            'type' => 'in:ind,org,user',
+            'id' => 'integer'
         ]);
 
-        // Authorize
-        if (Gate::denies('get-conversations', $request)) {
-            return response('', 401);
-        }
-
-        $type = $request->input('type');
-        $id = $request->input('id');
+        $type = $request->input('type', 'user');
+        $id = $request->input('id', Auth::id());
 
         $conversations = DB::table('conversation_members')
             ->select('id', 'conversation_id as cid')
+            ->where('user_id', Auth::id())
             ->where('memberable_type', $type)
             ->where('memberable_id', $id)
             ->paginate()
@@ -168,13 +165,12 @@ class ConversationController extends Controller
 
 
         // Authorize
-        if (Gate::denies('store-conversation', $request)) {
+        if (Gate::denies('create-conversation', $request)) {
             return response('', 401);
         }
 
         // Check existence of the target
         $models = [
-            'user' => User::class,
             'ind' => Ind::class,
             'org' => Org::class
         ];
@@ -184,14 +180,33 @@ class ConversationController extends Controller
         $type = $request->input('type');
         $id = $request->input('id');
 
-        $targetModel = $models[$targetType];
+        $targetUserId = null;
 
-        if ($type === 'user') {
-            if (!$targetModel::query()->where('id', $target)->exists()) {
+        if ($targetType === 'user') {
+            $user = User::query()
+                ->select('id')
+                ->where('id', $target)
+                ->limit(1)
+                ->first();
+
+            if (!$user) {
                 return response('', 422);
             }
-        } else if (!$targetModel::onlyApproved()->where('id', $target)->exists()) {
-            return response('', 422);
+
+            $targetUserId = $user->id;
+        } else {
+            $targetModel = $models[$targetType];
+            $service = $targetModel::onlyApproved()
+                ->select('user_id')
+                ->where('id', $target)
+                ->limit(1)
+                ->first();
+
+            if (!$service) {
+                return response('', 422);
+            }
+
+            $targetUserId = $service->user_id;
         }
 
         // Check whether the user has already a conversation with the target
@@ -221,10 +236,10 @@ class ConversationController extends Controller
         $conversation->save();
 
         // The user who is requesting to open a conversation
-        $this->createMember($conversation->id, $type, $id);
+        $member1 = $this->createMember($conversation->id, $type, $id, Auth::id());
 
         // Target user
-        $member2 = $this->createMember($conversation->id, $targetType, $target);
+        $member2 = $this->createMember($conversation->id, $targetType, $target, $targetUserId);
 
 
         $namePhoto = null;
@@ -253,6 +268,7 @@ class ConversationController extends Controller
         $row = $namePhoto[0];
         return [
             'id' => $conversation->id,
+            'mid' => $member1->id,
             'member' => [
                 'id' => $member2->id,
                 'userId' => $target,
@@ -263,10 +279,11 @@ class ConversationController extends Controller
         ];
     }
 
-    private function createMember($conversation, $type, $id)
+    private function createMember($conversation, $type, $id, $userId)
     {
         $member = new ConversationMember;
         $member->conversation_id = $conversation;
+        $member->user_id = $userId;
         $member->memberable_type = $type;
         $member->memberable_id = $id;
         $member->save();

@@ -92,7 +92,7 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, .1);
         display: flex;
         justify-content: flex-end;
-        z-index: 2;
+        z-index: 3;
     }
 
     .msgs {
@@ -107,7 +107,8 @@
         padding: 10px 50px;
         background: #fff;
         position: sticky;
-        top: 0;
+        top: 40px;
+        z-index: 2;
     }
 
     .hr {

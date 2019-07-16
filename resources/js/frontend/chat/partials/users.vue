@@ -30,10 +30,15 @@
         methods: {
             activeConversation(conversation) {
                 const {$store} = this
+                const {state} = $store
 
-                $store.commit('deActivateConversation', $store.state.account.conversationSelected)
-                $store.commit('setConversation', {account: $store.state.account, conversation})
-                $store.dispatch('loadMessages', {account: $store.state.account, conversation})
+                // if (state.account.conversationSelected === conversation) {
+                //     return
+                // }
+
+                $store.commit('deActivateConversation', state.account.conversationSelected)
+                $store.commit('setConversation', {account: state.account, conversation})
+                $store.dispatch('loadMessages', {account: state.account, conversation})
 
                 this.$nextTick(this.$scrollToBottom)
             }

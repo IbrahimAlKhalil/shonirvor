@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('sending-notification', function ($user) {
     return (int)$user->id === 1;
 });
+
+Broadcast::channel('c-{cid}-{mid}', function ($user, $cid) {
+    return \App\Models\ConversationMember::query()
+        ->where('conversation_id', $cid)
+        ->where('user_id', $user->id)
+        ->limit(1)
+        ->exists();
+});

@@ -11,9 +11,8 @@
             </div>
         </div>
 
-        <div class="d-flex align-items-center ml-1">
-            <i v-if="item.sent === false" class="fa fa-spinner" aria-hidden="true"></i>
-            <i v-else class="fa fa-check" aria-hidden="true"></i>
+        <div v-if="item.sent === false" class="d-flex align-items-center ml-1">
+            <i class="fa fa-spinner" aria-hidden="true"></i>
         </div>
     </div>
 </template>
@@ -44,18 +43,19 @@
 
         computed: {
             classList() {
-                const {conversationSelected} = this.$store.state.account
-                const out = conversationSelected.mid === this.item.mid
-
                 return {
                     wrapper: true,
-                    in: !out,
-                    out: out
+                    in: !this.out,
+                    out: this.out
                 }
             },
 
+            out() {
+                return this.$store.state.account.conversationSelected.mid === this.item.mid
+            },
+
             pic() {
-                return this.$store.state.account.photo
+                return this.out ? this.$store.state.account.photo : this.$store.state.account.conversationSelected.member.photo
             }
         }
     }

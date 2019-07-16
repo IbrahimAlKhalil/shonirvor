@@ -14,11 +14,6 @@ class ChatPolicy
 {
     use HandlesAuthorization;
 
-    public function getConversations(User $user, Request $request)
-    {
-        return $this->authorize($user, $request->input('id'), $request->input('type'));
-    }
-
     public function createConversation(User $user, Request $request)
     {
         $type = $request->input('type');
@@ -55,38 +50,8 @@ class ChatPolicy
 
     public function getMessages(User $user, Request $request)
     {
-        $type = $request->input('type');
-        $id = $request->input('id');
-
-        // Authorize
-
-        if (!$this->authorize($user, $id, $type)) {
-            return false;
-        }
-
         return ConversationMember::query()
-            ->where('memberable_type', $type)
-            ->where('memberable_id', $id)
-            ->where('conversation_id', $request->input('cid'))
-            ->limit(1)
-            ->exists();
-    }
-
-    public function sendMessage(User $user, Request $request)
-    {
-        $type = $request->input('type');
-        $id = $request->input('id');
-
-        // Authorize
-
-        if (!$this->authorize($user, $id, $type)) {
-            return false;
-        }
-
-        return ConversationMember::query()
-            ->where('id', $request->input('mid'))
-            ->where('memberable_type', $type)
-            ->where('memberable_id', $id)
+            ->where('user_id', $user->id)
             ->where('conversation_id', $request->input('cid'))
             ->limit(1)
             ->exists();

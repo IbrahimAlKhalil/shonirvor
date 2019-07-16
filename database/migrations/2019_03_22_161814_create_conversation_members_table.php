@@ -16,6 +16,7 @@ class CreateConversationMembersTable extends Migration
         Schema::create('conversation_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('conversation_id');
+            $table->unsignedInteger('user_id');
             $table->morphs('memberable');
             $table->dateTime('last_seen')->nullable();
             $table->timestamps();
@@ -23,6 +24,12 @@ class CreateConversationMembersTable extends Migration
             $table->foreign('conversation_id')
                 ->references('id')
                 ->on('conversations')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

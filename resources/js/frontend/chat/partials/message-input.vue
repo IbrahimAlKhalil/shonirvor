@@ -49,7 +49,6 @@
                 const {state} = $store
 
                 $store.dispatch('sendMessage', {
-                    account: state.account,
                     conversation: state.account.conversationSelected,
                     message: this.message
                 })
@@ -66,6 +65,7 @@
     .wrapper {
         position: sticky;
         bottom: 10px;
+        z-index: 2;
     }
 
     .message-box {

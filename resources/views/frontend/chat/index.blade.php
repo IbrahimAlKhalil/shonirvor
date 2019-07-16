@@ -12,7 +12,7 @@
             getAccounts: '{{route('chat.getAccounts')}}',
             getConversations: '{{route('chat.getConversations')}}',
             addConversation: '{{route('chat.store')}}',
-            getMessages: '{{route('chat-messages.getMessages')}}',
+            getMessages: '{{route('chat-messages.index')}}',
             send: '{{route('chat-messages.store')}}'
         }
 
