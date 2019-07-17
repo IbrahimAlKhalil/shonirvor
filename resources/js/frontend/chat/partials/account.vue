@@ -1,7 +1,9 @@
 <template>
     <div class="account">
         <div class="p-2 info">
-            <img class="profile-pic mx-auto d-block" :src="account.photo" :alt="account.name">
+            <div>
+                <img class="profile-pic mx-auto d-block" :src="account.photo" :alt="account.name">
+            </div>
             <p class="text-center mt-3 text-light name">{{account.name}}</p>
         </div>
         <div class="text-center p-2 change-account">
@@ -90,11 +92,11 @@
     }
 
     .profile-pic {
-        height: 100%;
         border-radius: 8px;
         box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
         background: #fff;
         padding: 10px;
+        width: 50px;
 
         @media screen and (min-width: $md) {
             width: 150px;
@@ -104,7 +106,9 @@
 
     .name {
         margin-left: 10px;
+        white-space: nowrap;
         @media screen and (min-width: $md) {
+            white-space: normal;
             margin-left: 0;
         }
     }

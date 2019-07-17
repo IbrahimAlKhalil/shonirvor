@@ -1,7 +1,7 @@
 <template>
-    <div :class="classList">
+    <div :class="classList" @mouseover="showMenu($event)" @mouseout="hideMenu($event)" ref="wrapper">
         <div class="img">
-            <img :src="pic" alt="Ibrahim Al Khalil" class="profile-pic">
+            <img :src="pic" class="profile-pic">
         </div>
 
         <div class="message">
@@ -11,8 +11,9 @@
             </div>
         </div>
 
-        <div v-if="item.sent === false" class="d-flex align-items-center ml-1">
-            <i class="fa fa-spinner" aria-hidden="true"></i>
+        <div v-if="out && (item.sent === false || menu)" class="d-flex align-items-center mt-3 ml-2">
+            <i v-if="item.sent === false" class="fa fa-spinner"></i>
+            <!--<i v-if="menu" class="fa fa-ellipsis-v"></i>-->
         </div>
     </div>
 </template>
@@ -23,6 +24,12 @@
             item: {
                 type: Object,
                 required: true
+            }
+        },
+
+        data() {
+            return {
+                menu: false
             }
         },
 
@@ -38,6 +45,14 @@
                 minutes = minutes < 10 ? '0' + minutes : minutes
 
                 return hours + ':' + minutes + ' ' + ampm
+            },
+
+            hideMenu(evt) {
+                this.menu = false
+            },
+
+            showMenu(evt) {
+                this.menu = true
             }
         },
 
@@ -85,6 +100,7 @@
         border-radius: 10px;
         box-shadow: 0 0 4px rgba(0, 0, 0, .3);
         position: relative;
+        word-break: break-word;
 
         &:after {
             content: '';

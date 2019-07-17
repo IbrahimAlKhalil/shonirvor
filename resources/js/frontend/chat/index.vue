@@ -1,7 +1,7 @@
 <template>
     <main class="d-flex">
         <template v-if="$store.state.account">
-            <aside>
+            <aside :class="$store.state.conversation?'inactive':''">
                 <account/>
                 <users/>
             </aside>
@@ -49,7 +49,8 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, .1);
 
         @media screen and (min-width: $md) {
-            width: 330px;
+            min-width: 330px;
+            max-width: 330px;
             overflow: hidden;
         }
 
@@ -63,5 +64,11 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+    }
+
+    .inactive {
+        @media all and (max-width: $md) {
+            display: none !important;
+        }
     }
 </style>

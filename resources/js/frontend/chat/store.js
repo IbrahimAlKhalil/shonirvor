@@ -21,11 +21,41 @@ export function scrollToBottom() {
     elm.scrollTop = elm.scrollHeight
 }
 
+function setConversationAttrs(conversation) {
+    conversation.archives = null
+    conversation.active = false
+    conversation.page = 0
+}
+
+function subscribe(account, conversation) {
+    echo.private(`c-${conversation.id}-${conversation.member.id}`)
+        .listen('.m', e => {
+            if (!conversation.archives) {
+                Vue.set(conversation, 'archives', {})
+            }
+
+            if (!conversation.archives.hasOwnProperty('Today')) {
+                Vue.set(conversation.archives, 'Today', [])
+            }
+
+            conversation.archives['Today'].push(e.msg)
+            Vue.nextTick(scrollToBottom)
+        })
+        .listen('.rc', () => {
+            store.commit('removeConversation', {account, conversation})
+        })
+}
+
+function unSubscribe(conversation) {
+    echo.leaveChannel(`c-${conversation.id}-${conversation.member.id}`)
+}
+
 const store = new Vuex.Store({
     state: {
         account: null,
         accounts: [],
-        meta: {}
+        meta: {},
+        conversation: false
     },
     mutations: {
         updateMeta(state) {
@@ -56,7 +86,7 @@ const store = new Vuex.Store({
 
         setAccounts(state, accounts) {
             accounts.forEach(account => {
-                account.conversationSelected = false
+                account.conversationSelected = null
                 account.conversations = null
             })
             state.accounts = accounts
@@ -69,36 +99,41 @@ const store = new Vuex.Store({
         setConversations(state, {account, conversations}) {
             account.conversations = conversations
 
-            conversations.forEach(conversation => {
-                echo.private(`c-${conversation.id}-${conversation.member.id}`)
-                    .listen('.m', e => {
-                        if (!conversation.archives) {
-                            Vue.set(conversation, 'archives', {})
-                        }
-
-                        if (!conversation.archives.hasOwnProperty('Today')) {
-                            Vue.set(conversation.archives, 'Today', [])
-                        }
-
-                        conversation.archives['Today'].push(e.msg)
-                        Vue.nextTick(scrollToBottom)
-                    })
-            })
+            conversations.forEach(conversation => subscribe(account, conversation))
         },
 
         setConversation(state, {account, conversation}) {
             if (conversation) {
                 conversation.active = true
             }
+
+            state.conversation = true
             account.conversationSelected = conversation
         },
 
         deActivateConversation(state, conversation) {
             conversation.active = false
+        },
+
+        removeConversation(state, {account, conversation}) {
+            const {conversations} = account
+            account.conversationSelected = null
+
+            unSubscribe(conversation)
+            conversations.splice(conversations.indexOf(conversation), 1)
+        },
+
+        deActivateConvLayout(state) {
+            state.conversation = false
+
+            state.conversation = false
+
+            state.account.conversationSelected.active = false
+            state.account.conversationSelected = null
         }
     },
     actions: {
-        createConversation(state, {account, target, targetType}) {
+        createConversation(ctx, {account, target, targetType}) {
             return new Promise(resolve => {
 
                 fetch(window.routes.addConversation, {
@@ -111,15 +146,19 @@ const store = new Vuex.Store({
                         _token: window.csrf
                     })
                 }).then(response => response.json().then(conversation => {
-                    conversation.active = false
+                    setConversationAttrs(conversation)
                     account.conversations.unshift(conversation)
                     resolve(conversation)
                 }))
 
             })
         },
-        loadMessages(state, {account, conversation}) {
+        loadMessages(ctx, {account, conversation}) {
             conversation.page = (conversation.page || 0) + 1
+
+            if (!conversation.archives) {
+                conversation.archives = false
+            }
 
             fetch(`${window.routes.getMessages}?id=${account.id}&type=${account.type}&cid=${conversation.id}&page=${conversation.page}`).then(response => response.json().then(archives => {
                 if (!conversation.archives) {
@@ -154,7 +193,7 @@ const store = new Vuex.Store({
                 Vue.prototype.$nextTick(scrollToBottom)
             }))
         },
-        sendMessage(state, {conversation, message}) {
+        sendMessage(ctx, {conversation, message}) {
             if (!conversation.archives.hasOwnProperty('Today')) {
                 Vue.set(conversation.archives, 'Today', [])
             }
@@ -181,61 +220,91 @@ const store = new Vuex.Store({
                 msg.at = data.at
                 msg.sent = true
             }))
+        },
+        removeConversation(ctx, {account, conversation}) {
+            return new Promise((resolve, reject) => {
+                fetch(window.routes.addConversation + '/' + conversation.id, {
+                    method: 'POST',
+                    body: objectToFormData({
+                        _method: 'delete',
+                        _token: window.csrf
+                    })
+                }).then(response => {
+                    if (response.status === 200) {
+                        ctx.commit('removeConversation', {account, conversation})
+
+                        Vue.nextTick(scrollToBottom)
+                        return resolve()
+                    }
+
+                    reject()
+                })
+            })
         }
     }
 })
 
-store.watch(({account}) => account, (account) => {
-    if (account.conversations) {
-        return
+
+let metaLoaded = false
+
+store.watch(({account}) => account, (account, oldAccount) => {
+    if (oldAccount && Array.isArray(oldAccount.conversations)) {
+        oldAccount.conversations.forEach(unSubscribe)
+
+        oldAccount.conversationSelected = null
+        oldAccount.conversations = null
     }
 
+    store.commit('setAccount', account)
+
+
     fetch(`${window.routes.getConversations}?id=${account.id}&type=${account.type}`).then(response => response.json().then(conversations => {
-        conversations.forEach(conversation => {
-            conversation.archives = null
-            conversation.active = false
-            conversation.page = 0
-        })
+
+        conversations.forEach(setConversationAttrs)
+
+        store.commit('setConversations', {account, conversations})
+
 
         const {state} = store
         const {meta} = state
 
-        store.commit('setConversations', {account, conversations})
+        if (metaLoaded) {
+            return
+        }
 
-        if (meta.hasOwnProperty('target') && meta.hasOwnProperty('target-type') && meta.account === account.id.toString()) {
+        metaLoaded = true
 
-            const exists = conversations.some(conversation => {
-                const ok = conversation.member.userId.toString() === meta.target && conversation.member.type === meta['target-type']
+        if (!(
+            meta.hasOwnProperty('target')
+            && meta.hasOwnProperty('target-type')
+        )) {
+            return
+        }
 
-                if (ok) {
-                    store.commit('setConversation', {account, conversation})
-                    store.dispatch('loadMessages', {account, conversation})
-                }
+        const exists = conversations.some(conversation => {
+            const ok = conversation.member.userId.toString() === meta.target && conversation.member.type === meta['target-type']
 
-                return ok
-            })
-
-            if (!exists) {
-                store.dispatch('createConversation', {
-                    account,
-                    target: meta.target,
-                    targetType: meta['target-type']
-                }).then(conversation => {
-                    store.commit('setConversation', {account, conversation})
-                    store.dispatch('loadMessages', {account, conversation})
-                })
+            if (ok) {
+                store.commit('setConversation', {account, conversation})
+                store.dispatch('loadMessages', {account, conversation})
             }
 
-            return
-        }
+            return ok
+        })
 
-        if (conversations[0]) {
-            store.commit('setConversation', {account, conversation: conversations[0]})
-            store.dispatch('loadMessages', {conversation: conversations[0], account})
-            return
-        }
+        if (!exists) {
+            store.dispatch('createConversation', {
+                account,
+                target: meta.target,
+                targetType: meta['target-type']
+            }).then(conversation => {
 
-        store.commit('setConversation', {account, conversation: null})
+                store.commit('setConversation', {account, conversation})
+                store.dispatch('loadMessages', {account, conversation})
+
+                subscribe(account, conversation)
+            })
+        }
     }))
 })
 

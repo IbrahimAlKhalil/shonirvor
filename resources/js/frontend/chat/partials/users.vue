@@ -32,11 +32,14 @@
                 const {$store} = this
                 const {state} = $store
 
-                // if (state.account.conversationSelected === conversation) {
-                //     return
-                // }
+                if (state.account.conversationSelected === conversation) {
+                    return
+                }
 
-                $store.commit('deActivateConversation', state.account.conversationSelected)
+                if (state.account.conversationSelected) {
+                    $store.commit('deActivateConversation', state.account.conversationSelected)
+                }
+
                 $store.commit('setConversation', {account: state.account, conversation})
                 $store.dispatch('loadMessages', {account: state.account, conversation})
 

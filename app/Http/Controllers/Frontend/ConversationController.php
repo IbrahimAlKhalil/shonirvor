@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Events\ConversationRemoved;
 use App\Models\Conversation;
 use App\Models\ConversationMember;
 use App\Models\Ind;
@@ -277,6 +278,28 @@ class ConversationController extends Controller
                 'photo' => asset('storage/' . $row->photo)
             ]
         ];
+    }
+
+    public function destroy($cid)
+    {
+
+        $member = ConversationMember::query()
+            ->select('id')
+            ->where('conversation_id', $cid)
+            ->where('user_id', Auth::id())
+            ->limit(1)
+            ->first();
+
+
+        if (!$member) {
+            return response('', 401);
+        }
+
+        Conversation::query()->where('id', $cid)->delete();
+
+        event(new ConversationRemoved($cid, $member->id));
+
+        return response('');
     }
 
     private function createMember($conversation, $type, $id, $userId)

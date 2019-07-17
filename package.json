@@ -7,7 +7,7 @@
         "babel-loader": "^8.0.5",
         "blueimp-md5": "^2.10.0",
         "bootstrap": "^4.3.1",
-        "bootstrap-vue": "^2.0.0-rc.16",
+        "bootstrap-vue": "^v2.0.0-rc.26",
         "copy-webpack-plugin": "^4.6.0",
         "css-loader": "^1.0.1",
         "file-loader": "^2.0.0",
