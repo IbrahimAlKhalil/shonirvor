@@ -1,42 +1,43 @@
 <template>
     <section id="chat-section" :class="'flex-grow-1 position-relative' + ($store.state.conversation?' active':'')">
-        <template v-if="archives">
-            <header>
-                <button class="btn btn-dark back" @click="$store.commit('deActivateConvLayout')"><i
-                        class="fa fa-arrow-left"></i></button>
-                <div class="spacer"></div>
+        <header v-if="archives">
+            <button class="btn btn-dark back" @click="$store.commit('deActivateConvLayout')"><i
+                    class="fa fa-arrow-left"></i></button>
+            <div class="spacer"></div>
 
-                <b-dropdown variant="link" size="lg" no-caret>
-                    <template slot="button-content">
-                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                    </template>
+            <b-dropdown variant="link" size="lg" no-caret>
+                <template slot="button-content">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </template>
 
-                    <b-dropdown-item href="#" @click="remove"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete
-                        Conversation
-                    </b-dropdown-item>
-                </b-dropdown>
-            </header>
+                <b-dropdown-item href="#" @click="remove"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete
+                    Conversation
+                </b-dropdown-item>
+            </b-dropdown>
+        </header>
 
-            <div class="msgs">
-                <div v-for="(date, key) in archives">
-                    <div class="date-wrapper">
-                        <span class="hr"></span>
-                        <span class="date">{{key}}</span>
-                        <span class="hr"></span>
-                    </div>
-                    <transition-group name="slide-fade">
-                        <message v-for="(message, index) in date" :key="key + index" :item="message"/>
-                    </transition-group>
-                </div>
-            </div>
-
-            <message-input/>
-        </template>
-        <div v-else-if="archives === false" class="spinner">
+        <div :class="(archives===false?'absolute ':'')+'spinner d-flex justify-content-center my-4'+(!loading?' opacity-0':'')"
+             ref="spinner">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
+
+        <template v-if="archives">
+            <div class="msgs">
+                <div v-for="(archive, index) in archives" :key="index">
+                    <div class="date-wrapper">
+                        <span class="hr"></span>
+                        <span class="date">{{archive.label}}</span>
+                        <span class="hr"></span>
+                    </div>
+                    <transition-group name="slide-fade">
+                        <message v-for="(message, index) in archive.messages" :key="'t'+index" :item="message"/>
+                    </transition-group>
+                </div>
+            </div>
+            <message-input/>
+        </template>
     </section>
 </template>
 
@@ -46,6 +47,14 @@
     import {mapState} from 'vuex'
 
     export default {
+        components: {message, messageInput},
+
+        data() {
+            return {
+                loading: false
+            }
+        },
+
         computed: {
             ...mapState({
                 account: 'account'
@@ -88,7 +97,33 @@
                 })
             }
         },
-        components: {message, messageInput}
+
+        created() {
+            const {$store} = this
+            const {state} = $store
+            const vm = this
+
+            const observer = new IntersectionObserver(x => {
+
+                if (x[0].isIntersecting && state.account.conversationSelected) {
+                    vm.$data.loading = true
+
+                    setTimeout(() => {
+                        $store.dispatch('loadMessages', {
+                            account: state.account,
+                            conversation: state.account.conversationSelected
+                        })
+                            .then(() => {
+                                vm.$data.loading = false
+                            })
+                    }, 5000)
+                }
+            }, {threshold: 1.0})
+
+            this.$nextTick(() => {
+                observer.observe(this.$refs.spinner)
+            })
+        }
     }
 </script>
 
@@ -147,6 +182,9 @@
         display: none;
     }
 
+    .opacity-0 {
+        opacity: 0;
+    }
 
     @media all and (min-width: $md) {
         section {

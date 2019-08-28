@@ -89,7 +89,7 @@ class ConversationController extends Controller
         }, $conversations);
 
         $members = DB::table('conversation_members')
-            ->select('id', 'conversation_id as cid', 'last_seen', 'memberable_type', 'memberable_id')
+            ->select('id', 'conversation_id as cid', 'memberable_type', 'memberable_id')
             ->whereIn('conversation_id', $conversationsIds)
             ->whereNotIn('id', $ids)
             ->get();

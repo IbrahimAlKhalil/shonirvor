@@ -10,7 +10,7 @@
                     <span class="badge badge-primary badge-pill"></span>
                 </li>
             </ul>
-            <div v-else class="spinner">
+            <div v-else class="spinner absolute">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
@@ -41,7 +41,10 @@
                 }
 
                 $store.commit('setConversation', {account: state.account, conversation})
-                $store.dispatch('loadMessages', {account: state.account, conversation})
+
+                if (!(conversation.archives && conversation.archives.length)) {
+                    $store.dispatch('loadMessages', {account: state.account, conversation, scroll: true})
+                }
 
                 this.$nextTick(this.$scrollToBottom)
             }

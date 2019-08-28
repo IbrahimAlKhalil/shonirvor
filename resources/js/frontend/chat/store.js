@@ -25,20 +25,29 @@ function setConversationAttrs(conversation) {
     conversation.archives = null
     conversation.active = false
     conversation.page = 0
+    conversation.today = null
 }
 
 function subscribe(account, conversation) {
     echo.private(`c-${conversation.id}-${conversation.member.id}`)
         .listen('.m', e => {
+
             if (!conversation.archives) {
-                Vue.set(conversation, 'archives', {})
+                Vue.set(conversation, 'archives', [
+                    {
+                        label: 'Today',
+                        messages: [e.msg]
+                    }
+                ])
+            } else if (!conversation.today) {
+                conversation.archives.unshift({
+                    label: 'Today',
+                    messages: [e.msg]
+                })
+            } else {
+                conversation.today.messages.unshift(e.msg)
             }
 
-            if (!conversation.archives.hasOwnProperty('Today')) {
-                Vue.set(conversation.archives, 'Today', [])
-            }
-
-            conversation.archives['Today'].push(e.msg)
             Vue.nextTick(scrollToBottom)
         })
         .listen('.rc', () => {
@@ -153,16 +162,16 @@ const store = new Vuex.Store({
 
             })
         },
-        loadMessages(ctx, {account, conversation}) {
+        loadMessages(ctx, {account, conversation, scroll}) {
             conversation.page = (conversation.page || 0) + 1
 
             if (!conversation.archives) {
                 conversation.archives = false
             }
 
-            fetch(`${window.routes.getMessages}?id=${account.id}&type=${account.type}&cid=${conversation.id}&page=${conversation.page}`).then(response => response.json().then(archives => {
+            fetch(`${window.routes.getMessages}?id=${account.id}&type=${account.type}&cid=${conversation.id}&page=${conversation.page}`).then(response => response.json().then(messages => {
                 if (!conversation.archives) {
-                    Vue.set(conversation, 'archives', {})
+                    Vue.set(conversation, 'archives', [])
                 }
 
                 const regx = /\d{4,}-\d\d-\d\d/gim
@@ -170,32 +179,60 @@ const store = new Vuex.Store({
                     'July', 'August', 'September', 'October', 'November', 'December'
                 ]
 
-                archives.forEach(message => {
+                const oldArchives = {}
+
+                for (const archive of conversation.archives) {
+                    oldArchives[archive.label] = archive.messages
+                }
+
+                messages.forEach(message => {
                     const extracted = message.at.match(regx)[0]
                     let key
 
-                    if (window.dates.today.match(regx)[0] === extracted) {
-                        key = 'Today'
-                    } else if (window.dates.yesterday.match(regx)[0] === extracted) {
-                        key = 'Yesterday'
-                    } else {
-                        const date = new Date(extracted)
-                        key = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                    switch (extracted) {
+                        case window.dates.today.match(regx)[0]:
+                            key = 'Today'
+                            break
+                        case window.dates.yesterday.match(regx)[0]:
+                            key = 'Yesterday'
+                            break
+                        default:
+                            const date = new Date(extracted)
+                            key = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
                     }
 
-                    if (!conversation.archives.hasOwnProperty(key)) {
-                        Vue.set(conversation.archives, key, [])
+                    if (!oldArchives.hasOwnProperty(key)) {
+                        let archive = {
+                            label: key,
+                            messages: [message]
+                        }
+
+                        if (!conversation.today && key === 'Today') {
+                            conversation.today = archive
+                        }
+
+                        conversation.archives.unshift(archive)
+                        oldArchives[key] = archive.messages
+                        return
                     }
 
-                    conversation.archives[key].unshift(message)
+                    oldArchives[key].unshift(message)
                 })
 
-                Vue.prototype.$nextTick(scrollToBottom)
+                scroll && Vue.prototype.$nextTick(scrollToBottom)
             }))
         },
         sendMessage(ctx, {conversation, message}) {
-            if (!conversation.archives.hasOwnProperty('Today')) {
-                Vue.set(conversation.archives, 'Today', [])
+            let {today} = conversation
+
+            if (!today) {
+                today = {
+                    label: 'Today',
+                    messages: []
+                }
+
+                conversation.today = today
+                conversation.archives.unshift(today)
             }
 
             const msg = {
@@ -206,7 +243,7 @@ const store = new Vuex.Store({
                 sent: false
             }
 
-            conversation.archives['Today'].push(msg)
+            today.messages.push(msg)
 
             fetch(window.routes.send, {
                 method: 'POST',
@@ -286,7 +323,6 @@ store.watch(({account}) => account, (account, oldAccount) => {
 
             if (ok) {
                 store.commit('setConversation', {account, conversation})
-                store.dispatch('loadMessages', {account, conversation})
             }
 
             return ok
@@ -300,7 +336,6 @@ store.watch(({account}) => account, (account, oldAccount) => {
             }).then(conversation => {
 
                 store.commit('setConversation', {account, conversation})
-                store.dispatch('loadMessages', {account, conversation})
 
                 subscribe(account, conversation)
             })

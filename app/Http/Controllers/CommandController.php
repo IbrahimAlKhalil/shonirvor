@@ -19,32 +19,65 @@ class CommandController extends Controller
 
     public function migrateDatabase()
     {
-        Schema::create('jobs', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('queue')->index();
-            $table->longText('payload');
-            $table->unsignedTinyInteger('attempts');
-            $table->unsignedInteger('reserved_at')->nullable();
-            $table->unsignedInteger('available_at');
-            $table->unsignedInteger('created_at');
+        Schema::create('conversations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+            $table->softDeletes();
         });
 
-        Schema::create('failed_jobs', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('connection');
-            $table->text('queue');
-            $table->longText('payload');
-            $table->longText('exception');
-            $table->timestamp('failed_at')->useCurrent();
-        });
-
-        Schema::create('message_templates', function (Blueprint $table) {
+        Schema::create('chat_message_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->mediumText('message');
-            $table->timestamps();
         });
 
+        Schema::create('conversation_members', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('conversation_id');
+            $table->unsignedInteger('user_id');
+            $table->morphs('memberable');
+            $table->timestamps();
+
+            $table->foreign('conversation_id')
+                ->references('id')
+                ->on('conversations')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
+        Schema::create('chat_messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('conversation_id');
+            $table->unsignedInteger('conversation_member_id');
+
+            $table->string('message');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('type_id')
+                ->references('id')
+                ->on('chat_message_types')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('conversation_id')
+                ->references('id')
+                ->on('conversations')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('conversation_member_id')
+                ->references('id')
+                ->on('conversation_members')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+        });
         return 'Ok';
     }
 

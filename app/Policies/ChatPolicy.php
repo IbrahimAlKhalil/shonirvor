@@ -36,6 +36,10 @@ class ChatPolicy
 
         // Normal user can't open conversation with normal user
         if ($type === 'user' && !Auth::user()->hasRole('admin')) {
+            if ($targetType === 'ind' || $targetType === 'org') {
+                return true;
+            }
+
             if ($targetUserAdmin == null) {
                 $targetUserAdmin = User::find($target)->hasRole('admin');
             }

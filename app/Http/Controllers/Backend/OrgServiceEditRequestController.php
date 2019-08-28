@@ -88,10 +88,12 @@ class OrgServiceEditRequestController extends Controller
             $org->cover_photo = $data['cover-photo'];
         }
         $org->save();
-        $org->slug()->update([
-            'name' => $data['slug']
-        ]);
 
+        if($data['slug'] !== $org->slug->name) {
+            $org->slug()->update([
+                'name' => $data['slug']
+            ]);
+        }
 
         // Attach/Detach sub categories
         $subCategories = [];
