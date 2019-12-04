@@ -3,8 +3,8 @@
 namespace App\Events;
 
 use App\Models\ChatMessage;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -44,9 +44,8 @@ class SendChatMessage implements ShouldBroadcast
     public function broadcastOn()
     {
         $cid = $this->cid;
-        $mid = $this->mid;
 
-        return new PrivateChannel("c-$cid-$mid");
+        return new PresenceChannel("c-$cid");
     }
 
     public function broadcastAs()

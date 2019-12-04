@@ -294,13 +294,13 @@
                             @endforelse
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
+                        {{--<button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
                                     class="fa fa-plus"></i> আরও যুক্ত করুন
-                        </button>
+                        </button>--}}
                     </div>
                 </div>
 
-                <div class="row mt-5">
+                {{--<div class="row mt-5">
                     <div class="col-12">
                         <p class="h4 border-bottom">সেবার জন্য অনুরোধ করুনঃ</p>
                         <table class="table table-striped table-bordered table-hover table-sm w-100 text-center">
@@ -321,7 +321,7 @@
                                     class="fa fa-plus"></i> আরও যুক্ত করুন
                         </button>
                     </div>
-                </div>
+                </div>--}}
 
                 <div class="row mt-5">
                     <div class="col-12" id="cover-photo">

@@ -1,62 +1,100 @@
-import Vuex from 'vuex'
-import Vue from 'vue'
-import parseQuery from './modules/parse-query'
-import {objectToFormData} from './modules/object-to-form-data'
-import Echo from 'laravel-echo'
-import Pusher from 'pusher-js'
+import Vuex from 'vuex';
+import Vue from 'vue';
+import parseQuery from './modules/parse-query';
+import {objectToFormData} from './modules/object-to-form-data';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-window.Pusher = Pusher
+window.Pusher = Pusher;
 
 const echo = new Echo({
     broadcaster: 'pusher',
     key: '5a3bf510cd645f292be8',
     cluster: 'ap2',
     encrypted: true
-})
+});
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export function scrollToBottom() {
-    const elm = document.getElementById('chat-section')
-    elm.scrollTop = elm.scrollHeight
+    const elm = document.getElementById('chat-section');
+    elm.scrollTop = elm.scrollHeight;
 }
 
 function setConversationAttrs(conversation) {
-    conversation.archives = null
-    conversation.active = false
-    conversation.page = 0
-    conversation.today = null
+    conversation.archives = null;
+    conversation.active = false;
+    conversation.page = 0;
+    conversation.today = null;
+    conversation.typing = false;
 }
 
 function subscribe(account, conversation) {
-    echo.private(`c-${conversation.id}-${conversation.member.id}`)
+    conversation.echo = echo.join(`c-${conversation.id}`)
+        .here(members => {
+            members.forEach(member => {
+                if (conversation.member.id === member.id) {
+                    Vue.set(conversation.member, 'online', true);
+                }
+            });
+        })
+        .joining(member => {
+            if (conversation.member.id === member.id) {
+                Vue.set(conversation.member, 'online', true);
+            }
+        })
+        .leaving(member => {
+            if (conversation.member.id === member.id) {
+                Vue.set(conversation.member, 'online', false);
+            }
+        })
         .listen('.m', e => {
+            let messages;
+
 
             if (!conversation.archives) {
+                messages = [e.msg];
+
                 Vue.set(conversation, 'archives', [
                     {
                         label: 'Today',
-                        messages: [e.msg]
+                        messages
                     }
-                ])
+                ]);
             } else if (!conversation.today) {
+                messages = [e.msg];
+
                 conversation.archives.unshift({
                     label: 'Today',
-                    messages: [e.msg]
-                })
+                    messages
+                });
             } else {
-                conversation.today.messages.unshift(e.msg)
+                messages = conversation.today.messages;
+                conversation.today.messages.push(e.msg);
             }
 
-            Vue.nextTick(scrollToBottom)
+            e.msg.remove = function () {
+                messages.splice(messages.indexOf(e.msg), 1);
+            };
+
+            Vue.nextTick(scrollToBottom);
         })
         .listen('.rc', () => {
-            store.commit('removeConversation', {account, conversation})
+            store.commit('removeConversation', {account, conversation});
         })
+        .listenForWhisper('typing', () => {
+            conversation.typing = true;
+
+            Vue.nextTick(scrollToBottom);
+        })
+        .listenForWhisper('typing-stopped', () => {
+            conversation.typing = false;
+            Vue.nextTick(scrollToBottom);
+        });
 }
 
 function unSubscribe(conversation) {
-    echo.leaveChannel(`c-${conversation.id}-${conversation.member.id}`)
+    echo.leaveChannel(`c-${conversation.id}-${conversation.member.id}`);
 }
 
 const store = new Vuex.Store({
@@ -68,77 +106,77 @@ const store = new Vuex.Store({
     },
     mutations: {
         updateMeta(state) {
-            state.meta = parseQuery(location.search)
+            state.meta = parseQuery(location.search);
         },
 
         updateAccount(state) {
-            const {meta} = state
+            const {meta} = state;
 
             if (!meta.hasOwnProperty('account-type') || !meta.hasOwnProperty('account')) {
-                state.account = state.accounts[state.accounts.length - 1]
-                return
+                state.account = state.accounts[state.accounts.length - 1];
+                return;
             }
 
-            let account = null
+            let account = null;
 
             state.accounts.some(item => {
-                const ok = item.type === meta['account-type'] && item.id.toString() === meta.account
+                const ok = item.type === meta['account-type'] && item.id.toString() === meta.account;
                 if (ok) {
-                    account = item
+                    account = item;
                 }
 
-                return ok
-            })
+                return ok;
+            });
 
-            state.account = account
+            state.account = account;
         },
 
         setAccounts(state, accounts) {
             accounts.forEach(account => {
-                account.conversationSelected = null
-                account.conversations = null
-            })
-            state.accounts = accounts
+                account.conversationSelected = null;
+                account.conversations = null;
+            });
+            state.accounts = accounts;
         },
 
         setAccount(state, account) {
-            state.account = account
+            state.account = account;
         },
 
         setConversations(state, {account, conversations}) {
-            account.conversations = conversations
+            account.conversations = conversations;
 
-            conversations.forEach(conversation => subscribe(account, conversation))
+            conversations.forEach(conversation => subscribe(account, conversation));
         },
 
         setConversation(state, {account, conversation}) {
             if (conversation) {
-                conversation.active = true
+                conversation.active = true;
             }
 
-            state.conversation = true
-            account.conversationSelected = conversation
+            state.conversation = true;
+            account.conversationSelected = conversation;
         },
 
         deActivateConversation(state, conversation) {
-            conversation.active = false
+            conversation.active = false;
         },
 
         removeConversation(state, {account, conversation}) {
-            const {conversations} = account
-            account.conversationSelected = null
+            const {conversations} = account;
+            account.conversationSelected = null;
 
-            unSubscribe(conversation)
-            conversations.splice(conversations.indexOf(conversation), 1)
+            unSubscribe(conversation);
+            conversations.splice(conversations.indexOf(conversation), 1);
         },
 
         deActivateConvLayout(state) {
-            state.conversation = false
+            state.conversation = false;
 
-            state.conversation = false
+            state.conversation = false;
 
-            state.account.conversationSelected.active = false
-            state.account.conversationSelected = null
+            state.account.conversationSelected.active = false;
+            state.account.conversationSelected = null;
         }
     },
     actions: {
@@ -155,84 +193,95 @@ const store = new Vuex.Store({
                         _token: window.csrf
                     })
                 }).then(response => response.json().then(conversation => {
-                    setConversationAttrs(conversation)
-                    account.conversations.unshift(conversation)
-                    resolve(conversation)
-                }))
+                    setConversationAttrs(conversation);
+                    account.conversations.unshift(conversation);
+                    resolve(conversation);
+                }));
 
-            })
+            });
         },
         loadMessages(ctx, {account, conversation, scroll}) {
-            conversation.page = (conversation.page || 0) + 1
+            conversation.page = (conversation.page || 0) + 1;
 
             if (!conversation.archives) {
-                conversation.archives = false
+                conversation.archives = false;
             }
 
             fetch(`${window.routes.getMessages}?id=${account.id}&type=${account.type}&cid=${conversation.id}&page=${conversation.page}`).then(response => response.json().then(messages => {
                 if (!conversation.archives) {
-                    Vue.set(conversation, 'archives', [])
+                    Vue.set(conversation, 'archives', []);
                 }
 
-                const regx = /\d{4,}-\d\d-\d\d/gim
+                const regx = /\d{4,}-\d\d-\d\d/gim;
                 const months = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'
-                ]
+                ];
 
-                const oldArchives = {}
+                const oldArchives = {};
 
                 for (const archive of conversation.archives) {
-                    oldArchives[archive.label] = archive.messages
+                    oldArchives[archive.label] = archive.messages;
                 }
 
                 messages.forEach(message => {
-                    const extracted = message.at.match(regx)[0]
-                    let key
+                    const extracted = message.at.match(regx)[0];
+                    let key;
 
                     switch (extracted) {
                         case window.dates.today.match(regx)[0]:
-                            key = 'Today'
-                            break
+                            key = 'Today';
+                            break;
                         case window.dates.yesterday.match(regx)[0]:
-                            key = 'Yesterday'
-                            break
+                            key = 'Yesterday';
+                            break;
                         default:
-                            const date = new Date(extracted)
-                            key = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+                            const date = new Date(extracted);
+                            key = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
                     }
+
+                    let messages;
+
+                    message.remove = function () {
+                        messages.splice(messages.indexOf(message), 1);
+                    };
 
                     if (!oldArchives.hasOwnProperty(key)) {
+                        messages = [message];
+
                         let archive = {
                             label: key,
-                            messages: [message]
-                        }
+                            messages
+                        };
 
                         if (!conversation.today && key === 'Today') {
-                            conversation.today = archive
+                            conversation.today = archive;
                         }
 
-                        conversation.archives.unshift(archive)
-                        oldArchives[key] = archive.messages
-                        return
+                        conversation.archives.unshift(archive);
+                        oldArchives[key] = archive.messages;
+                        return;
                     }
 
-                    oldArchives[key].unshift(message)
-                })
+                    messages = oldArchives[key];
 
-                scroll && Vue.prototype.$nextTick(scrollToBottom)
-            }))
+                    oldArchives[key].unshift(message);
+                });
+
+                scroll && Vue.prototype.$nextTick(scrollToBottom);
+            }));
         },
         sendMessage(ctx, {conversation, message}) {
-            let {today} = conversation
+            let {today} = conversation;
 
             if (!today) {
                 today = {
                     label: 'Today',
                     messages: []
-                }
+                };
 
-                conversation.today = today
-                conversation.archives.unshift(today)
+                Vue.set(conversation, 'today', today);
+
+                conversation.archives.push(today);
             }
 
             const msg = {
@@ -241,9 +290,13 @@ const store = new Vuex.Store({
                 mid: conversation.mid,
                 msg: message,
                 sent: false
-            }
+            };
 
-            today.messages.push(msg)
+            msg.remove = function () {
+                today.messages.splice(today.messages.indexOf(msg), 1);
+            };
+
+            today.messages.push(msg);
 
             fetch(window.routes.send, {
                 method: 'POST',
@@ -251,12 +304,13 @@ const store = new Vuex.Store({
                     mid: conversation.mid,
                     txt: message,
                     _token: window.csrf
-                })
+                }),
+                headers: {'X-Socket-ID': echo.socketId()}
             }).then(response => response.json().then(data => {
-                msg.id = data.id
-                msg.at = data.at
-                msg.sent = true
-            }))
+                msg.id = data.id;
+                msg.at = data.at;
+                msg.sent = true;
+            }));
         },
         removeConversation(ctx, {account, conversation}) {
             return new Promise((resolve, reject) => {
@@ -268,65 +322,65 @@ const store = new Vuex.Store({
                     })
                 }).then(response => {
                     if (response.status === 200) {
-                        ctx.commit('removeConversation', {account, conversation})
+                        ctx.commit('removeConversation', {account, conversation});
 
-                        Vue.nextTick(scrollToBottom)
-                        return resolve()
+                        Vue.nextTick(scrollToBottom);
+                        return resolve();
                     }
 
-                    reject()
-                })
-            })
+                    reject();
+                });
+            });
         }
     }
-})
+});
 
 
-let metaLoaded = false
+let metaLoaded = false;
 
 store.watch(({account}) => account, (account, oldAccount) => {
     if (oldAccount && Array.isArray(oldAccount.conversations)) {
-        oldAccount.conversations.forEach(unSubscribe)
+        oldAccount.conversations.forEach(unSubscribe);
 
-        oldAccount.conversationSelected = null
-        oldAccount.conversations = null
+        oldAccount.conversationSelected = null;
+        oldAccount.conversations = null;
     }
 
-    store.commit('setAccount', account)
+    store.commit('setAccount', account);
 
 
     fetch(`${window.routes.getConversations}?id=${account.id}&type=${account.type}`).then(response => response.json().then(conversations => {
 
-        conversations.forEach(setConversationAttrs)
+        conversations.forEach(setConversationAttrs);
 
-        store.commit('setConversations', {account, conversations})
+        store.commit('setConversations', {account, conversations});
 
 
-        const {state} = store
-        const {meta} = state
+        const {state} = store;
+        const {meta} = state;
 
         if (metaLoaded) {
-            return
+            return;
         }
 
-        metaLoaded = true
+        metaLoaded = true;
 
         if (!(
             meta.hasOwnProperty('target')
             && meta.hasOwnProperty('target-type')
         )) {
-            return
+            return;
         }
 
         const exists = conversations.some(conversation => {
-            const ok = conversation.member.userId.toString() === meta.target && conversation.member.type === meta['target-type']
+            const ok = conversation.member.userId.toString() === meta.target && conversation.member.type === meta['target-type'];
 
             if (ok) {
-                store.commit('setConversation', {account, conversation})
+                store.commit('setConversation', {account, conversation});
             }
 
-            return ok
-        })
+            return ok;
+        });
 
         if (!exists) {
             store.dispatch('createConversation', {
@@ -335,12 +389,12 @@ store.watch(({account}) => account, (account, oldAccount) => {
                 targetType: meta['target-type']
             }).then(conversation => {
 
-                store.commit('setConversation', {account, conversation})
+                store.commit('setConversation', {account, conversation});
 
-                subscribe(account, conversation)
-            })
+                subscribe(account, conversation);
+            });
         }
-    }))
-})
+    }));
+});
 
-export default store
+export default store;

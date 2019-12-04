@@ -30,8 +30,14 @@
                 <div class="text-center">
                     @auth()
                         <a class="btn btn-primary fa fa-comments text-white my-2"
-                           href="{{ route('chat.index') }}?target={{$provider->id}}&target-type=ind&account={{auth()->user()->id}}&account-type=user"> চ্যাট</a>
+                           href="{{ route('chat.index') }}?target={{$provider->id}}&target-type=ind&account={{auth()->user()->id}}&account-type=user">
+                            চ্যাট</a>
                     @endauth
+                    @guest()
+                        <a class="btn btn-primary fa fa-comments text-white my-2"
+                           href="{{ route('login') }}">
+                            চ্যাট</a>
+                    @endguest
                     @if($provider->facebook)
                         <a class="btn btn-primary fa fa-facebook text-white my-2 facebook-link"
                            target="_blank" href="{{ $provider->facebook }}"> ফেসবুক</a>
@@ -40,9 +46,12 @@
                         <a class="btn btn-info fa fa-globe text-white my-2" href="{{ $provider->website }}"
                            target="_blank"> ওয়েবসাইট</a>
                     @endif
-                    <a class="btn btn-secondary fa fa-file-text text-white my-2"
-                       href="{{ 'https://docs.google.com/viewer?url='.asset('storage/'.$provider->cv) }}"
-                       target="_blank"> বায়োডাটা</a>
+                    @if($provider->cv)
+                        <a class="btn btn-secondary fa fa-file-text text-white my-2"
+                           href="{{ 'https://docs.google.com/viewer?url='.asset('storage/'.$provider->cv) }}"
+                           target="_blank"> বায়োডাটা</a>
+                    @endif
+
                     <a class="btn btn-warning my-2" href="tel:{{ $provider->mobile }}">
                         <i class="fa fa-phone"></i> {{ en2bnNumber($provider->mobile) }}
                     </a>
@@ -59,12 +68,14 @@
                                 @foreach($provider->subCategories as $subCategory)
                                     <p class="border-bottom font-italic font-weight-bold text-primary">{{ $subCategory->name }}</p>
                                     @foreach($subCategory->workMethods->sortBy('id') as $workMethod)
-                                        @if($workMethod->id != 4)
-                                            <p>{{ $workMethod->name }}ঃ {{ en2bnNumber($workMethod->pivot->rate) }}
-                                                টাকা</p>
-                                        @else
-                                            <p>@if($subCategory->workMethods->count() > 1){{ 'অথবা ' }}@endifচুক্তি
-                                                ভিত্তিক</p>
+                                        @if($workMethod->pivot->rate)
+                                            @if($workMethod->id != 4)
+                                                <p>{{ $workMethod->name }}ঃ {{ en2bnNumber($workMethod->pivot->rate) }}
+                                                    টাকা</p>
+                                            @else
+                                                <p>@if($subCategory->workMethods->count() > 1){{ 'অথবা ' }}@endifচুক্তি
+                                                    ভিত্তিক</p>
+                                            @endif
                                         @endif
                                     @endforeach
                                 @endforeach

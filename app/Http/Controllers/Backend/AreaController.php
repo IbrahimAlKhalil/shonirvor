@@ -64,7 +64,7 @@ class AreaController extends Controller
         $allUnion = Union::select(['id', 'bn_name'])->where('thana_id', $union->thana_id)->get();
         $villages = Village::select(['id', 'bn_name'])->where('union_id', $union->id)->get();
 
-        return view('backend.area.village', compact('union', 'villages', 'unions', 'allUnion', 'allDivision', 'allDistrict', 'allThana'));
+        return view('backend.area.village', compact('union', 'villages', 'allUnion', 'allDivision', 'allDistrict', 'allThana'));
     }
 
     public function storeDivision(Request $request)

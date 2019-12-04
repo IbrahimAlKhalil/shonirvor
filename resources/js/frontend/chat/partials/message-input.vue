@@ -14,7 +14,7 @@
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
             </label>
             <textarea v-model="message" class="form-control" rows="2" placeholder="এখানে লিখুন..."
-                      @keydown.enter.prevent.exact="send"></textarea>
+                      @keydown.enter.prevent.exact="send" @focus="typing(true)" @blur="typing(false)"></textarea>
             <i class="fa fa-paper-plane send-icon" aria-hidden="true" @click="send"></i>
         </div>
     </div>
@@ -56,6 +56,10 @@
                 this.message = ''
 
                 this.$nextTick(this.$strollToBottom)
+            },
+
+            typing(typing) {
+                this.$store.state.account.conversationSelected.echo.whisper(typing ? 'typing' : 'typing-stopped', {})
             }
         }
     }

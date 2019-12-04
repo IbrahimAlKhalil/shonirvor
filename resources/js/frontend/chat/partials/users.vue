@@ -3,11 +3,14 @@
         <div class="user-wrapper">
             <ul v-if="conversations" class="list-group mt-2">
                 <li v-for="(conversation, index) in conversations" :key="index"
-                    :class="`list-group-item list-group-item-action user ${conversation.active?'active':''}`"
+                    :class="`list-group-item list-group-item-action user d-flex align-items-center ${conversation.active?'active':''}`"
                     @click="activeConversation(conversation)">
-                    <img :src="conversation.member.photo" :alt="conversation.member.name">
+                    <div class="position-relative">
+                        <img :src="conversation.member.photo" :alt="conversation.member.name">
+                        <span :class="`status ${conversation.member.online?'online':''}`"></span>
+                    </div>
                     <span class="mr-auto ml-2">{{conversation.member.name}}</span>
-                    <span class="badge badge-primary badge-pill"></span>
+                    <span class="badge badge-secondary badge-pill"></span>
                 </li>
             </ul>
             <div v-else class="spinner absolute">
@@ -82,13 +85,27 @@
 
             img {
                 height: 25px;
+                border: 2px solid #3c7cfe;
+                border-radius: 2px;
             }
 
             &.active img {
-                border: 4px solid transparent;
                 background: #fff;
-                border-radius: 3px;
             }
+        }
+    }
+
+    .status {
+        padding: 5px;
+        position: absolute;
+        border-radius: 50%;
+        top: -6px;
+        left: -6px;
+        border: 2px solid #3c7cfe;
+        background: #ff7303;
+
+        &.online {
+            background: #00ff64;
         }
     }
 

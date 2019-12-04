@@ -19,6 +19,7 @@ module.exports = {
         'frontend/my-services/ind-service/edit': './resources/js/frontend/my-services/ind-service/edit.js',
         'frontend/my-services/org-service/edit': './resources/js/frontend/my-services/org-service/edit.js',
         'frontend/chat': './resources/js/frontend/chat/index.js',
+        'frontend/channel': './resources/js/frontend/chat/channel.js',
 
         'backend/dashboard': './resources/js/backend/dashboard.js',
         'backend/contents/registration-instruction': './resources/js/backend/contents/registration-instruction.js',
@@ -29,11 +30,12 @@ module.exports = {
         'backend/request/ad-edit/index': './resources/js/backend/request/index.js',
         'backend/common': './resources/js/backend/common.js',
         'backend/service-filter': './resources/js/backend/service-filter.js',
+        'backend/user-filter': './resources/js/backend/user-filter.js',
 
         'errors/404': './resources/js/errors/404.js'
     },
     output: {
-        path: path.resolve(__dirname, "public/assets/js"),
+        path: path.resolve(__dirname, 'public/assets/js'),
         filename: '[name].bundle.js'
     },
     resolve: {
@@ -103,5 +105,5 @@ module.exports = {
     externals: {
         jquery: 'jQuery'
     },
-    devtool: "source-map"
+    devtool: 'source-map'
 };

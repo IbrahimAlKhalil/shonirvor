@@ -243,8 +243,7 @@
                             <div class="col-9">
                                 <select id="sub-categories"
                                         data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
-                                        data-option-loader-properties="value=id,text=name"
-                                        multiple>
+                                        data-option-loader-properties="value=id,text=name">
                                 </select>
 
 
@@ -271,13 +270,6 @@
                                                 <a class="fa fa-trash col-md-2 align-items-center float-right text-danger delete-image remove-btn d-none"
                                                    href="#"></a>
                                             </div>
-                                        </li>
-                                        <li class="repeater-insert-before d-none"></li>
-                                        <li class="list-group-item border-0">
-                                            <button type="button" id="add-new-sub"
-                                                    class="btn btn-light float-left shadow-sm">
-                                                <i class="fa fa-plus"></i> আরও
-                                            </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -327,15 +319,6 @@
                         </div>
 
                         <div class="form-group row mx-5">
-                            <label for="cover-photo" class="col-3 col-form-label">কভার ছবি</label>
-                            <div class="col-9">
-                                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
-                                       class="file-picker"
-                                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
-                            </div>
-                        </div>
-
-                        <div class="form-group row mx-5">
                             <label for="trade-license" class="col-3 col-form-label">ট্রেড লাইসেন্স</label>
                             <div class="col-9">
                                 <input id="trade-license" name="trade-license" type="file" accept="image/*"
@@ -362,23 +345,6 @@
                             </div>
                         @endif
 
-                        <div class="form-group row mx-5">
-                            <label for="images" class="col-3 col-form-label">প্রাতিষ্ঠানিক ছবি</label>
-                            <div class="col-9">
-                                <div class="flex">
-                                    @for($i=0; $i<4; $i++)
-                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
-                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                                            <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]"></textarea>
-                                            <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*" class="form-control-file file-picker"
-                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
-                                        </div>
-                                    @endfor
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="p-4" id="step-5">
                         <div class="form-group row mx-5">
@@ -620,8 +586,7 @@
                             class="text-danger">*</span></label>
                 <select id="mo-sub-categories"
                         data-placeholder="-- আপনার প্রতিষ্ঠানের সেবার ধরন নির্বাচন করুন --"
-                        data-option-loader-properties="value=id,text=name"
-                        multiple>
+                        data-option-loader-properties="value=id,text=name">
                 </select>
 
                 <ul id="mo-sub-repeater-container" class="list-group">
@@ -647,9 +612,6 @@
                     </li>
                     <li class="repeater-insert-before d-none"></li>
                 </ul>
-                <button type="button" class="btn btn-light shadow-sm mt-1 d-none" id="mo-add-new-sub"><i
-                            class="fa fa-plus"></i> আরও
-                </button>
             </div>
 
             <div class="form-group">
@@ -708,25 +670,6 @@
                     </div>
                 </div>
             @endif
-
-            <div class="form-group">
-                <label class="col-form-label font-weight-bold">প্রাতিষ্ঠানিক ছবি</label>
-                <div>
-                    <div class="flex">
-                        @for($i=0; $i<4; $i++)
-                            <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
-                                <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                          name="images[{{ $i }}][description]"></textarea>
-                                <input id="images" name="images[{{ $i }}][file]" type="file"
-                                       accept="image/*"
-                                       class="form-control-file file-picker"
-                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label class="col-form-label font-weight-bold">রেজিস্ট্রেশন প্যাকেজ নির্ধারণ করুন</label>
@@ -812,20 +755,20 @@
         $('#smartwizard').smartWizard({
             theme: 'arrows',
             lang: {
-                next: "পরবর্তী ধাপ",
-                previous: "আগের ধাপ"
+                next: 'পরবর্তী ধাপ',
+                previous: 'আগের ধাপ'
             },
-            useURLhash: false,
+            useURLhash: true,
             autoAdjustHeight: false
-        });
+        })
 
         $('select').selectize({
             plugins: ['option-loader']
-        });
+        })
 
         $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method, #mo-category, #mo-sub-categories, #mo-division, #mo-district, #mo-thana, #mo-union, #mo-village, #mo-package, #mo-payment-method').selectize({
             plugins: ['option-loader']
-        });
+        })
 
     </script>
 @endsection

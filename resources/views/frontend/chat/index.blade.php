@@ -14,13 +14,13 @@
             addConversation: '{{route('chat.store')}}',
             getMessages: '{{route('chat-messages.index')}}',
             send: '{{route('chat-messages.store')}}'
-        }
+        };
 
-        var csrf = '{{csrf_token()}}'
+        var csrf = '{{csrf_token()}}';
 
         var dates = {
             today: '{{\Carbon\Carbon::today()}}',
             yesterday: '{{\Carbon\Carbon::yesterday()}}'
-        }
+        };
     </script>
 @endsection

@@ -102,3 +102,905 @@
 [2019-08-26 18:15:14][3] Processed:  App\Events\SendChatMessage
 [2019-08-26 18:15:28][4] Processing: App\Events\SendChatMessage
 [2019-08-26 18:15:29][4] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:57:51][1] Processing: App\Events\SendChatMessage
+[2019-08-28 18:57:52][1] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:58:34][2] Processing: App\Events\SendChatMessage
+[2019-08-28 18:58:34][2] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:13][3] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:13][3] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:13][4] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:13][4] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:15][5] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:15][6] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:15][7] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:15][8] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:15][9] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:15][10] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:16][6] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][9] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][11] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:16][8] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][12] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:16][10] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][5] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][7] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][11] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][12] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][13] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:16][13] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:16][14] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:16][14] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:18][15] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:19][15] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:19][16] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:19][16] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:22][17] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:22][18] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:22][17] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:22][18] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:22][19] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:23][19] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:25][20] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:25][21] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:25][20] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:25][21] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:26][22] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:26][22] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:28][23] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:28][23] Processed:  App\Events\SendChatMessage
+[2019-08-28 18:59:29][24] Processing: App\Events\SendChatMessage
+[2019-08-28 18:59:29][24] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:31][25] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:31][26] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:31][27] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:31][27] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:31][25] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:31][26] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:32][28] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:33][28] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:33][29] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:33][29] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:33][30] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:33][30] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:33][31] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:33][31] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:33][32] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:33][32] Processed:  App\Events\SendChatMessage
+[2019-08-28 19:00:34][33] Processing: App\Events\SendChatMessage
+[2019-08-28 19:00:34][33] Processed:  App\Events\SendChatMessage
+[2019-09-05 16:06:12][1] Processing: App\Events\SendChatMessage
+[2019-09-05 16:06:12][1] Processed:  App\Events\SendChatMessage
+[2019-09-05 16:19:38][2] Processing: App\Events\SendChatMessage
+[2019-09-05 16:19:39][2] Processed:  App\Events\SendChatMessage
+[2019-09-05 16:20:02][3] Processing: App\Events\SendChatMessage
+[2019-09-05 16:20:03][3] Processed:  App\Events\SendChatMessage
+[2019-09-05 16:23:54][4] Processing: App\Events\SendChatMessage
+[2019-09-05 16:23:54][4] Processed:  App\Events\SendChatMessage
+[2019-09-05 16:24:36][5] Processing: App\Events\SendChatMessage
+[2019-09-05 16:24:36][5] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:25:30][6] Processing: App\Events\SendChatMessage
+[2019-09-05 18:25:30][6] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:25:48][7] Processing: App\Events\SendChatMessage
+[2019-09-05 18:25:48][7] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:25:57][8] Processing: App\Events\SendChatMessage
+[2019-09-05 18:25:57][8] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:26:06][9] Processing: App\Events\SendChatMessage
+[2019-09-05 18:26:06][9] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:26:36][10] Processing: App\Events\SendChatMessage
+[2019-09-05 18:26:36][10] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:27:21][11] Processing: App\Events\SendChatMessage
+[2019-09-05 18:27:21][11] Processed:  App\Events\SendChatMessage
+[2019-09-05 18:30:45][12] Processing: App\Events\SendChatMessage
+[2019-09-05 18:30:45][12] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:02:06][1] Processing: App\Events\SendChatMessage
+[2019-09-07 15:02:07][1] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:02:19][2] Processing: App\Events\SendChatMessage
+[2019-09-07 15:02:19][2] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:02:37][3] Processing: App\Events\SendChatMessage
+[2019-09-07 15:02:37][3] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:02:46][4] Processing: App\Events\SendChatMessage
+[2019-09-07 15:02:46][4] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:03:55][5] Processing: App\Events\SendChatMessage
+[2019-09-07 15:03:55][5] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:04:07][6] Processing: App\Events\SendChatMessage
+[2019-09-07 15:04:07][6] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:05:31][7] Processing: App\Events\SendChatMessage
+[2019-09-07 15:05:31][7] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:06:04][8] Processing: App\Events\SendChatMessage
+[2019-09-07 15:06:04][8] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:06:07][9] Processing: App\Events\SendChatMessage
+[2019-09-07 15:06:07][9] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:06:10][10] Processing: App\Events\SendChatMessage
+[2019-09-07 15:06:10][10] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:06:13][11] Processing: App\Events\SendChatMessage
+[2019-09-07 15:06:13][11] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:06:19][12] Processing: App\Events\SendChatMessage
+[2019-09-07 15:06:19][12] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:20:02][13] Processing: App\Events\SendChatMessage
+[2019-09-07 15:20:02][13] Processed:  App\Events\SendChatMessage
+[2019-09-07 15:20:35][14] Processing: App\Events\SendChatMessage
+[2019-09-07 15:20:35][14] Processed:  App\Events\SendChatMessage
+[2019-09-07 17:12:13][15] Processing: App\Events\SendChatMessage
+[2019-09-07 17:12:13][15] Processed:  App\Events\SendChatMessage
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-09-15.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+[2019-09-22 18:41:48][1] Processing: App\Events\SendChatMessage
+[2019-09-22 18:41:49][1] Processed:  App\Events\SendChatMessage
+[2019-09-22 18:57:01][2] Processing: App\Events\SendChatMessage
+[2019-09-22 18:57:01][2] Processed:  App\Events\SendChatMessage
+[2019-09-22 19:02:04][3] Processing: App\Events\SendChatMessage
+[2019-09-22 19:02:05][3] Processed:  App\Events\SendChatMessage
+[2019-09-22 19:09:50][4] Processing: App\Events\SendChatMessage
+[2019-09-22 19:09:50][4] Processed:  App\Events\SendChatMessage
+[2019-09-22 19:09:53][5] Processing: App\Events\SendChatMessage
+[2019-09-22 19:09:53][5] Processed:  App\Events\SendChatMessage
+[2019-09-22 19:09:59][6] Processing: App\Events\SendChatMessage
+[2019-09-22 19:10:00][6] Processed:  App\Events\SendChatMessage
+[2019-09-22 19:16:45][7] Processing: App\Events\SendChatMessage
+[2019-09-22 19:16:45][7] Processed:  App\Events\SendChatMessage
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-11-13.log" could not be opened: failed to open stream: Permission denied
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+  Exception trace:
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+[2019-11-18 17:33:20][1] Processing: App\Events\SendChatMessage
+[2019-11-18 17:33:21][1] Processed:  App\Events\SendChatMessage
+[2019-11-18 17:33:26][2] Processing: App\Events\SendChatMessage
+[2019-11-18 17:33:27][2] Processed:  App\Events\SendChatMessage
+[2019-11-18 17:33:36][3] Processing: App\Events\SendChatMessage
+[2019-11-18 17:33:36][3] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:22:54][1] Processing: App\Events\SendChatMessage
+[2019-11-24 18:22:55][1] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:23:31][2] Processing: App\Events\SendChatMessage
+[2019-11-24 18:23:31][2] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:25:10][3] Processing: App\Events\SendChatMessage
+[2019-11-24 18:25:11][3] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:26:02][4] Processing: App\Events\SendChatMessage
+[2019-11-24 18:26:02][4] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:26:44][5] Processing: App\Events\SendChatMessage
+[2019-11-24 18:26:44][5] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:27:02][6] Processing: App\Events\SendChatMessage
+[2019-11-24 18:27:02][6] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:27:34][7] Processing: App\Events\SendChatMessage
+[2019-11-24 18:27:34][7] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:27:55][8] Processing: App\Events\SendChatMessage
+[2019-11-24 18:27:56][8] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:28:50][9] Processing: App\Events\SendChatMessage
+[2019-11-24 18:28:50][9] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:29:04][10] Processing: App\Events\SendChatMessage
+[2019-11-24 18:29:05][10] Processed:  App\Events\SendChatMessage
+[2019-11-24 18:29:08][11] Processing: App\Events\SendChatMessage
+[2019-11-24 18:29:08][11] Processed:  App\Events\SendChatMessage
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+
+   UnexpectedValueException  : The stream or file "/home/ibrahim/Projects/areasheba/storage/logs/laravel-2019-12-04.log" could not be opened: failed to open stream: Permission denied
+
+  at /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:107
+    103|             }
+    104|             restore_error_handler();
+    105|             if (!is_resource($this->stream)) {
+    106|                 $this->stream = null;
+  > 107|                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: '.$this->errorMessage, $this->url));
+    108|             }
+    109|         }
+    110| 
+    111|         if ($this->useLocking) {
+
+  Exception trace:
+
+  1   Monolog\Handler\StreamHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php:119
+
+  2   Monolog\Handler\RotatingFileHandler::write()
+      /home/ibrahim/Projects/areasheba/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php:39
+
+  Please use the argument -v to see more details.
+[2019-12-04 17:24:30][1] Processing: App\Jobs\SendSms
+[2019-12-04 17:24:39][1] Processed:  App\Jobs\SendSms
+[2019-12-04 17:24:39][2] Processing: App\Events\SmsSent
+[2019-12-04 17:24:39][2] Processed:  App\Events\SmsSent

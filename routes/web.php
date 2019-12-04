@@ -163,6 +163,8 @@ Route::namespace('Backend')->group(function () {
 
             Route::put('user/refer-package/{user}', 'UserController@updateReferPackage')->name('user.refer-package');
             Route::put('user/pay-referrer/{user}', 'UserController@payReferrer')->name('user.pay-referrer');
+            Route::post('user-filter', 'UserController@filter')->name('users.filter');
+            Route::post('user-send-sms', 'UserController@sendSms')->name('users.send-sms');
             Route::resource('users', 'UserController', [
                 'only' => ['index', 'show', 'destroy']
             ]);
@@ -262,7 +264,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::middleware('throttle:60,15')->group(function () {
-        Route::resource('chat', 'Frontend\ConversationController', ['only' => ['index', 'destroy', 'store']]);
+        Route::resource('chat', 'Frontend\ConversationController', ['only' => ['destroy', 'store']]);
+        Route::get('chat', 'Frontend\ConversationController@index')->middleware('auth')->name('chat.index');
         Route::get('chat/get-accounts', 'Frontend\ConversationController@getAccounts')->name('chat.getAccounts');
         Route::get('chat/get-conversations', 'Frontend\ConversationController@getConversations')->name('chat.getConversations');
 

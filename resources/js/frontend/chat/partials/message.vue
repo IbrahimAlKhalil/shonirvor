@@ -1,5 +1,5 @@
 <template>
-    <div :class="classList" @mouseover="showMenu($event)" @mouseout="hideMenu($event)" ref="wrapper">
+    <div :class="classList" ref="wrapper">
         <div class="img">
             <img :src="pic" class="profile-pic">
         </div>
@@ -11,9 +11,18 @@
             </div>
         </div>
 
-        <div v-if="out && (item.sent === false || menu)" class="d-flex align-items-center mt-3 ml-2">
+        <div v-if="out && item.sent === false" class="d-flex align-items-center mt-3 ml-2">
             <i v-if="item.sent === false" class="fa fa-spinner"></i>
-            <!--<i v-if="menu" class="fa fa-ellipsis-v"></i>-->
+        </div>
+
+        <div v-if="out" class="menu align-items-center mt-3">
+            <b-dropdown size="md" variant="link" no-caret lazy>
+                <template slot="button-content">
+                    <i class="fa fa-ellipsis-v"></i>
+                </template>
+                <b-dropdown-item @click.prevent="removeMessage"><i class="fa fa-trash"></i> &nbsp;Delete
+                </b-dropdown-item>
+            </b-dropdown>
         </div>
     </div>
 </template>
@@ -27,32 +36,31 @@
             }
         },
 
-        data() {
-            return {
-                menu: false
-            }
-        },
-
         methods: {
             formatDate(str) {
-                const date = new Date(str)
+                const date = new Date(str);
 
-                let hours = date.getHours()
-                let minutes = date.getMinutes()
-                const ampm = hours >= 12 ? 'pm' : 'am'
-                hours = hours % 12
-                hours = hours ? hours : 12
-                minutes = minutes < 10 ? '0' + minutes : minutes
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                const ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
 
-                return hours + ':' + minutes + ' ' + ampm
+                return hours + ':' + minutes + ' ' + ampm;
             },
 
-            hideMenu(evt) {
-                this.menu = false
-            },
+            removeMessage() {
+                const {item} = this.$props;
 
-            showMenu(evt) {
-                this.menu = true
+                fetch(window.routes.getMessages + '/' + item.id, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': window.csrf
+                    },
+                }).then(() => {
+                    item.remove();
+                });
             }
         },
 
@@ -62,18 +70,18 @@
                     wrapper: true,
                     in: !this.out,
                     out: this.out
-                }
+                };
             },
 
             out() {
-                return this.$store.state.account.conversationSelected.mid === this.item.mid
+                return this.$store.state.account.conversationSelected.mid === this.item.mid;
             },
 
             pic() {
-                return this.out ? this.$store.state.account.photo : this.$store.state.account.conversationSelected.member.photo
+                return this.out ? this.$store.state.account.photo : this.$store.state.account.conversationSelected.member.photo;
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -89,6 +97,18 @@
     .wrapper {
         display: flex;
         padding: 20px;
+
+        .menu {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        &:hover {
+            .menu {
+                display: flex;
+            }
+        }
     }
 
     .date {

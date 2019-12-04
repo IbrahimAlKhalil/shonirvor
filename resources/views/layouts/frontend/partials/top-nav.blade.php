@@ -26,7 +26,8 @@
                 </li>
                 @auth()
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('chat.index') }}">চ্যাট</a>
+                        <a class="nav-link" href="{{ route('chat.index') }}">চ্যাট <span id="chat-count-badge"
+                                                                                         class="badge badge-light badge-pill"></span></a>
                     </li>
                 @endauth
                 @if($myServiceLink)

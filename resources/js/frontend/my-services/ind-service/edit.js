@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    /****************** Subcategories *************************/
+/*    /!****************** Subcategories *************************!/
 
     (function () {
         let container = document.getElementById('sub-categories');
@@ -146,10 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-    })();
+    })();*/
 
 
-    /**************************** Subcategory requests **********************/
+/*    /!**************************** Subcategory requests **********************!/
 
     (function () {
         let container = document.getElementById('sub-category-requests');
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#update-form').removeAttr('novalidate');
             repeater.repeat();
         });
-    })();
+    })();*/
 
     /******************** Work images ********************/
     (function () {

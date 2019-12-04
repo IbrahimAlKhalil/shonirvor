@@ -30,8 +30,14 @@
                 <div class="text-center">
                     @auth()
                         <a class="btn btn-primary fa fa-comments text-white my-2"
-                           href="{{ route('chat.index') }}?target={{$provider->id}}&target-type=org&account={{auth()->user()->id}}&account-type=user"> চ্যাট</a>
+                           href="{{ route('chat.index') }}?target={{$provider->id}}&target-type=org&account={{auth()->user()->id}}&account-type=user">
+                            চ্যাট</a>
                     @endauth
+                    @guest()
+                        <a class="btn btn-primary fa fa-comments text-white my-2"
+                           href="{{ route('login') }}">
+                            চ্যাট</a>
+                    @endguest
                     @if($provider->facebook)
                         <a class="btn btn-primary fa fa-facebook text-white my-2 facebook-link"
                            target="_blank" href="{{ $provider->facebook }}"> ফেসবুক</a>
@@ -188,7 +194,7 @@
             filledStar: '<i class="fa fa-star"></i>',
             emptyStar: '<i class="fa fa-star-o"></i>',
             clearButton: '<i class="fa fa-lg fa-minus-circle"></i>',
-        });
+        })
 
         $('[id^="showStar"]').rating({
             step: 1,
@@ -199,15 +205,15 @@
             showCaption: false,
             showCaptionAsTitle: false,
             displayOnly: true
-        });
+        })
 
         $('#feedback-delete-form').submit(function () {
-            var $confirm = confirm('আপনি কি নিশ্চিত মন্তব্যটি মুছে ফেলতে চান?');
+            var $confirm = confirm('আপনি কি নিশ্চিত মন্তব্যটি মুছে ফেলতে চান?')
             if (!$confirm) {
-                return false;
+                return false
             }
 
-            return true;
-        });
+            return true
+        })
     </script>
 @endsection

@@ -17,10 +17,17 @@ Broadcast::channel('sending-notification', function ($user) {
     return (int)$user->id === 1;
 });
 
-Broadcast::channel('c-{cid}-{mid}', function ($user, $cid) {
-    return \App\Models\ConversationMember::query()
+Broadcast::channel('c-{cid}', function ($user, $cid) {
+    $member = \App\Models\ConversationMember::query()
+        ->select('id')
         ->where('conversation_id', $cid)
         ->where('user_id', $user->id)
         ->limit(1)
-        ->exists();
+        ->first();
+
+    if ($member) {
+        return ['id' => $member->id];
+    }
+
+    return false;
 });

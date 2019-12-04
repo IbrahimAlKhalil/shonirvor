@@ -139,6 +139,8 @@ class FilterController extends Controller
             return abort(422);
         }
 
+        return 'Hella';
+
         $message = $request->post('message');
         $this->dispatch(new SendSms(array_unique($ids), $message));
 

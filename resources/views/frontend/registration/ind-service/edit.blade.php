@@ -1166,15 +1166,15 @@
         $('#smartwizard').smartWizard({
             theme: 'arrows',
             lang: {
-                next: "পরবর্তী ধাপ",
-                previous: "আগের ধাপ"
+                next: 'পরবর্তী ধাপ',
+                previous: 'আগের ধাপ'
             },
             useURLhash: true,
             autoAdjustHeight: false
-        });
+        })
 
         $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method, #mo-category, #mo-sub-categories, #mo-division, #mo-district, #mo-thana, #mo-union, #mo-village, #mo-package, #mo-payment-method').selectize({
             plugins: ['option-loader']
-        });
+        })
     </script>
 @endsection

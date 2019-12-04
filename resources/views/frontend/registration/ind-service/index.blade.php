@@ -290,8 +290,7 @@
                             <div class="col-9" id="sub-category-parent" data-route="{{ route('api.work-methods') }}">
                                 <select id="sub-categories" name="sub-categories[]"
                                         data-placeholder="-- আপনার সেবা নির্বাচন করুন --"
-                                        data-option-loader-properties="value=id,text=name"
-                                        multiple>
+                                        data-option-loader-properties="value=id,text=name">
                                 </select>
 
                                 <span class="repeater-insert-before d-none"></span>
@@ -375,24 +374,12 @@
                                             </div>
                                         </div>
                                         <span class="repeater-insert-before d-none"></span>
-                                        <button type="button" class="btn btn-light float-left shadow-sm" id="add-new"><i
-                                                    class="fa fa-plus"></i> আরও
-                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="p-4" id="step-4">
-
-                        <div class="form-group row mx-5">
-                            <label for="cover-photo" class="col-3 col-form-label">কভার ছবি</label>
-                            <div class="col-9">
-                                <input id="cover-photo" name="cover-photo" type="file" accept="image/*"
-                                       class="file-picker"
-                                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
-                            </div>
-                        </div>
 
                         @if (!$identityExists)
                             @if($errors->has('identities'))
@@ -411,24 +398,6 @@
                                 </div>
                             </div>
                         @endif
-
-                        <div class="form-group row mx-5">
-                            <label for="images" class="col-3 col-form-label">সেবা প্রদানের ছবি সমূহ</label>
-                            <div class="col-9">
-                                <div class="flex">
-                                    @for($i=0; $i<4; $i++)
-                                        <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
-                                            <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                                            <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                                      name="images[{{ $i }}][description]"></textarea>
-                                            <input id="images" name="images[{{ $i }}][file]" type="file"
-                                                   accept="image/*" class="form-control-file file-picker"
-                                                   data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
-                                        </div>
-                                    @endfor
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="form-group row mx-5">
                             <label for="cv" class="col-3 col-form-label">বায়োডাটা</label>
@@ -727,8 +696,7 @@
                 </label>
                 <select id="mo-sub-categories" name="mo-sub-categories[]"
                         data-placeholder="-- আপনার সেবা নির্বাচন করুন --"
-                        data-option-loader-properties="value=id,text=name"
-                        multiple>
+                        data-option-loader-properties="value=id,text=name">
                 </select>
                 <span class="repeater-insert-before d-none"></span>
                 <label class="mt-4 checkbox" for="mo-no-sub-category">
@@ -812,16 +780,7 @@
                         </div>
                     </div>
                     <span class="repeater-insert-before d-none"></span>
-                    <button type="button" class="btn btn-light shadow-sm mt-2" id="mo-add-new"><i
-                                class="fa fa-plus"></i> আরও
-                    </button>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="mo-cover-photo" class="col-form-label font-weight-bold">কভার ছবি</label>
-                <input id="mo-cover-photo" name="cover-photo" type="file" accept="image/*" class="file-picker"
-                       data-error="@if($errors->has('cover-photo')) {{ $errors->first('cover-photo') }} @endif">
             </div>
 
             @if (!$identityExists)
@@ -839,25 +798,6 @@
                     </div>
                 </div>
             @endif
-
-            <div class="form-group">
-                <label class="col-form-label font-weight-bold">সেবা প্রদানের ছবি সমূহ</label>
-                <div>
-                    <div class="flex">
-                        @for($i=0; $i<4; $i++)
-                            <div class="flex-fill shadow-sm p-2 mb-2 bg-white rounded border">
-                                <label for="images-{{ $i }}-text" class="my-2">ছবির বর্ণনা</label>
-                                <textarea id="images-{{ $i }}-text" type="text" class="form-control"
-                                          name="images[{{ $i }}][description]"></textarea>
-                                <input id="images" name="images[{{ $i }}][file]" type="file"
-                                       accept="image/*"
-                                       class="form-control-file file-picker"
-                                       data-error="@if($errors->has('images.'. $i .'.file')) {{ $errors->first('images.'. $i .'.file') }} @endif">
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label for="mo-cv" class="col-form-label font-weight-bold">বায়োডাটা</label>
@@ -958,16 +898,16 @@
         $('#smartwizard').smartWizard({
             theme: 'arrows',
             lang: {
-                next: "পরবর্তী ধাপ",
-                previous: "আগের ধাপ"
+                next: 'পরবর্তী ধাপ',
+                previous: 'আগের ধাপ'
             },
-            useURLhash: false,
+            useURLhash: true,
             autoAdjustHeight: false
-        });
+        })
 
         $('#category, #sub-categories, #division, #district, #thana, #union, #village, #package, #payment-method, #mo-category, #mo-sub-categories, #mo-division, #mo-district, #mo-thana, #mo-union, #mo-village, #mo-package, #mo-payment-method').selectize({
             plugins: ['option-loader']
-        });
+        })
     </script>
 @endsection
 

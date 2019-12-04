@@ -63,7 +63,7 @@ class ChatMessageController extends Controller
 
         DB::commit();
 
-        event(new SendChatMessage($message));
+        broadcast(new SendChatMessage($message))->toOthers();
 
         return [
             'id' => $message->id,
@@ -71,8 +71,8 @@ class ChatMessageController extends Controller
         ];
     }
 
-    public function destroy()
+    public function destroy($id)
     {
-
+        ChatMessage::query()->where('id', $id)->delete();
     }
 }

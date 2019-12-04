@@ -1,23 +1,23 @@
-import { Repeater } from '../../../modules/repeater';
+import {Repeater} from '../../../modules/repeater'
 
 document.addEventListener('DOMContentLoaded', () => {
 
     $('[data-repeater-clone]').each(function () {
-        let card = $(this);
+        let card = $(this)
         card.find('.remove-btn').on('click', function (event) {
-            event.preventDefault();
+            event.preventDefault()
             $(card).fadeOut('slow', function () {
-                $(card).remove();
-            });
-        });
-    });
+                $(card).remove()
+            })
+        })
+    })
 
 
     /************************ Additional pricing ***********************/
     function priceRepeater(container, addNew) {
         let repeater = new Repeater(container, function () {
-            let length = this.count;
-            let fragment = document.createElement('div');
+            let length = this.count
+            let fragment = document.createElement('div')
             fragment.innerHTML = `
             <div class="border rounded shadow-sm mt-2 position-relative">
                 <div class="form-group col-md-12 mt-3">
@@ -36,36 +36,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <span class="cross remove-btn"></span>
             </div>
-            `;
+            `
 
-            let div = fragment.firstElementChild.cloneNode(true);
+            let div = fragment.firstElementChild.cloneNode(true)
             $(div).find('.remove-btn').on('click', function (event) {
-                event.preventDefault();
+                event.preventDefault()
                 $(div).fadeOut('slow', function () {
-                    $(div).remove();
-                });
-            });
+                    $(div).remove()
+                })
+            })
 
-            return div;
-        });
+            return div
+        })
 
         addNew.addEventListener('click', () => {
-            repeater.repeat();
-        });
+            repeater.repeat()
+        })
     }
 
-    priceRepeater(document.getElementById('otirikto-kaj'), document.getElementById('add-new-price'));
+    priceRepeater(document.getElementById('otirikto-kaj'), document.getElementById('add-new-price'))
 
-    priceRepeater(document.getElementById('mo-otirikto-kaj'), document.getElementById('mo-add-new-price'));
+    priceRepeater(document.getElementById('mo-otirikto-kaj'), document.getElementById('mo-add-new-price'))
 
 
     /*********************** Sub category request ************************/
 
     function subReqRepeater(container, addNew) {
         let repeater = new Repeater(container, function () {
-            let length = this.count;
+            let length = this.count
 
-            let fragment = document.createElement('ul');
+            let fragment = document.createElement('ul')
             fragment.innerHTML = `
             <li class="mt-2 border-0 list-group-item" data-repeater-clone="true">
                 <div class="row">
@@ -79,40 +79,36 @@ document.addEventListener('DOMContentLoaded', () => {
                        href="#"></a>
                 </div>
             </li>
-            `;
+            `
 
-            let li = fragment.firstElementChild.cloneNode(true);
+            let li = fragment.firstElementChild.cloneNode(true)
             $(li).find('.remove-btn').on('click', function (event) {
-                event.preventDefault();
+                event.preventDefault()
                 $(li).fadeOut('slow', function () {
-                    $(li).remove();
-                });
-            });
+                    $(li).remove()
+                })
+            })
 
-            return li;
-        });
-
-        addNew.addEventListener('click', () => {
-            repeater.repeat();
-        });
+            return li
+        })
     }
 
-    subReqRepeater(document.getElementById('sub-req-repeater-container'), document.getElementById('add-new-sub'));
+    subReqRepeater(document.getElementById('sub-req-repeater-container'), document.getElementById('add-new-sub'))
 
-    let reqContainer = document.getElementById('mo-sub-req-repeater-container');
-    let reqAddNew = document.getElementById('mo-add-new-sub');
-    subReqRepeater(reqContainer, reqAddNew);
+    let reqContainer = document.getElementById('mo-sub-req-repeater-container')
+    let reqAddNew = document.getElementById('mo-add-new-sub')
+    subReqRepeater(reqContainer, reqAddNew)
 
     $('#mo-no-sub-category').on('click', function () {
-        $([reqContainer, reqAddNew]).toggleClass('d-none');
-    });
+        $([reqContainer, reqAddNew]).toggleClass('d-none')
+    })
 
     /*************************** Sub category *******************************/
 
     function subRepeater(container, select, $class = '') {
         let repeater = new Repeater(container, function (value) {
-            let length = this.count;
-            let fragment = document.createElement('ul');
+            let length = this.count
+            let fragment = document.createElement('ul')
             fragment.innerHTML = `
             <li class="repeater-clone mt-2 border-0 list-group-item">
                 <div class="row">
@@ -125,22 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="hidden" name="sub-categories[${length - 1}][id]" value="${value}">
                 </div>
             </li>
-        `;
+        `
 
-            return fragment.firstElementChild.cloneNode(true);
-        });
+            return fragment.firstElementChild.cloneNode(true)
+        })
 
-        select.selectize.on('change', values => {
-            repeater.removeAll();
-            if (values.length) {
-                values.forEach(value => {
-                    repeater.repeat([value]);
-                });
+        select.selectize.on('change', value => {
+            repeater.removeAll()
+            if (!value) {
+                return
             }
-        });
+            repeater.repeat([value])
+        })
     }
 
-    subRepeater(document.getElementById('sub-repeater-container'), document.getElementById('sub-categories'), 'col-md-6');
+    subRepeater(document.getElementById('sub-repeater-container'), document.getElementById('sub-categories'), 'col-md-6')
     subRepeater(document.getElementById('mo-sub-repeater-container'), document.getElementById('mo-sub-categories', 'col-form-label'))
-});
+})
 

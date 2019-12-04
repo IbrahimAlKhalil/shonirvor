@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Jobs\SendSms;
+use App\Models\MessageTemplate;
 use App\Models\User;
 use App\Models\Expense;
 use App\Models\Package;
-use function foo\func;
 use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\UserReferPackage;
@@ -21,8 +22,9 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::select('id', 'name', 'mobile')->paginate(20);
-        return view('backend.users.index', compact('users'));
+        $smsTemplates = MessageTemplate::select('id', 'name', 'message')->get();
+
+        return view('backend.users.index', compact('users', 'smsTemplates'));
     }
 
     public function show(User $user)
@@ -40,6 +42,40 @@ class UserController extends Controller
         $payable = $totalEarn - $totalPaymentGet;
 
         return view('backend.users.show', compact('user', 'referPackages', 'userReferPackageId', 'paymentMethods', 'totalEarn', 'payable'));
+    }
+
+    public function filter(Request $request)
+    {
+        $keyword = $request->input('keyword', '');
+
+        if (!$keyword) {
+            $keyword = '';
+        }
+
+        $users = User::query()->select('id', 'name', 'mobile', 'photo')
+            ->whereRaw("name REGEXP ? or mobile REGEXP ?", [$keyword, $keyword])
+            ->paginate($request->input('per-page', 10));
+
+        return $users;
+    }
+
+    public function sendSms(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|string',
+            'message' => 'required|string'
+        ]);
+
+        $ids = explode(',', $request->post('ids'));
+
+        if (!User::whereIn('id', $ids)->exists()) {
+            return abort(422);
+        }
+
+        $message = $request->post('message');
+        $this->dispatch(new SendSms(array_unique($ids), $message));
+
+        return '...';
     }
 
     public function updateReferPackage(User $user, Request $request)

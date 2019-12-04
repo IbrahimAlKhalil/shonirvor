@@ -16,7 +16,7 @@
             </b-dropdown>
         </header>
 
-        <div :class="(archives===false?'absolute ':'')+'spinner d-flex justify-content-center my-4'+(!loading?' opacity-0':'')"
+        <div :class="(archives===false?'absolute ':'')+'spinner d-flex justify-content-center '+(!loading?' opacity-0':'')"
              ref="spinner">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
@@ -35,6 +35,11 @@
                         <message v-for="(message, index) in archive.messages" :key="'t'+index" :item="message"/>
                     </transition-group>
                 </div>
+
+                <div v-if="account.conversationSelected.typing" class="typing">
+                    <img :src="account.conversationSelected.member.photo">
+                    {{account.conversationSelected.member.name}} is typing...
+                </div>
             </div>
             <message-input/>
         </template>
@@ -42,9 +47,9 @@
 </template>
 
 <script>
-    import message from './message'
-    import messageInput from './message-input'
-    import {mapState} from 'vuex'
+    import message from './message';
+    import messageInput from './message-input';
+    import {mapState} from 'vuex';
 
     export default {
         components: {message, messageInput},
@@ -52,7 +57,7 @@
         data() {
             return {
                 loading: false
-            }
+            };
         },
 
         computed: {
@@ -62,17 +67,17 @@
             archives() {
                 if (this.account.conversationSelected === null) {
                     // No conversation selected
-                    return null
+                    return null;
                 }
 
-                return this.account.conversationSelected.archives
+                return this.account.conversationSelected.archives;
             }
         },
         methods: {
             remove() {
-                const {state} = this.$store
-                const {account} = state
-                const conversation = account.conversationSelected
+                const {state} = this.$store;
+                const {account} = state;
+                const conversation = account.conversationSelected;
 
                 this.$bvModal.msgBoxConfirm('Please confirm that you want to delete this conversation.', {
                     title: 'Please Confirm',
@@ -91,40 +96,39 @@
                                 title: 'Success',
                                 autoHideDelay: 5000,
                                 variant: 'success'
-                            })
-                        })
+                            });
+                        });
                     }
-                })
+                });
             }
         },
 
         created() {
-            const {$store} = this
-            const {state} = $store
-            const vm = this
+            const {$store} = this;
+            const {state} = $store;
+            const vm = this;
 
             const observer = new IntersectionObserver(x => {
 
                 if (x[0].isIntersecting && state.account.conversationSelected) {
-                    vm.$data.loading = true
+                    vm.$data.loading = true;
 
-                    setTimeout(() => {
-                        $store.dispatch('loadMessages', {
-                            account: state.account,
-                            conversation: state.account.conversationSelected
-                        })
-                            .then(() => {
-                                vm.$data.loading = false
-                            })
-                    }, 5000)
+
+                    $store.dispatch('loadMessages', {
+                        account: state.account,
+                        conversation: state.account.conversationSelected
+                    })
+                        .then(() => {
+                            vm.$data.loading = false;
+                        });
                 }
-            }, {threshold: 1.0})
+            }, {threshold: 1.0});
 
             this.$nextTick(() => {
-                observer.observe(this.$refs.spinner)
-            })
+                observer.observe(this.$refs.spinner);
+            });
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -186,6 +190,10 @@
         opacity: 0;
     }
 
+    .spinner {
+        padding: 20px;
+    }
+
     @media all and (min-width: $md) {
         section {
             display: flex;
@@ -193,6 +201,27 @@
 
         .spacer {
             display: block;
+        }
+    }
+
+
+    .typing {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        margin-right: 25px;
+        margin-bottom: 10px;
+        font-size: .9rem;
+        font-family: monospace;
+        justify-content: flex-end;
+
+        img {
+            height: 20px;
+            width: 20px;
+            background: #4faefe;
+            padding: 2px;
+            border-radius: 10px;
+            margin-right: 6px;
         }
     }
 

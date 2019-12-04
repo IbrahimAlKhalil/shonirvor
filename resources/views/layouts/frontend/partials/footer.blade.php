@@ -11,6 +11,16 @@
                     </a>
                 </div>
             </div>
+            @auth()
+                <script>
+                    var routes = {
+                        getAccounts: '<?php echo e(route('chat.getAccounts')); ?>',
+                        getConversations: '<?php echo e(route('chat.getConversations')); ?>',
+                        getMessages: '<?php echo e(route('chat-messages.index')); ?>'
+                    }
+                </script>
+                <script src="{{asset('assets/js/frontend/channel.bundle.js')}}"></script>
+            @endauth
         </footer>
         </div>
         @yield('script')
